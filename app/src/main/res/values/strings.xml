@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">One Fish</string>
+
+    <string name="settings_dynamic_color_key" translatable="false">app_dynamicColor</string>
+    <string name="settings_dynamic_color_title">Dynamic color selection</string>
+    <string name="settings_dynamic_color_summary">Set theme color based on desktop wallpaper</string>
+    <string name="settings_poem_update_duration_title">Title poetry update interval</string>
+    <string name="settings_poem_update_duration_key" translatable="false">poem_update_duration</string>
+
+
+    <string name="setting">Settings</string>
+    <string name="home">Home</string>
+    <string name="ok">OK</string>
+    <string name="detail">Detail</string>
+
+    <string-array name="settings_duration_options">
+        <item>1分钟(dev)</item>
+        <item>5分钟</item>
+        <item>10分钟</item>
+        <item>15分钟</item>
+        <item>30分钟</item>
+    </string-array>
+    <integer-array name="settings_duration_values">
+        <item>60000</item>
+        <item>300000</item>
+        <item>600000</item>
+        <item>900000</item>
+        <item>1800000</item>
+    </integer-array>
+</resources>
