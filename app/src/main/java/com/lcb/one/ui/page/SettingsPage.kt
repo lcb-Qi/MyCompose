@@ -17,7 +17,7 @@ import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.theme.bodySmall
 import com.lcb.one.ui.theme.titleMedium
 import com.lcb.one.ui.widget.appDynamicColor
-import com.lcb.one.util.SharedPrefUtils
+import com.lcb.one.util.android.SharedPrefUtils
 import com.lcb.one.viewmodel.PoemViewModel
 
 

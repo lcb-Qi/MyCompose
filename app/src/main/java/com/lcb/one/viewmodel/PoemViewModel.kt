@@ -6,9 +6,9 @@ import com.lcb.one.bean.PoemResponse
 import com.lcb.one.network.PoemServerAccessor
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.page.AppSettings
-import com.lcb.one.util.JsonUtils
-import com.lcb.one.util.LLog
-import com.lcb.one.util.SharedPrefUtils
+import com.lcb.one.util.common.JsonUtils
+import com.lcb.one.util.android.LLog
+import com.lcb.one.util.android.SharedPrefUtils
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -18,16 +18,18 @@ class PoemViewModel : ViewModel() {
         private const val TAG = "PoemViewModel"
         var durationIndex = AppSettings.getPoemUpdateDurationIndex(MyApp.getAppContext())
         var duration = AppSettings.getPoemUpdateDuration(MyApp.getAppContext(), durationIndex)
+        private const val KEY_POEM_TOKEN = "poem_token"
+        private const val KEY_LAST_POEM = "last_poem"
     }
 
     private val poemApiService = PoemServerAccessor.getService()
 
     private suspend fun getToken(): String {
-        var token = SharedPrefUtils.getToken()
+        var token = SharedPrefUtils.getString(KEY_POEM_TOKEN)
         if (token.isNotEmpty()) return token
 
         token = poemApiService.getToken().token
-        SharedPrefUtils.saveToken(token)
+        SharedPrefUtils.putString(KEY_POEM_TOKEN, token)
 
         return token
     }
@@ -41,7 +43,7 @@ class PoemViewModel : ViewModel() {
 
     val poemFlow by lazy {
         MutableStateFlow(PoemInfo().apply {
-            val fromJson = JsonUtils.fromJson<PoemInfo>(SharedPrefUtils.getPoem())
+            val fromJson = JsonUtils.fromJson<PoemInfo>(SharedPrefUtils.getString(KEY_LAST_POEM))
             recommend = fromJson?.recommend ?: ""
             updateTime = fromJson?.updateTime ?: -1
             origin = fromJson?.origin ?: PoemResponse.Data.Origin()
@@ -73,6 +75,6 @@ class PoemViewModel : ViewModel() {
             origin = poemResponse.data.origin
         }
         poemFlow.value = info
-        SharedPrefUtils.savePoem(JsonUtils.toJson(poemFlow.value))
+        SharedPrefUtils.putString(KEY_LAST_POEM, JsonUtils.toJson(poemFlow.value))
     }
 }

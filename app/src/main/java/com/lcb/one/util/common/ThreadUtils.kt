@@ -1,4 +1,4 @@
-package com.lcb.one.util
+package com.lcb.one.util.common
 
 import android.os.Looper
 

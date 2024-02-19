@@ -3,7 +3,7 @@ package com.lcb.one.ui
 import android.app.Activity
 import android.app.Application.ActivityLifecycleCallbacks
 import android.os.Bundle
-import com.lcb.one.util.LLog
+import com.lcb.one.util.android.LLog
 
 object LifeCycleCallbackImpl : ActivityLifecycleCallbacks {
     private const val TAG = "LifeCycleCallback"

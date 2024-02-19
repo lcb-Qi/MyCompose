@@ -1,4 +1,4 @@
-package com.lcb.one.util
+package com.lcb.one.util.android
 
 import android.util.Log
 import com.lcb.one.ui.MyApp

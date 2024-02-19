@@ -1,4 +1,4 @@
-package com.lcb.one.util
+package com.lcb.one.util.common
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types

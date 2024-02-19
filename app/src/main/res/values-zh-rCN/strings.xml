@@ -8,4 +8,5 @@
     <string name="home">主页</string>
     <string name="ok">确定</string>
     <string name="detail">详情</string>
+    <string name="friendly_duration">%d 天 %02d 时 %02d 分 %02d 秒</string>
 </resources>

@@ -1,7 +1,7 @@
 package com.lcb.one.ui
 
 import android.app.Application
-import com.lcb.one.util.LLog
+import com.lcb.one.util.android.LLog
 
 class MyApp : Application() {
     companion object {

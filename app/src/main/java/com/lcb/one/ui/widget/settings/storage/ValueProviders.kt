@@ -2,7 +2,7 @@ package com.lcb.one.ui.widget.settings.storage
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.lcb.one.util.SharedPrefUtils
+import com.lcb.one.util.android.SharedPrefUtils
 import java.lang.IllegalArgumentException
 import kotlin.reflect.KProperty
 

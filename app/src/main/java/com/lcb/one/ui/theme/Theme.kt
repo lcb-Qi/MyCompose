@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import com.lcb.one.util.immerse
+import com.lcb.one.util.android.immerse
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,

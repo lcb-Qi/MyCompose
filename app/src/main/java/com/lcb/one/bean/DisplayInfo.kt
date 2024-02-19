@@ -6,8 +6,8 @@ import android.util.Size
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.lcb.one.ui.MyApp
-import com.lcb.one.util.DimenUtils
-import com.lcb.one.util.PhoneUtil
+import com.lcb.one.util.android.DimenUtils
+import com.lcb.one.util.android.PhoneUtil
 
 data class DisplayInfo(
     var displaySize: Size = Size(0, 0),

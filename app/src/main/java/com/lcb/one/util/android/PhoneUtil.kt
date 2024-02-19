@@ -1,4 +1,4 @@
-package com.lcb.one.util
+package com.lcb.one.util.android
 
 import android.content.Context
 import android.os.Build

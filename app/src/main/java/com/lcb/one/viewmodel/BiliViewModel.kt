@@ -3,7 +3,7 @@ package com.lcb.one.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lcb.one.network.BiliServerAccessor
-import com.lcb.one.util.LLog
+import com.lcb.one.util.android.LLog
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 

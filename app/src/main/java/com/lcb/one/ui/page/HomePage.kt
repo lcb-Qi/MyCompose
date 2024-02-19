@@ -1,31 +1,33 @@
 package com.lcb.one.ui.page
 
+import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalProvider
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
-import com.lcb.one.util.LLog
-import com.lcb.one.util.SharedPrefUtils
+import com.lcb.one.ui.MyApp
+import com.lcb.one.util.common.DateTimeUtils
+import com.lcb.one.util.android.SharedPrefUtils
+import kotlinx.coroutines.delay
 
 @Composable
 @Preview
@@ -34,35 +36,47 @@ fun HomePage(
     onImageClick: (() -> Unit)? = null,
     onTextClick: (() -> Unit)? = null
 ) {
-    var url by remember { mutableStateOf(SharedPrefUtils.getString("image_url").toUri()) }
-    LLog.d("TAG", "HomePage: url = $url")
+    var uri by remember { mutableStateOf(SharedPrefUtils.getString("image_url").toUri()) }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {
             it?.let {
-                LLog.d("TAG", "HomePage: onResult: $it")
-                url = it
-                SharedPrefUtils.putString("image_url", url.toString())
+                uri = it
+                SharedPrefUtils.putString("image_url", uri.toString())
+                MyApp.getAppContext().contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
             }
         })
 
+    val startTime = "2020-12-23 00:00:00"
+    var durationText by remember {
+        mutableStateOf(DateTimeUtils.friendlyDuration(DateTimeUtils.toMillis(startTime)))
+    }
+
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        AsyncImage(model = url, contentDescription = "",
-            Modifier.clickable {
-                launcher.launch("image/*")
-            },
-            onState = {
-                LLog.d("TAG", "HomePage: state = $it")
-                if (it is AsyncImagePainter.State.Error) {
-                    LLog.d("TAG", "HomePage: state Error = $it.")
-                }
-            }
+        AsyncImage(model = uri, contentDescription = "",
+            Modifier
+                .height(200.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .clickable { launcher.launch("image/*") }
         )
-        Text(text = "xx年xx天yy时xx分xx秒")
+        Text(text = durationText)
     }
+
+    LaunchedEffect(key1 = "updater", block = {
+        while (true) {
+            durationText =
+                DateTimeUtils.friendlyDuration(DateTimeUtils.toMillis(startTime))
+            delay(1000)
+        }
+    })
 }

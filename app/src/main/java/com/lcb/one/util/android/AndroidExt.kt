@@ -1,4 +1,4 @@
-package com.lcb.one.util
+package com.lcb.one.util.android
 
 import android.app.Activity
 import android.content.ContentResolver

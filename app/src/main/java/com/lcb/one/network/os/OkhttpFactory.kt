@@ -1,6 +1,6 @@
 package com.lcb.one.network.os
 
-import com.lcb.one.util.LLog
+import com.lcb.one.util.android.LLog
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

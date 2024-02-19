@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -19,8 +21,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.widget.ToolButton
-import com.lcb.one.util.DownLoadUtil
-import com.lcb.one.util.ThreadPool
+import com.lcb.one.util.android.DownLoadUtil
+import com.lcb.one.util.common.ThreadPool
 
 @Composable
 fun ToolPage(modifier: Modifier = Modifier) {
@@ -29,7 +31,7 @@ fun ToolPage(modifier: Modifier = Modifier) {
         navController = navController, startDestination = RouteConfig.HOME,
         enterTransition = { slideInVertically(animationSpec = tween(500)) { it } },
         exitTransition = { slideOutVertically(animationSpec = tween(500)) { -it } },
-        modifier = modifier
+        modifier = modifier.padding(horizontal = 16.dp)
     ) {
         composable(RouteConfig.HOME) { ToolPageImpl(navController) }
         composable(RouteConfig.DEVICE) { DeviceInfoPage() }

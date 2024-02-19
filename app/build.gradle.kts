@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId = "com.lcb.one"
-        minSdk = 30
+        minSdk = 31
         targetSdk = 34
         versionCode = 1
         versionName = "0.1.0"
@@ -110,25 +110,15 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.6")
     // implementation("androidx.compose.material:material-icons-extended:1.6.0")
 
-    // implementation("androidx.appcompat:appcompat:1.6.1")
-
-
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-    // implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    // implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
-
-    // implementation("androidx.activity:activity-ktx:1.6.1")
     implementation("androidx.preference:preference-ktx:1.2.0")
-
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
-
 
     // 图片加载 coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
     // 网络请求 retrofit2
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    // implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:3.12.1")
     implementation("com.squareup.retrofit2:converter-moshi:2.5.0")
 
@@ -136,10 +126,6 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
     implementation("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
-
-    // room
-    // implementation("androidx.room:room-runtime:2.5.0")
-    // ksp("androidx.room:room-compiler:2.5.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

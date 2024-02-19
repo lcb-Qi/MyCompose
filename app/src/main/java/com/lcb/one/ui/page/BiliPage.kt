@@ -23,7 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.lcb.one.viewmodel.BiliViewModel
 import com.lcb.one.ui.widget.ToolButton
-import com.lcb.one.util.DownLoadUtil
+import com.lcb.one.util.android.DownLoadUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

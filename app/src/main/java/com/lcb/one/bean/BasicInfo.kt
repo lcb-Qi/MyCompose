@@ -1,6 +1,6 @@
 package com.lcb.one.bean
 
-import com.lcb.one.util.PhoneUtil
+import com.lcb.one.util.android.PhoneUtil
 
 
 data class BasicInfo(

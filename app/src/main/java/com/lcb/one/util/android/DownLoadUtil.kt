@@ -1,4 +1,4 @@
-package com.lcb.one.util
+package com.lcb.one.util.android
 
 import android.content.ContentValues
 import android.graphics.Bitmap
@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.os.Environment
 import android.provider.MediaStore
 import com.lcb.one.ui.MyApp
+import com.lcb.one.util.common.DateTimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
@@ -60,7 +61,7 @@ object DownLoadUtil {
             val values = ContentValues().apply {
                 put(MediaStore.Images.ImageColumns.DISPLAY_NAME, fileName)
                 put(MediaStore.Images.ImageColumns.MIME_TYPE, contentType)
-                val relativePath = "${defaultImageRelativePath}/${defaultImageSubDir}/"
+                val relativePath = "$defaultImageRelativePath/$defaultImageSubDir/"
                 put(MediaStore.Images.ImageColumns.RELATIVE_PATH, relativePath)
             }
 
