@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
@@ -28,7 +29,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.lcb.one.ui.page.HomePage
 import com.lcb.one.viewmodel.PoemViewModel
-import com.lcb.one.ui.page.NoRippleInteractionSource
 import com.lcb.one.ui.page.SettingsPage
 import com.lcb.one.ui.page.ToolPage
 import com.lcb.one.ui.theme.labelLarge
@@ -71,9 +71,9 @@ class HomeActivity : ComponentActivity() {
                     var selectedIndex by remember { mutableIntStateOf(0) }
 
                     when (selectedIndex) {
-                        0 -> HomePage(modifier = Modifier.weight(1f))
-                        1 -> ToolPage(modifier = Modifier.weight(1f))
-                        2 -> SettingsPage(modifier = Modifier.weight(1f))
+                        0 -> HomePage(modifier = Modifier.weight(1f).wrapContentSize())
+                        1 -> ToolPage(modifier = Modifier.weight(1f).wrapContentSize())
+                        2 -> SettingsPage(modifier = Modifier.weight(1f).wrapContentSize())
                     }
 
                     AppTab(selectedIndex, items) {
@@ -100,7 +100,6 @@ class HomeActivity : ComponentActivity() {
                     selected = selected,
                     onClick = { onClick(index) },
                     text = { Text(tabItem.title, color = indicatorColor, style = labelLarge()) },
-                    interactionSource = NoRippleInteractionSource()
                 )
             }
         }

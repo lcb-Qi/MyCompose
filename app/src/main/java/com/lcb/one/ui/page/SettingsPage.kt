@@ -2,6 +2,7 @@ package com.lcb.one.ui.page
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -42,7 +43,7 @@ object AppSettings {
 
 @Composable
 fun SettingsPage(modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.fillMaxSize()) {
         val state = rememberPreferenceBooleanSettingState(
             stringResource(R.string.settings_dynamic_color_key),
             appDynamicColor

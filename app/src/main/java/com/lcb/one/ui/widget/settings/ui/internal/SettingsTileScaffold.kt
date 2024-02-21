@@ -21,8 +21,8 @@ internal fun SettingsTileScaffold(
     val minHeight = 72.dp
     ListItem(
         modifier = Modifier.defaultMinSize(minHeight = minHeight),
-        headlineText = { WrapContentColor(enabled) { title() } },
-        supportingText = if (summary == null) {
+        headlineContent = { WrapContentColor(enabled) { title() } },
+        supportingContent = if (summary == null) {
             null
         } else {
             { WrapContentColor(enabled = enabled) { summary() } }

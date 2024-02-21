@@ -21,6 +21,18 @@ object SharedPrefUtils {
         }
     }
 
+    fun getLong(key: String): Long {
+        if (key.isBlank()) return -1
+        return defaultPreferences.getLong(key, -1)
+    }
+
+    fun putLong(key: String, value: Long) {
+        if (key.isBlank()) return
+        defaultPreferences.edit {
+            putLong(key, value)
+        }
+    }
+
     fun getInt(key: String): Int {
         if (key.isBlank()) return -1
         return defaultPreferences.getInt(key, -1)

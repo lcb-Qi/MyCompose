@@ -49,7 +49,6 @@ fun DeviceInfoPage() {
                     selected = selected,
                     onClick = { selectedIndex = index },
                     text = { Text(text = text, style = labelLarge()) },
-                    interactionSource = NoRippleInteractionSource()
                 )
             }
         }

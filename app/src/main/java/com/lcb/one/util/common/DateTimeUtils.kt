@@ -8,16 +8,15 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.ResourceBundle.Control.FORMAT_DEFAULT
 
 object DateTimeUtils {
-    private const val TAG = "DateTimeUtils"
-
-    private val DEFAULT_ZONE_OFFSET: ZoneOffset = ZoneOffset.of("+8")
     private const val FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss"
     private const val FORMAT_SHORT = "yyyyMMddHHmmss"
 
     fun nowMillis(): Long {
-        return LocalDateTime.now().toInstant(DEFAULT_ZONE_OFFSET).toEpochMilli()
+        val now = LocalDateTime.now()
+        return now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
     fun nowString(): String {
@@ -39,7 +38,7 @@ object DateTimeUtils {
 
     fun toMillis(text: String, pattern: String = FORMAT_DEFAULT): Long {
         val dateTime = LocalDateTime.parse(text, DateTimeFormatter.ofPattern(pattern))
-        return dateTime.toInstant(DEFAULT_ZONE_OFFSET).toEpochMilli()
+        return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
     fun friendlyDuration(start: Long, end: Long = nowMillis()): String {
