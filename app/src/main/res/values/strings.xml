@@ -28,4 +28,6 @@
         <item>900000</item>
         <item>1800000</item>
     </integer-array>
+    <string name="tool">Tools</string>
+    <string name="more">More</string>
 </resources>

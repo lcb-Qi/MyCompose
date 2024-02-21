@@ -4,5 +4,6 @@ object RouteConfig {
     const val HOME = "home"
     const val BILI = "bili"
     const val DEVICE = "device"
+    const val MORE = "more"
     const val SETTINGS = "settings"
 }

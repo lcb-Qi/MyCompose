@@ -40,7 +40,7 @@ fun ToolPage(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ToolPageImpl(navController: NavController? = null) {
+private fun ToolPageImpl(navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -49,10 +49,10 @@ fun ToolPageImpl(navController: NavController? = null) {
 }
 
 @Composable
-private fun ToolView(modifier: Modifier, navController: NavController? = null) {
+private fun ToolView(modifier: Modifier, navController: NavController) {
     LazyVerticalGrid(modifier = modifier, columns = GridCells.Fixed(2)) {
         addToolButton("设备信息", true) {
-            navController?.navigate(RouteConfig.DEVICE)
+            navController.navigateSingleTop(RouteConfig.DEVICE)
         }
         addToolButton("提取壁纸") {
             ThreadPool.executeOnBackground {
@@ -63,7 +63,7 @@ private fun ToolView(modifier: Modifier, navController: NavController? = null) {
             }
         }
         addToolButton("bilibili工具") {
-            navController?.navigate(RouteConfig.BILI)
+            navController.navigateSingleTop(RouteConfig.BILI)
         }
     }
 }

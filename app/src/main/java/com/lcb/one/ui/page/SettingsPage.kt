@@ -78,11 +78,11 @@ fun SettingsPage(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun SettingsTitle(title: String) {
+fun SettingsTitle(title: String) {
     Text(text = title, style = titleMedium())
 }
 
 @Composable
-private fun SettingsSummary(summary: String) {
+fun SettingsSummary(summary: String) {
     Text(text = summary, style = bodySmall())
 }

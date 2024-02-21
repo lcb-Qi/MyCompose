@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,8 +28,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.lcb.one.R
 import com.lcb.one.ui.page.HomePage
+import com.lcb.one.ui.page.MorePage
 import com.lcb.one.viewmodel.PoemViewModel
 import com.lcb.one.ui.page.SettingsPage
 import com.lcb.one.ui.page.ToolPage
@@ -64,21 +69,19 @@ class HomeActivity : ComponentActivity() {
                         .fillMaxSize()
                 ) {
                     val items = listOf(
-                        TabItem("主页", Icons.Filled.Home),
-                        TabItem("工具", Icons.Filled.List),
-                        TabItem("设置", Icons.Filled.Settings)
+                        TabItem(stringResource(R.string.home), Icons.Filled.Home),
+                        TabItem(stringResource(R.string.tool), Icons.Filled.Android),
+                        TabItem(stringResource(R.string.more), Icons.Filled.MoreHoriz)
                     )
                     var selectedIndex by remember { mutableIntStateOf(0) }
 
                     when (selectedIndex) {
-                        0 -> HomePage(modifier = Modifier.weight(1f).wrapContentSize())
-                        1 -> ToolPage(modifier = Modifier.weight(1f).wrapContentSize())
-                        2 -> SettingsPage(modifier = Modifier.weight(1f).wrapContentSize())
+                        0 -> HomePage(modifier = Modifier.weight(1f))
+                        1 -> ToolPage(modifier = Modifier.weight(1f))
+                        2 -> MorePage(modifier = Modifier.weight(1f))
                     }
 
-                    AppTab(selectedIndex, items) {
-                        selectedIndex = it
-                    }
+                    AppTab(selectedIndex, items) { selectedIndex = it }
                 }
             }
         }
