@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">One Fish</string>
+    <string name="app_name">Salted Fish</string>
 
     <string name="settings_dynamic_color_key" translatable="false">app_dynamicColor</string>
     <string name="settings_dynamic_color_title">Dynamic color selection</string>

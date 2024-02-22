@@ -14,14 +14,14 @@ plugins {
 
 android {
     namespace = "com.lcb.one"
-    compileSdk = 34
+    compileSdk = rootProject.ext.get("compileSdk") as Int
 
     defaultConfig {
         applicationId = "com.lcb.one"
-        minSdk = 31
-        targetSdk = 34
-        versionCode = 1
-        versionName = "0.1.0"
+        minSdk = rootProject.ext.get("minSdk") as Int
+        targetSdk = rootProject.ext.get("compileSdk") as Int
+        versionCode = rootProject.ext.get("version_code") as Int
+        versionName = rootProject.ext.get("version_name") as String
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -77,7 +77,7 @@ android {
 
 tasks.register("copyTask") {
     doLast {
-        val appName = "One"
+        val appName = "Salted_fish"
         val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
         val fileName = "$appName-${android.defaultConfig.versionName}-release-$date.apk"
         val sourceFile = "./build/outputs/apk/release/app-release.apk"
@@ -102,13 +102,14 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.activity:activity-compose:1.8.1")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation(platform("androidx.compose:compose-bom:${rootProject.ext["compose_bom"]}"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3:1.2.0")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-icons-extended")
+
     implementation("androidx.navigation:navigation-compose:2.7.6")
-    implementation("androidx.compose.material:material-icons-extended:1.6.0")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation("androidx.preference:preference-ktx:1.2.0")
