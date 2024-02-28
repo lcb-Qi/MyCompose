@@ -2,8 +2,8 @@ package com.lcb.one.ui.page
 
 import android.content.Intent
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -26,9 +26,7 @@ import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.PACKAGE_ME
 
 fun NavController.navigateSingleTop(route: String) {
-    navigate(route = route, navOptions = navOptions {
-        launchSingleTop = true
-    })
+    navigate(route = route, navOptions = navOptions { launchSingleTop = true })
 }
 
 @Composable
@@ -36,8 +34,10 @@ fun MorePage(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     NavHost(
         navController = navController, startDestination = RouteConfig.MORE,
-        enterTransition = { slideInVertically(animationSpec = tween(500)) { it } },
-        exitTransition = { slideOutVertically(animationSpec = tween(500)) { -it } },
+        enterTransition = { slideInHorizontally(animationSpec = tween(500)) { it } },
+        exitTransition = { slideOutHorizontally(animationSpec = tween(500)) { -it } },
+        popEnterTransition = { slideInHorizontally(animationSpec = tween(500)) { -it } },
+        popExitTransition = { slideOutHorizontally(animationSpec = tween(500)) { it } },
         modifier = modifier
     ) {
         composable(RouteConfig.MORE) { MorePageImpl(navController) }

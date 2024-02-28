@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -59,15 +60,17 @@ class HomeActivity : ComponentActivity() {
             ) { paddingValues ->
                 val topPadding = paddingValues.calculateTopPadding()
                 val bottomPadding = paddingValues.calculateBottomPadding()
-                Box(
+                Column(
                     modifier = Modifier
                         .padding(top = topPadding, bottom = bottomPadding)
                         .fillMaxSize()
                 ) {
                     when (selectedIndex) {
-                        0 -> HomePage()
-                        1 -> ToolPage()
-                        2 -> MorePage()
+                        // 带有 NavHost 的页面，需要占满全部空间，否则动画不生效，原因未知
+                        // 这里通过 Column 设置 weight = 1，fill = true
+                        0 -> HomePage(Modifier.weight(1f))
+                        1 -> ToolPage(Modifier.weight(1f))
+                        2 -> MorePage(Modifier.weight(1f))
                     }
                 }
             }

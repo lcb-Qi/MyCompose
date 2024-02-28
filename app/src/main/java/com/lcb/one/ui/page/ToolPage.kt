@@ -2,16 +2,14 @@ package com.lcb.one.ui.page
 
 import android.app.WallpaperManager
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.Column
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmapOrNull
@@ -29,8 +27,10 @@ fun ToolPage(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     NavHost(
         navController = navController, startDestination = RouteConfig.HOME,
-        enterTransition = { slideInVertically(animationSpec = tween(500)) { it } },
-        exitTransition = { slideOutVertically(animationSpec = tween(500)) { -it } },
+        enterTransition = { slideInHorizontally(animationSpec = tween(500)) { it } },
+        exitTransition = { slideOutHorizontally(animationSpec = tween(500)) { -it } },
+        popEnterTransition = { slideInHorizontally(animationSpec = tween(500)) { -it } },
+        popExitTransition = { slideOutHorizontally(animationSpec = tween(500)) { it } },
         modifier = modifier.padding(horizontal = 16.dp)
     ) {
         composable(RouteConfig.HOME) { ToolPageImpl(navController) }
@@ -41,16 +41,7 @@ fun ToolPage(modifier: Modifier = Modifier) {
 
 @Composable
 private fun ToolPageImpl(navController: NavController) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        ToolView(Modifier.weight(1f), navController)
-    }
-}
-
-@Composable
-private fun ToolView(modifier: Modifier, navController: NavController) {
-    LazyVerticalGrid(modifier = modifier, columns = GridCells.Fixed(2)) {
+    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
         addToolButton("设备信息", true) {
             navController.navigateSingleTop(RouteConfig.DEVICE)
         }
