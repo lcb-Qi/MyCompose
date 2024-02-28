@@ -14,7 +14,7 @@ plugins {
 
 ext["compileSdk"] = 34
 ext["minSdk"] = 31
-ext["version_code"] = 10000
-ext["version_name"] = "1.0.0"
+ext["version_code"] = 10001
+ext["version_name"] = "1.0.1"
 
 ext["compose_bom"] = "2024.02.00"
