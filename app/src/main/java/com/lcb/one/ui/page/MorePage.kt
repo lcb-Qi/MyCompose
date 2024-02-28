@@ -1,30 +1,29 @@
 package com.lcb.one.ui.page
 
+import android.content.Intent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.lcb.one.R
+import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.widget.settings.ui.SettingsMenuLink
+import com.lcb.one.util.android.AppUtils
+import com.lcb.one.util.android.PACKAGE_ME
 
 fun NavController.navigateSingleTop(route: String) {
     navigate(route = route, navOptions = navOptions {
@@ -49,11 +48,36 @@ fun MorePage(modifier: Modifier = Modifier) {
 @Composable
 private fun MorePageImpl(navController: NavController) {
     Column {
+        // 设置
         SettingsMenuLink(
             title = { SettingsTitle(stringResource(R.string.setting)) },
             icon = { Icon(imageVector = Icons.Filled.Settings, contentDescription = "") }
         ) {
             navController.navigateSingleTop(RouteConfig.SETTINGS)
+        }
+
+        // 版本信息
+        val versionName = AppUtils.getAppVersionName(packageName = PACKAGE_ME)
+        val buildTime = stringResource(R.string.BUILD_TIME)
+        val versionInfo = "$versionName($buildTime)"
+        SettingsMenuLink(
+            title = { SettingsTitle(stringResource(R.string.version_info)) },
+            subtitle = { SettingsSummary(versionInfo) },
+            icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "") }
+        ) {
+        }
+
+        // 项目地址
+        val url = stringResource(R.string.project_location_url)
+        SettingsMenuLink(
+            title = { SettingsTitle(stringResource(R.string.project_location)) },
+            subtitle = { SettingsSummary(url) },
+            icon = { Icon(imageVector = Icons.Filled.Link, contentDescription = "") }
+        ) {
+            val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            MyApp.getAppContext().startActivity(intent)
         }
     }
 }

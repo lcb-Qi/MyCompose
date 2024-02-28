@@ -44,7 +44,8 @@ object AppSettings {
 @Composable
 fun SettingsPage(modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxSize()) {
-        val state = rememberPreferenceBooleanSettingState(
+        // 动态取色
+        val appDynamicColorState = rememberPreferenceBooleanSettingState(
             stringResource(R.string.settings_dynamic_color_key),
             appDynamicColor
         )
@@ -52,14 +53,14 @@ fun SettingsPage(modifier: Modifier = Modifier) {
         SettingsSwitch(
             title = { SettingsTitle(stringResource(R.string.settings_dynamic_color_title)) },
             summary = { SettingsSummary(stringResource(R.string.settings_dynamic_color_summary)) },
-            state = state.value
+            state = appDynamicColorState.value
         ) {
             appDynamicColor = it
-            state.value = appDynamicColor
+            appDynamicColorState.value = appDynamicColor
         }
 
-
-        val state2 = rememberPreferenceIntSettingState(
+        // 标题更新间隔
+        val durationIndexState = rememberPreferenceIntSettingState(
             stringResource(R.string.settings_poem_update_duration_key),
             PoemViewModel.durationIndex
         )
@@ -67,7 +68,7 @@ fun SettingsPage(modifier: Modifier = Modifier) {
         val values = integerArrayResource(R.array.settings_duration_values)
         SettingsListDropdown(
             title = { SettingsTitle(stringResource(R.string.settings_poem_update_duration_title)) },
-            state = state2,
+            state = durationIndexState,
             items = options.toList(),
             onItemSelected = { index, _ ->
                 PoemViewModel.durationIndex = index

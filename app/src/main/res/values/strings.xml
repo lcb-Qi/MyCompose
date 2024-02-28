@@ -13,6 +13,9 @@
     <string name="ok">OK</string>
     <string name="detail">Detail</string>
     <string name="friendly_duration">%d days %02d hours %02d minutes %02d seconds</string>
+    <string name="version_info">Version Info</string>
+    <string name="project_location">Project Location</string>
+    <string name="project_location_url" translatable="false">https://github.com/lcb-Qi/MyCompose</string>
 
     <string-array name="settings_duration_options">
         <item>1分钟(dev)</item>
