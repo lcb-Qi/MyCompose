@@ -64,7 +64,7 @@ android {
         resValue(
             "string",
             "BUILD_TIME",
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
         )
 
         resValue(
