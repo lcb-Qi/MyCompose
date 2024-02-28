@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lcb.one.network.BiliServerAccessor
 import com.lcb.one.util.android.LLog
+import com.lcb.one.util.common.launchOnIO
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 class BiliViewModel : ViewModel() {
     private val TAG = "BiliViewModel"
@@ -15,7 +15,7 @@ class BiliViewModel : ViewModel() {
 
     fun getVideoInfo(videoId: String) {
         LLog.d(TAG, "getVideoInfo: videoId = $videoId")
-        viewModelScope.launch {
+        viewModelScope.launchOnIO {
             val videoInfoResponse = if (videoId.startsWith("av", ignoreCase = true)) {
                 biliService.getVideoInfoByAvId(videoId)
             } else {

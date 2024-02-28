@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.widget.ToolButton
 import com.lcb.one.util.android.DownLoadUtil
+import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.common.ThreadPool
 
 @Composable
@@ -47,9 +48,13 @@ private fun ToolPageImpl(navController: NavController) {
         }
         addToolButton("提取壁纸") {
             ThreadPool.executeOnBackground {
-                val drawable = WallpaperManager.getInstance(MyApp.getAppContext()).drawable
-                drawable?.toBitmapOrNull()?.let {
-                    DownLoadUtil.writeBitmapToImageFile(it)
+                runCatching {
+                    val drawable = WallpaperManager.getInstance(MyApp.getAppContext()).drawable
+                    drawable?.toBitmapOrNull()?.let {
+                        DownLoadUtil.writeBitmapToImageFile(it)
+                    }
+                }.onFailure {
+                    ToastUtils.showToast("保存失败 ${it.message}")
                 }
             }
         }

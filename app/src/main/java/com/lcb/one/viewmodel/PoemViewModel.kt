@@ -7,11 +7,10 @@ import com.lcb.one.network.PoemServerAccessor
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.page.AppSettings
 import com.lcb.one.util.common.JsonUtils
-import com.lcb.one.util.android.LLog
 import com.lcb.one.util.android.SharedPrefUtils
+import com.lcb.one.util.common.launchOnIO
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 class PoemViewModel : ViewModel() {
     companion object {
@@ -55,7 +54,7 @@ class PoemViewModel : ViewModel() {
     fun getPoem(forceRefresh: Boolean = false) {
         if (!needRefresh(forceRefresh)) return
 
-        viewModelScope.launch {
+        viewModelScope.launchOnIO {
             isLoading.value = true
             refreshPoem()
             isLoading.value = false
@@ -63,7 +62,6 @@ class PoemViewModel : ViewModel() {
     }
 
     private fun needRefresh(forceRefresh: Boolean): Boolean {
-        LLog.d(TAG, "needRefresh: duration = $duration")
         return poemFlow.value.recommend.isBlank() || forceRefresh || System.currentTimeMillis() - poemFlow.value.updateTime > duration
     }
 
