@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.lcb.one.ui.widget.settings.storage.SettingValueState
 import com.lcb.one.ui.widget.settings.ui.internal.SettingsTileScaffold
@@ -36,7 +35,7 @@ fun SettingsListDropdown(
     title: @Composable () -> Unit,
     items: List<String>,
     icon: (@Composable () -> Unit)? = null,
-    subtitle: (@Composable () -> Unit)? = null,
+    summary: (@Composable () -> Unit)? = null,
     onItemSelected: ((Int, String) -> Unit)? = null,
     menuItem: (@Composable (index: Int, text: String) -> Unit)? = null,
 ) {
@@ -57,7 +56,7 @@ fun SettingsListDropdown(
             SettingsTileScaffold(
                 enabled = enabled,
                 title = title,
-                summary = subtitle,
+                summary = summary,
                 icon = icon,
                 action = {
                     WrapContentColor(enabled = enabled) {
@@ -88,7 +87,7 @@ fun SettingsListDropdown(
                                             if (menuItem != null) {
                                                 menuItem(index, text)
                                             } else {
-                                                Text(text = text, color = Color.Black)
+                                                Text(text = text)
                                             }
                                         },
                                         onClick = {
