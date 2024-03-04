@@ -33,4 +33,5 @@
     </integer-array>
     <string name="tool">Tools</string>
     <string name="more">More</string>
+    <string name="cancel">Cancel</string>
 </resources>

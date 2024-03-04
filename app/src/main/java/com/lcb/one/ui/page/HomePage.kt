@@ -18,6 +18,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -114,12 +115,17 @@ private fun DurationText() {
     })
 
     if (showDialog) {
+
         DatePickerDialog(
             onDismissRequest = { showDialog = false },
+            dismissButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text(text = stringResource(R.string.cancel))
+                }
+            },
             confirmButton = {
-                ToolButton(
-                    title = stringResource(R.string.ok),
-                    onclick = {
+                TextButton(
+                    onClick = {
                         showDialog = false
                         datePickerState.selectedDateMillis?.let {
                             val calendar = Calendar.getInstance()
@@ -132,7 +138,9 @@ private fun DurationText() {
                             updater(calendar.timeInMillis)
                         }
                     }
-                )
+                ) {
+                    Text(text = stringResource(R.string.ok))
+                }
             }
         ) {
             DatePicker(state = datePickerState)

@@ -88,9 +88,11 @@ class HomeActivity : ComponentActivity() {
                 }
 
                 if (showDetail) {
-                    PoemInfoDialog(poemDetail = poemInfo.origin) {
-                        showDetail = false
-                    }
+                    PoemInfoDialog(
+                        poemDetail = poemInfo.origin,
+                        onDismissRequest = { showDetail = false },
+                        onConfirm = { showDetail = false }
+                    )
                 }
             }
         }
