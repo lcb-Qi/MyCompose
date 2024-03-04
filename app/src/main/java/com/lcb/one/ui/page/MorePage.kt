@@ -22,6 +22,7 @@ import androidx.navigation.navOptions
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.widget.settings.ui.SettingsMenuLink
+import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.PACKAGE_ME
 
@@ -56,28 +57,28 @@ private fun MorePageImpl(navController: NavController) {
             navController.navigateSingleTop(RouteConfig.SETTINGS)
         }
 
-        // 版本信息
-        val versionName = AppUtils.getAppVersionName(packageName = PACKAGE_ME)
-        val buildTime = stringResource(R.string.BUILD_TIME)
-        val versionInfo = "$versionName($buildTime)"
-        SettingsMenuLink(
-            title = { SettingsTitle(stringResource(R.string.version_info)) },
-            subtitle = { SettingsSummary(versionInfo) },
-            icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "") }
-        ) {
-        }
-
         // 项目地址
         val url = stringResource(R.string.project_location_url)
         SettingsMenuLink(
             title = { SettingsTitle(stringResource(R.string.project_location)) },
-            subtitle = { SettingsSummary(url) },
+            summary = { SettingsSummary(url) },
             icon = { Icon(imageVector = Icons.Filled.Link, contentDescription = "") }
         ) {
             val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             MyApp.getAppContext().startActivity(intent)
+        }
+
+        // 版本信息
+        val versionName = AppUtils.getAppVersionName(packageName = PACKAGE_ME)
+        val buildTime = stringResource(R.string.BUILD_TIME)
+        val versionInfo = "$versionName($buildTime)"
+        SettingsSimpleText(
+            title = { SettingsTitle(stringResource(R.string.version_info)) },
+            summary = { SettingsSummary(versionInfo) },
+            icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "") }
+        ) {
         }
     }
 }

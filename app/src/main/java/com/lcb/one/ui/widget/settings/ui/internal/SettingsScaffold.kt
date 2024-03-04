@@ -1,26 +1,23 @@
 package com.lcb.one.ui.widget.settings.ui.internal
 
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SettingsTileScaffold(
+internal fun SettingsScaffold(
     enabled: Boolean = true,
     title: @Composable () -> Unit,
     summary: @Composable (() -> Unit)? = null,
-    icon: (@Composable () -> Unit)? = null,
-    action: (@Composable (Boolean) -> Unit)? = null,
-    actionDivider: Boolean = false,
+    icon: @Composable (() -> Unit)? = null,
+    action: @Composable ((Boolean) -> Unit)? = null,
 ) {
-    // val minHeight = if (subtitle == null) 72.dp else 88.dp
-    val minHeight = 72.dp
     ListItem(
-        modifier = Modifier.defaultMinSize(minHeight = minHeight),
+        modifier = Modifier.defaultMinSize(minHeight = 72.dp),
         headlineContent = { WrapContentColor(enabled) { title() } },
         supportingContent = if (summary == null) {
             null
@@ -35,7 +32,23 @@ internal fun SettingsTileScaffold(
         trailingContent = if (action == null) {
             null
         } else {
-            { action(enabled) }
+            { WrapContentColor(enabled) { action(enabled) } }
         },
     )
+}
+
+@Composable
+private fun WrapContentColor(
+    enabled: Boolean,
+    content: @Composable () -> Unit,
+) {
+    val alpha = if (enabled) {
+        1.0f
+    } else {
+        0.6f
+    }
+    val contentColor = LocalContentColor.current.copy(alpha = alpha)
+    CompositionLocalProvider(LocalContentColor provides contentColor) {
+        content()
+    }
 }

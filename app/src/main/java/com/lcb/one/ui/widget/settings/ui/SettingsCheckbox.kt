@@ -14,7 +14,7 @@ import androidx.compose.ui.semantics.Role
 import com.lcb.one.ui.widget.settings.storage.SettingValueState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
-import com.lcb.one.ui.widget.settings.ui.internal.SettingsTileScaffold
+import com.lcb.one.ui.widget.settings.ui.internal.SettingsScaffold
 
 @Composable
 fun SettingsCheckbox(
@@ -32,7 +32,6 @@ fun SettingsCheckbox(
     storageValue = boolean
     onCheckedChange(storageValue)
   }
-  Surface {
     Row(
       modifier = modifier
         .fillMaxWidth()
@@ -44,7 +43,7 @@ fun SettingsCheckbox(
         ),
       verticalAlignment = Alignment.CenterVertically,
     ) {
-      SettingsTileScaffold(
+      SettingsScaffold(
         enabled = enabled,
         title = title,
         summary = subtitle,
@@ -59,5 +58,4 @@ fun SettingsCheckbox(
         },
       )
     }
-  }
 }

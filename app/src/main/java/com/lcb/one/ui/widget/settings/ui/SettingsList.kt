@@ -41,7 +41,6 @@ fun SettingsList(
   useSelectedValueAsSubtitle: Boolean = true,
   subtitle: (@Composable () -> Unit)? = null,
   closeDialogDelay: Long = 200,
-  action: (@Composable (Boolean) -> Unit)? = null,
   onItemSelected: ((Int, String) -> Unit)? = null,
 ) {
   if (state.value >= items.size) {
@@ -61,8 +60,7 @@ fun SettingsList(
     enabled = enabled,
     icon = icon,
     title = title,
-    subtitle = safeSubtitle,
-    action = action,
+    summary = safeSubtitle,
     onClick = { showDialog = true },
   )
 

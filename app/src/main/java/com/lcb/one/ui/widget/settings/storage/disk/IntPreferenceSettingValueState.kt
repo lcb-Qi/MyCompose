@@ -14,7 +14,7 @@ import com.lcb.one.ui.widget.settings.storage.SettingValueState
 @Composable
 fun rememberPreferenceIntSettingState(
     key: String,
-    defaultValue: Int = -1,
+    defaultValue: Int = 0,
     preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(LocalContext.current),
 ): IntPreferenceSettingValueState {
     return remember {

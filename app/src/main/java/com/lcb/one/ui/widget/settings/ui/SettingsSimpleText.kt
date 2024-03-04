@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import com.lcb.one.ui.widget.settings.ui.internal.SettingsScaffold
 
 @Composable
-fun SettingsMenuLink(
+fun SettingsSimpleText(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     icon: (@Composable () -> Unit)? = null,
@@ -34,9 +34,7 @@ fun SettingsMenuLink(
             enabled = enabled,
             summary = summary,
             icon = icon,
-            action = {
-                Icon(Icons.AutoMirrored.Filled.ArrowForwardIos, "")
-            },
+            action = null,
         )
     }
 }

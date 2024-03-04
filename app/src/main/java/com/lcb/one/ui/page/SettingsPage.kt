@@ -53,7 +53,7 @@ fun SettingsPage(modifier: Modifier = Modifier) {
         SettingsSwitch(
             title = { SettingsTitle(stringResource(R.string.settings_dynamic_color_title)) },
             summary = { SettingsSummary(stringResource(R.string.settings_dynamic_color_summary)) },
-            state = appDynamicColorState.value
+            checked = appDynamicColorState.value
         ) {
             appDynamicColor = it
             appDynamicColorState.value = appDynamicColor
@@ -68,9 +68,10 @@ fun SettingsPage(modifier: Modifier = Modifier) {
         val values = integerArrayResource(R.array.settings_duration_values)
         SettingsListDropdown(
             title = { SettingsTitle(stringResource(R.string.settings_poem_update_duration_title)) },
-            state = durationIndexState,
+            selectIndex = durationIndexState.value,
             items = options.toList(),
             onItemSelected = { index, _ ->
+                durationIndexState.value = index
                 PoemViewModel.durationIndex = index
                 PoemViewModel.duration = values[index]
             }
