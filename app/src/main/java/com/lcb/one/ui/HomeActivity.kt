@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.lcb.one.R
 import com.lcb.one.ui.page.HomePage
 import com.lcb.one.ui.page.MorePage
@@ -29,6 +31,7 @@ import com.lcb.one.ui.widget.TopAppBars
 import com.lcb.one.ui.widget.AppThemeSurface
 import com.lcb.one.ui.widget.BottomBars
 import com.lcb.one.ui.widget.BottomBarItem
+import com.lcb.one.ui.widget.dialog.LoadingDialog
 import com.lcb.one.ui.widget.dialog.PoemInfoDialog
 
 class HomeActivity : ComponentActivity() {
@@ -59,6 +62,7 @@ class HomeActivity : ComponentActivity() {
             var selectedIndex by remember { mutableIntStateOf(0) }
 
             val poemInfo by poemViewModel.poemFlow.collectAsState()
+            val isLoading by poemViewModel.isLoading.collectAsState()
             var showDetail by remember { mutableStateOf(false) }
 
             Scaffold(
@@ -93,6 +97,11 @@ class HomeActivity : ComponentActivity() {
                         onDismissRequest = { showDetail = false },
                         onConfirm = { showDetail = false }
                     )
+                }
+                if (isLoading) {
+                    LoadingDialog {
+                        Text(text = stringResource(R.string.loading))
+                    }
                 }
             }
         }

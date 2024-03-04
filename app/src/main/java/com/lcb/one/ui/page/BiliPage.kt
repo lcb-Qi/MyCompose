@@ -5,6 +5,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -36,7 +37,7 @@ fun BiliPage() {
     val coverUrl by biliViewModel.coverUrl.collectAsState()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
     ) {
         OutlinedTextField(
             value = textInput,
@@ -45,7 +46,7 @@ fun BiliPage() {
             modifier = Modifier.fillMaxWidth()
         )
 
-        ToolButton(title = "获取封面") { biliViewModel.getVideoInfo(textInput) }
+        ToolButton(text = "获取封面") { biliViewModel.getVideoInfo(textInput) }
 
         AsyncImage(model = coverUrl, contentDescription = null,
             modifier = Modifier

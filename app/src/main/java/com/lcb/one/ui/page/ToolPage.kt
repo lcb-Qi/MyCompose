@@ -32,7 +32,7 @@ fun ToolPage(modifier: Modifier = Modifier) {
         exitTransition = { slideOutHorizontally(animationSpec = tween(500)) { -it } },
         popEnterTransition = { slideInHorizontally(animationSpec = tween(500)) { -it } },
         popExitTransition = { slideOutHorizontally(animationSpec = tween(500)) { it } },
-        modifier = modifier.padding(horizontal = 16.dp)
+        modifier = modifier
     ) {
         composable(RouteConfig.HOME) { ToolPageImpl(navController) }
         composable(RouteConfig.DEVICE) { DeviceInfoPage() }
@@ -42,7 +42,10 @@ fun ToolPage(modifier: Modifier = Modifier) {
 
 @Composable
 private fun ToolPageImpl(navController: NavController) {
-    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+    LazyVerticalGrid(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        columns = GridCells.Fixed(2)
+    ) {
         addToolButton("设备信息", true) {
             navController.navigateSingleTop(RouteConfig.DEVICE)
         }
@@ -73,11 +76,11 @@ private fun LazyGridScope.addToolButton(
         item(span = {
             GridItemSpan(maxLineSpan)
         }) {
-            ToolButton(title = title) { action?.invoke() }
+            ToolButton(text = title) { action?.invoke() }
         }
     } else {
         item {
-            ToolButton(title = title) { action?.invoke() }
+            ToolButton(text = title) { action?.invoke() }
         }
     }
 }

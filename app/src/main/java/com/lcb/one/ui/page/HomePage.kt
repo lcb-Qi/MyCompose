@@ -41,8 +41,6 @@ import coil.compose.AsyncImage
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.theme.labelLarge
-import com.lcb.one.ui.widget.ToolButton
-import com.lcb.one.util.android.LLog
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.android.SharedPrefUtils
 import kotlinx.coroutines.delay
@@ -51,7 +49,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Calendar
-import java.util.Date
 
 @Composable
 @Preview(showSystemUi = false)

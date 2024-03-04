@@ -36,7 +36,7 @@ fun DeviceInfoPage() {
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     val tabTitles = listOf("Basic", "Display")
-    Column(modifier = Modifier.fillMaxSize(), Arrangement.spacedBy(4.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp), Arrangement.spacedBy(4.dp)) {
         TabRow(
             selectedTabIndex = selectedIndex,
             modifier = Modifier
