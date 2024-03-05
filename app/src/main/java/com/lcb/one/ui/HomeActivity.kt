@@ -53,7 +53,7 @@ class HomeActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        poemViewModel.getPoem(false)
+        poemViewModel.refresh(false)
     }
 
     @Composable
@@ -69,7 +69,7 @@ class HomeActivity : ComponentActivity() {
                 topBar = {
                     TopAppBars(
                         text = poemInfo.recommend,
-                        onClick = { poemViewModel.getPoem(true) },
+                        onClick = { poemViewModel.refresh(true) },
                         onLongClick = { showDetail = true }
                     )
                 },

@@ -1,32 +1,20 @@
 package com.lcb.one.network
 
-import com.lcb.one.network.os.OkhttpFactory
 import com.lcb.one.bean.VideoInfoResponse
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
+import com.lcb.one.network.os.RESTFulRequest
+import com.lcb.one.util.android.LLog
 
-class BiliServerAccessor private constructor() {
-    companion object {
-        private const val BASE_URL = "https://api.bilibili.com/"
+object BiliServerAccessor {
+    private const val TAG = "BiliServerAccessor"
+    private const val BASE_URL = "https://api.bilibili.com/"
 
-        fun getService(): BiliService {
-            return Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(OkhttpFactory.okHttpClient)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
-                .create(BiliService::class.java)
-        }
-    }
+    suspend fun getVideoInfo(videoId: String): VideoInfoResponse? {
+        val result = RESTFulRequest.create(BASE_URL + "x/web-interface/view") {
+            param(if (videoId.startsWith("av")) "avid" else "bvid", videoId)
+        }.getResult(VideoInfoResponse::class.java)
 
-
-    interface BiliService {
-        @GET("x/web-interface/view")
-        suspend fun getVideoInfoByAvId(@Query("avid") avId: String): VideoInfoResponse
-
-        @GET("x/web-interface/view")
-        suspend fun getVideoInfoByBvId(@Query("bvid") avId: String): VideoInfoResponse
+        return result.onFailure {
+            LLog.d(TAG, "getVideoInfo failed: $it")
+        }.getOrNull()
     }
 }

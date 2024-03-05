@@ -38,9 +38,7 @@ object JsonUtils {
      * @return 实例对象
      */
     inline fun <reified T> fromJson(src: String): T? {
-        return kotlin.runCatching {
-            moshi.adapter<T>(getType<T>()).fromJson(src)
-        }.getOrNull()
+        return moshi.adapter<T>(getType<T>()).fromJson(src)
     }
 
 
@@ -50,7 +48,7 @@ object JsonUtils {
             moshi.adapter<T>(typeOfT).fromJson(src)
         }
 
-        return result.getOrNull()
+        return result.getOrThrow()
     }
 
     fun <T> fromJson(src: String, typeOfT: Class<T>): T? {
@@ -58,7 +56,7 @@ object JsonUtils {
             moshi.adapter(typeOfT).fromJson(src)
         }
 
-        return result.getOrNull()
+        return result.getOrThrow()
     }
 
     fun <T> listFromJson(src: String, typeOfT: Class<T>): List<T>? {

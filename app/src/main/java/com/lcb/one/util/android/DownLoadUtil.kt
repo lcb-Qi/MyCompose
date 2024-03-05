@@ -11,10 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.ResponseBody
-import retrofit2.Retrofit
-import retrofit2.http.GET
-import retrofit2.http.Streaming
-import retrofit2.http.Url
 
 object DownLoadUtil {
     private const val TAG = "DownLoadUtil"
@@ -24,24 +20,24 @@ object DownLoadUtil {
         Environment.getExternalStoragePublicDirectory(defaultImageRelativePath)
     private const val defaultImageSubDir = "aTool"
 
-    interface DownloadService {
-        @GET
-        @Streaming
-        suspend fun downloadFromUrl(@Url url: String): ResponseBody
-    }
-
-    private val downloadService by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://127.0.0.1/")
-            .build()
-            .create(DownloadService::class.java)
-    }
+    // interface DownloadService {
+    //     @GET
+    //     @Streaming
+    //     suspend fun downloadFromUrl(@Url url: String): ResponseBody
+    // }
+    //
+    // private val downloadService by lazy {
+    //     Retrofit.Builder()
+    //         .baseUrl("https://127.0.0.1/")
+    //         .build()
+    //         .create(DownloadService::class.java)
+    // }
 
     suspend fun saveImageFromUrl(url: String, fileName: String = DateTimeUtils.nowStringShort()) =
         withContext(Dispatchers.IO) {
             if (url.isBlank() || fileName.isBlank()) return@withContext
-            val responseBody = downloadService.downloadFromUrl(url)
-            responseBody.writeToImageFile(fileName)
+            // val responseBody = downloadService.downloadFromUrl(url)
+            // responseBody.writeToImageFile(fileName)
         }
 
 

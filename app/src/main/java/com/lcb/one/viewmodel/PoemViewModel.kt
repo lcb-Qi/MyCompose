@@ -6,11 +6,12 @@ import com.lcb.one.bean.PoemResponse
 import com.lcb.one.network.PoemServerAccessor
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.page.AppSettings
+import com.lcb.one.util.android.LLog
 import com.lcb.one.util.common.JsonUtils
 import com.lcb.one.util.android.SharedPrefUtils
-import com.lcb.one.util.common.launchOnIO
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class PoemViewModel : ViewModel() {
     companion object {
@@ -21,13 +22,12 @@ class PoemViewModel : ViewModel() {
         private const val KEY_LAST_POEM = "last_poem"
     }
 
-    private val poemApiService = PoemServerAccessor.getService()
 
     private suspend fun getToken(): String {
         var token = SharedPrefUtils.getString(KEY_POEM_TOKEN)
         if (token.isNotEmpty()) return token
 
-        token = poemApiService.getToken().token
+        token = PoemServerAccessor.getToken()?.token ?: ""
         SharedPrefUtils.putString(KEY_POEM_TOKEN, token)
 
         return token
@@ -51,28 +51,25 @@ class PoemViewModel : ViewModel() {
 
     val isLoading = MutableStateFlow(false)
 
-    fun getPoem(forceRefresh: Boolean = false) {
+    fun refresh(forceRefresh: Boolean = false) {
         if (!needRefresh(forceRefresh)) return
 
-        viewModelScope.launchOnIO {
+        viewModelScope.launch {
             isLoading.value = true
-            refreshPoem()
+            PoemServerAccessor.getPoem(getToken())?.let {
+                val info = PoemInfo().apply {
+                    recommend = it.data.content
+                    updateTime = System.currentTimeMillis()
+                    origin = it.data.origin
+                }
+                poemFlow.value = info
+                SharedPrefUtils.putString(KEY_LAST_POEM, JsonUtils.toJson(poemFlow.value))
+            }
             isLoading.value = false
         }
     }
 
     private fun needRefresh(forceRefresh: Boolean): Boolean {
         return poemFlow.value.recommend.isBlank() || forceRefresh || System.currentTimeMillis() - poemFlow.value.updateTime > duration
-    }
-
-    private suspend fun refreshPoem() {
-        val poemResponse = poemApiService.getPoem(getToken())
-        val info = PoemInfo().apply {
-            recommend = poemResponse.data.content
-            updateTime = System.currentTimeMillis()
-            origin = poemResponse.data.origin
-        }
-        poemFlow.value = info
-        SharedPrefUtils.putString(KEY_LAST_POEM, JsonUtils.toJson(poemFlow.value))
     }
 }
