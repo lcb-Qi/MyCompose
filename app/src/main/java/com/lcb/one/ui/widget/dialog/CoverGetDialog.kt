@@ -1,10 +1,8 @@
-package com.lcb.one.ui.page
+package com.lcb.one.ui.widget.dialog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
@@ -23,39 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import com.lcb.one.viewmodel.BiliViewModel
 import com.lcb.one.ui.widget.ToolButton
-import com.lcb.one.util.android.DownLoadUtil
-import com.lcb.one.util.android.LLog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun BiliPage() {
-    var show by remember { mutableStateOf(false) }
-    FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        ToolButton(text = "获取封面") { show = true }
-    }
-
-    if (show) {
-        CoverDialog(onDismiss = { show = false }, onSave = { saveCover(it) })
-    }
-}
-
-private fun saveCover(url: String) {
-    CoroutineScope(Dispatchers.IO).launch {
-        DownLoadUtil.saveImageFromUrl(url)
-    }
-}
+import com.lcb.one.viewmodel.BiliViewModel
 
 @Composable
-fun CoverDialog(
+fun CoverGetDialog(
     onDismiss: () -> Unit,
     onSave: (String) -> Unit,
 ) {
@@ -78,10 +48,7 @@ fun CoverDialog(
                         placeholder = { Text(text = "BV或av号") },
                         modifier = Modifier.weight(1f)
                     )
-                    ToolButton(text = "获取") {
-                        // isLoading = true
-                        biliViewModel.getCoverUrl(textInput)
-                    }
+                    ToolButton(text = "获取") { biliViewModel.getCoverUrl(textInput) }
                 }
 
 
@@ -110,5 +77,3 @@ fun CoverDialog(
         }
     )
 }
-
-

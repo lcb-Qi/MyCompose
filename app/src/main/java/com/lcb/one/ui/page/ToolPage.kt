@@ -4,13 +4,33 @@ import android.app.WallpaperManager
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridScope
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowRight
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.MiscellaneousServices
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.PhoneAndroid
+import androidx.compose.material3.ElevatedAssistChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.navigation.NavController
@@ -18,10 +38,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lcb.one.ui.MyApp
-import com.lcb.one.ui.widget.ToolButton
+import com.lcb.one.ui.widget.dialog.CoverGetDialog
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.common.ThreadPool
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun ToolPage(modifier: Modifier = Modifier) {
@@ -36,51 +59,90 @@ fun ToolPage(modifier: Modifier = Modifier) {
     ) {
         composable(RouteConfig.HOME) { ToolPageImpl(navController) }
         composable(RouteConfig.DEVICE) { DeviceInfoPage() }
-        composable(RouteConfig.BILI) { BiliPage() }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun ToolPageImpl(navController: NavController) {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        ToolBox(title = "设备", icon = { Icon(Icons.Filled.PhoneAndroid, "") }) {
+            FlowRow(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                ElevatedAssistChip(
+                    onClick = { navController.navigateSingleTop(RouteConfig.DEVICE) },
+                    label = { Text(text = "设备信息") })
+                ElevatedAssistChip(onClick = {
+                    ThreadPool.executeOnBackground {
+                        runCatching {
+                            val drawable =
+                                WallpaperManager.getInstance(MyApp.getAppContext()).drawable
+                            drawable?.toBitmapOrNull()?.let {
+                                DownLoadUtil.writeBitmapToImageFile(it)
+                            }
+                        }.onFailure {
+                            ToastUtils.showToast("保存失败 ${it.message}")
+                        }
+                    }
+                }, label = { Text(text = "提取壁纸") })
+            }
+        }
+
+        ToolBox(title = "其他", icon = { Icon(Icons.Filled.MiscellaneousServices, "") }) {
+            FlowRow(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                var showCoverGet by remember { mutableStateOf(false) }
+                ElevatedAssistChip(
+                    onClick = { showCoverGet = true },
+                    label = { Text(text = "获取封面") })
+                ElevatedAssistChip(onClick = { }, label = { Text(text = "BV转av") })
+                ElevatedAssistChip(onClick = { }, label = { Text(text = "av转BV") })
+
+                if (showCoverGet) {
+                    CoverGetDialog(onDismiss = { showCoverGet = false }) { saveCover(it) }
+                }
+            }
+        }
     }
 }
 
 @Composable
-private fun ToolPageImpl(navController: NavController) {
-    LazyVerticalGrid(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        columns = GridCells.Fixed(2)
-    ) {
-        addToolButton("设备信息", true) {
-            navController.navigateSingleTop(RouteConfig.DEVICE)
-        }
-        addToolButton("提取壁纸") {
-            ThreadPool.executeOnBackground {
-                runCatching {
-                    val drawable = WallpaperManager.getInstance(MyApp.getAppContext()).drawable
-                    drawable?.toBitmapOrNull()?.let {
-                        DownLoadUtil.writeBitmapToImageFile(it)
-                    }
-                }.onFailure {
-                    ToastUtils.showToast("保存失败 ${it.message}")
-                }
+private fun ToolBox(
+    title: String,
+    icon: @Composable () -> Unit,
+    content: @Composable () -> Unit
+) {
+    var showDetail by rememberSaveable { mutableStateOf(false) }
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            icon()
+            Text(text = title, Modifier.weight(1f))
+            IconButton(onClick = { showDetail = !showDetail }) {
+                Icon(
+                    if (showDetail) Icons.Filled.ArrowDropDown else Icons.AutoMirrored.Filled.ArrowRight,
+                    ""
+                )
             }
         }
-        addToolButton("bilibili工具") {
-            navController.navigateSingleTop(RouteConfig.BILI)
+
+        if (showDetail) {
+            content()
         }
     }
 }
 
-private fun LazyGridScope.addToolButton(
-    title: String = "",
-    singleLine: Boolean = false,
-    action: (() -> Unit)? = null
-) {
-    if (singleLine) {
-        item(span = {
-            GridItemSpan(maxLineSpan)
-        }) {
-            ToolButton(text = title) { action?.invoke() }
-        }
-    } else {
-        item {
-            ToolButton(text = title) { action?.invoke() }
-        }
+private fun saveCover(url: String) {
+    CoroutineScope(Dispatchers.IO).launch {
+        DownLoadUtil.saveImageFromUrl(url)
     }
 }

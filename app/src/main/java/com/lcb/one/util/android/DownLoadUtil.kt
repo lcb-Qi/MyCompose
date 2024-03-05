@@ -5,39 +5,31 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
 import android.provider.MediaStore
+import com.lcb.one.network.os.OkhttpFactory
 import com.lcb.one.ui.MyApp
 import com.lcb.one.util.common.DateTimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
+import okhttp3.Request
 import okhttp3.ResponseBody
 
 object DownLoadUtil {
     private const val TAG = "DownLoadUtil"
 
-    private val defaultImageRelativePath = Environment.DIRECTORY_PICTURES
-    private val defaultImageDir =
-        Environment.getExternalStoragePublicDirectory(defaultImageRelativePath)
-    private const val defaultImageSubDir = "aTool"
+    private val DEFAULT_IMAGE_RELATIVE_PATH = Environment.DIRECTORY_PICTURES
+    private const val DEFAULT_IMAGE_SUB_DIR = "SaltFish"
 
-    // interface DownloadService {
-    //     @GET
-    //     @Streaming
-    //     suspend fun downloadFromUrl(@Url url: String): ResponseBody
-    // }
-    //
-    // private val downloadService by lazy {
-    //     Retrofit.Builder()
-    //         .baseUrl("https://127.0.0.1/")
-    //         .build()
-    //         .create(DownloadService::class.java)
-    // }
 
     suspend fun saveImageFromUrl(url: String, fileName: String = DateTimeUtils.nowStringShort()) =
         withContext(Dispatchers.IO) {
             if (url.isBlank() || fileName.isBlank()) return@withContext
-            // val responseBody = downloadService.downloadFromUrl(url)
-            // responseBody.writeToImageFile(fileName)
+            val request = Request.Builder().apply {
+                url(url)
+            }.build()
+
+            val response = OkhttpFactory.okHttpClient.newCall(request).execute()
+            response.body?.writeToImageFile(fileName)
         }
 
 
@@ -57,7 +49,7 @@ object DownLoadUtil {
             val values = ContentValues().apply {
                 put(MediaStore.Images.ImageColumns.DISPLAY_NAME, fileName)
                 put(MediaStore.Images.ImageColumns.MIME_TYPE, contentType)
-                val relativePath = "$defaultImageRelativePath/$defaultImageSubDir/"
+                val relativePath = "$DEFAULT_IMAGE_RELATIVE_PATH/$DEFAULT_IMAGE_SUB_DIR/"
                 put(MediaStore.Images.ImageColumns.RELATIVE_PATH, relativePath)
             }
 
