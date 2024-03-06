@@ -1,6 +1,8 @@
 package com.lcb.one.ui.page
 
+import android.app.Activity
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -31,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +44,7 @@ import coil.compose.AsyncImage
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.theme.labelLarge
+import com.lcb.one.ui.widget.FriendlyExitHandler
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.android.SharedPrefUtils
 import kotlinx.coroutines.delay
@@ -63,6 +67,8 @@ fun HomePage(modifier: Modifier = Modifier) {
         PhotoFrame()
         DurationText()
     }
+
+    FriendlyExitHandler()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,9 +1,10 @@
 package com.lcb.one.ui.page
 
 object RouteConfig {
-    const val HOME = "home"
-    const val BILI = "bili"
-    const val DEVICE = "device"
-    const val MORE = "more"
-    const val SETTINGS = "settings"
+    const val HOME = "Home"
+    const val TOOL = "Tool"
+    const val MORE = "More"
+    const val BILI = "Bili"
+    const val DEVICE = "Device"
+    const val SETTINGS = "Settings"
 }

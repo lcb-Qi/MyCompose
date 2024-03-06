@@ -1,6 +1,8 @@
 package com.lcb.one.ui.page
 
+import android.app.Activity
 import android.app.WallpaperManager
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -31,13 +33,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.lcb.one.R
 import com.lcb.one.ui.MyApp
+import com.lcb.one.ui.widget.FriendlyExitHandler
 import com.lcb.one.ui.widget.dialog.CoverGetDialog
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
@@ -65,18 +71,22 @@ fun ToolPage(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ToolPageImpl(navController: NavController) {
+    FriendlyExitHandler()
+
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        ToolBox(title = "设备", icon = { Icon(Icons.Filled.PhoneAndroid, "") }) {
+        ToolBox(
+            title = stringResource(R.string.device),
+            icon = { Icon(Icons.Filled.PhoneAndroid, "") }) {
             FlowRow(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 ElevatedAssistChip(
                     onClick = { navController.navigateSingleTop(RouteConfig.DEVICE) },
-                    label = { Text(text = "设备信息") })
+                    label = { Text(text = stringResource(R.string.device_info)) })
                 ElevatedAssistChip(onClick = {
                     ThreadPool.executeOnBackground {
                         runCatching {
@@ -89,11 +99,13 @@ private fun ToolPageImpl(navController: NavController) {
                             ToastUtils.showToast("保存失败 ${it.message}")
                         }
                     }
-                }, label = { Text(text = "提取壁纸") })
+                }, label = { Text(text = stringResource(R.string.extract_wallpaper)) })
             }
         }
 
-        ToolBox(title = "其他", icon = { Icon(Icons.Filled.MiscellaneousServices, "") }) {
+        ToolBox(
+            title = stringResource(R.string.other),
+            icon = { Icon(Icons.Filled.MiscellaneousServices, "") }) {
             FlowRow(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -101,9 +113,13 @@ private fun ToolPageImpl(navController: NavController) {
                 var showCoverGet by remember { mutableStateOf(false) }
                 ElevatedAssistChip(
                     onClick = { showCoverGet = true },
-                    label = { Text(text = "获取封面") })
-                ElevatedAssistChip(onClick = { }, label = { Text(text = "BV转av") })
-                ElevatedAssistChip(onClick = { }, label = { Text(text = "av转BV") })
+                    label = { Text(text = stringResource(R.string.obtain_bilibili_cover)) })
+                ElevatedAssistChip(
+                    onClick = { },
+                    label = { Text(text = stringResource(R.string.bv_to_av)) })
+                ElevatedAssistChip(
+                    onClick = { },
+                    label = { Text(text = stringResource(R.string.av_to_bv)) })
 
                 if (showCoverGet) {
                     CoverGetDialog(onDismiss = { showCoverGet = false }) { saveCover(it) }

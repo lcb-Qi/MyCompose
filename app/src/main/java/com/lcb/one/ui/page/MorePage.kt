@@ -1,6 +1,8 @@
 package com.lcb.one.ui.page
 
+import android.app.Activity
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -12,6 +14,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import androidx.navigation.NavController
@@ -21,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
+import com.lcb.one.ui.widget.FriendlyExitHandler
 import com.lcb.one.ui.widget.settings.ui.SettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
 import com.lcb.one.util.android.AppUtils
@@ -48,6 +52,8 @@ fun MorePage(modifier: Modifier = Modifier) {
 
 @Composable
 private fun MorePageImpl(navController: NavController) {
+    FriendlyExitHandler()
+
     Column {
         // 设置
         SettingsMenuLink(

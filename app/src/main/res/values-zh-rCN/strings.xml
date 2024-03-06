@@ -15,4 +15,14 @@
     <string name="project_location">项目地址</string>
     <string name="cancel">取消</string>
     <string name="loading">加载中...</string>
+    <string name="back">返回</string>
+    <string name="save">保存</string>
+    <string name="obtain">获取</string>
+    <string name="device">设备</string>
+    <string name="device_info">设备信息</string>
+    <string name="extract_wallpaper">提取壁纸</string>
+    <string name="bv_to_av">BV转av</string>
+    <string name="av_to_bv">av转BV</string>
+    <string name="other">其他</string>
+    <string name="obtain_bilibili_cover">获取B站封面</string>
 </resources>

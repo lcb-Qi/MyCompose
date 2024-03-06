@@ -31,8 +31,18 @@
         <item>900000</item>
         <item>1800000</item>
     </integer-array>
-    <string name="tool">Tools</string>
+    <string name="tool">Tool</string>
     <string name="more">More</string>
     <string name="cancel">Cancel</string>
     <string name="loading">Loading...</string>
+    <string name="back">Back</string>
+    <string name="save">Save</string>
+    <string name="obtain">Obtain</string>
+    <string name="device">Device</string>
+    <string name="device_info">Device Info</string>
+    <string name="extract_wallpaper">Extract wallpaper</string>
+    <string name="bv_to_av">BV to av</string>
+    <string name="av_to_bv">av to BV</string>
+    <string name="other">Other</string>
+    <string name="obtain_bilibili_cover">obtain bilibili cover</string>
 </resources>

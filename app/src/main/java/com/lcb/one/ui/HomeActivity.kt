@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -22,11 +24,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.lcb.one.R
 import com.lcb.one.ui.page.HomePage
 import com.lcb.one.ui.page.MorePage
+import com.lcb.one.ui.page.RouteConfig
 import com.lcb.one.viewmodel.PoemViewModel
 import com.lcb.one.ui.page.ToolPage
+import com.lcb.one.ui.page.navigateSingleTop
 import com.lcb.one.ui.widget.TopAppBars
 import com.lcb.one.ui.widget.AppThemeSurface
 import com.lcb.one.ui.widget.BottomBars
@@ -40,9 +47,9 @@ class HomeActivity : ComponentActivity() {
 
     private val items by lazy {
         listOf(
-            BottomBarItem(0, getString(R.string.home), Icons.Filled.Home),
-            BottomBarItem(1, getString(R.string.tool), Icons.Filled.Android),
-            BottomBarItem(2, getString(R.string.more), Icons.Filled.MoreHoriz)
+            BottomBarItem(0, RouteConfig.HOME, getString(R.string.home), Icons.Filled.Home),
+            BottomBarItem(1, RouteConfig.TOOL, getString(R.string.tool), Icons.Filled.Android),
+            BottomBarItem(2, RouteConfig.MORE, getString(R.string.more), Icons.Filled.MoreHoriz)
         )
     }
 
@@ -77,19 +84,25 @@ class HomeActivity : ComponentActivity() {
             ) { paddingValues ->
                 val topPadding = paddingValues.calculateTopPadding()
                 val bottomPadding = paddingValues.calculateBottomPadding()
-                Column(
+
+                val navController = rememberNavController()
+                NavHost(
+                    navController = navController,
+                    startDestination = items[selectedIndex].route,
+                    enterTransition = { slideInHorizontally(animationSpec = tween(500)) { it } },
+                    exitTransition = { slideOutHorizontally(animationSpec = tween(500)) { -it } },
+                    popEnterTransition = { slideInHorizontally(animationSpec = tween(500)) { -it } },
+                    popExitTransition = { slideOutHorizontally(animationSpec = tween(500)) { it } },
                     modifier = Modifier
                         .padding(top = topPadding, bottom = bottomPadding)
                         .fillMaxSize()
                 ) {
-                    when (selectedIndex) {
-                        // 带有 NavHost 的页面，需要占满全部空间，否则动画不生效，原因未知
-                        // 这里通过 Column 设置 weight = 1，fill = true
-                        0 -> HomePage(Modifier.weight(1f))
-                        1 -> ToolPage(Modifier.weight(1f))
-                        2 -> MorePage(Modifier.weight(1f))
-                    }
+                    composable(RouteConfig.HOME) { HomePage() }
+                    composable(RouteConfig.TOOL) { ToolPage() }
+                    composable(RouteConfig.MORE) { MorePage() }
                 }
+
+                navController.navigateSingleTop(items[selectedIndex].route)
 
                 if (showDetail) {
                     PoemInfoDialog(
