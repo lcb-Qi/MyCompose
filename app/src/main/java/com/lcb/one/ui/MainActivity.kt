@@ -7,7 +7,9 @@ import androidx.activity.viewModels
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
@@ -24,10 +26,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.glance.appwidget.updateAll
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lcb.one.R
+import com.lcb.one.ui.glance.PoemAppWidget
 import com.lcb.one.ui.page.HomePage
 import com.lcb.one.ui.page.MorePage
 import com.lcb.one.ui.page.RouteConfig
@@ -40,8 +48,10 @@ import com.lcb.one.ui.widget.BottomBars
 import com.lcb.one.ui.widget.BottomBarItem
 import com.lcb.one.ui.widget.dialog.LoadingDialog
 import com.lcb.one.ui.widget.dialog.PoemInfoDialog
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class HomeActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
 
     private val poemViewModel by viewModels<PoemViewModel>()
 
@@ -56,6 +66,9 @@ class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { AppScreen() }
+        lifecycleScope.launch {
+            PoemAppWidget().updateAll(this@MainActivity)
+        }
     }
 
     override fun onResume() {
@@ -118,6 +131,23 @@ class HomeActivity : ComponentActivity() {
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun ss() {
+    Column {
+        Text(
+            text = "一二三四五，六七八九十",
+            style = TextStyle(textAlign = TextAlign.Start),
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            text = "—— 你好 你好呀",
+            style = TextStyle(textAlign = TextAlign.End),
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 

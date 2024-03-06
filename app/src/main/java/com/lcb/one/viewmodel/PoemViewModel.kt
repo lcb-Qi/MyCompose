@@ -18,8 +18,8 @@ class PoemViewModel : ViewModel() {
         private const val TAG = "PoemViewModel"
         var durationIndex = AppSettings.getPoemUpdateDurationIndex(MyApp.getAppContext())
         var duration = AppSettings.getPoemUpdateDuration(MyApp.getAppContext(), durationIndex)
-        private const val KEY_POEM_TOKEN = "poem_token"
-        private const val KEY_LAST_POEM = "last_poem"
+        const val KEY_POEM_TOKEN = "poem_token"
+        const val KEY_LAST_POEM = "last_poem"
     }
 
 
@@ -35,18 +35,15 @@ class PoemViewModel : ViewModel() {
 
     @JsonClass(generateAdapter = true)
     data class PoemInfo(
-        var recommend: String = "",
-        var updateTime: Long = -1,
-        var origin: PoemResponse.Data.Origin = PoemResponse.Data.Origin()
+        val recommend: String = "",
+        val updateTime: Long = -1,
+        val origin: PoemResponse.Data.Origin = PoemResponse.Data.Origin()
     )
 
     val poemFlow by lazy {
-        MutableStateFlow(PoemInfo().apply {
-            val fromJson = JsonUtils.fromJson<PoemInfo>(SharedPrefUtils.getString(KEY_LAST_POEM))
-            recommend = fromJson?.recommend ?: ""
-            updateTime = fromJson?.updateTime ?: -1
-            origin = fromJson?.origin ?: PoemResponse.Data.Origin()
-        })
+        MutableStateFlow(
+            JsonUtils.fromJson<PoemInfo>(SharedPrefUtils.getString(KEY_LAST_POEM)) ?: PoemInfo()
+        )
     }
 
     val isLoading = MutableStateFlow(false)
@@ -57,12 +54,8 @@ class PoemViewModel : ViewModel() {
         viewModelScope.launch {
             isLoading.value = true
             PoemServerAccessor.getPoem(getToken())?.let {
-                val info = PoemInfo().apply {
-                    recommend = it.data.content
-                    updateTime = System.currentTimeMillis()
-                    origin = it.data.origin
-                }
-                poemFlow.value = info
+                poemFlow.value =
+                    PoemInfo(it.data.content, System.currentTimeMillis(), it.data.origin)
                 SharedPrefUtils.putString(KEY_LAST_POEM, JsonUtils.toJson(poemFlow.value))
             }
             isLoading.value = false
@@ -70,6 +63,7 @@ class PoemViewModel : ViewModel() {
     }
 
     private fun needRefresh(forceRefresh: Boolean): Boolean {
-        return poemFlow.value.recommend.isBlank() || forceRefresh || System.currentTimeMillis() - poemFlow.value.updateTime > duration
+        val info = poemFlow.value
+        return info.recommend.isBlank() || forceRefresh || System.currentTimeMillis() - info.updateTime > duration
     }
 }

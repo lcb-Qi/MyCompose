@@ -36,12 +36,13 @@ fun DeviceInfoPage() {
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     val tabTitles = listOf("Basic", "Display")
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp), Arrangement.spacedBy(4.dp)) {
-        TabRow(
-            selectedTabIndex = selectedIndex,
-            modifier = Modifier
-                .padding(vertical = 4.dp)
-        ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        Arrangement.spacedBy(4.dp)
+    ) {
+        TabRow(selectedTabIndex = selectedIndex) {
             tabTitles.forEachIndexed { index, text ->
                 val selected = selectedIndex == index
                 Tab(

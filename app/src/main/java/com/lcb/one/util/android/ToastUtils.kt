@@ -7,14 +7,14 @@ import com.lcb.one.ui.MyApp
 import com.lcb.one.util.common.ThreadUtils
 
 object ToastUtils {
-    fun showToast(msg: String) {
+    fun showToast(msg: String, duration: Int = Toast.LENGTH_SHORT) {
         if (msg.isBlank()) return
 
         if (ThreadUtils.isOnMainThread()) {
-            Toast.makeText(MyApp.getAppContext(), msg, Toast.LENGTH_SHORT).show()
+            Toast.makeText(MyApp.getAppContext(), msg, duration).show()
         } else {
             Handler(Looper.getMainLooper()).post {
-                Toast.makeText(MyApp.getAppContext(), msg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(MyApp.getAppContext(), msg, duration).show()
             }
         }
     }

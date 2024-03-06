@@ -115,6 +115,9 @@ dependencies {
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
 
+    // glance
+    implementation("androidx.glance:glance-appwidget:1.0.0")
+
     // 图片加载 coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
