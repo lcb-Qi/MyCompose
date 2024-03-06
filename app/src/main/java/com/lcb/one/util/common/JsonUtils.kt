@@ -38,7 +38,10 @@ object JsonUtils {
      * @return 实例对象
      */
     inline fun <reified T> fromJson(src: String): T? {
-        return moshi.adapter<T>(getType<T>()).fromJson(src)
+        val result = kotlin.runCatching {
+            moshi.adapter<T>(getType<T>()).fromJson(src)
+        }
+        return result.getOrNull()
     }
 
 
@@ -48,7 +51,7 @@ object JsonUtils {
             moshi.adapter<T>(typeOfT).fromJson(src)
         }
 
-        return result.getOrThrow()
+        return result.getOrNull()
     }
 
     fun <T> fromJson(src: String, typeOfT: Class<T>): T? {
@@ -56,7 +59,7 @@ object JsonUtils {
             moshi.adapter(typeOfT).fromJson(src)
         }
 
-        return result.getOrThrow()
+        return result.getOrNull()
     }
 
     fun <T> listFromJson(src: String, typeOfT: Class<T>): List<T>? {
@@ -102,6 +105,6 @@ object JsonUtils {
             jsonAdapter.indent(indent).toJson(src)
         }
 
-        return result.getOrThrow()
+        return result.getOrDefault("")
     }
 }
