@@ -6,7 +6,6 @@ import com.lcb.one.bean.PoemResponse
 import com.lcb.one.network.PoemServerAccessor
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.page.AppSettings
-import com.lcb.one.util.android.LLog
 import com.lcb.one.util.common.JsonUtils
 import com.lcb.one.util.android.SharedPrefUtils
 import com.squareup.moshi.JsonClass

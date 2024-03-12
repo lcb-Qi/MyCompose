@@ -5,12 +5,11 @@ import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.lcb.one.ui.page.NoRippleInteractionSource
-import com.lcb.one.ui.theme.titleMedium
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,11 +30,11 @@ private fun TitleText(
 ) {
     Text(
         text = text,
-        style = titleMedium(),
+        style = MaterialTheme.typography.titleMedium,
         modifier = Modifier
             .wrapContentSize()
             .combinedClickable(
-                onLongClick = { onLongClick?.invoke() },
+                onLongClick = onLongClick,
                 indication = LocalIndication.current,
                 interactionSource = NoRippleInteractionSource(),
             ) {

@@ -2,9 +2,6 @@ package com.lcb.one.ui.page
 
 import android.app.WallpaperManager
 import android.content.Intent
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -33,30 +30,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lcb.one.R
 import com.lcb.one.ui.ClockActivity
 import com.lcb.one.ui.MyApp
+import com.lcb.one.ui.widget.AppNavHost
 import com.lcb.one.ui.widget.FriendlyExitHandler
 import com.lcb.one.ui.widget.dialog.CoverGetDialog
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.common.ThreadPool
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun ToolPage(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(
-        navController = navController, startDestination = RouteConfig.HOME,
-        enterTransition = { slideInHorizontally(animationSpec = tween(500)) { it } },
-        exitTransition = { slideOutHorizontally(animationSpec = tween(500)) { -it } },
-        popEnterTransition = { slideInHorizontally(animationSpec = tween(500)) { -it } },
-        popExitTransition = { slideOutHorizontally(animationSpec = tween(500)) { it } },
+    AppNavHost(
+        navController = navController,
+        startDestination = RouteConfig.HOME,
         modifier = modifier
     ) {
         composable(RouteConfig.HOME) { ToolPageImpl(navController) }
@@ -83,20 +74,12 @@ private fun ToolPageImpl(navController: NavController) {
             ) {
                 ElevatedAssistChip(
                     onClick = { navController.navigateSingleTop(RouteConfig.DEVICE) },
-                    label = { Text(text = stringResource(R.string.device_info)) })
-                ElevatedAssistChip(onClick = {
-                    ThreadPool.executeOnBackground {
-                        runCatching {
-                            val drawable =
-                                WallpaperManager.getInstance(MyApp.getAppContext()).drawable
-                            drawable?.toBitmapOrNull()?.let {
-                                DownLoadUtil.writeBitmapToImageFile(it)
-                            }
-                        }.onFailure {
-                            ToastUtils.showToast("保存失败 ${it.message}")
-                        }
-                    }
-                }, label = { Text(text = stringResource(R.string.extract_wallpaper)) })
+                    label = { Text(text = stringResource(R.string.device_info)) }
+                )
+                ElevatedAssistChip(
+                    onClick = { getWallPaper() },
+                    label = { Text(text = stringResource(R.string.extract_wallpaper)) }
+                )
             }
         }
 
@@ -113,22 +96,25 @@ private fun ToolPageImpl(navController: NavController) {
 
                 ElevatedAssistChip(
                     onClick = { showCoverGet = true },
-                    label = { Text(text = stringResource(R.string.obtain_bilibili_cover)) })
+                    label = { Text(text = stringResource(R.string.obtain_bilibili_cover)) }
+                )
                 ElevatedAssistChip(
                     enabled = false,
                     onClick = { },
-                    label = { Text(text = stringResource(R.string.bv_to_av)) })
+                    label = { Text(text = stringResource(R.string.bv_to_av)) }
+                )
                 ElevatedAssistChip(
                     enabled = false,
                     onClick = { },
-                    label = { Text(text = stringResource(R.string.av_to_bv)) })
-
+                    label = { Text(text = stringResource(R.string.av_to_bv)) }
+                )
                 ElevatedAssistChip(
                     onClick = { showClock = true },
-                    label = { Text(text = "时钟屏幕") })
+                    label = { Text(text = stringResource(R.string.clock_screen)) }
+                )
 
                 if (showCoverGet) {
-                    CoverGetDialog(onDismiss = { showCoverGet = false }) { saveCover(it) }
+                    CoverGetDialog(onDismiss = { showCoverGet = false })
                 }
                 if (showClock) {
                     LocalContext.current.run {
@@ -137,6 +123,20 @@ private fun ToolPageImpl(navController: NavController) {
                     showClock = false
                 }
             }
+        }
+    }
+}
+
+private fun getWallPaper() {
+    ThreadPool.executeOnBackground {
+        runCatching {
+            val drawable =
+                WallpaperManager.getInstance(MyApp.getAppContext()).drawable
+            drawable?.toBitmapOrNull()?.let {
+                DownLoadUtil.writeBitmapToImageFile(it)
+            }
+        }.onFailure {
+            ToastUtils.showToast("保存失败 ${it.message}")
         }
     }
 }
@@ -166,11 +166,5 @@ private fun ToolBox(
         if (showDetail) {
             content()
         }
-    }
-}
-
-private fun saveCover(url: String) {
-    CoroutineScope(Dispatchers.IO).launch {
-        DownLoadUtil.saveImageFromUrl(url)
     }
 }

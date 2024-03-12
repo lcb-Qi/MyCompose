@@ -3,6 +3,7 @@ package com.lcb.one.ui.page
 import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,8 +16,6 @@ import com.lcb.one.ui.widget.settings.ui.SettingsListDropdown
 import com.lcb.one.ui.widget.settings.ui.SettingsSwitch
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
-import com.lcb.one.ui.theme.bodySmall
-import com.lcb.one.ui.theme.titleMedium
 import com.lcb.one.ui.widget.appDynamicColor
 import com.lcb.one.util.android.SharedPrefUtils
 import com.lcb.one.viewmodel.PoemViewModel
@@ -81,10 +80,10 @@ fun SettingsPage(modifier: Modifier = Modifier) {
 
 @Composable
 fun SettingsTitle(title: String) {
-    Text(text = title, style = titleMedium())
+    Text(text = title, style = MaterialTheme.typography.titleMedium)
 }
 
 @Composable
 fun SettingsSummary(summary: String) {
-    Text(text = summary, style = bodySmall())
+    Text(text = summary, style = MaterialTheme.typography.bodySmall)
 }

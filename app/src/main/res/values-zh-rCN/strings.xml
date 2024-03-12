@@ -25,4 +25,5 @@
     <string name="av_to_bv">av转BV</string>
     <string name="other">其他</string>
     <string name="obtain_bilibili_cover">获取B站封面</string>
+    <string name="clock_screen">时钟屏幕</string>
 </resources>

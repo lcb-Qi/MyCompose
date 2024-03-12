@@ -7,16 +7,12 @@ object ThreadUtils {
     fun isOnBackgroundThread(): Boolean = !isOnMainThread()
 
     @Throws(IllegalThreadStateException::class)
-    fun forceOnMainThread() {
-        if (!isOnMainThread()) {
-            throw IllegalThreadStateException("Must be on main thread!")
-        }
+    fun assertOnMainThread() = require(isOnMainThread()) {
+        "You must call this method on the main thread"
     }
 
     @Throws(IllegalThreadStateException::class)
-    fun forceOnSubThread() {
-        if (isOnMainThread()) {
-            throw IllegalThreadStateException("Must be on sub thread!")
-        }
+    fun assertOnBackgroundThread() = require(isOnBackgroundThread()) {
+        "You must call this method on a background thread"
     }
 }

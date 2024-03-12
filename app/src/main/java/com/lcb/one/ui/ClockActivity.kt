@@ -10,8 +10,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,43 +20,33 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.lifecycleScope
 import com.lcb.one.R
-import com.lcb.one.ui.page.NoRippleInteractionSource
-import com.lcb.one.ui.theme.titleLarge
-import com.lcb.one.ui.theme.titleMedium
 import com.lcb.one.ui.widget.AppThemeSurface
+import com.lcb.one.ui.widget.NoRippleInteractionSource
 import com.lcb.one.ui.widget.settings.storage.disk.rememberPreferenceIntSettingState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
 import com.lcb.one.util.android.DimenUtils
 import com.lcb.one.util.common.DateTimeUtils
-import kotlinx.coroutines.launch
 
 class ClockActivity : ComponentActivity() {
     companion object {
@@ -141,7 +129,7 @@ class ClockActivity : ComponentActivity() {
                         bottom.linkTo(parent.bottom)
                     },
                     text = DateTimeUtils.format(DateTimeUtils.nowMillis(), "yyyy-MM-dd EE"),
-                    style = titleLarge().copy(fontSize = 18.sp)
+                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 18.sp)
                 )
             }
 

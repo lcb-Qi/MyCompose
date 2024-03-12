@@ -26,6 +26,7 @@ import com.lcb.one.ui.MainActivity
 import com.lcb.one.util.android.SharedPrefUtils
 import com.lcb.one.util.common.JsonUtils
 import com.lcb.one.viewmodel.PoemViewModel
+import kotlinx.coroutines.delay
 
 class PoemAppWidget : GlanceAppWidget() {
     companion object {
@@ -33,6 +34,7 @@ class PoemAppWidget : GlanceAppWidget() {
     }
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        delay(1000)
         provideContent {
             PoemAppWidgetContent()
         }

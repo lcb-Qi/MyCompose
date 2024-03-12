@@ -11,9 +11,6 @@ class MyApp : Application() {
             return app ?: throw RuntimeException("App is null!")
         }
 
-        fun isInBackground(): Boolean = LifeCycleCallbackImpl.isInBackground
-        fun isInForeground(): Boolean = LifeCycleCallbackImpl.isInForeground
-
         private var app: Application? = null
     }
 

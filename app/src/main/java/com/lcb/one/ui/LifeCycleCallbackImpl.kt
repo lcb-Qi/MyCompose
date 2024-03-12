@@ -7,9 +7,6 @@ import com.lcb.one.util.android.LLog
 
 object LifeCycleCallbackImpl : ActivityLifecycleCallbacks {
     private const val TAG = "LifeCycleCallback"
-    private var activeActivities = 0
-    val isInBackground: Boolean = activeActivities == 0
-    val isInForeground: Boolean = !isInBackground
 
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
@@ -22,8 +19,6 @@ object LifeCycleCallbackImpl : ActivityLifecycleCallbacks {
         val name = activity.javaClass.name
         val hashCode = activity.hashCode()
         LLog.d(TAG, "onActivityStarted: $name@$hashCode")
-
-        activeActivities++
     }
 
     override fun onActivityResumed(activity: Activity) {
@@ -42,8 +37,6 @@ object LifeCycleCallbackImpl : ActivityLifecycleCallbacks {
         val name = activity.javaClass.name
         val hashCode = activity.hashCode()
         LLog.d(TAG, "onActivityStopped: $name@$hashCode")
-
-        activeActivities--
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {

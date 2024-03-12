@@ -6,9 +6,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.ResourceBundle.Control.FORMAT_DEFAULT
 
 object DateTimeUtils {
     private const val FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss"

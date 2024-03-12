@@ -24,9 +24,9 @@ object DownLoadUtil {
     suspend fun saveImageFromUrl(url: String, fileName: String = DateTimeUtils.nowStringShort()) =
         withContext(Dispatchers.IO) {
             if (url.isBlank() || fileName.isBlank()) return@withContext
-            val request = Request.Builder().apply {
-                url(url)
-            }.build()
+            val request = Request.Builder()
+                .url(url)
+                .build()
 
             val response = OkhttpFactory.okHttpClient.newCall(request).execute()
             response.body?.writeToImageFile(fileName)

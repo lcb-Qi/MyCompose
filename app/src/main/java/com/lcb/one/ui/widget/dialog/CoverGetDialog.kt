@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -17,32 +16,30 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.lcb.one.R
-import com.lcb.one.ui.theme.titleMedium
 import com.lcb.one.ui.widget.ToolButton
+import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.viewmodel.BiliViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun CoverGetDialog(
-    onDismiss: () -> Unit,
-    onSave: (String) -> Unit,
-) {
+fun CoverGetDialog(onDismiss: () -> Unit) {
     var textInput by remember { mutableStateOf("BV117411r7R1") }
     val biliViewModel = viewModel<BiliViewModel>()
     val coverUrl by biliViewModel.coverUrl.collectAsState()
     val isLoading by biliViewModel.isLoading.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "输入完整的BV或av号", style = titleMedium()) },
+        title = { Text(text = "输入完整的BV或av号", style = MaterialTheme.typography.titleMedium) },
         text = {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -85,7 +82,11 @@ fun CoverGetDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = { onSave(coverUrl) }) {
+            TextButton(
+                onClick = {
+                    coroutineScope.launch { DownLoadUtil.saveImageFromUrl(coverUrl) }
+                }
+            ) {
                 Text(text = stringResource(R.string.save))
             }
         }

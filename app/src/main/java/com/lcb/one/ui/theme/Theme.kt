@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import com.lcb.one.util.android.immerse
+import com.lcb.one.util.android.AppUtils
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -23,18 +23,6 @@ private val LightColorScheme = lightColorScheme(
     secondary = PurpleGrey40,
     tertiary = Pink40,
 )
-
-@Composable
-fun primaryColor() = MaterialTheme.colorScheme.primary
-
-@Composable
-fun secondaryColor() = MaterialTheme.colorScheme.secondary
-
-@Composable
-fun tertiaryColor() = MaterialTheme.colorScheme.tertiary
-
-@Composable
-fun primaryContainerColor() = MaterialTheme.colorScheme.primaryContainer
 
 @Composable
 fun AppTheme(
@@ -54,7 +42,7 @@ fun AppTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            immerse(view, lightTheme = !darkTheme)
+            AppUtils.immerse(view, lightTheme = !darkTheme)
         }
     }
 

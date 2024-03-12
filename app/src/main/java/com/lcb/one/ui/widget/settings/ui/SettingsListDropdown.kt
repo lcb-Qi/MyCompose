@@ -13,6 +13,7 @@ import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.lcb.one.ui.widget.settings.ui.internal.SettingsScaffold
-import com.lcb.one.ui.theme.labelMedium
 
 @Composable
 fun SettingsListDropdown(
@@ -65,7 +65,7 @@ fun SettingsListDropdown(
                         modifier = Modifier.padding(vertical = 5.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(text = items[selectIndex], style = labelMedium())
+                        Text(text = items[selectIndex], style = MaterialTheme.typography.labelMedium)
                         Icon(
                             modifier = Modifier.padding(start = 8.dp),
                             imageVector = Icons.Rounded.ArrowDropDown,

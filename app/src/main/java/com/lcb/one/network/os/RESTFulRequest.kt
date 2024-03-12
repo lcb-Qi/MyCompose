@@ -17,17 +17,12 @@ import java.io.IOException
 class RESTFulRequest private constructor(private val builder: Builder) {
     companion object {
         private const val TAG = "RESTFulRequest"
-        fun create(url: String, block: Builder.() -> Unit): RESTFulRequest {
-            return Builder().apply {
-                url(url)
-                block()
-            }.build()
-        }
+        fun newBuilder(url: String) = Builder().url(url)
     }
 
-    private fun buildRequest(): Request {
+    private fun createRequest(): Request {
         val requestBuilder = Request.Builder().apply {
-            url(builder.serverUrl)
+            url(builder.url)
             when (builder.method) {
                 RequestMethod.GET -> {
                     url(buildUrl(builder))
@@ -65,7 +60,7 @@ class RESTFulRequest private constructor(private val builder: Builder) {
     }
 
     private fun buildUrl(builder: Builder): HttpUrl {
-        val urlBuilder = builder.serverUrl.toHttpUrl().newBuilder()
+        val urlBuilder = builder.url.toHttpUrl().newBuilder()
         builder.params.forEach { (key, value) ->
             urlBuilder.addQueryParameter(key, value)
         }
@@ -74,7 +69,7 @@ class RESTFulRequest private constructor(private val builder: Builder) {
     }
 
     suspend fun <T> getResult(type: Class<T>): Result<T?> = withContext(Dispatchers.IO) {
-        val request = buildRequest()
+        val request = createRequest()
 
         val result = runCatching {
             val response = OkhttpFactory.okHttpClient.newCall(request).execute()
@@ -103,7 +98,7 @@ class RESTFulRequest private constructor(private val builder: Builder) {
         @RequestMethod
         var method: String = RequestMethod.GET
             private set
-        var serverUrl: String = ""
+        var url: String = ""
             private set
         val headers: MutableMap<String, String> = mutableMapOf()
         val params: MutableMap<String, String> = mutableMapOf()
@@ -117,7 +112,7 @@ class RESTFulRequest private constructor(private val builder: Builder) {
         }
 
         fun url(url: String) = apply {
-            this.serverUrl = url
+            this.url = url
         }
 
         fun get() = apply {
@@ -126,7 +121,7 @@ class RESTFulRequest private constructor(private val builder: Builder) {
 
         fun post(isJson: Boolean = true) = apply {
             this.method = RequestMethod.POST
-            this.isJson = isJson;
+            this.isJson = isJson
         }
 
         fun put() = apply {

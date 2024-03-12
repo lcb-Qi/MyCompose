@@ -1,15 +1,13 @@
 package com.lcb.one.ui.page
 
-import androidx.compose.foundation.interaction.Interaction
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -24,12 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.lcb.one.ui.theme.bodyLarge
-import com.lcb.one.ui.theme.labelLarge
 import com.lcb.one.bean.BasicInfo
 import com.lcb.one.bean.DisplayInfo
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
 fun DeviceInfoPage() {
@@ -49,7 +43,7 @@ fun DeviceInfoPage() {
                     modifier = Modifier.zIndex(2f),
                     selected = selected,
                     onClick = { selectedIndex = index },
-                    text = { Text(text = text, style = labelLarge()) },
+                    text = { Text(text = text, style = MaterialTheme.typography.labelLarge) },
                 )
             }
         }
@@ -73,7 +67,7 @@ private fun InfoList(items: Map<String, String>) {
                             .align(Alignment.CenterVertically),
                         text = key,
                         textAlign = TextAlign.Start,
-                        style = bodyLarge()
+                        style = MaterialTheme.typography.bodyLarge
                     )
 
                     Spacer(modifier = Modifier.weight(0.5f))
@@ -84,7 +78,7 @@ private fun InfoList(items: Map<String, String>) {
                             .align(Alignment.CenterVertically),
                         text = value,
                         textAlign = TextAlign.End,
-                        style = bodyLarge()
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
             }
@@ -118,13 +112,5 @@ private fun BasicInfoList() {
         put("sdkVersion", deviceInfo.sdkVersion.toString())
     })
 }
-
-class NoRippleInteractionSource : MutableInteractionSource {
-    override val interactions: Flow<Interaction> = emptyFlow()
-    override suspend fun emit(interaction: Interaction) {}
-    override fun tryEmit(interaction: Interaction) = true
-}
-
-
 
 

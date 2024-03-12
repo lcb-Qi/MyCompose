@@ -1,11 +1,6 @@
 package com.lcb.one.ui.page
 
-import android.app.Activity
 import android.content.Intent
-import androidx.activity.compose.BackHandler
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
@@ -14,16 +9,15 @@ import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
+import com.lcb.one.ui.widget.AppNavHost
 import com.lcb.one.ui.widget.FriendlyExitHandler
 import com.lcb.one.ui.widget.settings.ui.SettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
@@ -37,12 +31,9 @@ fun NavController.navigateSingleTop(route: String) {
 @Composable
 fun MorePage(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(
-        navController = navController, startDestination = RouteConfig.MORE,
-        enterTransition = { slideInHorizontally(animationSpec = tween(500)) { it } },
-        exitTransition = { slideOutHorizontally(animationSpec = tween(500)) { -it } },
-        popEnterTransition = { slideInHorizontally(animationSpec = tween(500)) { -it } },
-        popExitTransition = { slideOutHorizontally(animationSpec = tween(500)) { it } },
+    AppNavHost(
+        navController = navController,
+        startDestination = RouteConfig.MORE,
         modifier = modifier
     ) {
         composable(RouteConfig.MORE) { MorePageImpl(navController) }

@@ -7,20 +7,15 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
 import com.lcb.one.bean.PoemResponse
-import com.lcb.one.ui.theme.bodyMedium
-import com.lcb.one.ui.theme.bodySmall
-import com.lcb.one.ui.theme.titleLarge
 
 @Composable
 fun PoemInfoDialog(
@@ -35,8 +30,11 @@ fun PoemInfoDialog(
         },
         title = {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = poemDetail.title, style = titleLarge())
-                Text(text = "${poemDetail.dynasty} ${poemDetail.author}", style = bodySmall())
+                Text(text = poemDetail.title, style = MaterialTheme.typography.titleLarge)
+                Text(
+                    text = "${poemDetail.dynasty} ${poemDetail.author}",
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         },
         text = {
@@ -48,28 +46,9 @@ fun PoemInfoDialog(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(poemDetail.content) {
-                    Text(text = it, style = bodyMedium())
+                    Text(text = it, style = MaterialTheme.typography.bodyMedium)
                 }
             }
-        }
-    )
-}
-
-@Composable
-fun LoadingDialog(content: @Composable () -> Unit) {
-    AlertDialog(
-        onDismissRequest = {},
-        confirmButton = {},
-        text = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                CircularProgressIndicator()
-                content()
-            }
-
         }
     )
 }

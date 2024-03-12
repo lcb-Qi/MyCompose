@@ -4,7 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
+import androidx.compose.material.icons.automirrored.rounded.NavigateNext
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,7 +35,7 @@ fun SettingsMenuLink(
             summary = summary,
             icon = icon,
             action = {
-                Icon(Icons.AutoMirrored.Rounded.ArrowForwardIos, "")
+                Icon(Icons.AutoMirrored.Rounded.NavigateNext, "")
             },
         )
     }
