@@ -12,9 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Android
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.rounded.Android
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,9 +57,9 @@ class MainActivity : ComponentActivity() {
 
     private val items by lazy {
         listOf(
-            BottomBarItem(0, RouteConfig.HOME, getString(R.string.home), Icons.Filled.Home),
-            BottomBarItem(1, RouteConfig.TOOL, getString(R.string.tool), Icons.Filled.Android),
-            BottomBarItem(2, RouteConfig.MORE, getString(R.string.more), Icons.Filled.MoreHoriz)
+            BottomBarItem(0, RouteConfig.HOME, getString(R.string.home), Icons.Rounded.Home),
+            BottomBarItem(1, RouteConfig.TOOL, getString(R.string.tool), Icons.Rounded.Android),
+            BottomBarItem(2, RouteConfig.MORE, getString(R.string.more), Icons.Rounded.MoreHoriz)
         )
     }
 

@@ -8,9 +8,9 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Link
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Link
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -58,7 +58,7 @@ private fun MorePageImpl(navController: NavController) {
         // 设置
         SettingsMenuLink(
             title = { SettingsTitle(stringResource(R.string.setting)) },
-            icon = { Icon(imageVector = Icons.Filled.Settings, contentDescription = "") }
+            icon = { Icon(imageVector = Icons.Rounded.Settings, contentDescription = "") }
         ) {
             navController.navigateSingleTop(RouteConfig.SETTINGS)
         }
@@ -68,7 +68,7 @@ private fun MorePageImpl(navController: NavController) {
         SettingsMenuLink(
             title = { SettingsTitle(stringResource(R.string.project_location)) },
             summary = { SettingsSummary(url) },
-            icon = { Icon(imageVector = Icons.Filled.Link, contentDescription = "") }
+            icon = { Icon(imageVector = Icons.Rounded.Link, contentDescription = "") }
         ) {
             val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -83,7 +83,7 @@ private fun MorePageImpl(navController: NavController) {
         SettingsSimpleText(
             title = { SettingsTitle(stringResource(R.string.version_info)) },
             summary = { SettingsSummary(versionInfo) },
-            icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "") }
+            icon = { Icon(imageVector = Icons.Rounded.Info, contentDescription = "") }
         ) {
         }
     }

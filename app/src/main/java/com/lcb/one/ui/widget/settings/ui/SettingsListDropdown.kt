@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowDropDown
+import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -68,7 +68,7 @@ fun SettingsListDropdown(
                         Text(text = items[selectIndex], style = labelMedium())
                         Icon(
                             modifier = Modifier.padding(start = 8.dp),
-                            imageVector = Icons.Outlined.ArrowDropDown,
+                            imageVector = Icons.Rounded.ArrowDropDown,
                             contentDescription = null,
                         )
                     }

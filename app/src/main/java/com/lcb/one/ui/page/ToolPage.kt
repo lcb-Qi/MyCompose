@@ -1,8 +1,7 @@
 package com.lcb.one.ui.page
 
-import android.app.Activity
 import android.app.WallpaperManager
-import androidx.activity.compose.BackHandler
+import android.content.Intent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -12,17 +11,14 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowRight
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.MiscellaneousServices
-import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.PhoneAndroid
+import androidx.compose.material.icons.automirrored.rounded.ArrowRight
+import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material.icons.rounded.MiscellaneousServices
+import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +28,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -42,6 +37,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lcb.one.R
+import com.lcb.one.ui.ClockActivity
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.widget.FriendlyExitHandler
 import com.lcb.one.ui.widget.dialog.CoverGetDialog
@@ -73,13 +69,14 @@ fun ToolPage(modifier: Modifier = Modifier) {
 private fun ToolPageImpl(navController: NavController) {
     FriendlyExitHandler()
 
+    // 设备
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         ToolBox(
             title = stringResource(R.string.device),
-            icon = { Icon(Icons.Filled.PhoneAndroid, "") }) {
+            icon = { Icon(Icons.Rounded.PhoneAndroid, "") }) {
             FlowRow(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -103,26 +100,41 @@ private fun ToolPageImpl(navController: NavController) {
             }
         }
 
+        // 其他
         ToolBox(
             title = stringResource(R.string.other),
-            icon = { Icon(Icons.Filled.MiscellaneousServices, "") }) {
+            icon = { Icon(Icons.Rounded.MiscellaneousServices, "") }) {
             FlowRow(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 var showCoverGet by remember { mutableStateOf(false) }
+                var showClock by remember { mutableStateOf(false) }
+
                 ElevatedAssistChip(
                     onClick = { showCoverGet = true },
                     label = { Text(text = stringResource(R.string.obtain_bilibili_cover)) })
                 ElevatedAssistChip(
+                    enabled = false,
                     onClick = { },
                     label = { Text(text = stringResource(R.string.bv_to_av)) })
                 ElevatedAssistChip(
+                    enabled = false,
                     onClick = { },
                     label = { Text(text = stringResource(R.string.av_to_bv)) })
 
+                ElevatedAssistChip(
+                    onClick = { showClock = true },
+                    label = { Text(text = "时钟屏幕") })
+
                 if (showCoverGet) {
                     CoverGetDialog(onDismiss = { showCoverGet = false }) { saveCover(it) }
+                }
+                if (showClock) {
+                    LocalContext.current.run {
+                        startActivity(Intent(this, ClockActivity::class.java))
+                    }
+                    showClock = false
                 }
             }
         }
@@ -145,7 +157,7 @@ private fun ToolBox(
             Text(text = title, Modifier.weight(1f))
             IconButton(onClick = { showDetail = !showDetail }) {
                 Icon(
-                    if (showDetail) Icons.Filled.ArrowDropDown else Icons.AutoMirrored.Filled.ArrowRight,
+                    if (showDetail) Icons.Rounded.ArrowDropDown else Icons.AutoMirrored.Rounded.ArrowRight,
                     ""
                 )
             }

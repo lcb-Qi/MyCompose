@@ -173,7 +173,6 @@ fun PhotoFrame() {
         contentDescription = "",
         Modifier
             .height(200.dp)
-            .clip(RoundedCornerShape(8.dp))
             .clickable { launcher.launch("image/*") }
     )
 }

@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.lcb.one.R
 import com.lcb.one.ui.theme.titleMedium
 import com.lcb.one.ui.widget.ToolButton
@@ -57,18 +58,23 @@ fun CoverGetDialog(
                         placeholder = { Text(text = "BV或av号") },
                         modifier = Modifier.weight(1f)
                     )
-                    ToolButton(text = stringResource(R.string.obtain)) { biliViewModel.getCoverUrl(textInput) }
+                    ToolButton(text = stringResource(R.string.obtain)) {
+                        biliViewModel.getCoverUrl(textInput)
+                    }
                 }
 
-
                 Box(
-                    Modifier.height(150.dp),
+                    Modifier.height(200.dp),
                     Alignment.Center
                 ) {
                     if (isLoading) {
                         CircularProgressIndicator()
                     } else {
-                        AsyncImage(model = coverUrl, contentDescription = null)
+                        SubcomposeAsyncImage(
+                            model = coverUrl,
+                            contentDescription = "",
+                            loading = { CircularProgressIndicator() }
+                        )
                     }
                 }
             }
