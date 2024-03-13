@@ -3,7 +3,7 @@ package com.lcb.one.ui.widget.settings.storage.disk
 import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
@@ -12,13 +12,13 @@ import androidx.preference.PreferenceManager
 import com.lcb.one.ui.widget.settings.storage.SettingValueState
 
 @Composable
-fun rememberPreferenceIntSettingState(
+fun rememberFloatPreferenceState(
     key: String,
-    defaultValue: Int = 0,
+    defaultValue: Float = 0f,
     preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(LocalContext.current),
-): IntPreferenceSettingValueState {
+): FloatPreferenceState {
     return remember {
-        IntPreferenceSettingValueState(
+        FloatPreferenceState(
             key = key,
             preferences = preferences,
             defaultValue = defaultValue,
@@ -26,18 +26,18 @@ fun rememberPreferenceIntSettingState(
     }
 }
 
-class IntPreferenceSettingValueState(
+class FloatPreferenceState(
     private val preferences: SharedPreferences,
     val key: String,
-    val defaultValue: Int = 0,
-) : SettingValueState<Int> {
+    val defaultValue: Float = 0f,
+) : SettingValueState<Float> {
 
-    private var _value by mutableStateOf(preferences.getInt(key, defaultValue))
+    private var _value by mutableFloatStateOf(preferences.getFloat(key, defaultValue))
 
-    override var value: Int
+    override var value: Float
         set(value) {
             _value = value
-            preferences.edit { putInt(key, value) }
+            preferences.edit { putFloat(key, value) }
         }
         get() = _value
 

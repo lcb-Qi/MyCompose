@@ -12,49 +12,34 @@ import androidx.preference.PreferenceManager
 import com.lcb.one.ui.widget.settings.storage.SettingValueState
 
 @Composable
-fun rememberPreferenceIntSetSettingState(
+fun rememberStringPreferenceState(
     key: String,
-    defaultValue: Set<Int> = emptySet(),
-    delimiter: String = "|",
+    defaultValue: String? = null,
     preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(LocalContext.current),
-): IntSetPreferenceSettingValueState {
+): StringPreferenceState {
     return remember {
-        IntSetPreferenceSettingValueState(
+        StringPreferenceState(
             key = key,
             preferences = preferences,
             defaultValue = defaultValue,
-            delimiter = delimiter,
         )
     }
 }
 
-class IntSetPreferenceSettingValueState(
+class StringPreferenceState(
     private val preferences: SharedPreferences,
     val key: String,
-    val defaultValue: Set<Int> = emptySet(),
-    val delimiter: String = "|",
-) : SettingValueState<Set<Int>> {
+    val defaultValue: String?,
+) : SettingValueState<String?> {
 
-    private var _value by mutableStateOf(
-        preferences.getString(key, defaultValue.toPrefString(delimiter))
-            .orEmpty()
-            .split(delimiter)
-            .filter { it.isNotEmpty() }
-            .map { it.toInt() }
-            .toMutableSet(),
-    )
+    private var _value by mutableStateOf(preferences.getString(key, defaultValue))
 
-    override var value: Set<Int>
+    override var value: String?
         set(value) {
-            _value = value.toSortedSet()
-            preferences.edit {
-                putString(key, value.toPrefString(delimiter))
-            }
+            _value = value
+            preferences.edit { putString(key, value) }
         }
         get() = _value
-
-    private fun Set<Int>.toPrefString(delimiter: String) =
-        joinToString(separator = delimiter) { it.toString() }
 
     override fun reset() {
         value = defaultValue

@@ -34,6 +34,7 @@
         <activity
             android:name=".ui.ClockActivity"
             android:exported="false"
+            android:configChanges="uiMode"
             android:screenOrientation="landscape" />
 
         <receiver

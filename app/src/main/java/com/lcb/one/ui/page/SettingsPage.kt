@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.integerArrayResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import com.lcb.one.ui.widget.settings.storage.disk.rememberPreferenceBooleanSettingState
-import com.lcb.one.ui.widget.settings.storage.disk.rememberPreferenceIntSettingState
+import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPreferenceState
+import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPreferenceState
 import com.lcb.one.ui.widget.settings.ui.SettingsListDropdown
 import com.lcb.one.ui.widget.settings.ui.SettingsSwitch
 import com.lcb.one.R
@@ -44,7 +44,7 @@ object AppSettings {
 fun SettingsPage(modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxSize()) {
         // 动态取色
-        val appDynamicColorState = rememberPreferenceBooleanSettingState(
+        val appDynamicColorState = rememberBooleanPreferenceState(
             stringResource(R.string.settings_dynamic_color_key),
             appDynamicColor
         )
@@ -59,7 +59,7 @@ fun SettingsPage(modifier: Modifier = Modifier) {
         }
 
         // 标题更新间隔
-        val durationIndexState = rememberPreferenceIntSettingState(
+        val durationIndexState = rememberIntPreferenceState(
             stringResource(R.string.settings_poem_update_duration_key),
             PoemViewModel.durationIndex
         )

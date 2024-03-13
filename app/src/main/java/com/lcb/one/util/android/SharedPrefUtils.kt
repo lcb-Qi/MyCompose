@@ -9,9 +9,9 @@ object SharedPrefUtils {
     val defaultPreferences: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(MyApp.getAppContext())
 
-    fun getString(key: String): String {
-        if (key.isBlank()) return ""
-        return defaultPreferences.getString(key, "") ?: ""
+    fun getString(key: String, default: String = ""): String {
+        if (key.isBlank()) return default
+        return defaultPreferences.getString(key, default) ?: default
     }
 
     fun putInt(key: String, value: Int) {
@@ -21,9 +21,9 @@ object SharedPrefUtils {
         }
     }
 
-    fun getLong(key: String): Long {
-        if (key.isBlank()) return -1
-        return defaultPreferences.getLong(key, -1)
+    fun getLong(key: String, default: Long = -1): Long {
+        if (key.isBlank()) return default
+        return defaultPreferences.getLong(key, default)
     }
 
     fun putLong(key: String, value: Long) {
@@ -33,9 +33,9 @@ object SharedPrefUtils {
         }
     }
 
-    fun getInt(key: String): Int {
-        if (key.isBlank()) return -1
-        return defaultPreferences.getInt(key, -1)
+    fun getInt(key: String, default: Int = -1): Int {
+        if (key.isBlank()) return default
+        return defaultPreferences.getInt(key, default)
     }
 
     fun putString(key: String, value: String) {
@@ -45,9 +45,9 @@ object SharedPrefUtils {
         }
     }
 
-    fun getBoolean(key: String): Boolean {
-        if (key.isBlank()) return false
-        return defaultPreferences.getBoolean(key, false)
+    fun getBoolean(key: String, default: Boolean = false): Boolean {
+        if (key.isBlank()) return default
+        return defaultPreferences.getBoolean(key, default)
     }
 
     fun putBoolean(key: String, value: Boolean) {

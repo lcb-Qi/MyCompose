@@ -12,32 +12,32 @@ import androidx.preference.PreferenceManager
 import com.lcb.one.ui.widget.settings.storage.SettingValueState
 
 @Composable
-fun rememberPreferenceFloatSettingState(
+fun rememberBooleanPreferenceState(
     key: String,
-    defaultValue: Float = 0f,
+    defaultValue: Boolean,
     preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(LocalContext.current),
-): FloatPreferenceSettingValueState {
+): BooleanPreferenceState {
     return remember {
-        FloatPreferenceSettingValueState(
-            key = key,
+        BooleanPreferenceState(
             preferences = preferences,
+            key = key,
             defaultValue = defaultValue,
         )
     }
 }
 
-class FloatPreferenceSettingValueState(
+class BooleanPreferenceState(
     private val preferences: SharedPreferences,
     val key: String,
-    val defaultValue: Float = 0f,
-) : SettingValueState<Float> {
+    val defaultValue: Boolean = false,
+) : SettingValueState<Boolean> {
 
-    private var _value by mutableStateOf(preferences.getFloat(key, defaultValue))
+    private var _value by mutableStateOf(preferences.getBoolean(key, defaultValue))
 
-    override var value: Float
+    override var value: Boolean
         set(value) {
             _value = value
-            preferences.edit { putFloat(key, value) }
+            preferences.edit { putBoolean(key, value) }
         }
         get() = _value
 
