@@ -29,7 +29,6 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,17 +51,16 @@ import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPreferenceStat
 import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPreferenceState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
-import com.lcb.one.util.android.DimenUtils
 import com.lcb.one.util.android.SharedPrefUtils
-import com.lcb.one.util.common.DateTimeUtils
-import kotlinx.coroutines.delay
+import java.util.Locale
 
 class ClockActivity : ComponentActivity() {
     companion object {
         private const val MAX_SIZE = 48
-        private const val MIN_SIZE = 12
-        private const val DEFAULT_SIZE = 30
-        private const val HIDE_SETTING_DELAY = 2000L/* ms */
+        private const val MIN_SIZE = 6
+        private const val DEFAULT_SIZE = 20
+        private const val DEFAULT_DATE_SIZE = MIN_SIZE
+
         private const val KEY_CLOCK_SIZE = "clock_text_size"
         private const val KEY_CLOCK_DARK_THEME = "clock_dark_theme"
     }
@@ -84,6 +83,7 @@ class ClockActivity : ComponentActivity() {
         AppThemeSurface(darkTheme = darkTheme) {
             var clockSize by
             rememberIntPreferenceState(KEY_CLOCK_SIZE, DEFAULT_SIZE)
+            val density = LocalDensity.current
             var showSetting by remember { mutableStateOf(false) }
             var onlyClock by remember { mutableStateOf(true) }
 
@@ -111,25 +111,27 @@ class ClockActivity : ComponentActivity() {
                         .fillMaxSize(),
                     factory = {
                         TextClock(it).apply {
+                            format12Hour =
+                                if (Locale.getDefault().language == Locale.CHINESE.language) {
+                                    "aa hh:mm:ss"
+                                } else {
+                                    "hh:mm:ss aa"
+                                }
                             format24Hour = "HH:mm:ss"
-                            textSize = DimenUtils.sp2px(clockSize)
+                            textSize = density.run { clockSize.sp.toPx() }
                             setTextColor(clockColor)
                             typeface = Typeface.defaultFromStyle(Typeface.BOLD)
                             gravity = Gravity.CENTER
                         }
                     },
                     update = {
-                        it.textSize = DimenUtils.sp2px(clockSize)
+                        it.textSize = density.run { clockSize.sp.toPx() }
                         it.setTextColor(clockColor)
                     }
                 )
 
+                val row = createRef()
                 if (!onlyClock) {
-                    LaunchedEffect(onlyClock) {
-                        delay(HIDE_SETTING_DELAY)
-                        onlyClock = true
-                    }
-                    val row = createRef()
                     Row(
                         modifier = Modifier.constrainAs(row) {
                             end.linkTo(parent.end)
@@ -156,13 +158,23 @@ class ClockActivity : ComponentActivity() {
                 }
 
                 val date = createRef()
-                Text(
+                AndroidView(
                     modifier = Modifier.constrainAs(date) {
                         start.linkTo(parent.start)
                         bottom.linkTo(parent.bottom)
                     },
-                    text = DateTimeUtils.format(DateTimeUtils.nowMillis(), "yyyy-MM-dd EE"),
-                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 18.sp)
+                    factory = {
+                        TextClock(it).apply {
+                            format24Hour = "yyyy-MM-dd EE"
+                            textSize = density.run { DEFAULT_DATE_SIZE.sp.toPx() }
+                            setTextColor(clockColor)
+                            typeface = Typeface.defaultFromStyle(Typeface.BOLD)
+                            gravity = Gravity.CENTER
+                        }
+                    },
+                    update = {
+                        it.setTextColor(clockColor)
+                    }
                 )
             }
 
@@ -203,7 +215,11 @@ class ClockActivity : ComponentActivity() {
 
                         IconButton(
                             enabled = enableMinus,
-                            onClick = { clockSize-- }) {
+                            onClick = {
+                                clockSize--
+                                onTextSizeChanged(clockSize)
+                            }
+                        ) {
                             Icon(
                                 imageVector = Icons.Rounded.Remove,
                                 contentDescription = ""
@@ -222,7 +238,11 @@ class ClockActivity : ComponentActivity() {
 
                         IconButton(
                             enabled = enablePlus,
-                            onClick = { clockSize++ }) {
+                            onClick = {
+                                clockSize++
+                                onTextSizeChanged(clockSize)
+                            }
+                        ) {
                             Icon(imageVector = Icons.Rounded.Add, contentDescription = "")
                         }
                     }
