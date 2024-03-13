@@ -6,8 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ToolButton(modifier: Modifier = Modifier, text: String, onclick: () -> Unit) {
-    Button(onClick = onclick, modifier = modifier) {
+fun ToolButton(
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    text: String,
+    onclick: () -> Unit
+) {
+    Button(enabled = enabled, onClick = onclick, modifier = modifier) {
         Text(text = text, maxLines = 1)
     }
 }

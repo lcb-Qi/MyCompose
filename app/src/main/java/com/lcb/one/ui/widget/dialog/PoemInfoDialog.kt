@@ -19,10 +19,13 @@ import com.lcb.one.bean.PoemResponse
 
 @Composable
 fun PoemInfoDialog(
+    show: Boolean,
     poemDetail: PoemResponse.Data.Origin,
     onDismissRequest: () -> Unit,
     onConfirm: () -> Unit
 ) {
+    if (!show) return
+
     AlertDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {

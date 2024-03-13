@@ -20,10 +20,11 @@
     <string name="obtain">获取</string>
     <string name="device">设备</string>
     <string name="device_info">设备信息</string>
-    <string name="extract_wallpaper">提取壁纸</string>
+    <string name="extract_wallpaper">提取桌面壁纸</string>
     <string name="bv_to_av">BV转av</string>
     <string name="av_to_bv">av转BV</string>
     <string name="other">其他</string>
     <string name="obtain_bilibili_cover">获取B站封面</string>
     <string name="clock_screen">时钟屏幕</string>
+    <string name="exit">退出</string>
 </resources>

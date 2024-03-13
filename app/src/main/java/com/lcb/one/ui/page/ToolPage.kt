@@ -37,7 +37,7 @@ import com.lcb.one.ui.ClockActivity
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.widget.AppNavHost
 import com.lcb.one.ui.widget.FriendlyExitHandler
-import com.lcb.one.ui.widget.dialog.CoverGetDialog
+import com.lcb.one.ui.widget.dialog.CoverGetBottomSheet
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.common.ThreadPool
@@ -113,9 +113,7 @@ private fun ToolPageImpl(navController: NavController) {
                     label = { Text(text = stringResource(R.string.clock_screen)) }
                 )
 
-                if (showCoverGet) {
-                    CoverGetDialog(onDismiss = { showCoverGet = false })
-                }
+                CoverGetBottomSheet(show = showCoverGet) { showCoverGet = false }
                 if (showClock) {
                     LocalContext.current.run {
                         startActivity(Intent(this, ClockActivity::class.java))

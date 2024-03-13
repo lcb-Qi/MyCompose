@@ -98,16 +98,13 @@ class MainActivity : ComponentActivity() {
 
                 navController.navigateSingleTop(items[selectedIndex].route)
 
-                if (showDetail) {
-                    PoemInfoDialog(
-                        poemDetail = poemInfo.origin,
-                        onDismissRequest = { showDetail = false },
-                        onConfirm = { showDetail = false }
-                    )
-                }
-                if (isLoading) {
-                    LoadingDialog()
-                }
+                PoemInfoDialog(
+                    showDetail,
+                    poemDetail = poemInfo.origin,
+                    onDismissRequest = { showDetail = false },
+                    onConfirm = { showDetail = false }
+                )
+                LoadingDialog(isLoading)
             }
         }
     }

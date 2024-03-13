@@ -1,33 +1,39 @@
 package com.lcb.one.viewmodel
 
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lcb.one.network.BiliServerAccessor
-import com.lcb.one.util.android.LLog
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class BiliViewModel : ViewModel() {
     private val TAG = "BiliViewModel"
-    val coverUrl = MutableStateFlow("")
+
+    private val _videoId = MutableLiveData("")
+    val coverUrl = MediatorLiveData("").apply {
+        addSource(_videoId) {
+            viewModelScope.launch {
+                isLoading.value = true
+                value = BiliServerAccessor.getVideoInfo(it)?.data?.pic
+                isLoading.value = false
+            }
+        }
+    }
+
 
     val isLoading = MutableStateFlow(false)
 
-    fun getCoverUrl(videoId: String) {
-        LLog.d(TAG, "getCoverUrl: videoId = $videoId")
-        viewModelScope.launch {
-            isLoading.value = true
-            BiliServerAccessor.getVideoInfo(videoId)?.let {
-                LLog.d(TAG, "getCoverUrl: it.data.pic = ${it.data.pic}")
-                coverUrl.value = it.data.pic
-            }
-            isLoading.value = false
-        }
+    fun getUrlByVideoId(videoId: String) {
+        if (videoId.isBlank()) return
+        _videoId.value = videoId
     }
 
     companion object {
 
         private const val TABLE = "fZodR9XQDSUm21yCkr6zBqiveYah8bt4xsWpHnJE7jL5VG3guMTKNPAwcF"
+
         // private val mp = HashMap<String, Int>()
         // private val mp2 = HashMap<Int, String>()
         private val ss = intArrayOf(11, 10, 3, 8, 4, 6, 2, 9, 5, 7)

@@ -14,7 +14,9 @@ import androidx.compose.ui.unit.dp
 import com.lcb.one.R
 
 @Composable
-fun LoadingDialog(message: String = stringResource(R.string.loading)) {
+fun LoadingDialog(show: Boolean, message: String = stringResource(R.string.loading)) {
+    if (!show) return
+
     AlertDialog(
         onDismissRequest = {},
         confirmButton = {},

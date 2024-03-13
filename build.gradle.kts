@@ -16,5 +16,3 @@ ext["compileSdk"] = 34
 ext["minSdk"] = 31
 ext["version_code"] = 10200
 ext["version_name"] = "1.2.0"
-
-ext["compose_bom"] = "2024.02.00"
