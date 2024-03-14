@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +31,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.SubcomposeAsyncImage
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
-import com.lcb.one.ui.widget.ToolButton
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.viewmodel.BiliViewModel
 import kotlinx.coroutines.launch
@@ -49,7 +49,6 @@ fun CoverGetBottomSheet(
     val isLoading by biliViewModel.isLoading.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
-    biliViewModel.getUrlByVideoId(textInput)
     ModalBottomSheet(sheetState = sheetState, onDismissRequest = onDismiss) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -69,13 +68,15 @@ fun CoverGetBottomSheet(
                     placeholder = { Text(text = "如BV117411r7R1") },
                     modifier = Modifier.weight(1f)
                 )
-                ToolButton(text = stringResource(R.string.obtain)) {
-                    biliViewModel.getUrlByVideoId(if (BuildConfig.DEBUG) "BV117411r7R1" else textInput)
+                Button(
+                    onClick = { biliViewModel.getUrlByVideoId(if (BuildConfig.DEBUG) "BV117411r7R1" else textInput) }
+                ) {
+                    Text(text = stringResource(R.string.obtain), maxLines = 1)
                 }
             }
 
             Box(
-                Modifier.height(200.dp),
+                Modifier.height(150.dp),
                 Alignment.Center
             ) {
                 if (isLoading) {
@@ -90,14 +91,12 @@ fun CoverGetBottomSheet(
             }
 
             val enable = !coverUrl.isNullOrBlank()
-            ToolButton(
-                enabled = enable,
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.save)
-            ) {
+            Button(enabled = enable, onClick = {
                 coroutineScope.launch {
                     DownLoadUtil.saveImageFromUrl(coverUrl!!)
                 }
+            }, modifier = Modifier.fillMaxWidth()) {
+                Text(text = stringResource(R.string.save), maxLines = 1)
             }
         }
     }

@@ -47,4 +47,9 @@
     <string name="obtain_bilibili_cover">obtain bilibili cover</string>
     <string name="clock_screen">clock screen</string>
     <string name="exit">Exit</string>
+    <string name="left_bottom">left-bottom</string>
+    <string name="right_bottom">right-bottom</string>
+    <string name="center_above">center-above</string>
+    <string name="center_below">center-below</string>
+    <string name="date_position">date position</string>
 </resources>
