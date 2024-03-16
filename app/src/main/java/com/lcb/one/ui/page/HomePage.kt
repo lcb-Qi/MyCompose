@@ -6,8 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -26,9 +25,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.lcb.one.R
@@ -45,18 +47,37 @@ import java.util.Calendar
 
 @Composable
 fun HomePage(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        PhotoFrame()
-        DurationText()
-    }
-
     FriendlyExitHandler()
+    ConstraintLayout(modifier = Modifier.padding(horizontal = 16.dp)) {
+
+        val anniversary = createRef()
+        Column(
+            modifier = modifier.constrainAs(anniversary) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            PhotoFrame()
+            DurationText()
+        }
+
+        val slogan = createRef()
+        Text(
+            text = "Code is technical debt",
+            modifier = Modifier
+                .constrainAs(slogan) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .alpha(0.5f),
+            style = MaterialTheme.typography.bodySmall
+        )
+
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -162,7 +183,8 @@ fun PhotoFrame() {
         model = uri,
         contentDescription = "",
         Modifier
-            .height(200.dp)
+            .heightIn(max = 200.dp)
+            .clip(MaterialTheme.shapes.small)
             .clickable { launcher.launch("image/*") }
     )
 }
