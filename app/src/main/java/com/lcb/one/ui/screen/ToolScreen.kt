@@ -1,4 +1,4 @@
-package com.lcb.one.ui.page
+package com.lcb.one.ui.screen
 
 import android.app.WallpaperManager
 import android.content.Intent
@@ -30,34 +30,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.navigation.NavController
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.lcb.one.R
 import com.lcb.one.ui.ClockActivity
 import com.lcb.one.ui.MyApp
-import com.lcb.one.ui.widget.AppNavHost
+import com.lcb.one.ui.Route
 import com.lcb.one.ui.widget.FriendlyExitHandler
-import com.lcb.one.ui.widget.dialog.CoverGetBottomSheet
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.common.ThreadPool
 
-@Composable
-fun ToolPage(modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
-    AppNavHost(
-        navController = navController,
-        startDestination = RouteConfig.HOME,
-        modifier = modifier
-    ) {
-        composable(RouteConfig.HOME) { ToolPageImpl(navController) }
-        composable(RouteConfig.DEVICE) { DeviceInfoPage() }
-    }
-}
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ToolPageImpl(navController: NavController) {
+fun ToolScreen(navController: NavController) {
     FriendlyExitHandler()
 
     // 设备
@@ -73,7 +57,7 @@ private fun ToolPageImpl(navController: NavController) {
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 ElevatedAssistChip(
-                    onClick = { navController.navigateSingleTop(RouteConfig.DEVICE) },
+                    onClick = { navController.navigateSingleTop(Route.DEVICE) },
                     label = { Text(text = stringResource(R.string.device_info)) }
                 )
                 ElevatedAssistChip(
@@ -95,7 +79,7 @@ private fun ToolPageImpl(navController: NavController) {
                 var showClock by remember { mutableStateOf(false) }
 
                 ElevatedAssistChip(
-                    onClick = { showCoverGet = true },
+                    onClick = { navController.navigateSingleTop(Route.BILI) },
                     label = { Text(text = stringResource(R.string.obtain_bilibili_cover)) }
                 )
                 ElevatedAssistChip(
@@ -113,7 +97,7 @@ private fun ToolPageImpl(navController: NavController) {
                     label = { Text(text = stringResource(R.string.clock_screen)) }
                 )
 
-                CoverGetBottomSheet(show = showCoverGet) { showCoverGet = false }
+                // CoverGetBottomSheet(show = showCoverGet) { showCoverGet = false }
                 if (showClock) {
                     LocalContext.current.run {
                         startActivity(Intent(this, ClockActivity::class.java))

@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lcb.one.bean.PoemResponse
 import com.lcb.one.network.PoemServerAccessor
-import com.lcb.one.ui.MyApp
-import com.lcb.one.ui.page.AppSettings
+import com.lcb.one.ui.AppSettings
 import com.lcb.one.util.common.JsonUtils
 import com.lcb.one.util.android.SharedPrefUtils
 import com.squareup.moshi.JsonClass
@@ -14,9 +13,6 @@ import kotlinx.coroutines.launch
 
 class PoemViewModel : ViewModel() {
     companion object {
-        private const val TAG = "PoemViewModel"
-        var durationIndex = AppSettings.getPoemUpdateDurationIndex(MyApp.getAppContext())
-        var duration = AppSettings.getPoemUpdateDuration(MyApp.getAppContext(), durationIndex)
         const val KEY_POEM_TOKEN = "poem_token"
         const val KEY_LAST_POEM = "last_poem"
     }
@@ -63,6 +59,6 @@ class PoemViewModel : ViewModel() {
 
     private fun needRefresh(forceRefresh: Boolean): Boolean {
         val info = poemFlow.value
-        return info.recommend.isBlank() || forceRefresh || System.currentTimeMillis() - info.updateTime > duration
+        return info.recommend.isBlank() || forceRefresh || System.currentTimeMillis() - info.updateTime > AppSettings.poemUpdateDuration
     }
 }

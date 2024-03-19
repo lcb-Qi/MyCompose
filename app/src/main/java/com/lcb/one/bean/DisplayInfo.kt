@@ -4,19 +4,19 @@ import android.content.Context
 import android.util.DisplayMetrics
 import android.util.Size
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import com.lcb.one.ui.MyApp
+import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.DimenUtils
 import com.lcb.one.util.android.PhoneUtil
 
 data class DisplayInfo(
-    var displaySize: Size = Size(0, 0),
-    var resolution: Size = Size(0, 0),
-    var smallWidth: Int = 0,
-    var density: Float = 0f,
-    var dpi: Int = 0,
-    var statusBarsHeight: Int = 0,
-    var navigationBarsHeight: Int = 0
+    var displaySize: Size = Size(-1, -1),
+    var resolution: Size = Size(-1, -1),
+    var smallWidth: Int = -1,
+    var density: Float = -1f,
+    var dpi: Int = -1,
+    var statusBarsHeight: Int = -1,
+    var navigationBarsHeight: Int = -1
 ) {
     fun displaySize2dp(): String {
         val widthInDip = DimenUtils.px2dp(displaySize.width)
@@ -39,14 +39,16 @@ data class DisplayInfo(
             windowManager.defaultDisplay.getMetrics(outMetrics)
 
             displayInfo.apply {
-                displaySize = Size(outMetrics.widthPixels, outMetrics.heightPixels)
                 resolution = PhoneUtil.getResolution(context)
                 density = outMetrics.density
                 dpi = outMetrics.densityDpi
-                val activity = context as? AppCompatActivity
-                // statusBarsHeight = activity?.getStatusBarsHeight() ?: -1
-                // navigationBarsHeight = activity?.getNavigationBarsHeight() ?: -1
+                statusBarsHeight = AppUtils.getStatusBarsHeight()
+                navigationBarsHeight = AppUtils.getNavigationBarsHeight()
                 smallWidth = context.resources.configuration.smallestScreenWidthDp
+                displaySize = Size(
+                    resolution.width,
+                    resolution.height - statusBarsHeight - navigationBarsHeight
+                )
             }
 
             return displayInfo

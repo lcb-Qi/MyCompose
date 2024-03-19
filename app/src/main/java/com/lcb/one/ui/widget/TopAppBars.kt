@@ -12,33 +12,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 fun TopAppBars(
     text: String,
+    navigationIcon: @Composable () -> Unit = {},
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
 ) {
-    TopAppBar(title = { TitleText(text, onLongClick, onClick) })
-}
-
-@Composable
-@OptIn(ExperimentalFoundationApi::class)
-private fun TitleText(
-    text: String,
-    onLongClick: (() -> Unit)?,
-    onClick: (() -> Unit)?
-) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier
-            .wrapContentSize()
-            .combinedClickable(
-                onLongClick = onLongClick,
-                indication = LocalIndication.current,
-                interactionSource = NoRippleInteractionSource(),
-            ) {
-                onClick?.invoke()
-            }
+    TopAppBar(
+        navigationIcon = navigationIcon,
+        title = {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .wrapContentSize()
+                    .combinedClickable(
+                        onLongClick = onLongClick,
+                        indication = LocalIndication.current,
+                        interactionSource = NoRippleInteractionSource(),
+                    ) {
+                        onClick?.invoke()
+                    }
+            )
+        }
     )
 }

@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.widget.settings.storage.SettingValueState
 
 @Composable
@@ -27,7 +28,7 @@ fun rememberStringPreferenceState(
 }
 
 class StringPreferenceState(
-    private val preferences: SharedPreferences,
+    private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(MyApp.getAppContext()),
     val key: String,
     val defaultValue: String?,
 ) : SettingValueState<String?> {

@@ -1,4 +1,4 @@
-package com.lcb.one.ui.page
+package com.lcb.one.ui.screen
 
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -46,7 +46,7 @@ import java.time.ZoneId
 import java.util.Calendar
 
 @Composable
-fun HomePage(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier) {
     FriendlyExitHandler()
     ConstraintLayout(modifier = Modifier.padding(horizontal = 16.dp)) {
 

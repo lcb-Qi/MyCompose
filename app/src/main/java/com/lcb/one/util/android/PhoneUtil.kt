@@ -28,7 +28,7 @@ object PhoneUtil {
     fun getSdkInt(): Int = Build.VERSION.SDK_INT
 
     fun getResolution(context: Context): Size {
-        val metrics = context.getSystemService(WindowManager::class.java).maximumWindowMetrics
+        val metrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
         return Size(metrics.bounds.width(), metrics.bounds.height())
     }
 }

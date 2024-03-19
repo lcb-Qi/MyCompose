@@ -7,30 +7,36 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Android
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.MoreHoriz
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lcb.one.R
 import com.lcb.one.ui.glance.PoemAppWidget
-import com.lcb.one.ui.page.HomePage
-import com.lcb.one.ui.page.MorePage
-import com.lcb.one.ui.page.RouteConfig
+import com.lcb.one.ui.screen.BiliBiliScreen
+import com.lcb.one.ui.screen.DeviceInfoScreen
+import com.lcb.one.ui.screen.HomeScreen
+import com.lcb.one.ui.screen.MoreScreen
+import com.lcb.one.ui.screen.SettingsScreen
 import com.lcb.one.viewmodel.PoemViewModel
-import com.lcb.one.ui.page.ToolPage
-import com.lcb.one.ui.page.navigateSingleTop
+import com.lcb.one.ui.screen.ToolScreen
+import com.lcb.one.ui.screen.navigateSingleTop
 import com.lcb.one.ui.widget.AppNavHost
 import com.lcb.one.ui.widget.TopAppBars
 import com.lcb.one.ui.widget.AppThemeSurface
@@ -44,14 +50,6 @@ class MainActivity : ComponentActivity() {
 
     private val poemViewModel by viewModels<PoemViewModel>()
 
-    private val items by lazy {
-        listOf(
-            BottomBarItem(0, RouteConfig.HOME, getString(R.string.home), Icons.Rounded.Home),
-            BottomBarItem(1, RouteConfig.TOOL, getString(R.string.tool), Icons.Rounded.Android),
-            BottomBarItem(2, RouteConfig.MORE, getString(R.string.more), Icons.Rounded.MoreHoriz)
-        )
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { AppScreen() }
@@ -64,39 +62,72 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun AppScreen() {
         AppThemeSurface {
-            var selectedIndex by remember { mutableIntStateOf(0) }
-
-            val poemInfo by poemViewModel.poemFlow.collectAsState()
-            val isLoading by poemViewModel.isLoading.collectAsState()
-            var showDetail by remember { mutableStateOf(false) }
+            var onTitleClick: (() -> Unit)? = null
+            var onTitleLongClick: (() -> Unit)? = null
+            val navController = rememberNavController()
+            val routes = createRouter(navController)
+            val bottomItem = createBottomBarItem()
 
             Scaffold(
                 topBar = {
                     TopAppBars(
-                        text = poemInfo.recommend,
-                        onClick = { poemViewModel.refresh(true) },
-                        onLongClick = { showDetail = true }
+                        text = AppSettings.appTitle,
+                        onClick = onTitleClick,
+                        onLongClick = onTitleLongClick,
+                        navigationIcon = {
+                            val route = navController.currentDestination?.route
+                            if (route != Route.HOME && route != Route.TOOL && route != Route.MORE) {
+                                IconButton(onClick = { navController.navigateUp() }) {
+                                    Icon(Icons.AutoMirrored.Rounded.ArrowBack, "")
+                                }
+                            }
+                        }
                     )
                 },
-                bottomBar = { AppBottomBars(selectedIndex, items) { selectedIndex = it } }
+                bottomBar = {
+                    AppBottomBars(0, bottomItem) {
+                        when (it) {
+                            0 -> navController.navigateSingleTop(Route.HOME)
+                            1 -> navController.navigateSingleTop(Route.TOOL)
+                            2 -> navController.navigateSingleTop(Route.MORE)
+                        }
+                    }
+                }
             ) { paddingValues ->
                 val topPadding = paddingValues.calculateTopPadding()
                 val bottomPadding = paddingValues.calculateBottomPadding()
 
-                val navController = rememberNavController()
+                val poemInfo by poemViewModel.poemFlow.collectAsState()
+                val isLoading by poemViewModel.isLoading.collectAsState()
+                var showDetail by remember { mutableStateOf(false) }
+
+                AppSettings.appTitle = poemInfo.recommend
+                LaunchedEffect(navController) {
+                    navController.currentBackStackEntryFlow.collect { backStack ->
+                        val route = backStack.destination.route
+                        AppSettings.appTitle = if (route == Route.HOME) {
+                            onTitleClick = { poemViewModel.refresh(true) }
+                            onTitleLongClick = { showDetail = true }
+                            poemInfo.recommend
+                        } else {
+                            onTitleClick = null
+                            onTitleLongClick = null
+                            routes.find { it.route == route }?.title ?: getString(R.string.app_name)
+                        }
+                    }
+                }
+
                 AppNavHost(
                     navController = navController,
-                    startDestination = items[selectedIndex].route,
+                    startDestination = Route.HOME,
                     modifier = Modifier
                         .padding(top = topPadding, bottom = bottomPadding)
                         .fillMaxSize()
                 ) {
-                    composable(RouteConfig.HOME) { HomePage() }
-                    composable(RouteConfig.TOOL) { ToolPage() }
-                    composable(RouteConfig.MORE) { MorePage() }
+                    routes.forEach { routeItem ->
+                        composable(routeItem.route) { routeItem.content() }
+                    }
                 }
-
-                navController.navigateSingleTop(items[selectedIndex].route)
 
                 PoemInfoDialog(
                     showDetail,
@@ -107,5 +138,24 @@ class MainActivity : ComponentActivity() {
                 LoadingDialog(isLoading)
             }
         }
+    }
+
+    private fun createBottomBarItem(): List<BottomBarItem> {
+        return listOf(
+            BottomBarItem(getString(R.string.home), Icons.Rounded.Home),
+            BottomBarItem(getString(R.string.tool), Icons.Rounded.Android),
+            BottomBarItem(getString(R.string.more), Icons.Rounded.MoreHoriz)
+        )
+    }
+
+    private fun createRouter(navController: NavHostController): List<RouteScreen> {
+        return listOf(
+            RouteScreen(Route.HOME, getString(R.string.home)) { HomeScreen() },
+            RouteScreen(Route.TOOL, getString(R.string.tool)) { ToolScreen(navController) },
+            RouteScreen(Route.MORE, getString(R.string.more)) { MoreScreen(navController) },
+            RouteScreen(Route.BILI, getString(R.string.bibibili)) { BiliBiliScreen() },
+            RouteScreen(Route.DEVICE, getString(R.string.device_info)) { DeviceInfoScreen() },
+            RouteScreen(Route.SETTINGS, getString(R.string.settings)) { SettingsScreen() },
+        )
     }
 }

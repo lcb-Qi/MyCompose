@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -88,5 +90,17 @@ object AppUtils {
         val packageInfo = pm.getPackageInfo(packageName, 0)
 
         return packageInfo.versionCode
+    }
+
+    fun getNavigationBarsHeight(context: Context = MyApp.getAppContext()): Int {
+        val metrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
+        val insets = metrics.windowInsets.getInsets(WindowInsets.Type.systemBars())
+        return insets.bottom
+    }
+
+    fun getStatusBarsHeight(context: Context = MyApp.getAppContext()): Int {
+        val metrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
+        val insets = metrics.windowInsets.getInsets(WindowInsets.Type.systemBars())
+        return insets.top
     }
 }

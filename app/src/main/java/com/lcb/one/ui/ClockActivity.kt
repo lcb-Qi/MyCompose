@@ -10,7 +10,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -53,7 +52,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.lcb.one.R
 import com.lcb.one.ui.widget.AppThemeSurface
 import com.lcb.one.ui.widget.NoRippleInteractionSource
-import com.lcb.one.ui.widget.appDynamicColor
 import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPreferenceState
 import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPreferenceState
 import com.lcb.one.ui.widget.settings.storage.getValue
@@ -107,7 +105,7 @@ class ClockActivity : ComponentActivity() {
     fun ClockView() {
         var darkTheme by rememberBooleanPreferenceState(
             KEY_CLOCK_DARK_THEME,
-            appDynamicColor
+            AppSettings.appDynamicColor
         )
         AppThemeSurface(darkTheme = darkTheme) {
             var clockSize by
@@ -277,7 +275,7 @@ class ClockActivity : ComponentActivity() {
         var position by remember { mutableIntStateOf(getDatePosition()) }
         AlertDialog(
             properties = DialogProperties(usePlatformDefaultWidth = false),
-            title = { Text(text = stringResource(R.string.setting)) },
+            title = { Text(text = stringResource(R.string.settings)) },
             onDismissRequest = onDismiss,
             confirmButton = {
                 TextButton(onClick = onDismiss) {

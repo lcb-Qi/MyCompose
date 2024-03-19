@@ -1,4 +1,4 @@
-package com.lcb.one.ui.page
+package com.lcb.one.ui.screen
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
@@ -8,16 +8,13 @@ import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import androidx.navigation.NavController
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
-import com.lcb.one.ui.widget.AppNavHost
+import com.lcb.one.ui.Route
 import com.lcb.one.ui.widget.FriendlyExitHandler
 import com.lcb.one.ui.widget.settings.ui.SettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
@@ -29,29 +26,16 @@ fun NavController.navigateSingleTop(route: String) {
 }
 
 @Composable
-fun MorePage(modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
-    AppNavHost(
-        navController = navController,
-        startDestination = RouteConfig.MORE,
-        modifier = modifier
-    ) {
-        composable(RouteConfig.MORE) { MorePageImpl(navController) }
-        composable(RouteConfig.SETTINGS) { SettingsPage() }
-    }
-}
-
-@Composable
-private fun MorePageImpl(navController: NavController) {
+fun MoreScreen(navController: NavController) {
     FriendlyExitHandler()
 
     Column {
         // 设置
         SettingsMenuLink(
-            title = { SettingsTitle(stringResource(R.string.setting)) },
+            title = { SettingsTitle(stringResource(R.string.settings)) },
             icon = { Icon(imageVector = Icons.Rounded.Settings, contentDescription = "") }
         ) {
-            navController.navigateSingleTop(RouteConfig.SETTINGS)
+            navController.navigateSingleTop(Route.SETTINGS)
         }
 
         // 项目地址
