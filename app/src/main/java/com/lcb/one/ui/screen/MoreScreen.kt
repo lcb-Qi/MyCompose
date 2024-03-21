@@ -28,6 +28,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
+import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.bean.GithubLatest
 import com.lcb.one.network.os.RESTFulRequest
@@ -41,8 +42,12 @@ import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.LLog
 import com.lcb.one.util.android.PACKAGE_ME
+import com.lcb.one.util.android.ToastUtils
 import io.noties.markwon.Markwon
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 fun NavController.navigateSingleTop(route: String) {
     navigate(route = route, navOptions = navOptions { launchSingleTop = true })
@@ -81,7 +86,7 @@ fun MoreScreen(navController: NavController) {
         var newVersion by remember { mutableStateOf("") }
         var fileName by remember { mutableStateOf("") }
         var downloadUrl by remember { mutableStateOf("") }
-        val versionName = AppUtils.getAppVersionName(packageName = PACKAGE_ME)
+        val versionName = BuildConfig.VERSION_NAME
         val buildTime = stringResource(R.string.BUILD_TIME)
         val versionInfo = "$versionName($buildTime)"
         SettingsSimpleText(
@@ -90,20 +95,16 @@ fun MoreScreen(navController: NavController) {
             icon = { Icon(imageVector = Icons.Rounded.Info, contentDescription = "") }
         ) {
             scope.launch {
-                runCatching {
-                    RESTFulRequest.newBuilder("https://api.github.com/repos/lcb-Qi/MyCompose/releases/latest")
-                        .build()
-                        .getResult(GithubLatest::class.java)
-                        .onSuccess {
-                            if (it == null) return@onSuccess
-                            downloadUrl = it.assets[0].browserDownloadUrl
-                            newVersion = it.tagName
-                            md = it.body
-                            fileName = it.assets[0].name
-
-                            showUpdate = true
-                        }
+                val updateInfo = checkUpdate()
+                if (updateInfo == null) {
+                    ToastUtils.showToast("未检测到新版本")
+                    return@launch
                 }
+                if (updateInfo.version == BuildConfig.VERSION_NAME) {
+                    ToastUtils.showToast("已是最新版")
+                    return@launch
+                }
+                showUpdate = true
             }
         }
 
@@ -187,3 +188,30 @@ fun MoreScreen(navController: NavController) {
         }
     }
 }
+
+data class UpdateInfo(
+    val version: String,
+    val url: String,
+    val message: String,
+    val filename: String
+)
+
+private suspend fun checkUpdate(): UpdateInfo? = runCatching {
+    withContext(Dispatchers.IO) {
+        var updateInfo: UpdateInfo? = null
+        RESTFulRequest.newBuilder("https://api.github.com/repos/lcb-Qi/MyCompose/releases/latest")
+            .build()
+            .getResult(GithubLatest::class.java)
+            .onSuccess {
+                if (it == null) return@onSuccess
+                updateInfo = UpdateInfo(
+                    it.tagName,
+                    it.assets[0].browserDownloadUrl,
+                    it.body,
+                    it.assets[0].name
+                )
+            }
+
+        return@withContext updateInfo
+    }
+}.getOrNull()
