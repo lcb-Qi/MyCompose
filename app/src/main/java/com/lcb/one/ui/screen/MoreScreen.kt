@@ -80,6 +80,7 @@ fun MoreScreen(navController: NavController) {
         }
 
         var showUpdate by remember { mutableStateOf(false) }
+        var updateInfo: UpdateInfo? by remember { mutableStateOf(null) }
         val context = LocalContext.current
         val scope = rememberCoroutineScope()
         var md by remember { mutableStateOf("") }
@@ -95,12 +96,12 @@ fun MoreScreen(navController: NavController) {
             icon = { Icon(imageVector = Icons.Rounded.Info, contentDescription = "") }
         ) {
             scope.launch {
-                val updateInfo = checkUpdate()
+                updateInfo = checkUpdate()
                 if (updateInfo == null) {
                     ToastUtils.showToast("未检测到新版本")
                     return@launch
                 }
-                if (updateInfo.version == BuildConfig.VERSION_NAME) {
+                if (updateInfo?.version == BuildConfig.VERSION_NAME) {
                     ToastUtils.showToast("已是最新版")
                     return@launch
                 }
@@ -163,7 +164,7 @@ fun MoreScreen(navController: NavController) {
                             if (state == DownLoadState.SUCCESS) {
                                 AppUtils.installApk(context, apkUri!!)
                             } else {
-                                stub?.start(downloadUrl, fileName)
+                                stub?.start(updateInfo!!.url, updateInfo!!.filename)
                             }
                         },
                         enabled = enable
@@ -175,12 +176,12 @@ fun MoreScreen(navController: NavController) {
                     AndroidView(
                         factory = {
                             val textView = TextView(it)
-                            markdown.setMarkdown(textView, md)
+                            markdown.setMarkdown(textView, updateInfo!!.message)
 
                             return@AndroidView textView
                         },
                         update = {
-                            markdown.setMarkdown(it, md)
+                            markdown.setMarkdown(it, updateInfo!!.message)
                         }
                     )
                 }
