@@ -7,6 +7,7 @@ import android.content.ServiceConnection
 import android.net.Uri
 import android.os.IBinder
 import android.widget.TextView
+import androidx.annotation.Keep
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -81,12 +83,7 @@ fun MoreScreen(navController: NavController) {
 
         var showUpdate by remember { mutableStateOf(false) }
         var updateInfo: UpdateInfo? by remember { mutableStateOf(null) }
-        val context = LocalContext.current
         val scope = rememberCoroutineScope()
-        var md by remember { mutableStateOf("") }
-        var newVersion by remember { mutableStateOf("") }
-        var fileName by remember { mutableStateOf("") }
-        var downloadUrl by remember { mutableStateOf("") }
         val versionName = BuildConfig.VERSION_NAME
         val buildTime = stringResource(R.string.BUILD_TIME)
         val versionInfo = "$versionName($buildTime)"
@@ -101,7 +98,7 @@ fun MoreScreen(navController: NavController) {
                     ToastUtils.showToast("未检测到新版本")
                     return@launch
                 }
-                if (updateInfo?.version == BuildConfig.VERSION_NAME) {
+                if (compareVersion(updateInfo!!.version, BuildConfig.VERSION_NAME) > 0) {
                     ToastUtils.showToast("已是最新版")
                     return@launch
                 }
@@ -109,87 +106,119 @@ fun MoreScreen(navController: NavController) {
             }
         }
 
-        if (showUpdate) {
-            var state by remember { mutableStateOf(DownLoadState.IDLE) }
-            var enable by remember { mutableStateOf(true) }
-            var text by remember { mutableStateOf("下载") }
-            var apkUri: Uri? by remember { mutableStateOf(null) }
-
-            var stub: DownLoadService.Stub? = null
-            val serviceConnection = object : ServiceConnection {
-                override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                    stub = service as DownLoadService.Stub
-                    stub?.addDownloadStateListener { downLoadState, uri ->
-                        state = downLoadState
-                        enable = when (state) {
-                            DownLoadState.IDLE -> true
-                            DownLoadState.DOWNLOADING -> false
-                            DownLoadState.SUCCESS -> true
-                            DownLoadState.FAILED -> true
-                        }
-                        text = when (state) {
-                            DownLoadState.IDLE -> "下载"
-                            DownLoadState.DOWNLOADING -> "下载中"
-                            DownLoadState.SUCCESS -> "安装"
-                            DownLoadState.FAILED -> "下载"
-                        }
-                        apkUri = uri
-                    }
-                }
-
-                override fun onServiceDisconnected(name: ComponentName?) {
-                }
-            }
-            context.bindService(
-                Intent(context, DownLoadService::class.java), serviceConnection,
-                Context.BIND_AUTO_CREATE
-            )
-
-
-            val markdown = Markwon.builder(context).build()
-            AlertDialog(
-                onDismissRequest = { },
-                dismissButton = {
-                    TextButton(onClick = {
-                        stub?.cancel()
-                        context.unbindService(serviceConnection)
-                        showUpdate = false
-                    }) {
-                        Text(text = stringResource(R.string.cancel))
-                    }
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            if (state == DownLoadState.SUCCESS) {
-                                AppUtils.installApk(context, apkUri!!)
-                            } else {
-                                stub?.start(updateInfo!!.url, updateInfo!!.filename)
-                            }
-                        },
-                        enabled = enable
-                    ) {
-                        Text(text = text)
-                    }
-                },
-                text = {
-                    AndroidView(
-                        factory = {
-                            val textView = TextView(it)
-                            markdown.setMarkdown(textView, updateInfo!!.message)
-
-                            return@AndroidView textView
-                        },
-                        update = {
-                            markdown.setMarkdown(it, updateInfo!!.message)
-                        }
-                    )
-                }
-            )
-        }
+        UpdateDialog(showUpdate, updateInfo) { showUpdate = false }
     }
 }
 
+/**
+ * Compare version
+ *
+ * @return 1: version1 > version12; -1: version1 < version2; 0: version1 == version2
+ */
+private fun compareVersion(version1: String, version2: String): Int {
+    val v1 = version1.split(".").map { it.toInt() }
+    val v2 = version2.split(".").map { it.toInt() }
+
+    require(v1.size == 3 && v2.size == 3) { "version must like x.x.x" }
+
+    v1.forEachIndexed { index, i ->
+        if (i > v2[index]) {
+            return 1
+        } else if (i < v2[index]) {
+            return -1
+        }
+    }
+
+    return 0
+}
+
+@Composable
+fun UpdateDialog(show: Boolean, updateInfo: UpdateInfo?, onCancel: () -> Unit) {
+    if (!show || updateInfo == null) return
+
+    val context = LocalContext.current
+
+    var state by remember { mutableStateOf(DownLoadState.IDLE) }
+    var enable by remember { mutableStateOf(true) }
+    var text by remember { mutableStateOf("下载") }
+    var apkUri: Uri? by remember { mutableStateOf(null) }
+
+    var stub: DownLoadService.Stub? = null
+    val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            stub = service as DownLoadService.Stub
+            stub?.addDownloadStateListener { downLoadState, uri ->
+                state = downLoadState
+                enable = when (state) {
+                    DownLoadState.IDLE -> true
+                    DownLoadState.DOWNLOADING -> false
+                    DownLoadState.SUCCESS -> true
+                    DownLoadState.FAILED -> true
+                }
+                text = when (state) {
+                    DownLoadState.IDLE -> "下载"
+                    DownLoadState.DOWNLOADING -> "下载中"
+                    DownLoadState.SUCCESS -> "安装"
+                    DownLoadState.FAILED -> "下载"
+                }
+                apkUri = uri
+            }
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+        }
+    }
+    context.bindService(
+        Intent(context, DownLoadService::class.java), serviceConnection,
+        Context.BIND_AUTO_CREATE
+    )
+
+    val markdown = Markwon.builder(context).build()
+
+    AlertDialog(
+        title = { Text(text = updateInfo.version, style = MaterialTheme.typography.titleLarge) },
+        text = {
+            AndroidView(
+                factory = {
+                    val textView = TextView(it)
+                    markdown.setMarkdown(textView, updateInfo.message)
+                    return@AndroidView textView
+                },
+                update = {
+                    markdown.setMarkdown(it, updateInfo.message)
+                }
+            )
+        },
+        onDismissRequest = {},
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    if (state == DownLoadState.SUCCESS) {
+                        AppUtils.installApk(context, apkUri!!)
+                    } else {
+                        stub?.start(updateInfo.url, updateInfo.filename)
+                    }
+                },
+                enabled = enable
+            ) {
+                Text(text = text)
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    stub?.cancel()
+                    context.unbindService(serviceConnection)
+                    onCancel()
+                }
+            ) {
+                Text(text = stringResource(R.string.cancel))
+            }
+        }
+    )
+}
+
+@Keep
 data class UpdateInfo(
     val version: String,
     val url: String,
