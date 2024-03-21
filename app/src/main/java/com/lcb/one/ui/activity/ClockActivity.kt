@@ -1,4 +1,4 @@
-package com.lcb.one.ui
+package com.lcb.one.ui.activity
 
 import android.graphics.Typeface
 import android.os.Bundle
@@ -30,6 +30,7 @@ import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.lcb.one.R
+import com.lcb.one.ui.AppSettings
 import com.lcb.one.ui.screen.SettingsSummary
 import com.lcb.one.ui.screen.SettingsTitle
 import com.lcb.one.ui.widget.AppThemeSurface

@@ -1,4 +1,4 @@
-package com.lcb.one.ui
+package com.lcb.one.ui.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -28,6 +28,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lcb.one.R
+import com.lcb.one.ui.AppSettings
+import com.lcb.one.ui.Route
+import com.lcb.one.ui.RouteScreen
 import com.lcb.one.ui.glance.PoemAppWidget
 import com.lcb.one.ui.screen.BiliBiliScreen
 import com.lcb.one.ui.screen.DeviceInfoScreen

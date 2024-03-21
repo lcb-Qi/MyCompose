@@ -115,6 +115,7 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
 
@@ -133,6 +134,9 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
     implementation("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
+
+    //markdown
+    implementation("io.noties.markwon:core:4.6.2")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

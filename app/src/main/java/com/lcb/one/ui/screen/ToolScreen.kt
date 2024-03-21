@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.navigation.NavController
 import com.lcb.one.R
-import com.lcb.one.ui.ClockActivity
+import com.lcb.one.ui.activity.ClockActivity
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.Route
 import com.lcb.one.ui.widget.FriendlyExitHandler

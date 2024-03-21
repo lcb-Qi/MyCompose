@@ -2,9 +2,11 @@ package com.lcb.one.util.android
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -19,6 +21,8 @@ data class AppVersionInfo(val versionCode: Int, val versionName: String)
 const val PACKAGE_ME = BuildConfig.APPLICATION_ID
 
 object AppUtils {
+    private const val TAG = "AppUtils"
+
     fun immerse(
         view: View,
         @WindowInsetsCompat.Type.InsetsType type: Int = WindowInsetsCompat.Type.systemBars(),
@@ -102,5 +106,15 @@ object AppUtils {
         val metrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
         val insets = metrics.windowInsets.getInsets(WindowInsets.Type.systemBars())
         return insets.top
+    }
+
+    fun installApk(context: Context = MyApp.getAppContext(), uri: Uri) {
+        LLog.d(TAG, "installApk: uri = $uri")
+        val installIntent = Intent(Intent.ACTION_VIEW).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            setDataAndType(uri, "application/vnd.android.package-archive");
+        }
+        context.startActivity(installIntent)
     }
 }

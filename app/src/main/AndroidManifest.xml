@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name=".ui.MyApp"
@@ -19,8 +20,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyCompose"
         android:usesCleartextTraffic="true">
+        <service
+            android:name=".ui.service.DownLoadService"
+            android:enabled="true"
+            android:exported="true">
+
+        </service>
+
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MyCompose">
@@ -30,11 +38,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".ui.ClockActivity"
-            android:exported="false"
+            android:name=".ui.activity.ClockActivity"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="landscape" />
 
         <receiver
@@ -43,9 +50,20 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_info" />
         </receiver>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths_public" />
+        </provider>
     </application>
 </manifest>
