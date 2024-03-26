@@ -32,6 +32,7 @@ import com.lcb.one.ui.AppSettings
 import com.lcb.one.ui.Route
 import com.lcb.one.ui.RouteScreen
 import com.lcb.one.ui.glance.PoemAppWidget
+import com.lcb.one.ui.screen.AppListScreen
 import com.lcb.one.ui.screen.BiliBiliScreen
 import com.lcb.one.ui.screen.DeviceInfoScreen
 import com.lcb.one.ui.screen.HomeScreen
@@ -159,6 +160,7 @@ class MainActivity : ComponentActivity() {
             RouteScreen(Route.BILI, getString(R.string.bibibili)) { BiliBiliScreen() },
             RouteScreen(Route.DEVICE, getString(R.string.device_info)) { DeviceInfoScreen() },
             RouteScreen(Route.SETTINGS, getString(R.string.settings)) { SettingsScreen() },
+            RouteScreen(Route.APPS, "应用列表") { AppListScreen() },
         )
     }
 }

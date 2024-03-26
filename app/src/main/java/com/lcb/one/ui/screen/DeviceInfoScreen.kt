@@ -61,7 +61,6 @@ fun DeviceInfoScreen() {
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.Top
         ) {
-            // selectedIndex = it
             when (it) {
                 0 -> BasicInfoList()
                 1 -> DisplayInfoList()

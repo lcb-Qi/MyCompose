@@ -10,6 +10,7 @@ object Route {
     const val BILI = "BiliBili"
     const val DEVICE = "Device"
     const val SETTINGS = "Settings"
+    const val APPS = "Apps"
 }
 
 @Stable

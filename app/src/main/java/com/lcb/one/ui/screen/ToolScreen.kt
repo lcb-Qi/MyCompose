@@ -64,6 +64,11 @@ fun ToolScreen(navController: NavController) {
                     onClick = { getWallPaper() },
                     label = { Text(text = stringResource(R.string.extract_wallpaper)) }
                 )
+
+                ElevatedAssistChip(
+                    onClick = { navController.navigateSingleTop(Route.APPS) },
+                    label = { Text(text = "应用列表") }
+                )
             }
         }
 
@@ -75,7 +80,6 @@ fun ToolScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                var showCoverGet by remember { mutableStateOf(false) }
                 var showClock by remember { mutableStateOf(false) }
 
                 ElevatedAssistChip(
@@ -97,7 +101,6 @@ fun ToolScreen(navController: NavController) {
                     label = { Text(text = stringResource(R.string.clock_screen)) }
                 )
 
-                // CoverGetBottomSheet(show = showCoverGet) { showCoverGet = false }
                 if (showClock) {
                     LocalContext.current.run {
                         startActivity(Intent(this, ClockActivity::class.java))

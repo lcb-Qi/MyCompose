@@ -1,8 +1,11 @@
 package com.lcb.one.util.android
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageInfo
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -15,6 +18,8 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.lcb.one.BuildConfig
 import com.lcb.one.ui.MyApp
+import java.text.Collator
+import java.util.Locale
 
 data class AppVersionInfo(val versionCode: Int, val versionName: String)
 
@@ -116,5 +121,54 @@ object AppUtils {
             setDataAndType(uri, "application/vnd.android.package-archive");
         }
         context.startActivity(installIntent)
+    }
+
+    @SuppressLint("QueryPermissionsNeeded")
+    fun getAllApps(context: Context): List<String> {
+        val packageManager = context.packageManager
+        val info = packageManager.getInstalledPackages(0).asSequence()
+        return info.sortedWith { o1, o2 ->
+            collator.compare(
+                packageManager.getApplicationLabel(o1.applicationInfo),
+                packageManager.getApplicationLabel(o2.applicationInfo)
+            )
+        }
+            .map { it.packageName }
+            .toList()
+    }
+
+    fun getUserApps(context: Context): List<String> {
+        val packageManager = context.packageManager
+        val info = packageManager.getInstalledPackages(0).asSequence()
+        return info.filter { it.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0 }
+            .sortedWith { o1, o2 ->
+                collator.compare(
+                    packageManager.getApplicationLabel(o1.applicationInfo),
+                    packageManager.getApplicationLabel(o2.applicationInfo)
+                )
+            }
+            .map { it.packageName }
+            .toList()
+    }
+
+    fun getSystemApps(context: Context): List<String> {
+        val packageManager = context.packageManager
+        val info = packageManager.getInstalledPackages(0).asSequence()
+        return info.filter { it.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0 }
+            .sortedWith { o1, o2 ->
+                collator.compare(
+                    packageManager.getApplicationLabel(o1.applicationInfo),
+                    packageManager.getApplicationLabel(o2.applicationInfo)
+                )
+            }
+            .map { it.packageName }
+            .toList()
+    }
+
+    val collator by lazy {
+        Collator.getInstance(Locale.getDefault()).apply {
+            strength = Collator.PRIMARY // 设置排序强度为主要级别，只比较基本的字符差异
+            // decomposition = Collator.FULL_DECOMPOSITION // 设置字符分解为完全分解，以便正确处理包含变音符号的字符
+        }
     }
 }
