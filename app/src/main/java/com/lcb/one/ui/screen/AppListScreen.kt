@@ -3,12 +3,14 @@ package com.lcb.one.ui.screen
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -22,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.lcb.one.ui.widget.AppBar
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.LLog
 
@@ -33,29 +36,38 @@ enum class AppSelection(val label: String) {
 
 @Composable
 fun AppListScreen() {
-    var appSelection by remember { mutableStateOf(AppSelection.USER) }
-    Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 8.dp)
+    Scaffold(topBar = { AppBar(title = "应用列表") }) { paddingValues ->
+        var appSelection by remember { mutableStateOf(AppSelection.USER) }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding()
+                )
         ) {
-            var showDetail by remember { mutableStateOf(false) }
-            TextButton(onClick = { showDetail = true }) {
-                Text(text = appSelection.label)
-            }
-            DropdownMenu(expanded = showDetail, onDismissRequest = { showDetail = false }) {
-                AppSelection.values().forEach {
-                    DropdownMenuItem(
-                        text = { Text(text = it.label) },
-                        onClick = {
-                            showDetail = false
-                            appSelection = it
-                        }
-                    )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            ) {
+                var showDetail by remember { mutableStateOf(false) }
+                TextButton(onClick = { showDetail = true }) {
+                    Text(text = appSelection.label)
+                }
+                DropdownMenu(expanded = showDetail, onDismissRequest = { showDetail = false }) {
+                    AppSelection.values().forEach {
+                        DropdownMenuItem(
+                            text = { Text(text = it.label) },
+                            onClick = {
+                                showDetail = false
+                                appSelection = it
+                            }
+                        )
+                    }
                 }
             }
+            AppList(appSelection = appSelection)
         }
-        AppList(appSelection = appSelection)
     }
 }
 
@@ -68,8 +80,6 @@ private fun AppList(modifier: Modifier = Modifier, appSelection: AppSelection) {
         AppSelection.SYSTEM -> AppUtils.getSystemApps(LocalContext.current)
         AppSelection.ALL -> AppUtils.getAllApps(LocalContext.current)
     }
-    LLog.d("TAG", "AppList: appSelection = $appSelection, apps = $apps")
-
     LazyColumn(modifier = modifier) {
         items(count = apps.size, key = { apps[it] }) {
             val packageName = apps[it]

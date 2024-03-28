@@ -19,6 +19,6 @@ object AppSettings {
 
     var poemUpdateDuration by IntPreferenceState(
         key = MyApp.getAppContext().getString(R.string.settings_poem_update_duration_key),
-        defaultValue = 5 * 60 * 1000
+        defaultValue = 15 * 60 * 1000
     )
 }

@@ -2,11 +2,15 @@ package com.lcb.one.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.navigation.NavHostController
+import com.lcb.one.ui.screen.AppListScreen
+import com.lcb.one.ui.screen.MainScreen
+import com.lcb.one.ui.screen.BiliBiliScreen
+import com.lcb.one.ui.screen.DeviceInfoScreen
+import com.lcb.one.ui.screen.SettingsScreen
 
 object Route {
-    const val HOME = "Home"
-    const val TOOL = "Tool"
-    const val MORE = "More"
+    const val MAIN = "Main"
     const val BILI = "BiliBili"
     const val DEVICE = "Device"
     const val SETTINGS = "Settings"
@@ -16,6 +20,15 @@ object Route {
 @Stable
 class RouteScreen(
     val route: String,
-    val title: String,
     val content: @Composable () -> Unit
 )
+
+fun getRouters(navController: NavHostController): List<RouteScreen> {
+    return listOf(
+        RouteScreen(Route.MAIN) { MainScreen(navController) },
+        RouteScreen(Route.BILI) { BiliBiliScreen() },
+        RouteScreen(Route.DEVICE) { DeviceInfoScreen() },
+        RouteScreen(Route.SETTINGS) { SettingsScreen() },
+        RouteScreen(Route.APPS) { AppListScreen() },
+    )
+}

@@ -9,16 +9,15 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,43 +26,52 @@ import androidx.compose.ui.zIndex
 import com.lcb.one.R
 import com.lcb.one.bean.BasicInfo
 import com.lcb.one.bean.DisplayInfo
+import com.lcb.one.ui.widget.AppBar
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DeviceInfoScreen() {
-    val tabTitles = listOf(stringResource(R.string.device), stringResource(R.string.display))
-    val pagerState = rememberPagerState { tabTitles.size }
-    val coroutineScope = rememberCoroutineScope()
+    Scaffold(topBar = { AppBar(title = stringResource(R.string.device_info)) }) { paddingValues ->
+        val tabTitles = listOf(stringResource(R.string.device), stringResource(R.string.display))
+        val pagerState = rememberPagerState { tabTitles.size }
+        val coroutineScope = rememberCoroutineScope()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-    ) {
-        TabRow(selectedTabIndex = pagerState.currentPage) {
-            tabTitles.forEachIndexed { index, text ->
-                Tab(
-                    modifier = Modifier.zIndex(2f),
-                    selected = pagerState.currentPage == index,
-                    onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(index)
-                        }
-                    },
-                    text = { Text(text = text, style = MaterialTheme.typography.labelLarge) },
-                )
-            }
-        }
-
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.Top
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding()
+                ),
         ) {
-            when (it) {
-                0 -> BasicInfoList()
-                1 -> DisplayInfoList()
+            TabRow(
+                selectedTabIndex = pagerState.currentPage,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
+                tabTitles.forEachIndexed { index, text ->
+                    Tab(
+                        modifier = Modifier.zIndex(2f),
+                        selected = pagerState.currentPage == index,
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                        },
+                        text = { Text(text = text, style = MaterialTheme.typography.labelLarge) },
+                    )
+                }
+            }
+
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.Top
+            ) {
+                when (it) {
+                    0 -> BasicInfoList()
+                    1 -> DisplayInfoList()
+                }
             }
         }
     }

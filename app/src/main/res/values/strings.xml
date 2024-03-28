@@ -18,18 +18,18 @@
     <string name="project_location_url" translatable="false">https://github.com/lcb-Qi/MyCompose</string>
 
     <string-array name="settings_duration_options">
-        <item>5分钟</item>
-        <item>10分钟</item>
         <item>15分钟</item>
         <item>30分钟</item>
-        <item>60分钟</item>
+        <item>1小时</item>
+        <item>12小时</item>
+        <item>1天</item>
     </string-array>
     <integer-array name="settings_duration_values">
-        <item>300000</item>
-        <item>600000</item>
         <item>900000</item>
         <item>1800000</item>
         <item>3600000</item>
+        <item>43200000</item>
+        <item>864000000</item>
     </integer-array>
     <string name="tool">Tool</string>
     <string name="more">More</string>

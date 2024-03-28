@@ -2,7 +2,9 @@ package com.lcb.one.ui.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,31 +15,40 @@ import com.lcb.one.ui.widget.settings.ui.SettingsListDropdown
 import com.lcb.one.ui.widget.settings.ui.SettingsSwitch
 import com.lcb.one.R
 import com.lcb.one.ui.AppSettings
-import com.lcb.one.viewmodel.PoemViewModel
+import com.lcb.one.ui.widget.AppBar
 
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier) {
-    Column(modifier = modifier.fillMaxSize()) {
-        // 动态取色
-        SettingsSwitch(
-            title = { SettingsTitle(stringResource(R.string.settings_dynamic_color_title)) },
-            summary = { SettingsSummary(stringResource(R.string.settings_dynamic_color_summary)) },
-            checked = AppSettings.appDynamicColor
+    Scaffold(topBar = { AppBar(title = stringResource(R.string.settings)) }) { paddingValues ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding()
+                )
         ) {
-            AppSettings.appDynamicColor = it
-        }
-
-        // 标题更新间隔
-        val options = stringArrayResource(R.array.settings_duration_options)
-        val values = integerArrayResource(R.array.settings_duration_values)
-        SettingsListDropdown(
-            title = { SettingsTitle(stringResource(R.string.settings_poem_update_duration_title)) },
-            selectIndex = values.indexOf(AppSettings.poemUpdateDuration).coerceAtLeast(0),
-            items = options.toList(),
-            onItemSelected = { index, _ ->
-                AppSettings.poemUpdateDuration = values[index]
+            // 动态取色
+            SettingsSwitch(
+                title = { SettingsTitle(stringResource(R.string.settings_dynamic_color_title)) },
+                summary = { SettingsSummary(stringResource(R.string.settings_dynamic_color_summary)) },
+                checked = AppSettings.appDynamicColor
+            ) {
+                AppSettings.appDynamicColor = it
             }
-        )
+
+            // 标题更新间隔
+            val options = stringArrayResource(R.array.settings_duration_options)
+            val values = integerArrayResource(R.array.settings_duration_values)
+            SettingsListDropdown(
+                title = { SettingsTitle(stringResource(R.string.settings_poem_update_duration_title)) },
+                selectIndex = values.indexOf(AppSettings.poemUpdateDuration).coerceAtLeast(0),
+                items = options.toList(),
+                onItemSelected = { index, _ ->
+                    AppSettings.poemUpdateDuration = values[index]
+                }
+            )
+        }
     }
 }
 

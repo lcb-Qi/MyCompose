@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
@@ -48,8 +49,9 @@ import java.util.Calendar
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
     FriendlyExitHandler()
-    ConstraintLayout(modifier = Modifier.padding(horizontal = 16.dp)) {
-
+    ConstraintLayout(modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = 16.dp)) {
         val anniversary = createRef()
         Column(
             modifier = modifier.constrainAs(anniversary) {

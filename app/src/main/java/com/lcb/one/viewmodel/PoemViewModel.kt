@@ -59,6 +59,8 @@ class PoemViewModel : ViewModel() {
 
     private fun needRefresh(forceRefresh: Boolean): Boolean {
         val info = poemFlow.value
-        return info.recommend.isBlank() || forceRefresh || System.currentTimeMillis() - info.updateTime > AppSettings.poemUpdateDuration
+        return info.recommend.isBlank() ||
+                forceRefresh ||
+                (System.currentTimeMillis() - info.updateTime > AppSettings.poemUpdateDuration)
     }
 }
