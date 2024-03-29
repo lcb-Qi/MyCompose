@@ -50,7 +50,6 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun MoreScreen(navController: NavController) {
-    FriendlyExitHandler()
 
     Column {
         // 设置

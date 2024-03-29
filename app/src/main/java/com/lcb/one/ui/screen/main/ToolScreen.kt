@@ -43,7 +43,6 @@ import com.lcb.one.util.common.ThreadPool
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ToolScreen(navController: NavController) {
-    FriendlyExitHandler()
 
     // 设备
     Column(

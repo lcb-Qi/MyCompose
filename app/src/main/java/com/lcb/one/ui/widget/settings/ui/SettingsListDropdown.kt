@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -81,6 +83,7 @@ fun SettingsListDropdown(
                     }
 
                     DropdownMenu(
+                        modifier = Modifier.requiredHeightIn(max = 250.dp),
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
                     ) {

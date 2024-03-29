@@ -20,7 +20,11 @@ enum class AppSelection(val label: String) {
 }
 
 @Composable
-fun ApplicationList(modifier: Modifier = Modifier, appSelection: AppSelection) {
+fun ApplicationList(
+    modifier: Modifier = Modifier,
+    appSelection: AppSelection,
+    onItemClick: () -> Unit = {}
+) {
     val packageManager = LocalContext.current.packageManager
 
     val apps = when (appSelection) {
@@ -32,7 +36,7 @@ fun ApplicationList(modifier: Modifier = Modifier, appSelection: AppSelection) {
         items(count = apps.size, key = { apps[it] }) {
             val packageName = apps[it]
             ListItem(
-                modifier = Modifier.clickable {},
+                modifier = Modifier.clickable { onItemClick() },
                 leadingContent = {
                     AsyncImage(
                         modifier = Modifier.size(40.dp),

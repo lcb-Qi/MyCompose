@@ -24,11 +24,14 @@ import com.lcb.one.R
 import com.lcb.one.ui.widget.appbar.BottomBar
 import com.lcb.one.ui.widget.appbar.BottomBarItem
 import com.lcb.one.ui.widget.appbar.ToolBar
+import com.lcb.one.ui.widget.common.FriendlyExitHandler
 import com.lcb.one.ui.widget.dialog.PoemInfoDialog
 import com.lcb.one.viewmodel.PoemViewModel
 
 @Composable
 fun MainScreen(navController: NavHostController) {
+    FriendlyExitHandler()
+
     val poemViewModel = viewModel<PoemViewModel>()
     val bottomItem = listOf(
         BottomBarItem(stringResource(R.string.home), Icons.Rounded.Home),
