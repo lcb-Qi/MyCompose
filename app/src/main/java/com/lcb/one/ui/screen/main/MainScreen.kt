@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen
+package com.lcb.one.ui.screen.main
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,9 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.lcb.one.R
-import com.lcb.one.ui.widget.AppBottomBars
-import com.lcb.one.ui.widget.BottomBarItem
-import com.lcb.one.ui.widget.AppBar
+import com.lcb.one.ui.widget.appbar.BottomBar
+import com.lcb.one.ui.widget.appbar.BottomBarItem
+import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.dialog.PoemInfoDialog
 import com.lcb.one.viewmodel.PoemViewModel
 
@@ -41,7 +41,7 @@ fun MainScreen(navController: NavHostController) {
     var currentIndex by rememberSaveable { mutableIntStateOf(0) }
     Scaffold(
         topBar = {
-            AppBar(
+            ToolBar(
                 title = poemInfo.recommend,
                 onTitleClick = { poemViewModel.refresh(true) },
                 onTitleLongClick = { showDetail = true },
@@ -49,7 +49,7 @@ fun MainScreen(navController: NavHostController) {
             )
         },
         bottomBar = {
-            AppBottomBars(currentIndex, bottomItem) { currentIndex = it }
+            BottomBar(currentIndex, bottomItem) { currentIndex = it }
         }
     ) { paddingValues ->
         val topPadding = paddingValues.calculateTopPadding()
@@ -70,7 +70,9 @@ fun MainScreen(navController: NavHostController) {
 
     PoemInfoDialog(
         showDetail,
-        poemDetail = poemInfo.origin,
+        title = poemInfo.origin.title,
+        authorInfo = "${poemInfo.origin.dynasty} ${poemInfo.origin.author}",
+        content = poemInfo.origin.content,
         onDismissRequest = { showDetail = false },
         onConfirm = { showDetail = false }
     )

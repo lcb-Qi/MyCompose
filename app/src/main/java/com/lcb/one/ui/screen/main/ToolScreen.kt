@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen
+package com.lcb.one.ui.screen.main
 
 import android.app.WallpaperManager
 import android.content.Intent
@@ -34,9 +34,10 @@ import com.lcb.one.R
 import com.lcb.one.ui.activity.ClockActivity
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.Route
-import com.lcb.one.ui.widget.FriendlyExitHandler
+import com.lcb.one.ui.widget.common.FriendlyExitHandler
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
+import com.lcb.one.util.android.navigateSingleTop
 import com.lcb.one.util.common.ThreadPool
 
 @OptIn(ExperimentalLayoutApi::class)

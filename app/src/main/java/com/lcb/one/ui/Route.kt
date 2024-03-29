@@ -3,11 +3,11 @@ package com.lcb.one.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.navigation.NavHostController
-import com.lcb.one.ui.screen.AppListScreen
-import com.lcb.one.ui.screen.MainScreen
-import com.lcb.one.ui.screen.BiliBiliScreen
-import com.lcb.one.ui.screen.DeviceInfoScreen
-import com.lcb.one.ui.screen.SettingsScreen
+import com.lcb.one.ui.screen.applist.AppListScreen
+import com.lcb.one.ui.screen.main.MainScreen
+import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
+import com.lcb.one.ui.screen.device.DeviceInfoScreen
+import com.lcb.one.ui.screen.settings.SettingsScreen
 
 object Route {
     const val MAIN = "Main"

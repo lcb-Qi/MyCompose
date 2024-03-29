@@ -1,4 +1,4 @@
-package com.lcb.one.ui.widget
+package com.lcb.one.ui.widget.common
 
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.NavigateNext
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,8 +18,8 @@ fun SettingsMenuLink(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     icon: (@Composable () -> Unit)? = null,
-    title: @Composable () -> Unit,
-    summary: (@Composable () -> Unit)? = null,
+    title: String,
+    summary: String? = null,
     onClick: () -> Unit,
 ) {
     Row(
@@ -30,9 +32,13 @@ fun SettingsMenuLink(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         SettingsScaffold(
-            title = title,
             enabled = enabled,
-            summary = summary,
+            title = { Text(text = title, style = MaterialTheme.typography.titleMedium) },
+            summary = {
+                if (summary != null) {
+                    Text(text = summary, style = MaterialTheme.typography.bodySmall)
+                }
+            },
             icon = icon,
             action = {
                 Icon(Icons.AutoMirrored.Rounded.NavigateNext, "")

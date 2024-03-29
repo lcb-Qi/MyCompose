@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen
+package com.lcb.one.ui.screen.device
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -26,13 +26,13 @@ import androidx.compose.ui.zIndex
 import com.lcb.one.R
 import com.lcb.one.bean.BasicInfo
 import com.lcb.one.bean.DisplayInfo
-import com.lcb.one.ui.widget.AppBar
+import com.lcb.one.ui.widget.appbar.ToolBar
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DeviceInfoScreen() {
-    Scaffold(topBar = { AppBar(title = stringResource(R.string.device_info)) }) { paddingValues ->
+    Scaffold(topBar = { ToolBar(title = stringResource(R.string.device_info)) }) { paddingValues ->
         val tabTitles = listOf(stringResource(R.string.device), stringResource(R.string.display))
         val pagerState = rememberPagerState { tabTitles.size }
         val coroutineScope = rememberCoroutineScope()
@@ -99,37 +99,6 @@ private fun InfoList(items: Map<String, String>) {
             }
         }
     }
-}
-
-@Composable
-private fun DisplayInfoList() {
-    val displayInfo by remember { mutableStateOf(DisplayInfo.obtain()) }
-
-    InfoList(
-        mapOf(
-            "Resolution" to displayInfo.resolution.toString() + " px",
-            "Display Size" to displayInfo.displaySize.toString() + " px",
-            "Small Width" to displayInfo.smallWidth.toString() + " dp",
-            "DPI" to displayInfo.dpi.toString(),
-            "Density" to displayInfo.density.toString(),
-            "StatusBars Height" to displayInfo.statusBarsHeight.toString() + " px",
-            "NavigationBars Height" to displayInfo.navigationBarsHeight.toString() + " px",
-        )
-    )
-}
-
-@Composable
-private fun BasicInfoList() {
-    val deviceInfo by remember { mutableStateOf(BasicInfo.obtain()) }
-
-    InfoList(
-        mapOf(
-            "Device Model" to deviceInfo.deviceModel,
-            "Brand" to deviceInfo.brand,
-            "OS Version" to deviceInfo.osVersion,
-            "SDK Version" to deviceInfo.sdkVersion.toString()
-        )
-    )
 }
 
 

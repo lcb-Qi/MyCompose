@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen
+package com.lcb.one.ui.screen.main
 
 import android.content.ComponentName
 import android.content.Context
@@ -29,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.navigation.NavController
-import androidx.navigation.navOptions
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.bean.GithubLatest
@@ -38,22 +37,16 @@ import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.Route
 import com.lcb.one.ui.service.DownLoadService
 import com.lcb.one.ui.service.DownLoadState
-import com.lcb.one.ui.widget.FriendlyExitHandler
+import com.lcb.one.ui.widget.common.FriendlyExitHandler
 import com.lcb.one.ui.widget.settings.ui.SettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
 import com.lcb.one.util.android.AppUtils
-import com.lcb.one.util.android.LLog
-import com.lcb.one.util.android.PACKAGE_ME
 import com.lcb.one.util.android.ToastUtils
+import com.lcb.one.util.android.navigateSingleTop
 import io.noties.markwon.Markwon
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
-fun NavController.navigateSingleTop(route: String) {
-    navigate(route = route, navOptions = navOptions { launchSingleTop = true })
-}
 
 @Composable
 fun MoreScreen(navController: NavController) {
@@ -62,7 +55,7 @@ fun MoreScreen(navController: NavController) {
     Column {
         // 设置
         SettingsMenuLink(
-            title = { SettingsTitle(stringResource(R.string.settings)) },
+            title = stringResource(R.string.settings),
             icon = { Icon(imageVector = Icons.Rounded.Settings, contentDescription = "") }
         ) {
             navController.navigateSingleTop(Route.SETTINGS)
@@ -71,8 +64,8 @@ fun MoreScreen(navController: NavController) {
         // 项目地址
         val url = stringResource(R.string.project_location_url)
         SettingsMenuLink(
-            title = { SettingsTitle(stringResource(R.string.project_location)) },
-            summary = { SettingsSummary(url) },
+            title = stringResource(R.string.project_location),
+            summary = url,
             icon = { Icon(imageVector = Icons.Rounded.Link, contentDescription = "") }
         ) {
             val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
@@ -88,8 +81,8 @@ fun MoreScreen(navController: NavController) {
         val buildTime = stringResource(R.string.BUILD_TIME)
         val versionInfo = "$versionName($buildTime)"
         SettingsSimpleText(
-            title = { SettingsTitle(stringResource(R.string.version_info)) },
-            summary = { SettingsSummary(versionInfo) },
+            title = stringResource(R.string.version_info),
+            summary = versionInfo,
             icon = { Icon(imageVector = Icons.Rounded.Info, contentDescription = "") }
         ) {
             scope.launch {

@@ -5,6 +5,8 @@ import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.database.getStringOrNull
+import androidx.navigation.NavController
+import androidx.navigation.navOptions
 
 // Uri
 fun Uri.toAbsolutePath(context: Context): String {
@@ -43,4 +45,8 @@ private fun Uri.toFilePathForNonMediaUri(context: Context): String {
     }
 
     return path
+}
+
+fun NavController.navigateSingleTop(route: String) {
+    navigate(route = route, navOptions = navOptions { launchSingleTop = true })
 }

@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen
+package com.lcb.one.ui.screen.main
 
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -36,7 +36,7 @@ import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
-import com.lcb.one.ui.widget.FriendlyExitHandler
+import com.lcb.one.ui.widget.common.FriendlyExitHandler
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.android.SharedPrefUtils
 import kotlinx.coroutines.delay

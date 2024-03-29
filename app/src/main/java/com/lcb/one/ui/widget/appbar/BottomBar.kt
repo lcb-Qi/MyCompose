@@ -1,4 +1,4 @@
-package com.lcb.one.ui.widget
+package com.lcb.one.ui.widget.appbar
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -18,7 +18,7 @@ data class BottomBarItem(
 )
 
 @Composable
-fun AppBottomBars(defaultIndex: Int, items: List<BottomBarItem>, onClick: (Int) -> Unit) {
+fun BottomBar(defaultIndex: Int, items: List<BottomBarItem>, onClick: (Int) -> Unit) {
     require(defaultIndex in items.indices) {
         throw IllegalArgumentException("selectedIndex must in items.indices(${items.indices})")
     }

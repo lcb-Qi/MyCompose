@@ -1,4 +1,4 @@
-package com.lcb.one.ui.widget
+package com.lcb.one.ui.widget.common
 
 import android.app.Activity
 import android.os.SystemClock

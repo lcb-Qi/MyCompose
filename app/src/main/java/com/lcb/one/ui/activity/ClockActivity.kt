@@ -16,7 +16,6 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,15 +30,12 @@ import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.lcb.one.R
 import com.lcb.one.ui.AppSettings
-import com.lcb.one.ui.screen.SettingsSummary
-import com.lcb.one.ui.screen.SettingsTitle
-import com.lcb.one.ui.widget.AppThemeSurface
+import com.lcb.one.ui.theme.AppTheme
 import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPreferenceState
 import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPreferenceState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
 import com.lcb.one.ui.widget.settings.ui.SettingsGroup
-import com.lcb.one.ui.widget.settings.ui.SettingsGroupTitle
 import com.lcb.one.ui.widget.settings.ui.SettingsListDropdown
 import com.lcb.one.ui.widget.settings.ui.SettingsSlider
 import com.lcb.one.ui.widget.settings.ui.SettingsSwitch
@@ -99,30 +95,24 @@ class ClockActivity : ComponentActivity() {
         var clockSize by rememberIntPreferenceState(KEY_CLOCK_SIZE, getClockSize())
         var datePosition by rememberIntPreferenceState(KEY_DATE_POSITION, getDatePosition())
 
-        AppThemeSurface(darkTheme = darkTheme) {
+        AppTheme(darkTheme = darkTheme) {
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             ModalNavigationDrawer(
                 drawerState = drawerState,
                 drawerContent = {
                     ModalDrawerSheet {
                         Column(modifier = Modifier.padding(24.dp)) {
-                            SettingsGroup(title = {
-                                SettingsGroupTitle {
-                                    Text(text = stringResource(R.string.settings))
-                                }
-                            }) {
-
-
+                            SettingsGroup(title = stringResource(R.string.settings)) {
                                 SettingsSwitch(
                                     checked = darkTheme,
-                                    title = { SettingsTitle(title = "深色") },
-                                    summary = { SettingsSummary(summary = "仅本页面生效") },
+                                    title = "深色",
+                                    summary = "仅本页面生效",
                                     onCheckedChange = { darkTheme = it }
                                 )
 
                                 SettingsSlider(
-                                    title = { SettingsTitle(title = "时钟字号") },
-                                    summary = { SettingsSummary(clockSize.toString()) },
+                                    title = "时钟字号",
+                                    summary = clockSize.toString(),
                                     value = clockSize.toFloat(),
                                     valueRange = MIN_SIZE.toFloat()..MAX_SIZE.toFloat(),
                                     onValueChange = {
@@ -133,7 +123,7 @@ class ClockActivity : ComponentActivity() {
                                 val options = positions.map { it.label }
                                 val values = positions.map { it.id }
                                 SettingsListDropdown(
-                                    title = { SettingsTitle(title = "日期位置") },
+                                    title = "日期位置",
                                     selectIndex = values.indexOf(datePosition).coerceAtLeast(0),
                                     items = options,
                                     onItemSelected = { index, _ ->
@@ -248,7 +238,7 @@ class ClockActivity : ComponentActivity() {
             modifier = modifier,
             factory = {
                 TextClock(it).apply {
-                    typeface = Typeface.defaultFromStyle(Typeface.BOLD)
+                    setTypeface(Typeface.MONOSPACE, Typeface.BOLD)
                     gravity = Gravity.CENTER
                     builder?.invoke(this)
                 }

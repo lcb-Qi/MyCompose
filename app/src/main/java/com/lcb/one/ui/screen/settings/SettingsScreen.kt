@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen
+package com.lcb.one.ui.screen.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,11 +15,11 @@ import com.lcb.one.ui.widget.settings.ui.SettingsListDropdown
 import com.lcb.one.ui.widget.settings.ui.SettingsSwitch
 import com.lcb.one.R
 import com.lcb.one.ui.AppSettings
-import com.lcb.one.ui.widget.AppBar
+import com.lcb.one.ui.widget.appbar.ToolBar
 
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier) {
-    Scaffold(topBar = { AppBar(title = stringResource(R.string.settings)) }) { paddingValues ->
+    Scaffold(topBar = { ToolBar(title = stringResource(R.string.settings)) }) { paddingValues ->
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -30,8 +30,8 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
         ) {
             // 动态取色
             SettingsSwitch(
-                title = { SettingsTitle(stringResource(R.string.settings_dynamic_color_title)) },
-                summary = { SettingsSummary(stringResource(R.string.settings_dynamic_color_summary)) },
+                title = stringResource(R.string.settings_dynamic_color_title),
+                summary = stringResource(R.string.settings_dynamic_color_summary),
                 checked = AppSettings.appDynamicColor
             ) {
                 AppSettings.appDynamicColor = it
@@ -41,7 +41,7 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
             val options = stringArrayResource(R.array.settings_duration_options)
             val values = integerArrayResource(R.array.settings_duration_values)
             SettingsListDropdown(
-                title = { SettingsTitle(stringResource(R.string.settings_poem_update_duration_title)) },
+                title = stringResource(R.string.settings_poem_update_duration_title),
                 selectIndex = values.indexOf(AppSettings.poemUpdateDuration).coerceAtLeast(0),
                 items = options.toList(),
                 onItemSelected = { index, _ ->
@@ -50,14 +50,4 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
             )
         }
     }
-}
-
-@Composable
-fun SettingsTitle(title: String) {
-    Text(text = title, style = MaterialTheme.typography.titleMedium)
-}
-
-@Composable
-fun SettingsSummary(summary: String) {
-    Text(text = summary, style = MaterialTheme.typography.bodySmall)
 }

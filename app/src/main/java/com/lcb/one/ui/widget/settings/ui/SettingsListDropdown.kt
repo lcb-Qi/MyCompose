@@ -31,10 +31,10 @@ fun SettingsListDropdown(
     enabled: Boolean = true,
     @IntRange(from = 0)
     selectIndex: Int,
-    title: @Composable () -> Unit,
+    title: String,
     items: List<String>,
     icon: (@Composable () -> Unit)? = null,
-    summary: (@Composable () -> Unit)? = null,
+    summary: String? = null,
     onItemSelected: ((Int, String) -> Unit)? = null,
     menuItem: (@Composable (index: Int, text: String) -> Unit)? = null,
 ) {
@@ -52,8 +52,12 @@ fun SettingsListDropdown(
     ) {
         SettingsScaffold(
             enabled = enabled,
-            title = title,
-            summary = summary,
+            title = { Text(text = title, style = MaterialTheme.typography.titleMedium) },
+            summary = {
+                if (summary != null) {
+                    Text(text = summary, style = MaterialTheme.typography.bodySmall)
+                }
+            },
             icon = icon,
             action = {
                 Column(
@@ -65,7 +69,10 @@ fun SettingsListDropdown(
                         modifier = Modifier.padding(vertical = 5.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(text = items[selectIndex], style = MaterialTheme.typography.labelMedium)
+                        Text(
+                            text = items[selectIndex],
+                            style = MaterialTheme.typography.labelMedium
+                        )
                         Icon(
                             modifier = Modifier.padding(start = 8.dp),
                             imageVector = Icons.Rounded.ArrowDropDown,

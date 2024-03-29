@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.lcb.one.network.BiliServerAccessor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class BiliViewModel : ViewModel() {
     private val TAG = "BiliViewModel"
@@ -16,7 +17,9 @@ class BiliViewModel : ViewModel() {
         addSource(_videoId) {
             viewModelScope.launch {
                 isLoading.value = true
-                value = BiliServerAccessor.getVideoInfo(it)?.data?.pic
+                value = BiliServerAccessor.getVideoInfo(it)?.let {
+                    JSONObject(it).optJSONObject("data")?.optString("pic")
+                }
                 isLoading.value = false
             }
         }

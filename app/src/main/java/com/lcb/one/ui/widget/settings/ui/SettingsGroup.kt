@@ -7,37 +7,33 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.lcb.one.R
 
 @Composable
 fun SettingsGroup(
     modifier: Modifier = Modifier,
-    title: @Composable (() -> Unit)? = null,
+    title: String? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-    ) {
+    Column(modifier = modifier.fillMaxWidth()) {
         if (title != null) {
-            SettingsGroupTitle(title)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                val primary = MaterialTheme.colorScheme.primary
+                val titleStyle = MaterialTheme.typography.headlineMedium.copy(color = primary)
+                ProvideTextStyle(value = titleStyle) { Text(text = title) }
+            }
         }
         content()
-    }
-}
-
-@Composable
-internal fun SettingsGroupTitle(title: @Composable () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp),
-        contentAlignment = Alignment.CenterStart,
-    ) {
-        val primary = MaterialTheme.colorScheme.primary
-        val titleStyle = MaterialTheme.typography.headlineMedium.copy(color = primary)
-        ProvideTextStyle(value = titleStyle) { title() }
     }
 }

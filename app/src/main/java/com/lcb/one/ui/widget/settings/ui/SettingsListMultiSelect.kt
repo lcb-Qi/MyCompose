@@ -31,12 +31,12 @@ fun SettingsListMultiSelect(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     state: SettingValueState<Set<Int>>,
-    title: @Composable () -> Unit,
+    title: String,
     items: List<String>,
     icon: @Composable (() -> Unit)? = null,
     confirmButton: String,
     useSelectedValuesAsSubtitle: Boolean = true,
-    subtitle: @Composable (() -> Unit)? = null,
+    summary: String? = null,
     onItemsSelected: ((List<String>) -> Unit)? = null,
 ) {
     if (state.value.any { index -> index >= items.size }) {
@@ -46,15 +46,10 @@ fun SettingsListMultiSelect(
     var showDialog by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
 
-    val safeSubtitle = if (state.value.size >= 0 && useSelectedValuesAsSubtitle) {
-        {
-            Text(
-                text = state.value.map { index -> items[index] }
-                    .joinToString(separator = ", ") { it },
-            )
-        }
+    val safeSummary = if (state.value.size >= 0 && useSelectedValuesAsSubtitle) {
+        state.value.map { index -> items[index] }.joinToString(separator = ", ") { it }
     } else {
-        subtitle
+        summary
     }
 
     SettingsMenuLink(
@@ -62,7 +57,7 @@ fun SettingsListMultiSelect(
         enabled = enabled,
         icon = icon,
         title = title,
-        summary = safeSubtitle,
+        summary = safeSummary,
         onClick = { showDialog = true },
     )
 
@@ -80,13 +75,13 @@ fun SettingsListMultiSelect(
     }
 
     AlertDialog(
-        title = title,
+        title = { Text(text = title, style = MaterialTheme.typography.titleMedium) },
         text = {
             Column(
                 modifier = Modifier.verticalScroll(scrollState),
             ) {
-                if (subtitle != null) {
-                    subtitle()
+                if (summary != null) {
+                    Text(text = summary, style = MaterialTheme.typography.bodySmall)
                     Spacer(modifier = Modifier.size(8.dp))
                 }
 

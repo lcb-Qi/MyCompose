@@ -1,4 +1,4 @@
-package com.lcb.one.ui.widget
+package com.lcb.one.ui.widget.appbar
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -16,10 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.lcb.one.ui.widget.common.NoRippleInteractionSource
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
-fun AppBar(
+fun ToolBar(
     title: String,
     enableBack: Boolean = true,
     actions: @Composable RowScope.() -> Unit = {},
