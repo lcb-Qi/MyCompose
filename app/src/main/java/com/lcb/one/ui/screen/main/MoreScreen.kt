@@ -90,7 +90,7 @@ fun MoreScreen(navController: NavController) {
                     ToastUtils.showToast("未检测到新版本")
                     return@launch
                 }
-                if (compareVersion(updateInfo!!.version, BuildConfig.VERSION_NAME) > 0) {
+                if (compareVersion(updateInfo!!.version, BuildConfig.VERSION_NAME) <= 0) {
                     ToastUtils.showToast("已是最新版")
                     return@launch
                 }
