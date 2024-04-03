@@ -12,6 +12,10 @@ object DateTimeUtils {
     private const val FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss"
     private const val FORMAT_SHORT = "yyyyMMddHHmmss"
 
+    fun toLocalDateTime(millis: Long): LocalDateTime {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault())
+    }
+
     fun nowMillis(): Long {
         val now = LocalDateTime.now()
         return now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()

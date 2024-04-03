@@ -2,17 +2,21 @@ package com.lcb.one.ui.screen.main
 
 import android.app.WallpaperManager
 import android.content.Intent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowRight
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.MiscellaneousServices
 import androidx.compose.material.icons.rounded.PhoneAndroid
+import androidx.compose.material.icons.rounded.Woman2
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmapOrNull
@@ -51,7 +56,8 @@ fun ToolScreen(navController: NavController) {
     ) {
         ToolBox(
             title = stringResource(R.string.device),
-            icon = { Icon(Icons.Rounded.PhoneAndroid, "") }) {
+            icon = { Icon(Icons.Rounded.PhoneAndroid, "") }
+        ) {
             FlowRow(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -75,7 +81,8 @@ fun ToolScreen(navController: NavController) {
         // 其他
         ToolBox(
             title = stringResource(R.string.other),
-            icon = { Icon(Icons.Rounded.MiscellaneousServices, "") }) {
+            icon = { Icon(Icons.Rounded.MiscellaneousServices, "") }
+        ) {
             FlowRow(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -99,6 +106,17 @@ fun ToolScreen(navController: NavController) {
                 ElevatedAssistChip(
                     onClick = { showClock = true },
                     label = { Text(text = stringResource(R.string.clock_screen)) }
+                )
+                ElevatedAssistChip(
+                    onClick = { navController.navigateSingleTop(Route.MENSTRUAL_CYCLE_ASSISTANT) },
+                    label = { Text(text = "经期助手") },
+                    trailingIcon = {
+                        Image(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(R.drawable.icon_beta),
+                            contentDescription = ""
+                        )
+                    }
                 )
 
                 if (showClock) {
@@ -148,7 +166,7 @@ private fun ToolBox(
             }
         }
 
-        if (showDetail) {
+        AnimatedVisibility(visible = showDetail) {
             content()
         }
     }

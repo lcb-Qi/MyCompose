@@ -7,6 +7,7 @@ import com.lcb.one.ui.screen.applist.AppListScreen
 import com.lcb.one.ui.screen.main.MainScreen
 import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
 import com.lcb.one.ui.screen.device.DeviceInfoScreen
+import com.lcb.one.ui.screen.mcAssistant.MenstrualCycleAssistantScreen
 import com.lcb.one.ui.screen.settings.SettingsScreen
 
 object Route {
@@ -15,6 +16,7 @@ object Route {
     const val DEVICE = "Device"
     const val SETTINGS = "Settings"
     const val APPS = "Apps"
+    const val MENSTRUAL_CYCLE_ASSISTANT = "MenstrualCycleAssistant"
 }
 
 @Stable
@@ -30,5 +32,6 @@ fun getRouters(navController: NavHostController): List<RouteScreen> {
         RouteScreen(Route.DEVICE) { DeviceInfoScreen() },
         RouteScreen(Route.SETTINGS) { SettingsScreen() },
         RouteScreen(Route.APPS) { AppListScreen() },
+        RouteScreen(Route.MENSTRUAL_CYCLE_ASSISTANT) { MenstrualCycleAssistantScreen() },
     )
 }
