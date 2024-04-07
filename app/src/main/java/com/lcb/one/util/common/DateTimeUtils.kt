@@ -2,23 +2,33 @@ package com.lcb.one.util.common
 
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
+import com.lcb.one.util.common.DateTimeUtils.toMillis
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 object DateTimeUtils {
-    private const val FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss"
-    private const val FORMAT_SHORT = "yyyyMMddHHmmss"
+    const val FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss"
+    const val FORMAT_SHORT = "yyyyMMddHHmmss"
+    const val FORMAT_ONLY_DATE = "yyyy-MM-dd"
+
+    fun LocalDateTime.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
+        return atZone(zoneId).toInstant().toEpochMilli()
+    }
+
+    fun LocalDate.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
+        return atStartOfDay(zoneId).toInstant().toEpochMilli()
+    }
 
     fun toLocalDateTime(millis: Long): LocalDateTime {
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault())
     }
 
-    fun nowMillis(): Long {
-        val now = LocalDateTime.now()
-        return now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    fun nowMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
+        return LocalDateTime.now().atZone(zoneId).toInstant().toEpochMilli()
     }
 
     fun nowString(): String {
