@@ -15,8 +15,8 @@ data class McDay(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Int? = null,
-    @ColumnInfo(name = "start_time")
+    @ColumnInfo(name = "start_time", defaultValue = "NULL")
     val startTime: Long? = null,// LocalDate对应的时间戳，仅包含年月日
-    @ColumnInfo(name = "end_time")
+    @ColumnInfo(name = "end_time", defaultValue = "NULL")
     val endTime: Long? = null// LocalDate对应的时间戳，仅包含年月日
 )

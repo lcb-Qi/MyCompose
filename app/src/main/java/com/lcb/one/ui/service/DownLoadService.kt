@@ -15,10 +15,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import com.lcb.one.util.android.LLog
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class DownloadInfo(val url: String, val filename: String) : Parcelable
 
 enum class DownLoadState {
     IDLE, DOWNLOADING, SUCCESS, FAILED

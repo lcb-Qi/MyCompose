@@ -4,11 +4,8 @@ import java.time.format.DateTimeFormatter
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-
-    id("kotlin-parcelize")
-
-    kotlin("kapt")
     id("com.google.devtools.ksp")
+    id("androidx.room")
 }
 
 
@@ -52,7 +49,9 @@ android {
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        // Compose 与 Kotlin 的兼容性对应关系：
+        // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+        kotlinCompilerExtensionVersion = "1.5.6"
     }
     packaging {
         resources {
@@ -73,6 +72,15 @@ android {
             LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMddHHmm"))
         )
     }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
+}
+
+ksp {
+    arg("room.incremental", "true")
+    arg("room.generateKotlin", "true")
 }
 
 tasks.register("copyTask") {
@@ -100,24 +108,27 @@ project.afterEvaluate {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.activity:activity-compose:1.8.1")
-    implementation(platform("androidx.compose:compose-bom:2024.02.00"))
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.activity:activity-compose:1.8.2")
+    // compose
+    val composeVersion = "2024.04.00"
+    implementation(platform("androidx.compose:compose-bom:$composeVersion"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.runtime:runtime-livedata")
-
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    val lifecycleVersion = "2.7.0"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.preference:preference-ktx:1.2.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
+
+    implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // glance
     implementation("androidx.glance:glance-appwidget:1.0.0")
@@ -139,9 +150,11 @@ dependencies {
     implementation("io.noties.markwon:core:4.6.2")
 
     // room数据库
-    implementation("androidx.room:room-runtime:2.5.0")
-    implementation("androidx.room:room-ktx:2.5.0")
-    ksp("androidx.room:room-compiler:2.5.0")
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
