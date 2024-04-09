@@ -1,4 +1,4 @@
-package com.lcb.one.network.os
+package com.lcb.one.network.core
 
 import androidx.annotation.StringDef
 import com.lcb.one.util.android.LLog

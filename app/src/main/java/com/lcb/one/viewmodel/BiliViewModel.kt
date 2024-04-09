@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lcb.one.network.BiliServerAccessor
+import com.lcb.one.util.common.launchSafely
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -15,11 +16,11 @@ class BiliViewModel : ViewModel() {
     private val _videoId = MutableLiveData("")
     val coverUrl = MediatorLiveData("").apply {
         addSource(_videoId) {
-            viewModelScope.launch {
+            if (it.isBlank()) return@addSource
+            viewModelScope.launchSafely {
                 isLoading.value = true
-                value = BiliServerAccessor.getVideoInfo(it)?.let {
-                    JSONObject(it).optJSONObject("data")?.optString("pic")
-                }
+                val response = BiliServerAccessor.getVideoInfo(it)
+                value = JSONObject(response).optJSONObject("data")?.optString("pic") ?: ""
                 isLoading.value = false
             }
         }

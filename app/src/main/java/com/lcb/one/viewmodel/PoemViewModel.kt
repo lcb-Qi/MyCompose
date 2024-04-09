@@ -4,12 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lcb.one.bean.PoemResponse
 import com.lcb.one.network.PoemServerAccessor
-import com.lcb.one.ui.AppSettings
+import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.util.common.JsonUtils
 import com.lcb.one.util.android.SharedPrefUtils
+import com.lcb.one.util.common.launchSafely
 import com.squareup.moshi.JsonClass
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PoemViewModel : ViewModel() {
     companion object {
@@ -17,12 +19,12 @@ class PoemViewModel : ViewModel() {
         const val KEY_LAST_POEM = "last_poem"
     }
 
+    private val poemService = PoemServerAccessor.apiService
 
     private suspend fun getToken(): String {
         var token = SharedPrefUtils.getString(KEY_POEM_TOKEN)
         if (token.isNotEmpty()) return token
-
-        token = PoemServerAccessor.getToken()?.token ?: ""
+        token = poemService.getToken().token
         SharedPrefUtils.putString(KEY_POEM_TOKEN, token)
 
         return token
@@ -46,13 +48,18 @@ class PoemViewModel : ViewModel() {
     fun refresh(forceRefresh: Boolean = false) {
         if (!needRefresh(forceRefresh)) return
 
-        viewModelScope.launch {
+        viewModelScope.launchSafely {
             isLoading.value = true
-            PoemServerAccessor.getPoem(getToken())?.let {
-                poemFlow.value =
-                    PoemInfo(it.data.content, System.currentTimeMillis(), it.data.origin)
-                SharedPrefUtils.putString(KEY_LAST_POEM, JsonUtils.toJson(poemFlow.value))
+            val poemResponse = withContext(Dispatchers.IO) {
+                poemService.getPoem(getToken())
             }
+            poemFlow.value =
+                PoemInfo(
+                    recommend = poemResponse.data.content,
+                    updateTime = System.currentTimeMillis(),
+                    origin = poemResponse.data.origin
+                )
+            SharedPrefUtils.putString(KEY_LAST_POEM, JsonUtils.toJson(poemFlow.value))
             isLoading.value = false
         }
     }
@@ -61,6 +68,6 @@ class PoemViewModel : ViewModel() {
         val info = poemFlow.value
         return info.recommend.isBlank() ||
                 forceRefresh ||
-                (System.currentTimeMillis() - info.updateTime > AppSettings.poemUpdateDuration)
+                (System.currentTimeMillis() - info.updateTime > AppGlobalConfigs.poemUpdateDuration)
     }
 }

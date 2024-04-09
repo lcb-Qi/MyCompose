@@ -3,6 +3,7 @@ package com.lcb.one.util.android
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
@@ -10,13 +11,16 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
+import android.provider.Settings
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.annotation.ColorInt
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.lcb.one.BuildConfig
+import com.lcb.one.R
 import com.lcb.one.ui.MyApp
 import java.text.Collator
 import java.util.Locale

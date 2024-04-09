@@ -32,18 +32,21 @@ import androidx.navigation.NavController
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.bean.GithubLatest
-import com.lcb.one.network.os.RESTFulRequest
+import com.lcb.one.network.commonApiService
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.Route
 import com.lcb.one.ui.service.DownLoadService
 import com.lcb.one.ui.service.DownLoadState
-import com.lcb.one.ui.widget.common.FriendlyExitHandler
 import com.lcb.one.ui.widget.settings.ui.SettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
 import com.lcb.one.util.android.AppUtils
+import com.lcb.one.util.android.DimenUtils
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.android.navigateSingleTop
+import com.lcb.one.util.common.JsonUtils
+import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
+import io.noties.markwon.core.MarkwonTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -108,6 +111,8 @@ fun MoreScreen(navController: NavController) {
  * @return 1: version1 > version12; -1: version1 < version2; 0: version1 == version2
  */
 private fun compareVersion(version1: String, version2: String): Int {
+    if (BuildConfig.DEBUG) return 1
+
     val v1 = version1.split(".").map { it.toInt() }
     val v2 = version2.split(".").map { it.toInt() }
 
@@ -221,18 +226,16 @@ data class UpdateInfo(
 private suspend fun checkUpdate(): UpdateInfo? = runCatching {
     withContext(Dispatchers.IO) {
         var updateInfo: UpdateInfo? = null
-        RESTFulRequest.newBuilder("https://api.github.com/repos/lcb-Qi/MyCompose/releases/latest")
-            .build()
-            .getResult(GithubLatest::class.java)
-            .onSuccess {
-                if (it == null) return@onSuccess
-                updateInfo = UpdateInfo(
-                    it.tagName,
-                    it.assets[0].browserDownloadUrl,
-                    it.body,
-                    it.assets[0].name
-                )
-            }
+        val response =
+            commonApiService.get("https://api.github.com/repos/lcb-Qi/MyCompose/releases/latest")
+        JsonUtils.fromJson<GithubLatest>(response)?.let {
+            updateInfo = UpdateInfo(
+                it.tagName,
+                it.assets[0].browserDownloadUrl,
+                it.body,
+                it.assets[0].name
+            )
+        }
 
         return@withContext updateInfo
     }

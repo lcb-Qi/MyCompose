@@ -1,4 +1,4 @@
-package com.lcb.one.network.os
+package com.lcb.one.network.core
 
 import com.lcb.one.util.android.LLog
 import okhttp3.ConnectionPool

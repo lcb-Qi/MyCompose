@@ -29,7 +29,7 @@
         <item>1800000</item>
         <item>3600000</item>
         <item>43200000</item>
-        <item>864000000</item>
+        <item>86400000</item>
     </integer-array>
     <string name="tool">Tool</string>
     <string name="more">More</string>

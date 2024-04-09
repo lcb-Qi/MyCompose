@@ -35,7 +35,9 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
+import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.widget.appbar.ToolBar
+import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.viewmodel.BiliViewModel
 import kotlinx.coroutines.launch
@@ -81,7 +83,14 @@ fun BiliBiliScreen() {
                 )
 
                 Button(
-                    onClick = { biliViewModel.getUrlByVideoId(textInput) },
+                    onClick = {
+                        if (AppUtils.isNetworkAvailable()) {
+                            if (BuildConfig.DEBUG) textInput = "BV1Jp421y768"
+                            biliViewModel.getUrlByVideoId(textInput)
+                        } else {
+                            AppGlobalConfigs.assertNetwork = true
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(text = stringResource(R.string.obtain))

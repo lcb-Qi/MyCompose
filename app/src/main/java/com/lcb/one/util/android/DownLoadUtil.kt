@@ -5,7 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
 import android.provider.MediaStore
-import com.lcb.one.network.os.OkhttpFactory
+import com.lcb.one.network.commonApiService
+import com.lcb.one.network.core.OkhttpFactory
 import com.lcb.one.ui.MyApp
 import com.lcb.one.util.common.DateTimeUtils
 import kotlinx.coroutines.Dispatchers
@@ -24,12 +25,8 @@ object DownLoadUtil {
     suspend fun saveImageFromUrl(url: String, fileName: String = DateTimeUtils.nowStringShort()) =
         withContext(Dispatchers.IO) {
             if (url.isBlank() || fileName.isBlank()) return@withContext
-            val request = Request.Builder()
-                .url(url)
-                .build()
-
-            val response = OkhttpFactory.okHttpClient.newCall(request).execute()
-            response.body?.writeToImageFile(fileName)
+            val responseBody = commonApiService.downloadFile(url)
+            responseBody.writeToImageFile(fileName)
         }
 
 

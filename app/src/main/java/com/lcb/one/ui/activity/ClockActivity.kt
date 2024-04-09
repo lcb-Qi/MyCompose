@@ -29,7 +29,7 @@ import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.lcb.one.R
-import com.lcb.one.ui.AppSettings
+import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.theme.AppTheme
 import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPreferenceState
 import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPreferenceState
@@ -89,7 +89,7 @@ class ClockActivity : ComponentActivity() {
     fun ClockScreen() {
         var darkTheme by rememberBooleanPreferenceState(
             KEY_CLOCK_DARK_THEME,
-            AppSettings.appDynamicColor
+            AppGlobalConfigs.appDynamicColor
         )
 
         var clockSize by rememberIntPreferenceState(KEY_CLOCK_SIZE, getClockSize())
