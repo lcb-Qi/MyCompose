@@ -11,8 +11,3 @@ plugins {
 
     id("androidx.room") version "2.6.1" apply false
 }
-
-ext["compileSdk"] = 34
-ext["minSdk"] = 31
-ext["version_code"] = 10400
-ext["version_name"] = "1.4.0"

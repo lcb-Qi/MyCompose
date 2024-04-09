@@ -14,8 +14,11 @@ interface McDayDao {
     @Query("SELECT * FROM mc_day ORDER BY start_time")
     fun queryAll(): Flow<List<McDay>>
 
-    @Query("SELECT * FROM mc_day WHERE :time BETWEEN start_time AND end_time")
-    fun getByTime(time: Long): McDay?
+    @Query("SELECT * FROM mc_day ORDER BY start_time DESC LIMIT 1")
+    suspend fun getLastMcDay(): McDay?
+
+    @Query("SELECT * FROM mc_day WHERE finish = false")
+    suspend fun getRunningMcDay(): McDay?
 
     @Update
     suspend fun update(mcDay: McDay)

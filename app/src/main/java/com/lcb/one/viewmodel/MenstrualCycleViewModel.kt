@@ -6,8 +6,6 @@ import com.lcb.one.bean.McDay
 import com.lcb.one.room.appDatabase
 import com.lcb.one.util.android.LLog
 import com.lcb.one.util.common.DateTimeUtils.toMillis
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -20,23 +18,29 @@ class MenstrualCycleViewModel : ViewModel() {
         appDatabase.getMcDayDao()
     }
 
-    val mcDaysFlow by lazy {
-        MutableStateFlow<List<McDay>>(emptyList())
-    }
+    val mcDaysFlow = mcDayDao.queryAll()
 
-    fun getMcDays(): Flow<List<McDay>> {
-        LLog.d(TAG, "getMcDays: ")
-        return mcDayDao.queryAll()
-    }
-
-    fun add(mcDay: McDay) {
-        LLog.d(TAG, "add: $mcDay")
+    fun startNewMenstrualCycle() {
+        LLog.d(TAG, "startNewMenstrualCycle: ")
         viewModelScope.launch {
-            mcDayDao.insert(mcDay)
+            val nowMillis = LocalDate.now().toMillis()
+            mcDayDao.insert(McDay(startTime = nowMillis, finish = false))
         }
     }
 
-    fun getByTime(date: LocalDate): McDay? {
-        return mcDayDao.getByTime(date.toMillis())
+    fun endMenstrualCycle(endTime: Long) {
+        LLog.d(TAG, "endMenstrualCycle: ")
+        viewModelScope.launch {
+            mcDayDao.getRunningMcDay()?.let {
+                updateMenstrualCycle(it.copy(finish = true, endTime = endTime))
+            }
+        }
+    }
+
+    fun updateMenstrualCycle(mcDay: McDay) {
+        LLog.d(TAG, "updateMenstrualCycle: $mcDay")
+        viewModelScope.launch {
+            mcDayDao.update(mcDay)
+        }
     }
 }

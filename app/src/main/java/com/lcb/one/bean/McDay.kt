@@ -15,8 +15,16 @@ data class McDay(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Int? = null,
-    @ColumnInfo(name = "start_time", defaultValue = "NULL")
-    val startTime: Long? = null,// LocalDate对应的时间戳，仅包含年月日
-    @ColumnInfo(name = "end_time", defaultValue = "NULL")
-    val endTime: Long? = null// LocalDate对应的时间戳，仅包含年月日
+    val finish: Boolean = false,
+    @ColumnInfo(name = "start_time", defaultValue = "${Long.MIN_VALUE}")
+    val startTime: Long = Long.MIN_VALUE,// LocalDate对应的时间戳，仅包含年月日
+    @ColumnInfo(name = "end_time", defaultValue = "${Long.MIN_VALUE}")
+    val endTime: Long = Long.MIN_VALUE// LocalDate对应的时间戳，仅包含年月日
 )
+
+fun McDay.copy(
+    id: Int? = this.id,
+    finish: Boolean = this.finish,
+    startTime: Long = this.startTime,
+    endTime: Long = this.endTime
+) = McDay(id, finish, startTime, endTime)

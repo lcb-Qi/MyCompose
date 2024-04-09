@@ -14,12 +14,17 @@ import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.util.android.LLog
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.viewmodel.MenstrualCycleViewModel
+import java.time.Duration
+import java.time.LocalDateTime
 
 @Composable
 fun MenstrualCycleHistoryScreen() {
     val mcViewmodel = viewModel<MenstrualCycleViewModel>()
     Scaffold(topBar = { ToolBar(title = "MenstrualCycle History(beta)") }) { paddingValues ->
-        val mcDays by mcViewmodel.getMcDays().collectAsState(emptyList())
+        val mcDays by mcViewmodel.mcDaysFlow.collectAsState(emptyList())
+        mcDays.forEach {
+            LLog.d("TAG", "MenstrualCycleHistoryScreen: mcDays = $it")
+        }
         LazyColumn(
             modifier = Modifier.padding(
                 start = 16.dp,
@@ -28,16 +33,21 @@ fun MenstrualCycleHistoryScreen() {
                 bottom = paddingValues.calculateBottomPadding()
             )
         ) {
-            LLog.d("TAG", "MenstrualCycleHistoryScreen: $mcDays")
-            items(count = mcDays.size, key = { mcDays[it].startTime ?: it }) {
+            items(count = mcDays.size, key = { mcDays[it].startTime }) {
                 val mcDay = mcDays[it]
-                if (mcDay.startTime != null && mcDay.endTime != null) {
-                    val startTime =
-                        DateTimeUtils.format(mcDay.startTime, DateTimeUtils.FORMAT_ONLY_DATE)
-                    val endTime =
+                val startTime =
+                    DateTimeUtils.format(mcDay.startTime, DateTimeUtils.FORMAT_ONLY_DATE)
+                val endTime =
+                    if (mcDay.finish) {
                         DateTimeUtils.format(mcDay.endTime, DateTimeUtils.FORMAT_ONLY_DATE)
-                    Text(text = "$startTime - $endTime")
-                }
+                    } else {
+                        "未结束"
+                    }
+                val duration = Duration.between(
+                    DateTimeUtils.toLocalDateTime(mcDay.startTime),
+                    if (mcDay.finish) DateTimeUtils.toLocalDateTime(mcDay.endTime) else LocalDateTime.now()
+                ).toDays() + 1
+                Text(text = "$startTime 到 $endTime 持续 $duration 天")
             }
         }
     }

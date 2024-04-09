@@ -33,6 +33,7 @@ const val MONTHS_IN_YEAR = 12
 fun Calendar(
     default: Long = DateTimeUtils.nowMillis(),
     mcData: List<McDay> = emptyList(),
+    predictMcDay: McDay? = null,
     onDateChanged: (Long) -> Unit,
 ) {
     val dateTime = DateTimeUtils.toLocalDateTime(default)
@@ -63,7 +64,12 @@ fun Calendar(
         ) { pagerIndex ->
             val yearMonth = YearMonth.of(selectYear, pagerIndex + 1)
 
-            CalendarMonth(month = yearMonth, selectDay = selectDay, mcData = mcData) {
+            CalendarMonth(
+                month = yearMonth,
+                selectDay = selectDay,
+                mcData = mcData,
+                predictMcDay = predictMcDay
+            ) {
                 selectDay = it
                 onDateChanged(yearMonth.atDayMillis(selectDay))
             }

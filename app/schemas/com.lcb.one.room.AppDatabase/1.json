@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "bdeda23b0070abeb45db9a8c2691f3b5",
+    "identityHash": "4b791e1248f40205992f699d02ad46a5",
     "entities": [
       {
         "tableName": "mc_day",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `start_time` INTEGER DEFAULT NULL, `end_time` INTEGER DEFAULT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `finish` INTEGER NOT NULL, `start_time` INTEGER NOT NULL DEFAULT -9223372036854775808, `end_time` INTEGER NOT NULL DEFAULT -9223372036854775808)",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,18 +15,24 @@
             "notNull": false
           },
           {
+            "fieldPath": "finish",
+            "columnName": "finish",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "startTime",
             "columnName": "start_time",
             "affinity": "INTEGER",
-            "notNull": false,
-            "defaultValue": "NULL"
+            "notNull": true,
+            "defaultValue": "-9223372036854775808"
           },
           {
             "fieldPath": "endTime",
             "columnName": "end_time",
             "affinity": "INTEGER",
-            "notNull": false,
-            "defaultValue": "NULL"
+            "notNull": true,
+            "defaultValue": "-9223372036854775808"
           }
         ],
         "primaryKey": {
@@ -52,7 +58,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bdeda23b0070abeb45db9a8c2691f3b5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4b791e1248f40205992f699d02ad46a5')"
     ]
   }
 }

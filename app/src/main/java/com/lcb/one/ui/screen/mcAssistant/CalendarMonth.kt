@@ -15,7 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.lcb.one.bean.McDay
+import com.lcb.one.util.common.DateTimeUtils.toMillis
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.time.temporal.WeekFields
@@ -26,6 +28,7 @@ fun CalendarMonth(
     month: YearMonth,
     selectDay: Int = 1,
     mcData: List<McDay> = emptyList(),
+    predictMcDay: McDay? = null,
     onDaySelected: (Int) -> Unit
 ) {
     ConstraintLayout {
@@ -90,11 +93,17 @@ fun CalendarMonth(
                                     .requiredSize(48.dp),
                                 day = dayNumber,
                                 mcDay = mcData.any {
-                                    if (it.startTime == null || it.endTime == null) {
-                                        false
-                                    } else {
+                                    if (it.finish) {
                                         month.atDayMillis(dayNumber) in it.startTime..it.endTime
+                                    } else {
+                                        month.atDayMillis(dayNumber) in it.startTime..LocalDate.now()
+                                            .toMillis()
                                     }
+                                },
+                                predictMcDay = if (predictMcDay == null) {
+                                    false
+                                } else {
+                                    month.atDayMillis(dayNumber) in predictMcDay.startTime..predictMcDay.endTime
                                 },
                                 selected = selectDay == dayNumber
                             ) {

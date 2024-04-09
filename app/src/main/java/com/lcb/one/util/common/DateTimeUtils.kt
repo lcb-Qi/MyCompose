@@ -2,6 +2,7 @@ package com.lcb.one.util.common
 
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
+import com.lcb.one.util.android.LLog
 import com.lcb.one.util.common.DateTimeUtils.toMillis
 import java.time.Duration
 import java.time.Instant
@@ -9,11 +10,19 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 object DateTimeUtils {
     const val FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss"
     const val FORMAT_SHORT = "yyyyMMddHHmmss"
     const val FORMAT_ONLY_DATE = "yyyy-MM-dd"
+
+    fun LocalDateTime.isToday(): Boolean {
+        val now = LocalDate.now().atTime(0, 0, 0)
+        val toDays = Duration.between(this, now).toDays()
+
+        return toDays == 0L
+    }
 
     fun LocalDateTime.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
         return atZone(zoneId).toInstant().toEpochMilli()

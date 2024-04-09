@@ -11,14 +11,14 @@ plugins {
 
 android {
     namespace = "com.lcb.one"
-    compileSdk = rootProject.ext.get("compileSdk") as Int
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.lcb.one"
-        minSdk = rootProject.ext.get("minSdk") as Int
-        targetSdk = rootProject.ext.get("compileSdk") as Int
-        versionCode = rootProject.ext.get("version_code") as Int
-        versionName = rootProject.ext.get("version_name") as String
+        minSdk = 31
+        targetSdk = 34
+        versionCode = 10400
+        versionName = "1.4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -60,17 +60,11 @@ android {
     }
 
     defaultConfig {
-        resValue(
-            "string",
-            "BUILD_TIME",
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
-        )
-
-        resValue(
-            "string",
-            "BUILD_ID",
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMddHHmm"))
-        )
+        val now = LocalDateTime.now()
+        val buildTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
+        val buildId = now.format(DateTimeFormatter.ofPattern("MMddHHmm"))
+        resValue("string", "BUILD_TIME", buildTime)
+        resValue("string", "BUILD_ID", buildId)
     }
 
     room {
@@ -146,7 +140,7 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
 
-    //markdown
+    // markdown
     implementation("io.noties.markwon:core:4.6.2")
 
     // room数据库
