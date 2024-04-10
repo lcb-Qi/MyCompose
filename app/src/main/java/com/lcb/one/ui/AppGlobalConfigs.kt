@@ -3,6 +3,7 @@ package com.lcb.one.ui
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.ui.widget.settings.storage.disk.BooleanPreferenceState
 import com.lcb.one.ui.widget.settings.storage.disk.IntPreferenceState
@@ -13,6 +14,12 @@ object AppGlobalConfigs {
     var appDynamicColor by BooleanPreferenceState(
         key = MyApp.getAppContext().getString(R.string.settings_dynamic_color_key),
         defaultValue = true
+    )
+
+    const val COUNT_TO_ENABLE_DEV_MODE = 10
+    var appDevMode by BooleanPreferenceState(
+        key = MyApp.getAppContext().getString(R.string.settings_dev_mode),
+        defaultValue = BuildConfig.DEBUG
     )
 
     var poemUpdateDuration by IntPreferenceState(

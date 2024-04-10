@@ -3,6 +3,7 @@ package com.lcb.one.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.navigation.NavHostController
+import com.lcb.one.ui.screen.about.AboutScreen
 import com.lcb.one.ui.screen.applist.AppListScreen
 import com.lcb.one.ui.screen.main.MainScreen
 import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
@@ -16,6 +17,7 @@ object Route {
     const val BILI = "BiliBili"
     const val DEVICE = "Device"
     const val SETTINGS = "Settings"
+    const val ABOUT = "About"
     const val APPS = "Apps"
     const val MENSTRUAL_CYCLE_ASSISTANT = "MenstrualCycleAssistant"
     const val MENSTRUAL_CYCLE_HISTORY = "MenstrualCycleHistory"
@@ -33,6 +35,7 @@ fun getRouters(navController: NavHostController): List<RouteScreen> {
         RouteScreen(Route.BILI) { BiliBiliScreen() },
         RouteScreen(Route.DEVICE) { DeviceInfoScreen() },
         RouteScreen(Route.SETTINGS) { SettingsScreen() },
+        RouteScreen(Route.ABOUT) { AboutScreen() },
         RouteScreen(Route.APPS) { AppListScreen() },
         RouteScreen(Route.MENSTRUAL_CYCLE_ASSISTANT) { MenstrualCycleAssistantScreen(navController) },
         RouteScreen(Route.MENSTRUAL_CYCLE_HISTORY) { MenstrualCycleHistoryScreen() },

@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.navigation.NavController
 import com.lcb.one.R
+import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.activity.ClockActivity
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.Route
@@ -93,16 +94,18 @@ fun ToolScreen(navController: NavController) {
                     onClick = { navController.navigateSingleTop(Route.BILI) },
                     label = { Text(text = stringResource(R.string.obtain_bilibili_cover)) }
                 )
-                ElevatedAssistChip(
-                    enabled = false,
-                    onClick = { },
-                    label = { Text(text = stringResource(R.string.bv_to_av)) }
-                )
-                ElevatedAssistChip(
-                    enabled = false,
-                    onClick = { },
-                    label = { Text(text = stringResource(R.string.av_to_bv)) }
-                )
+                if (AppGlobalConfigs.appDevMode) {
+                    ElevatedAssistChip(
+                        enabled = false,
+                        onClick = { },
+                        label = { Text(text = stringResource(R.string.bv_to_av)) }
+                    )
+                    ElevatedAssistChip(
+                        enabled = false,
+                        onClick = { },
+                        label = { Text(text = stringResource(R.string.av_to_bv)) }
+                    )
+                }
                 ElevatedAssistChip(
                     onClick = { showClock = true },
                     label = { Text(text = stringResource(R.string.clock_screen)) }
