@@ -1,5 +1,6 @@
 package com.lcb.one.util.common
 
+import android.os.Build
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
 import com.lcb.one.util.android.LLog
@@ -12,28 +13,42 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
+fun LocalDateTime.isBeforeToday(): Boolean {
+    return toLocalDate().isBefore(LocalDate.now())
+}
+
+fun LocalDateTime.isAfterToday(): Boolean {
+    toLocalDate().isEqual(LocalDate.now())
+    return toLocalDate().isAfter(LocalDate.now())
+}
+
+fun LocalDateTime.isToday(): Boolean {
+    return toLocalDate().isEqual(LocalDate.now())
+}
+
+fun LocalDateTime.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
+    return atZone(zoneId).toInstant().toEpochMilli()
+}
+
+fun LocalDate.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
+    return atStartOfDay(zoneId).toInstant().toEpochMilli()
+}
+
 object DateTimeUtils {
     const val FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss"
     const val FORMAT_SHORT = "yyyyMMddHHmmss"
     const val FORMAT_ONLY_DATE = "yyyy-MM-dd"
 
-    fun LocalDateTime.isToday(): Boolean {
-        val now = LocalDate.now().atTime(0, 0, 0)
-        val toDays = Duration.between(this, now).toDays()
-
-        return toDays == 0L
+    fun toLocalDate(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            LocalDate.ofInstant(Instant.ofEpochMilli(millis), zoneId)
+        } else {
+            toLocalDateTime(millis, zoneId).toLocalDate()
+        }
     }
 
-    fun LocalDateTime.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
-        return atZone(zoneId).toInstant().toEpochMilli()
-    }
-
-    fun LocalDate.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
-        return atStartOfDay(zoneId).toInstant().toEpochMilli()
-    }
-
-    fun toLocalDateTime(millis: Long): LocalDateTime {
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault())
+    fun toLocalDateTime(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), zoneId)
     }
 
     fun nowMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
@@ -76,5 +91,21 @@ object DateTimeUtils {
 
         return MyApp.getAppContext()
             .getString(R.string.friendly_duration, daysPart, hoursPart, minutesPart, secondsPart)
+    }
+
+    fun getDurationDays(start: Long, end: Long): Duration {
+        return Duration.between(toLocalDateTime(start), toLocalDateTime(end))
+    }
+
+    fun isToday(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): Boolean {
+        return toLocalDateTime(millis, zoneId).isToday()
+    }
+
+    fun isAfterToday(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): Boolean {
+        return toLocalDateTime(millis, zoneId).isAfterToday()
+    }
+
+    fun isBeforeToday(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): Boolean {
+        return toLocalDateTime(millis, zoneId).isBeforeToday()
     }
 }

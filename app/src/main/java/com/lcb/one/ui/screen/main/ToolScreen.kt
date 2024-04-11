@@ -94,33 +94,12 @@ fun ToolScreen(navController: NavController) {
                     onClick = { navController.navigateSingleTop(Route.BILI) },
                     label = { Text(text = stringResource(R.string.obtain_bilibili_cover)) }
                 )
-                if (AppGlobalConfigs.appDevMode) {
-                    ElevatedAssistChip(
-                        enabled = false,
-                        onClick = { },
-                        label = { Text(text = stringResource(R.string.bv_to_av)) }
-                    )
-                    ElevatedAssistChip(
-                        enabled = false,
-                        onClick = { },
-                        label = { Text(text = stringResource(R.string.av_to_bv)) }
-                    )
-                }
                 ElevatedAssistChip(
                     onClick = { showClock = true },
                     label = { Text(text = stringResource(R.string.clock_screen)) }
                 )
-                ElevatedAssistChip(
-                    onClick = { navController.navigateSingleTop(Route.MENSTRUAL_CYCLE_ASSISTANT) },
-                    label = { Text(text = "经期助手") },
-                    trailingIcon = {
-                        Image(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(R.drawable.icon_beta),
-                            contentDescription = ""
-                        )
-                    }
-                )
+
+                DevItems(navController)
 
                 if (showClock) {
                     LocalContext.current.run {
@@ -130,6 +109,33 @@ fun ToolScreen(navController: NavController) {
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun DevItems(navController: NavController) {
+    if (AppGlobalConfigs.appDevMode) {
+        ElevatedAssistChip(
+            enabled = false,
+            onClick = { },
+            label = { Text(text = stringResource(R.string.bv_to_av)) }
+        )
+        ElevatedAssistChip(
+            enabled = false,
+            onClick = { },
+            label = { Text(text = stringResource(R.string.av_to_bv)) }
+        )
+        ElevatedAssistChip(
+            onClick = { navController.navigateSingleTop(Route.MENSTRUAL_CYCLE_ASSISTANT) },
+            label = { Text(text = "经期助手") },
+            trailingIcon = {
+                Image(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(R.drawable.icon_beta),
+                    contentDescription = ""
+                )
+            }
+        )
     }
 }
 

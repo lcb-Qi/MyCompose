@@ -21,10 +21,3 @@ data class McDay(
     @ColumnInfo(name = "end_time", defaultValue = "${Long.MIN_VALUE}")
     val endTime: Long = Long.MIN_VALUE// LocalDate对应的时间戳，仅包含年月日
 )
-
-fun McDay.copy(
-    id: Int? = this.id,
-    finish: Boolean = this.finish,
-    startTime: Long = this.startTime,
-    endTime: Long = this.endTime
-) = McDay(id, finish, startTime, endTime)

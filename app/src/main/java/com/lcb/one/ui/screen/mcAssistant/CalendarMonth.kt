@@ -16,6 +16,7 @@ import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.lcb.one.bean.McDay
 import com.lcb.one.util.common.DateTimeUtils.toMillis
+import com.lcb.one.util.common.toMillis
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth

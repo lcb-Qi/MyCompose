@@ -1,6 +1,7 @@
 package com.lcb.one.room
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -28,4 +29,7 @@ interface McDayDao {
 
     @Query("DELETE FROM mc_day")
     suspend fun deleteAll()
+
+    @Delete
+    suspend fun delete(mcDay: McDay)
 }
