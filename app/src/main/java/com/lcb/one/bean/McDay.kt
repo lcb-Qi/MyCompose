@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.lcb.one.util.common.toMillis
+import java.time.LocalDate
 
 @Entity(
     tableName = "mc_day",
@@ -21,3 +23,15 @@ data class McDay(
     @ColumnInfo(name = "end_time", defaultValue = "${Long.MIN_VALUE}")
     val endTime: Long = Long.MIN_VALUE// LocalDate对应的时间戳，仅包含年月日
 )
+
+fun List<McDay>.getMcDay(time: Long): McDay? {
+    return find {
+        val range = if (it.finish) {
+            it.startTime..it.endTime
+        } else {
+            it.startTime..LocalDate.now().toMillis()
+        }
+
+        return@find time in range
+    }
+}

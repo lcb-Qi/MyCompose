@@ -1,47 +1,42 @@
 package com.lcb.one.ui.screen.mcAssistant
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.Today
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.lcb.one.bean.McDay
+import com.lcb.one.bean.getMcDay
 import com.lcb.one.ui.Route
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.util.android.navigateSingleTop
 import com.lcb.one.util.common.DateTimeUtils
-import com.lcb.one.util.common.DateTimeUtils.isBeforeToday
-import com.lcb.one.util.common.DateTimeUtils.isToday
-import com.lcb.one.util.common.DateTimeUtils.toMillis
-import com.lcb.one.util.common.isBeforeToday
-import com.lcb.one.util.common.isToday
 import com.lcb.one.util.common.toMillis
 import com.lcb.one.viewmodel.MenstrualCycleViewModel
-import java.time.Duration
+import java.time.LocalDate
 
 const val MENSTRUAL_CYCLE_INTERVAL = 28L
 const val MENSTRUAL_CYCLE_DURATION = 7L
@@ -67,6 +62,7 @@ fun MenstrualCycleAssistantScreen(navController: NavController) {
                 .toMillis()
         )
     }
+    var selectedDate by rememberSaveable { mutableLongStateOf(DateTimeUtils.nowMillis()) }
     Scaffold(
         topBar = {
             ToolBar(title = "经期助手", actions = {
@@ -74,6 +70,17 @@ fun MenstrualCycleAssistantScreen(navController: NavController) {
                     Icon(imageVector = Icons.Rounded.History, contentDescription = "")
                 }
             })
+        },
+        floatingActionButton = {
+            AnimatedVisibility(
+                visible = !DateTimeUtils.isToday(selectedDate),
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                FloatingActionButton(onClick = { selectedDate = LocalDate.now().toMillis() }) {
+                    Icon(imageVector = Icons.Rounded.Today, contentDescription = "")
+                }
+            }
         }
     ) { paddingValues ->
         Column(
@@ -84,23 +91,20 @@ fun MenstrualCycleAssistantScreen(navController: NavController) {
                 end = 16.dp
             ),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            var selectDay by remember { mutableLongStateOf(DateTimeUtils.nowMillis()) }
-            Calendar(selectDay, mcDays, predictMcDay) { selectDay = it }
-
-            val selectDateTime = DateTimeUtils.toLocalDateTime(selectDay)
-            if (!selectDateTime.isBeforeToday()) {
-                MessageText(selectDay, runningMcDay, predictMcDay)
+            Calendar(selectedDate, mcDays, predictMcDay) {
+                selectedDate = it
             }
 
-            if (selectDateTime.isToday() && runningMcDay == null) {
-                Button(onClick = { mcViewmodel.startNewMenstrualCycle() }) {
+            MenstrualCycleInfo(selectedDate, mcDays, predictMcDay)
+
+            if (!DateTimeUtils.isAfterToday(selectedDate) && runningMcDay == null && (lastMcDay == null || selectedDate > lastMcDay!!.endTime)) {
+                Button(onClick = { mcViewmodel.startNewMenstrualCycle(selectedDate) }) {
                     Text(text = "开始记录经期")
                 }
             }
-            if (runningMcDay != null && selectDay >= runningMcDay.startTime) {
-                Button(onClick = { mcViewmodel.endMenstrualCycle(selectDay) }) {
+            if (runningMcDay != null && selectedDate >= runningMcDay.startTime) {
+                Button(onClick = { mcViewmodel.endMenstrualCycle(selectedDate) }) {
                     Text(text = "已结束")
                 }
             }
@@ -109,32 +113,68 @@ fun MenstrualCycleAssistantScreen(navController: NavController) {
 }
 
 @Composable
-fun MessageText(
-    selectDay: Long,
-    runningMcDay: McDay? = null,
+fun MenstrualCycleInfo(
+    selectedDate: Long,
+    mcDays: List<McDay>,
     predictMcDay: McDay? = null
 ) {
-    ProvideTextStyle(MaterialTheme.typography.titleMedium) {
-        Column(modifier = Modifier.padding(top = 16.dp)) {
-            runningMcDay?.let {
-                val days = DateTimeUtils.getDurationDays(it.startTime, selectDay).toDays()
-                Text(text = "今天是经期的第 ${days + 1} 天")
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = DateTimeUtils.format(selectedDate, DateTimeUtils.FORMAT_ONLY_DATE),
+                    style = MaterialTheme.typography.titleLarge
+                )
 
-                if (days <= MENSTRUAL_CYCLE_DURATION) {
-                    Text(text = "预计结束还有 ${MENSTRUAL_CYCLE_DURATION - days} 天")
-                }
+                val message = mcDays.getMcDay(selectedDate)?.let {
+                    buildString {
+                        var days = DateTimeUtils.getDurationDays(it.startTime, selectedDate)
+                        append("月经期第${days + 1}天")
+                        if (it.finish) {
+                            days = DateTimeUtils.getDurationDays(selectedDate, it.endTime)
+                            if (days > 0) {
+                                append("，还有${days}天结束")
+                            }
+                        } else {
+                            days = MENSTRUAL_CYCLE_DURATION - days
+                            if (days > 0) {
+                                append("，预计还有${days}天结束")
+                            } else {
+                                append("，已超过${MENSTRUAL_CYCLE_DURATION}天，请注意健康哦")
+                            }
+                        }
+                    }
+                } ?: "不在月经期哦"
+
+                Text(text = message, style = MaterialTheme.typography.labelLarge)
             }
+        }
 
-            predictMcDay?.let {
-                val days = DateTimeUtils.getDurationDays(selectDay, it.startTime).toDays()
-                if (days > 0) {
-                    Text(text = "预计下一次在 $days 天后")
-                }
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(16.dp)) columnPredict@{
+                Text(
+                    text = "经期预测",
+                    style = MaterialTheme.typography.titleLarge
+                )
 
-                if (selectDay in it.startTime..it.endTime) {
-                    val predictDays =
-                        DateTimeUtils.getDurationDays(it.startTime, selectDay).toDays()
-                    Text(text = "预计下一次经期的第 $predictDays 天")
+                if (predictMcDay == null) return@columnPredict
+
+                val lastMcDay = mcDays.last()
+                val message =
+                    if (selectedDate >= lastMcDay.endTime && selectedDate < predictMcDay.startTime) {
+                        val days =
+                            DateTimeUtils.getDurationDays(selectedDate, predictMcDay.startTime)
+                        "预计下一次在${days}天后"
+                    } else if (selectedDate in predictMcDay.startTime..predictMcDay.endTime) {
+                        val days =
+                            DateTimeUtils.getDurationDays(predictMcDay.startTime, selectedDate)
+                        "预计下一次经期的第${days + 1}天"
+                    } else {
+                        null
+                    }
+
+                AnimatedVisibility(message != null) {
+                    Text(text = message ?: "", style = MaterialTheme.typography.labelLarge)
                 }
             }
         }

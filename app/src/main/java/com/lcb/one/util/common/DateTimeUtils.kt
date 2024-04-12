@@ -3,15 +3,14 @@ package com.lcb.one.util.common
 import android.os.Build
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
-import com.lcb.one.util.android.LLog
-import com.lcb.one.util.common.DateTimeUtils.toMillis
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.YearMonth
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
+import java.util.Locale
 
 fun LocalDateTime.isBeforeToday(): Boolean {
     return toLocalDate().isBefore(LocalDate.now())
@@ -34,10 +33,25 @@ fun LocalDate.toMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long {
     return atStartOfDay(zoneId).toInstant().toEpochMilli()
 }
 
+fun YearMonth.atDayMillis(day: Int): Long {
+    require(day in 0..lengthOfMonth()) {
+        "$year-$monthValue-$day is invalid, day must in ${0..lengthOfMonth()}"
+    }
+
+    return atDay(day).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+}
+
 object DateTimeUtils {
     const val FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss"
     const val FORMAT_SHORT = "yyyyMMddHHmmss"
-    const val FORMAT_ONLY_DATE = "yyyy-MM-dd"
+    val FORMAT_ONLY_DATE
+        get() =
+            if (Locale.getDefault().language == Locale.CHINESE.language) {
+                "yyyy年MM月dd日"
+            } else {
+                "yyyy-MM-dd"
+            }
+
 
     fun toLocalDate(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -93,8 +107,8 @@ object DateTimeUtils {
             .getString(R.string.friendly_duration, daysPart, hoursPart, minutesPart, secondsPart)
     }
 
-    fun getDurationDays(start: Long, end: Long): Duration {
-        return Duration.between(toLocalDateTime(start), toLocalDateTime(end))
+    fun getDurationDays(start: Long, end: Long): Long {
+        return Duration.between(toLocalDateTime(start), toLocalDateTime(end)).toDays()
     }
 
     fun isToday(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): Boolean {

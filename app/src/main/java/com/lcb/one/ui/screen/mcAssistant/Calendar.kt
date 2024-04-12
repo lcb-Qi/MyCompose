@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChevronLeft
 import androidx.compose.material.icons.rounded.ChevronRight
@@ -22,8 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import com.lcb.one.bean.McDay
 import com.lcb.one.util.common.DateTimeUtils
+import com.lcb.one.util.common.atDayMillis
 import java.time.YearMonth
-import java.time.ZoneId
 
 const val DAYS_IN_WEEK = 7
 const val MONTHS_IN_YEAR = 12
@@ -36,11 +35,15 @@ fun Calendar(
     predictMcDay: McDay? = null,
     onDateChanged: (Long) -> Unit,
 ) {
+    // TODO: 提取状态，给外部提供 rememberXXXState()，参数仅传XXXState
     val dateTime = DateTimeUtils.toLocalDateTime(default)
 
-    val pagerState = rememberPagerState(initialPage = dateTime.monthValue - 1) { MONTHS_IN_YEAR }
-    var selectDay by remember { mutableIntStateOf(dateTime.dayOfMonth) }
-    var selectYear by remember { mutableIntStateOf(dateTime.year) }
+    val pagerState = rememberPagerState(
+        inputs = arrayOf(default),
+        initialPage = dateTime.monthValue - 1
+    ) { MONTHS_IN_YEAR }
+    var selectDay by remember(default) { mutableIntStateOf(dateTime.dayOfMonth) }
+    var selectYear by remember(default) { mutableIntStateOf(dateTime.year) }
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -80,12 +83,4 @@ fun Calendar(
             }
         }
     }
-}
-
-fun YearMonth.atDayMillis(day: Int): Long {
-    require(day in 0..lengthOfMonth()) {
-        "$year-$monthValue-$day is invalid, day must in ${0..lengthOfMonth()}"
-    }
-
-    return atDay(day).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 }

@@ -6,12 +6,7 @@ import com.lcb.one.bean.McDay
 import com.lcb.one.room.appDatabase
 import com.lcb.one.util.android.LLog
 import com.lcb.one.util.common.DateTimeUtils
-import com.lcb.one.util.common.DateTimeUtils.toMillis
-import com.lcb.one.util.common.ThreadUtils
 import com.lcb.one.util.common.launchSafely
-import com.lcb.one.util.common.toMillis
-import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 class MenstrualCycleViewModel : ViewModel() {
     companion object {
@@ -24,16 +19,15 @@ class MenstrualCycleViewModel : ViewModel() {
 
     val mcDaysFlow = mcDayDao.queryAll()
 
-    fun startNewMenstrualCycle() {
-        LLog.d(TAG, "startNewMenstrualCycle: ")
+    fun startNewMenstrualCycle(startTime: Long) {
+        LLog.d(TAG, "startNewMenstrualCycle: startTime = ${DateTimeUtils.toLocalDate(startTime)}")
         viewModelScope.launchSafely {
-            val nowMillis = LocalDate.now().toMillis()
-            mcDayDao.insert(McDay(startTime = nowMillis, finish = false))
+            mcDayDao.insert(McDay(startTime = startTime, finish = false))
         }
     }
 
     fun endMenstrualCycle(endTime: Long) {
-        LLog.d(TAG, "endMenstrualCycle: ")
+        LLog.d(TAG, "endMenstrualCycle: endTime = ${DateTimeUtils.toLocalDate(endTime)}")
         viewModelScope.launchSafely {
             mcDayDao.getRunningMcDay()?.let {
                 updateMenstrualCycle(it.copy(finish = true, endTime = endTime))
