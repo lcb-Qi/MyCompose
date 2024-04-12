@@ -44,7 +44,7 @@ const val MENSTRUAL_CYCLE_DURATION = 7L
 @Composable
 fun MenstrualCycleAssistantScreen(navController: NavController) {
     val mcViewmodel = viewModel<MenstrualCycleViewModel>()
-    val mcDays by mcViewmodel.mcDaysFlow.collectAsState(emptyList())
+    val mcDays by mcViewmodel.getAll().collectAsState(emptyList())
     val runningMcDay = mcDays.find { !it.finish }
     var lastMcDay: McDay? = null
     mcDays.forEach {
@@ -65,11 +65,14 @@ fun MenstrualCycleAssistantScreen(navController: NavController) {
     var selectedDate by rememberSaveable { mutableLongStateOf(DateTimeUtils.nowMillis()) }
     Scaffold(
         topBar = {
-            ToolBar(title = "经期助手", actions = {
-                IconButton(onClick = { navController.navigateSingleTop(Route.MENSTRUAL_CYCLE_HISTORY) }) {
-                    Icon(imageVector = Icons.Rounded.History, contentDescription = "")
+            ToolBar(
+                title = "经期助手",
+                actions = {
+                    IconButton(onClick = { navController.navigateSingleTop(Route.MENSTRUAL_CYCLE_HISTORY) }) {
+                        Icon(imageVector = Icons.Rounded.History, contentDescription = "")
+                    }
                 }
-            })
+            )
         },
         floatingActionButton = {
             AnimatedVisibility(

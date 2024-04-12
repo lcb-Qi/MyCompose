@@ -17,7 +17,7 @@ class MenstrualCycleViewModel : ViewModel() {
         appDatabase.getMcDayDao()
     }
 
-    val mcDaysFlow = mcDayDao.queryAll()
+    fun getAll() = mcDayDao.queryAll()
 
     fun startNewMenstrualCycle(startTime: Long) {
         LLog.d(TAG, "startNewMenstrualCycle: startTime = ${DateTimeUtils.toLocalDate(startTime)}")
