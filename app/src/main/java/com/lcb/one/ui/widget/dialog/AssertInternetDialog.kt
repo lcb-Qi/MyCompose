@@ -16,8 +16,8 @@ import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.MyApp
 
 @Composable
-fun AssertInternetDialog() {
-    if (!AppGlobalConfigs.assertNetwork) return
+fun AssertInternetDialog(show: Boolean) {
+    if (!show) return
 
     AlertDialog(
         onDismissRequest = {},

@@ -1,7 +1,9 @@
 package com.lcb.one.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavHostController
 import com.lcb.one.ui.screen.about.AboutScreen
 import com.lcb.one.ui.screen.applist.AppListScreen
@@ -29,15 +31,17 @@ class RouteScreen(
     val content: @Composable () -> Unit
 )
 
-fun getRouters(navController: NavHostController): List<RouteScreen> {
+val LocalNav: ProvidableCompositionLocal<NavHostController?> = staticCompositionLocalOf { null }
+
+fun getRouters(): List<RouteScreen> {
     return listOf(
-        RouteScreen(Route.MAIN) { MainScreen(navController) },
+        RouteScreen(Route.MAIN) { MainScreen() },
         RouteScreen(Route.BILI) { BiliBiliScreen() },
         RouteScreen(Route.DEVICE) { DeviceInfoScreen() },
         RouteScreen(Route.SETTINGS) { SettingsScreen() },
         RouteScreen(Route.ABOUT) { AboutScreen() },
         RouteScreen(Route.APPS) { AppListScreen() },
-        RouteScreen(Route.MENSTRUAL_CYCLE_ASSISTANT) { MenstrualCycleAssistantScreen(navController) },
+        RouteScreen(Route.MENSTRUAL_CYCLE_ASSISTANT) { MenstrualCycleAssistantScreen() },
         RouteScreen(Route.MENSTRUAL_CYCLE_HISTORY) { MenstrualCycleHistoryScreen() },
     )
 }

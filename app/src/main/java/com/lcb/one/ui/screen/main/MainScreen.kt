@@ -20,20 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.widget.appbar.BottomBar
 import com.lcb.one.ui.widget.appbar.BottomBarItem
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.FriendlyExitHandler
-import com.lcb.one.ui.widget.dialog.AssertInternetDialog
 import com.lcb.one.ui.widget.dialog.PoemInfoDialog
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.viewmodel.PoemViewModel
 
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun MainScreen() {
     FriendlyExitHandler()
 
     val poemViewModel = viewModel<PoemViewModel>()
@@ -76,8 +74,8 @@ fun MainScreen(navController: NavHostController) {
         ) {
             when (currentIndex) {
                 0 -> HomeScreen()
-                1 -> ToolScreen(navController)
-                2 -> MoreScreen(navController)
+                1 -> ToolScreen()
+                2 -> MoreScreen()
             }
         }
     }

@@ -27,9 +27,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.lcb.one.bean.McDay
 import com.lcb.one.bean.getMcDay
+import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.Route
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.util.android.navigateSingleTop
@@ -42,7 +42,9 @@ const val MENSTRUAL_CYCLE_INTERVAL = 28L
 const val MENSTRUAL_CYCLE_DURATION = 7L
 
 @Composable
-fun MenstrualCycleAssistantScreen(navController: NavController) {
+fun MenstrualCycleAssistantScreen() {
+    val navController = LocalNav.current!!
+
     val mcViewmodel = viewModel<MenstrualCycleViewModel>()
     val mcDays by mcViewmodel.getAll().collectAsState(emptyList())
     val runningMcDay = mcDays.find { !it.finish }

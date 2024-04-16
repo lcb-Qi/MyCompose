@@ -16,7 +16,6 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowRight
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.MiscellaneousServices
 import androidx.compose.material.icons.rounded.PhoneAndroid
-import androidx.compose.material.icons.rounded.Woman2
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,10 +36,10 @@ import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.navigation.NavController
 import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
+import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.activity.ClockActivity
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.Route
-import com.lcb.one.ui.widget.common.FriendlyExitHandler
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.android.navigateSingleTop
@@ -48,7 +47,8 @@ import com.lcb.one.util.common.ThreadPool
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ToolScreen(navController: NavController) {
+fun ToolScreen() {
+    val navController = LocalNav.current!!
 
     // 设备
     Column(
