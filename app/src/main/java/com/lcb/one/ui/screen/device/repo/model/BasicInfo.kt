@@ -1,4 +1,4 @@
-package com.lcb.one.bean
+package com.lcb.one.ui.screen.device.repo.model
 
 import com.lcb.one.util.android.PhoneUtil
 

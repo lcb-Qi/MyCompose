@@ -1,9 +1,9 @@
-package com.lcb.one.viewmodel
+package com.lcb.one.ui.screen.mcAssistant.repo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lcb.one.bean.McDay
-import com.lcb.one.room.appDatabase
+import com.lcb.one.database.appDatabase
+import com.lcb.one.ui.screen.mcAssistant.repo.model.McDay
 import com.lcb.one.util.android.LLog
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.launchSafely

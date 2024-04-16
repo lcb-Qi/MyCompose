@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.mcAssistant
+package com.lcb.one.ui.screen.mcAssistant.widget
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.lcb.one.bean.McDay
+import com.lcb.one.ui.screen.mcAssistant.repo.model.McDay
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.atDayMillis
 import kotlinx.coroutines.launch

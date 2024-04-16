@@ -1,51 +1,67 @@
-package com.lcb.one.bean
+package com.lcb.one.ui.screen.main.repo.model
 
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class PoemResponse(
-    @Json(name = "data")
+    @SerialName("data")
     val `data`: Data = Data(),
-    @Json(name = "ipAddress")
+
+    @SerialName("ipAddress")
     val ipAddress: String = "", // 183.45.78.113
-    @Json(name = "status")
+
+    @SerialName("status")
     val status: String = "", // success
-    @Json(name = "token")
+
+    @SerialName("token")
     val token: String = "", // 5k9qhf7ZYSrfG9p5L3pARfPUjzvBa+6V
-    @Json(name = "warning")
+
+    @SerialName("warning")
+    @Transient
     val warning: Any? = null // null
 ) {
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class Data(
-        @Json(name = "cacheAt")
+        @SerialName("cacheAt")
         val cacheAt: String = "", // 2024-01-19T15:47:23.271504009
-        @Json(name = "content")
+
+        @SerialName("content")
         val content: String = "", // 拂拂风前度暗香，月色侵花冷。
-        @Json(name = "id")
+
+        @SerialName("id")
         val id: String = "", // 5b8b9572e116fb3714e72601
-        @Json(name = "matchTags")
+
+        @SerialName("matchTags")
         val matchTags: List<String> = listOf(),
-        @Json(name = "origin")
+
+        @SerialName("origin")
         val origin: Origin = Origin(),
-        @Json(name = "popularity")
+
+        @SerialName("popularity")
         val popularity: Int = 0, // 2130
-        @Json(name = "recommendedReason")
+
+        @SerialName("recommendedReason")
         val recommendedReason: String = ""
     ) {
-        @JsonClass(generateAdapter = true)
+        @Serializable
         data class Origin(
-            @Json(name = "author")
+            @SerialName("author")
             val author: String = "", // 朱淑真
-            @Json(name = "content")
+
+            @SerialName("content")
             val content: List<String> = listOf(),
-            @Json(name = "dynasty")
+
+            @SerialName("dynasty")
             val dynasty: String = "", // 宋代
-            @Json(name = "title")
+
+            @SerialName("title")
             val title: String = "", // 卜算子（咏梅）
-            @Json(name = "translate")
-            val translate: Any? = null // null
+
+            @SerialName("translate")
+            val translate: List<String>? = null // null
         )
     }
 }

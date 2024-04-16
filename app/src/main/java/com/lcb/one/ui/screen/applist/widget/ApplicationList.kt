@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.applist
+package com.lcb.one.ui.screen.applist.widget
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size

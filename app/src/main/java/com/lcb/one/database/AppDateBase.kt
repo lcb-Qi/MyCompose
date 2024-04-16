@@ -1,10 +1,11 @@
-package com.lcb.one.room
+package com.lcb.one.database
 
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.lcb.one.bean.McDay
+import com.lcb.one.ui.screen.mcAssistant.repo.model.McDay
 import com.lcb.one.ui.MyApp
+import com.lcb.one.ui.screen.mcAssistant.repo.McDayDao
 
 private const val TAG = "AppDateBase"
 

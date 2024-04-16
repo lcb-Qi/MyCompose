@@ -1,17 +1,16 @@
-package com.lcb.one.viewmodel
+package com.lcb.one.ui.screen.main.repo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lcb.one.bean.PoemResponse
-import com.lcb.one.network.PoemServerAccessor
 import com.lcb.one.ui.AppGlobalConfigs
-import com.lcb.one.util.common.JsonUtils
+import com.lcb.one.ui.screen.main.repo.model.PoemResponse
 import com.lcb.one.util.android.SharedPrefUtils
+import com.lcb.one.util.common.JsonUtils
 import com.lcb.one.util.common.launchSafely
-import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 
 class PoemViewModel : ViewModel() {
     companion object {
@@ -30,17 +29,16 @@ class PoemViewModel : ViewModel() {
         return token
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class PoemInfo(
         val recommend: String = "",
         val updateTime: Long = -1,
         val origin: PoemResponse.Data.Origin = PoemResponse.Data.Origin()
     )
 
-    val poemFlow by lazy {
-        MutableStateFlow(
-            JsonUtils.fromJson<PoemInfo>(SharedPrefUtils.getString(KEY_LAST_POEM)) ?: PoemInfo()
-        )
+    val poemFlow: MutableStateFlow<PoemInfo> by lazy {
+        val last = SharedPrefUtils.getString(KEY_LAST_POEM)
+        MutableStateFlow(JsonUtils.fromJson(last) ?: PoemInfo())
     }
 
     val isLoading = MutableStateFlow(false)

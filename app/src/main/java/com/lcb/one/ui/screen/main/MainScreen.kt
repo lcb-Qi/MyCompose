@@ -26,9 +26,9 @@ import com.lcb.one.ui.widget.appbar.BottomBar
 import com.lcb.one.ui.widget.appbar.BottomBarItem
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.FriendlyExitHandler
-import com.lcb.one.ui.widget.dialog.PoemInfoDialog
+import com.lcb.one.ui.screen.main.widget.PoemInfoDialog
 import com.lcb.one.util.android.AppUtils
-import com.lcb.one.viewmodel.PoemViewModel
+import com.lcb.one.ui.screen.main.repo.PoemViewModel
 
 @Composable
 fun MainScreen() {

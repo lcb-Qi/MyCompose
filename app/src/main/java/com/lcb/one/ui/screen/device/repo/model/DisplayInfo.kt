@@ -1,4 +1,4 @@
-package com.lcb.one.bean
+package com.lcb.one.ui.screen.device.repo.model
 
 import android.content.Context
 import android.util.DisplayMetrics

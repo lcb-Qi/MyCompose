@@ -14,9 +14,6 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,8 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.lcb.one.R
-import com.lcb.one.bean.BasicInfo
-import com.lcb.one.bean.DisplayInfo
+import com.lcb.one.ui.screen.device.widget.BasicInfoList
+import com.lcb.one.ui.screen.device.widget.DisplayInfoList
 import com.lcb.one.ui.widget.appbar.ToolBar
 import kotlinx.coroutines.launch
 

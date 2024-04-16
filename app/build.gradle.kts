@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    id("org.jetbrains.kotlin.plugin.serialization")
     id("androidx.room")
 }
 
@@ -135,11 +136,10 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.5.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.6.2")
+    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.11.0")
 
     // json
-    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
-    implementation("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     // markdown
     implementation("io.noties.markwon:core:4.6.2")

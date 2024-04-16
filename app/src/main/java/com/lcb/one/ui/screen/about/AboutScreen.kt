@@ -38,12 +38,11 @@ import com.lcb.one.bean.GithubLatest
 import com.lcb.one.network.commonApiService
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.service.DownLoadService
-import com.lcb.one.ui.service.DownLoadState
+import com.lcb.one.ui.service.DownLoadService.DownLoadState
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.settings.ui.SettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
 import com.lcb.one.util.android.AppUtils
-import com.lcb.one.util.android.LLog
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.common.JsonUtils
 import io.noties.markwon.Markwon

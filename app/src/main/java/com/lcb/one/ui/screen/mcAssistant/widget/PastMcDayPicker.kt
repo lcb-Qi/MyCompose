@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.mcAssistant
+package com.lcb.one.ui.screen.mcAssistant.widget
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

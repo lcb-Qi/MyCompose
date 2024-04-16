@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.main
+package com.lcb.one.ui.screen.main.widget
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

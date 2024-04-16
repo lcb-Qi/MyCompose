@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.mcAssistant
+package com.lcb.one.ui.screen.mcAssistant.widget
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.lcb.one.bean.McDay
+import com.lcb.one.ui.screen.mcAssistant.repo.model.McDay
 import com.lcb.one.util.common.atDayMillis
 import com.lcb.one.util.common.toMillis
 import java.time.DayOfWeek

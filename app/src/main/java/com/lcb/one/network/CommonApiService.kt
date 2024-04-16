@@ -1,9 +1,11 @@
 package com.lcb.one.network
 
 import com.lcb.one.network.core.OkhttpFactory
+import com.lcb.one.util.common.JsonUtils
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
@@ -15,7 +17,8 @@ val commonApiService: CommonApiService by lazy {
         .baseUrl("https://127.0.0.1:8080/")
         .client(OkhttpFactory.okHttpClient)
         .addConverterFactory(ScalarsConverterFactory.create())
-        .addConverterFactory(MoshiConverterFactory.create()).build()
+        .addConverterFactory(JsonUtils.getConverterFactory())
+        .build()
         .create(CommonApiService::class.java)
 }
 

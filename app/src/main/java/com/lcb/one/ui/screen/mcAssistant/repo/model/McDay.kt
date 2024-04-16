@@ -1,4 +1,4 @@
-package com.lcb.one.bean
+package com.lcb.one.ui.screen.mcAssistant.repo.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

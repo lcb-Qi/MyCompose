@@ -25,7 +25,7 @@ import androidx.glance.text.TextStyle
 import com.lcb.one.ui.activity.MainActivity
 import com.lcb.one.util.android.SharedPrefUtils
 import com.lcb.one.util.common.JsonUtils
-import com.lcb.one.viewmodel.PoemViewModel
+import com.lcb.one.ui.screen.main.repo.PoemViewModel
 import kotlinx.coroutines.delay
 
 class PoemAppWidget : GlanceAppWidget() {

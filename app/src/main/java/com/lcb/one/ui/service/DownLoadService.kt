@@ -16,12 +16,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import com.lcb.one.util.android.LLog
 
-enum class DownLoadState {
-    IDLE, DOWNLOADING, SUCCESS, FAILED
-}
-
-
 class DownLoadService : LifecycleService() {
+    enum class DownLoadState {
+        IDLE, DOWNLOADING, SUCCESS, FAILED
+    }
+
     companion object {
         private const val TAG = "DownLoadService"
     }

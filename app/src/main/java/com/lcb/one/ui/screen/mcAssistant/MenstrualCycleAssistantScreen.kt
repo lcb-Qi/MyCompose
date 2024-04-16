@@ -27,15 +27,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lcb.one.bean.McDay
-import com.lcb.one.bean.getMcDay
+import com.lcb.one.ui.screen.mcAssistant.repo.model.McDay
+import com.lcb.one.ui.screen.mcAssistant.repo.model.getMcDay
 import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.Route
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.util.android.navigateSingleTop
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.toMillis
-import com.lcb.one.viewmodel.MenstrualCycleViewModel
+import com.lcb.one.ui.screen.mcAssistant.repo.MenstrualCycleViewModel
+import com.lcb.one.ui.screen.mcAssistant.widget.Calendar
 import java.time.LocalDate
 
 const val MENSTRUAL_CYCLE_INTERVAL = 28L

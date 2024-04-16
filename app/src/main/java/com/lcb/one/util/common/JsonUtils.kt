@@ -1,110 +1,39 @@
 package com.lcb.one.util.common
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import java.lang.reflect.ParameterizedType
-import java.lang.reflect.Type
+import com.lcb.one.util.android.LLog
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 object JsonUtils {
-    val moshi: Moshi by lazy {
-        Moshi.Builder()
-            .addLast(KotlinJsonAdapterFactory())// 支持反射模式
-            .build()
-    }
+    const val TAG = "JsonUtils"
 
-    abstract class TypeToken<T>
-
-    inline fun <reified T> getType(): Type {
-        val typeToken = object : TypeToken<T>() {}
-
-        return typeToken::class.java
-            .genericSuperclass
-            .let { it as ParameterizedType }
-            .actualTypeArguments[0]
-    }
-
-    /************** inline 方式实现 *****************/
-    inline fun <reified T> toJson(src: T?, indent: String = ""): String {
-        return kotlin.runCatching {
-            moshi.adapter<T>(getType<T>()).indent(indent).toJson(src)
-        }.getOrDefault("")
-    }
-
-    /**
-     * Json -> Bean
-     * @param T 实体类，如果包含范型，请具体化，否则只会得到基本的list、map类型，而不是想要的实体类
-     * @param src json字符串
-     * @return 实例对象
-     */
-    inline fun <reified T> fromJson(src: String): T? {
-        val result = kotlin.runCatching {
-            moshi.adapter<T>(getType<T>()).fromJson(src)
+    val json by lazy {
+        Json(from = Json) {
+            ignoreUnknownKeys = true
+            prettyPrint = true
         }
-        return result.getOrNull()
     }
 
+    fun getConverterFactory() =
+        json.asConverterFactory("application/json; charset=UTF8".toMediaType())
 
-    /************** 不用 inline *****************/
-    private fun <T> fromJson(src: String, typeOfT: Type): T? {
-        val result = kotlin.runCatching {
-            moshi.adapter<T>(typeOfT).fromJson(src)
+    inline fun <reified T> toJson(src: T, default: String = ""): String {
+        return try {
+            json.encodeToString(src)
+        } catch (e: Exception) {
+            LLog.d(TAG, "toJson failed: $e")
+            default
         }
-
-        return result.getOrNull()
     }
 
-    fun <T> fromJson(src: String, typeOfT: Class<T>): T? {
-        val result = kotlin.runCatching {
-            moshi.adapter(typeOfT).fromJson(src)
+    inline fun <reified T> fromJson(src: String, default: T? = null): T? {
+        return try {
+            json.decodeFromString<T>(src)
+        } catch (e: Exception) {
+            LLog.d(TAG, "fromJson failed: $e")
+            default
         }
-
-        return result.getOrNull()
-    }
-
-    fun <T> listFromJson(src: String, typeOfT: Class<T>): List<T>? {
-        val realType = Types.newParameterizedType(List::class.java, typeOfT)
-
-        return fromJson(src, realType)
-    }
-
-    fun <K, V> mapFromJson(src: String, typeOfKey: Class<K>, typeOfValue: Class<V>): Map<K, V>? {
-        val realType = Types.newParameterizedType(Map::class.java, typeOfKey, typeOfValue)
-
-        return fromJson(src, realType)
-    }
-
-    fun <T> toJson(src: T, type: Type, indent: String = ""): String {
-        val result = kotlin.runCatching {
-            val jsonAdapter = moshi.adapter<T>(type)
-            jsonAdapter.indent(indent).toJson(src)
-        }
-
-        return result.getOrDefault("")
-    }
-
-    fun <T> listToJson(src: List<T>, typeOfT: Type, indent: String = ""): String {
-        val result = kotlin.runCatching {
-            val type = Types.newParameterizedType(List::class.java, typeOfT)
-            val jsonAdapter = moshi.adapter<List<T>>(type)
-            jsonAdapter.indent(indent).toJson(src)
-        }
-
-        return result.getOrDefault("")
-    }
-
-    fun <K, V> mapToJson(
-        src: Map<K, V>,
-        typeOfKey: Type,
-        typeOfValue: Type,
-        indent: String = ""
-    ): String {
-        val result = kotlin.runCatching {
-            val type = Types.newParameterizedType(Map::class.java, typeOfKey, typeOfValue)
-            val jsonAdapter = moshi.adapter<Map<K, V>>(type)
-            jsonAdapter.indent(indent).toJson(src)
-        }
-
-        return result.getOrDefault("")
     }
 }

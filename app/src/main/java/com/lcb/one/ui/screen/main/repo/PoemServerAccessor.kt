@@ -1,10 +1,10 @@
-package com.lcb.one.network
+package com.lcb.one.ui.screen.main.repo
 
-import com.lcb.one.bean.PoemResponse
-import com.lcb.one.bean.TokenResponse
 import com.lcb.one.network.core.OkhttpFactory
+import com.lcb.one.ui.screen.main.repo.model.PoemResponse
+import com.lcb.one.ui.screen.main.repo.model.TokenResponse
+import com.lcb.one.util.common.JsonUtils
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 
@@ -16,7 +16,7 @@ class PoemServerAccessor private constructor() {
             Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(OkhttpFactory.okHttpClient)
-                .addConverterFactory(MoshiConverterFactory.create())
+                .addConverterFactory(JsonUtils.getConverterFactory())
                 .build()
                 .create(PoemService::class.java)
         }

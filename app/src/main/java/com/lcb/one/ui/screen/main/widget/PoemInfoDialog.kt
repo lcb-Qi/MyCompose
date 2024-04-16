@@ -1,4 +1,4 @@
-package com.lcb.one.ui.widget.dialog
+package com.lcb.one.ui.screen.main.widget
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

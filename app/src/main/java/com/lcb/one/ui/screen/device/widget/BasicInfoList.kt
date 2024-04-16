@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.device
+package com.lcb.one.ui.screen.device.widget
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ListItem
@@ -8,21 +8,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.lcb.one.bean.DisplayInfo
+import com.lcb.one.ui.screen.device.repo.model.BasicInfo
 
 @Composable
-fun DisplayInfoList() {
-    val displayInfo by remember { mutableStateOf(DisplayInfo.obtain()) }
+fun BasicInfoList() {
+    val deviceInfo by remember { mutableStateOf(BasicInfo.obtain()) }
     val map = mapOf(
-        "Resolution" to displayInfo.resolution.toString() + " px",
-        "Display Size" to displayInfo.displaySize.toString() + " px",
-        "Small Width" to displayInfo.smallWidth.toString() + " dp",
-        "DPI" to displayInfo.dpi.toString(),
-        "Density" to displayInfo.density.toString(),
-        "StatusBars Height" to displayInfo.statusBarsHeight.toString() + " px",
-        "NavigationBars Height" to displayInfo.navigationBarsHeight.toString() + " px",
+        "Device Model" to deviceInfo.deviceModel,
+        "Brand" to deviceInfo.brand,
+        "OS Version" to deviceInfo.osVersion,
+        "SDK Version" to deviceInfo.sdkVersion.toString()
     )
-
 
     LazyColumn {
         map.forEach { (key, value) ->
