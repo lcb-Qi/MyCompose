@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -66,7 +67,7 @@ fun BiliBiliScreen() {
         floatingActionButton = {
             if (coverUrl.isNotBlank()) {
                 FloatingActionButton(onClick = download) {
-                    Icon(imageVector = Icons.Rounded.Save, contentDescription = "")
+                    Icon(imageVector = Icons.Rounded.Download, contentDescription = "")
                 }
             }
         }

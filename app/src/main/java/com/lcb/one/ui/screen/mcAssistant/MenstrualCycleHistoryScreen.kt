@@ -5,19 +5,17 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.WarningAmber
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,21 +27,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lcb.one.ui.screen.mcAssistant.repo.model.McDay
 import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.common.Point
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
 import com.lcb.one.util.android.ToastUtils
-import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.ui.screen.mcAssistant.repo.MenstrualCycleViewModel
+import com.lcb.one.ui.screen.mcAssistant.repo.model.McDay
+import com.lcb.one.ui.screen.mcAssistant.repo.model.allFinished
+import com.lcb.one.ui.screen.mcAssistant.repo.model.averageDurationDay
+import com.lcb.one.ui.screen.mcAssistant.repo.model.averageIntervalDay
+import com.lcb.one.ui.screen.mcAssistant.widget.MenstrualCycleHistoryCard
 import com.lcb.one.ui.screen.mcAssistant.widget.PastMcDayPicker
 import kotlinx.coroutines.launch
-import java.time.Duration
-import java.time.LocalDate
 import kotlin.math.roundToInt
 
 private const val DRAG_OFFSET_MAX = 400
@@ -51,13 +48,13 @@ private const val DRAG_OFFSET_MAX = 400
 @Composable
 fun MenstrualCycleHistoryScreen() {
     val mcViewmodel = viewModel<MenstrualCycleViewModel>()
-    val mcDays by mcViewmodel.getAll().collectAsState(emptyList())
-    var showAdd by remember { mutableStateOf(false) }
+    val allMcDay by mcViewmodel.getAll().collectAsState(emptyList())
+    var showImportButton by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     Scaffold(
         topBar = { ToolBar(title = "全部经期") },
         floatingActionButton = {
-            FloatingActionButton(onClick = { showAdd = true }) {
+            FloatingActionButton(onClick = { showImportButton = true }) {
                 Icon(imageVector = Icons.Rounded.Add, contentDescription = "")
             }
         }
@@ -72,61 +69,17 @@ fun MenstrualCycleHistoryScreen() {
             verticalArrangement = Arrangement.spacedBy(12.dp),
             reverseLayout = true
         ) {
-            items(count = mcDays.size, key = { mcDays[it].startTime }) { index ->
-                var showDelete by remember { mutableStateOf(false) }
-                var offsetX by remember { mutableFloatStateOf(0f) }
-                val draggableState = rememberDraggableState {
-                    offsetX = (offsetX + it).coerceIn(0f, Float.MAX_VALUE)
-                    if (offsetX > DRAG_OFFSET_MAX) {
-                        showDelete = true
-                    }
-                }
-                MenstrualCycleHistoryCard(
-                    modifier = Modifier
-                        .draggable(
-                            enabled = !showDelete,
-                            state = draggableState,
-                            orientation = Orientation.Horizontal,
-                            reverseDirection = true,
-                            onDragStopped = {
-                                if (!showDelete) {
-                                    animate(offsetX, 0f) { value, velocity ->
-                                        offsetX = value
-                                    }
-                                }
-                            }
-                        )
-                        .offset {
-                            IntOffset(-offsetX.roundToInt(), 0)
-                        },
-                    mcDay = mcDays[index]
-                )
-
-                SimpleMessageDialog(
-                    show = showDelete,
-                    message = "确认删除这条记录？",
-                    onCancel = {
-                        showDelete = false
-                        scope.launch {
-                            animate(offsetX, 0f) { value, velocity ->
-                                offsetX = value
-                            }
-                        }
-                    },
-                    onConfirm = {
-                        mcViewmodel.deleteMenstrualCycle(mcDays[index])
-                        showDelete = false
-                    },
-                    icon = {
-                        Icon(imageVector = Icons.Rounded.WarningAmber, contentDescription = "")
-                    }
-                )
+            items(count = allMcDay.size, key = { allMcDay[it].startTime }) { index ->
+                val mcDay = allMcDay[index]
+                HistoryItem(data = mcDay) { mcViewmodel.deleteMenstrualCycle(mcDay) }
             }
+
+            item { SummaryMessage(allMcDay) }
         }
     }
 
-    PastMcDayPicker(showAdd, onCancel = { showAdd = false }) { selectRange ->
-        val hasIntersect = mcDays.any {
+    PastMcDayPicker(showImportButton, onCancel = { showImportButton = false }) { selectRange ->
+        val hasIntersect = allMcDay.any {
             !(selectRange.last < it.startTime || selectRange.first > it.endTime)
         }
         if (hasIntersect) {
@@ -134,45 +87,80 @@ fun MenstrualCycleHistoryScreen() {
         } else {
             mcViewmodel.addPastMenstrualCycle(selectRange.first, selectRange.last)
         }
-        showAdd = false
+        showImportButton = false
     }
 }
 
 @Composable
-fun MenstrualCycleHistoryCard(modifier: Modifier = Modifier, mcDay: McDay) {
-    val startTime = DateTimeUtils.toLocalDate(mcDay.startTime)
-    val endTime = if (mcDay.finish) {
-        DateTimeUtils.toLocalDate(mcDay.endTime)
-    } else {
-        null
+fun HistoryItem(data: McDay, onDelete: (McDay) -> Unit) {
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var offsetX by remember { mutableFloatStateOf(0f) }
+    val draggableState = rememberDraggableState {
+        offsetX = (offsetX + it).coerceIn(0f, Float.MAX_VALUE)
+        if (offsetX > DRAG_OFFSET_MAX) {
+            showDeleteDialog = true
+        }
     }
-    val duration =
-        Duration.between(
-            startTime.atStartOfDay(),
-            endTime?.atStartOfDay() ?: LocalDate.now().atStartOfDay()
-        )
-    ListItem(
-        colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(CardDefaults.shape),
-        leadingContent = if (!mcDay.finish) {
-            { Point() }
-        } else {
-            null
+    val scope = rememberCoroutineScope()
+    val animateOffset: (target: Float) -> Unit = {
+        scope.launch {
+            animate(initialValue = offsetX, targetValue = it) { value, _ ->
+                offsetX = value
+            }
+        }
+    }
+    MenstrualCycleHistoryCard(
+        modifier = Modifier
+            .offset { IntOffset(-offsetX.roundToInt(), 0) }
+            .draggable(
+                enabled = !showDeleteDialog,
+                state = draggableState,
+                orientation = Orientation.Horizontal,
+                reverseDirection = true,
+                onDragStopped = {
+                    if (!showDeleteDialog) {
+                        animateOffset(0f)
+                    }
+                }
+            ),
+        mcDay = data,
+    )
+
+    SimpleMessageDialog(
+        show = showDeleteDialog,
+        message = "确认删除这条记录？",
+        onCancel = {
+            showDeleteDialog = false
+            animateOffset(0f)
         },
-        headlineContent = { Text(text = "经期", style = MaterialTheme.typography.titleMedium) },
-        supportingContent = {
-            Text(
-                text = "$startTime 至 ${endTime ?: "未结束"}",
-                style = MaterialTheme.typography.titleSmall
-            )
+        onConfirm = {
+            onDelete(data)
+            showDeleteDialog = false
         },
-        trailingContent = {
-            Text(
-                text = "共${duration.toDays() + 1}天",
-                style = MaterialTheme.typography.titleSmall
-            )
+        icon = {
+            Icon(imageVector = Icons.Rounded.WarningAmber, contentDescription = "")
         }
     )
+}
+
+@Composable
+fun SummaryMessage(data: List<McDay>) {
+    if (data.isNotEmpty()) {
+        val count = data.size
+        val runningCount = if (data.allFinished()) 0 else 1
+        val averageDuration = data.averageDurationDay()
+        val averageInterval = data.averageIntervalDay()
+
+        Column(/* Modifier.padding(horizontal = 16.dp) */) {
+            ProvideTextStyle(value = MaterialTheme.typography.bodyLarge) {
+                Text(text = "共 $count 条月经记录，$runningCount 条未结束")
+                Text(
+                    text = "平均每次持续（不含未结束） ${String.format("%.2f", averageDuration)} 天"
+                )
+                Text(
+                    text = "平均每次间隔 ${String.format("%.2f", averageInterval)} 天"
+                )
+            }
+        }
+    }
 }
