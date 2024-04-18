@@ -5,14 +5,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
 import android.provider.MediaStore
-import com.lcb.one.network.commonApiService
-import com.lcb.one.network.core.OkhttpFactory
+import com.lcb.one.network.CommonApiService
 import com.lcb.one.ui.MyApp
 import com.lcb.one.util.common.DateTimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
-import okhttp3.Request
 import okhttp3.ResponseBody
 
 object DownLoadUtil {
@@ -25,7 +23,7 @@ object DownLoadUtil {
     suspend fun saveImageFromUrl(url: String, fileName: String = DateTimeUtils.nowStringShort()) =
         withContext(Dispatchers.IO) {
             if (url.isBlank() || fileName.isBlank()) return@withContext
-            val responseBody = commonApiService.downloadFile(url)
+            val responseBody = CommonApiService.instance.downloadFile(url)
             responseBody.writeToImageFile(fileName)
         }
 

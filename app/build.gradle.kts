@@ -134,7 +134,6 @@ dependencies {
     // 网络请求 retrofit2
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.5.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.6.2")
     implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.11.0")
 
@@ -150,6 +149,8 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+
+    // implementation("xyz.junerver.compose:hooks:1.0.11")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

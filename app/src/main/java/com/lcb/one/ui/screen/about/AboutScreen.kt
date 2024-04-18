@@ -35,7 +35,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.bean.GithubLatest
-import com.lcb.one.network.commonApiService
+import com.lcb.one.network.CommonApiService
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.service.DownLoadService
 import com.lcb.one.ui.service.DownLoadService.DownLoadState
@@ -238,7 +238,7 @@ private suspend fun checkUpdate(): UpdateInfo? = runCatching {
     withContext(Dispatchers.IO) {
         var updateInfo: UpdateInfo? = null
         val response =
-            commonApiService.get("https://api.github.com/repos/lcb-Qi/MyCompose/releases/latest")
+            CommonApiService.instance.get("https://api.github.com/repos/lcb-Qi/MyCompose/releases/latest")
         JsonUtils.fromJson<GithubLatest>(response)?.let {
             updateInfo = UpdateInfo(
                 it.tagName,

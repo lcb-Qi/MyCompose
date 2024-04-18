@@ -18,7 +18,7 @@ class PoemViewModel : ViewModel() {
         const val KEY_LAST_POEM = "last_poem"
     }
 
-    private val poemService = PoemServerAccessor.apiService
+    private val poemService = PoemApiService.instance
 
     private suspend fun getToken(): String {
         var token = SharedPrefUtils.getString(KEY_POEM_TOKEN)

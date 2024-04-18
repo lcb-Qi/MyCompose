@@ -4,22 +4,23 @@ import com.lcb.one.util.android.LLog
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import kotlin.time.Duration.Companion.seconds
-import kotlin.time.toJavaDuration
+import java.util.concurrent.TimeUnit
 
 object OkhttpFactory {
-    private val TIME_OUT = 10.seconds
-    val okHttpClient by lazy {
-        val loggingInterceptor = HttpLoggingInterceptor {
-            LLog.v("Okhttp", it)
-        }
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+    private const val TIME_OUT = 10L/* seconds */
+    private const val TAG = "OkhttpRequest"
+    private val loggingInterceptor = HttpLoggingInterceptor {
+        LLog.v(TAG, it)
+    }.apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
 
+    val okHttpClient by lazy {
         OkHttpClient.Builder()
             .connectionPool(ConnectionPool())
-            .connectTimeout(TIME_OUT.toJavaDuration())
-            .readTimeout(TIME_OUT.toJavaDuration())
-            .writeTimeout(TIME_OUT.toJavaDuration())
+            .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
+            .readTimeout(TIME_OUT, TimeUnit.SECONDS)
+            .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
             .build()
     }
