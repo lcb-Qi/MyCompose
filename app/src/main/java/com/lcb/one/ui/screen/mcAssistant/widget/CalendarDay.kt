@@ -2,6 +2,7 @@ package com.lcb.one.ui.screen.mcAssistant.widget
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,8 +28,8 @@ fun CalendarDay(
 ) {
     Surface(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(4.dp),
+            .requiredSize(48.dp)
+            .padding(2.dp),
         shape = MaterialTheme.shapes.small,
         selected = selected,
         onClick = onClick,
@@ -46,7 +47,7 @@ fun CalendarDay(
         }
     ) {
         Box(
-            modifier = Modifier.requiredSize(40.dp),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -58,7 +59,7 @@ fun CalendarDay(
                     modifier = Modifier.fillMaxSize().padding(4.dp),
                     text = "预",
                     textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp, color = MaterialTheme.colorScheme.error)
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp, color = MaterialTheme.colorScheme.error, lineHeight = 8.sp)
                 )
             }
         }

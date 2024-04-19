@@ -31,8 +31,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.theme.AppTheme
-import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPreferenceState
-import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPreferenceState
+import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPrefState
+import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
 import com.lcb.one.ui.widget.settings.ui.SettingsGroup
@@ -72,7 +72,6 @@ class ClockActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // setContent { ClockView() }
         setContent { ClockScreen() }
         hideSystemBars()
     }
@@ -87,13 +86,13 @@ class ClockActivity : ComponentActivity() {
 
     @Composable
     fun ClockScreen() {
-        var darkTheme by rememberBooleanPreferenceState(
+        var darkTheme by rememberBooleanPrefState(
             KEY_CLOCK_DARK_THEME,
             AppGlobalConfigs.appDynamicColor
         )
 
-        var clockSize by rememberIntPreferenceState(KEY_CLOCK_SIZE, getClockSize())
-        var datePosition by rememberIntPreferenceState(KEY_DATE_POSITION, getDatePosition())
+        var clockSize by rememberIntPrefState(KEY_CLOCK_SIZE, getClockSize())
+        var datePosition by rememberIntPrefState(KEY_DATE_POSITION, getDatePosition())
 
         AppTheme(darkTheme = darkTheme) {
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)

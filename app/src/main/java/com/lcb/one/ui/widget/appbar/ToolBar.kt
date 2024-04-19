@@ -17,6 +17,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.lcb.one.ui.widget.common.NoRippleInteractionSource
+import com.lcb.one.util.android.LLog
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -27,6 +28,7 @@ fun ToolBar(
     onTitleClick: (() -> Unit)? = null,
     onTitleLongClick: (() -> Unit)? = null
 ) {
+    LLog.d("TAG", "MainScreen: ToolBar run")
     val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     TopAppBar(
         navigationIcon = {

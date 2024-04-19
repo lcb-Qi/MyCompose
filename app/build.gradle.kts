@@ -106,6 +106,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.activity:activity-compose:1.8.2")
     // compose
+    // bom对照表：https://developer.android.google.cn/develop/ui/compose/bom/bom-mapping
     val composeVersion = "2024.04.00"
     implementation(platform("androidx.compose:compose-bom:$composeVersion"))
     implementation("androidx.compose.ui:ui")

@@ -15,27 +15,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
+import com.lcb.one.ui.screen.main.repo.model.PoemResponse
 
 @Composable
 fun PoemInfoDialog(
     show: Boolean,
-    title: String,
-    authorInfo: String,
-    content: List<String>,
-    onDismissRequest: () -> Unit,
-    onConfirm: () -> Unit
+    origin: PoemResponse.Data.Origin,
+    onDismiss: () -> Unit,
 ) {
     if (!show) return
 
     AlertDialog(
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = onDismiss,
         confirmButton = {
-            TextButton(onClick = onConfirm) { Text(text = stringResource(R.string.ok)) }
+            TextButton(onClick = onDismiss) { Text(text = stringResource(R.string.ok)) }
         },
         title = {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = title, style = MaterialTheme.typography.titleLarge)
-                Text(text = authorInfo, style = MaterialTheme.typography.bodySmall)
+                Text(text = origin.title, style = MaterialTheme.typography.titleLarge)
+                Text(
+                    text = "${origin.dynasty} ${origin.author}",
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         },
         text = {
@@ -46,7 +47,7 @@ fun PoemInfoDialog(
                     .heightIn(max = 240.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(content) {
+                items(origin.content) {
                     Text(text = it, style = MaterialTheme.typography.bodyLarge)
                 }
             }

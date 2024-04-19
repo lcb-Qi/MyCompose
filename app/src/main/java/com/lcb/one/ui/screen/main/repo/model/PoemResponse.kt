@@ -29,7 +29,7 @@ data class PoemResponse(
         val cacheAt: String = "", // 2024-01-19T15:47:23.271504009
 
         @SerialName("content")
-        val content: String = "", // 拂拂风前度暗香，月色侵花冷。
+        val recommend: String = "", // 拂拂风前度暗香，月色侵花冷。
 
         @SerialName("id")
         val id: String = "", // 5b8b9572e116fb3714e72601

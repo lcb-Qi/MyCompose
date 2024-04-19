@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
 import com.lcb.one.ui.screen.main.widget.EventCard
-import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPreferenceState
+import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
 import com.lcb.one.ui.widget.settings.ui.SettingsListDropdown
@@ -120,7 +120,7 @@ private fun GetOffWorkCard() {
 @Composable
 fun SalaryDayCard() {
     var showSettings by remember { mutableStateOf(false) }
-    var targetDay by rememberIntPreferenceState("salary_day", 1)
+    var targetDay by rememberIntPrefState("salary_day", 1)
     val today = LocalDate.now()
 
     var targetDate = today.withDayOfMonth(targetDay)
