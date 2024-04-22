@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -59,24 +60,19 @@ fun ToolScreen() {
             title = stringResource(R.string.device),
             icon = { Icon(Icons.Rounded.PhoneAndroid, "") }
         ) {
-            FlowRow(
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                ElevatedAssistChip(
-                    onClick = { navController.navigateSingleTop(Route.DEVICE) },
-                    label = { Text(text = stringResource(R.string.device_info)) }
-                )
-                ElevatedAssistChip(
-                    onClick = { getWallPaper() },
-                    label = { Text(text = stringResource(R.string.extract_wallpaper)) }
-                )
+            ElevatedAssistChip(
+                onClick = { navController.navigateSingleTop(Route.DEVICE) },
+                label = { Text(text = stringResource(R.string.device_info)) }
+            )
+            ElevatedAssistChip(
+                onClick = { getWallPaper() },
+                label = { Text(text = stringResource(R.string.extract_wallpaper)) }
+            )
 
-                ElevatedAssistChip(
-                    onClick = { navController.navigateSingleTop(Route.APPS) },
-                    label = { Text(text = "应用列表") }
-                )
-            }
+            ElevatedAssistChip(
+                onClick = { navController.navigateSingleTop(Route.APPS) },
+                label = { Text(text = "应用列表") }
+            )
         }
 
         // 其他
@@ -84,37 +80,37 @@ fun ToolScreen() {
             title = stringResource(R.string.other),
             icon = { Icon(Icons.Rounded.MiscellaneousServices, "") }
         ) {
-            FlowRow(
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                var showClock by remember { mutableStateOf(false) }
+            var showClock by remember { mutableStateOf(false) }
 
-                ElevatedAssistChip(
-                    onClick = { navController.navigateSingleTop(Route.BILI) },
-                    label = { Text(text = stringResource(R.string.obtain_bilibili_cover)) }
-                )
-                ElevatedAssistChip(
-                    onClick = { showClock = true },
-                    label = { Text(text = stringResource(R.string.clock_screen)) }
-                )
+            ElevatedAssistChip(
+                onClick = { navController.navigateSingleTop(Route.BILI) },
+                label = { Text(text = stringResource(R.string.obtain_bilibili_cover)) }
+            )
+            ElevatedAssistChip(
+                onClick = { showClock = true },
+                label = { Text(text = stringResource(R.string.clock_screen)) }
+            )
 
-                DevItems(navController)
-
-                if (showClock) {
-                    LocalContext.current.run {
-                        startActivity(Intent(this, ClockActivity::class.java))
-                    }
-                    showClock = false
+            if (showClock) {
+                LocalContext.current.run {
+                    startActivity(Intent(this, ClockActivity::class.java))
                 }
+                showClock = false
             }
         }
+
+        DevItems(navController)
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun DevItems(navController: NavController) {
-    if (AppGlobalConfigs.appDevMode) {
+    if (!AppGlobalConfigs.appDevMode) return
+    ToolBox(
+        title = "更多",
+        icon = { Icon(Icons.Rounded.MiscellaneousServices, "") }
+    ) {
         ElevatedAssistChip(
             enabled = false,
             onClick = { },
@@ -153,11 +149,12 @@ private fun getWallPaper() {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ToolBox(
     title: String,
     icon: @Composable () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable FlowRowScope.() -> Unit
 ) {
     var showDetail by rememberSaveable { mutableStateOf(false) }
     Column {
@@ -176,7 +173,12 @@ private fun ToolBox(
         }
 
         AnimatedVisibility(visible = showDetail) {
-            content()
+            FlowRow(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                content()
+            }
         }
     }
 }

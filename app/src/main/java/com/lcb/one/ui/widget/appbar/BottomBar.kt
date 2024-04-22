@@ -6,10 +6,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class BottomBarItem(
@@ -18,20 +14,16 @@ data class BottomBarItem(
 )
 
 @Composable
-fun BottomBar(defaultIndex: Int, items: List<BottomBarItem>, onClick: (Int) -> Unit) {
-    require(defaultIndex in items.indices) {
+fun BottomBar(selectedIndex: Int, items: List<BottomBarItem>, onItemChanged: (Int) -> Unit) {
+    require(selectedIndex in items.indices) {
         throw IllegalArgumentException("selectedIndex must in items.indices(${items.indices})")
     }
     NavigationBar {
-        var currentIndex by remember { mutableIntStateOf(defaultIndex) }
         items.forEachIndexed { index, item ->
-            val selected = currentIndex == index
+            val selected = selectedIndex == index
             NavigationBarItem(
                 selected = selected,
-                onClick = {
-                    currentIndex = index
-                    onClick(currentIndex)
-                },
+                onClick = { onItemChanged(index) },
                 label = { Text(item.label, style = MaterialTheme.typography.labelMedium) },
                 icon = { Icon(imageVector = item.icon, contentDescription = item.label) })
         }
