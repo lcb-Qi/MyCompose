@@ -36,6 +36,7 @@ import com.lcb.one.ui.screen.bilibili.repo.BiliServerAccessor
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.DownLoadUtil
+import com.lcb.one.util.android.ToastUtils
 import kotlinx.coroutines.launch
 
 @Composable
@@ -58,6 +59,9 @@ fun BiliBiliScreen() {
     val download: () -> Unit = {
         scope.launch {
             DownLoadUtil.saveImageFromUrl(coverUrl)
+                .onSuccess { ToastUtils.showToast("保存成功 $it") }
+                .onFailure { ToastUtils.showToast("保存失败") }
+
         }
     }
 

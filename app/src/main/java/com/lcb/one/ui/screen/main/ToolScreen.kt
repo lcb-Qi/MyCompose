@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.navigation.NavController
 import com.lcb.one.R
@@ -138,14 +139,12 @@ private fun DevItems(navController: NavController) {
 private fun getWallPaper() {
     ThreadPool.executeOnBackground {
         runCatching {
-            val drawable =
-                WallpaperManager.getInstance(MyApp.getAppContext()).drawable
-            drawable?.toBitmapOrNull()?.let {
-                DownLoadUtil.writeBitmapToImageFile(it)
-            }
+            val bitmap =
+                WallpaperManager.getInstance(MyApp.getAppContext()).drawable?.toBitmap()
+            DownLoadUtil.writeBitmapToImageFile(bitmap!!)
         }.onFailure {
             ToastUtils.showToast("保存失败 ${it.message}")
-        }
+        }.onSuccess { ToastUtils.showToast("保存成功 $it") }
     }
 }
 

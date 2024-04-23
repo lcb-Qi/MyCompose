@@ -1,18 +1,21 @@
 package com.lcb.one.util.android
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ApplicationInfo
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.AdaptiveIconDrawable
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.core.graphics.drawable.toBitmapOrNull
 import com.lcb.one.BuildConfig
 import com.lcb.one.ui.MyApp
-import java.text.Collator
-import java.util.Locale
 
 data class AppVersionInfo(val versionCode: Int, val versionName: String)
 
@@ -81,52 +84,44 @@ object AppUtils {
         context.startActivity(installIntent)
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
-    fun getAllApps(context: Context): List<String> {
-        val packageManager = context.packageManager
-        val info = packageManager.getInstalledPackages(0).asSequence()
-        return info.sortedWith { o1, o2 ->
-            collator.compare(
-                packageManager.getApplicationLabel(o1.applicationInfo),
-                packageManager.getApplicationLabel(o2.applicationInfo)
-            )
-        }
-            .map { it.packageName }
-            .toList()
+    fun getAllPackageName(context: Context = MyApp.getAppContext()): List<String> {
+        val pm = context.packageManager
+        val info = pm.getInstalledPackages(0)
+        return info.map { it.packageName }
     }
 
-    fun getUserApps(context: Context): List<String> {
-        val packageManager = context.packageManager
-        val info = packageManager.getInstalledPackages(0).asSequence()
-        return info.filter { it.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0 }
-            .sortedWith { o1, o2 ->
-                collator.compare(
-                    packageManager.getApplicationLabel(o1.applicationInfo),
-                    packageManager.getApplicationLabel(o2.applicationInfo)
-                )
+    fun getAppIcon(context: Context = MyApp.getAppContext(), packageName: String): Bitmap? {
+        val icon: Bitmap?
+        val pm = context.packageManager
+
+        when (val drawable = pm.getApplicationIcon(packageName)) {
+            is BitmapDrawable -> icon = drawable.bitmap
+
+            is AdaptiveIconDrawable -> {
+                val backgroundDr = drawable.background
+                val foregroundDr = drawable.foreground
+                val drr = arrayOfNulls<Drawable>(2)
+                drr[0] = backgroundDr
+                drr[1] = foregroundDr
+                val layerDrawable = LayerDrawable(drr)
+                val width = layerDrawable.getIntrinsicWidth()
+                val height = layerDrawable.getIntrinsicHeight()
+                icon = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                val canvas = Canvas(icon)
+                layerDrawable.setBounds(0, 0, canvas.width, canvas.height)
+                layerDrawable.draw(canvas)
             }
-            .map { it.packageName }
-            .toList()
-    }
 
-    fun getSystemApps(context: Context): List<String> {
-        val packageManager = context.packageManager
-        val info = packageManager.getInstalledPackages(0).asSequence()
-        return info.filter { it.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0 }
-            .sortedWith { o1, o2 ->
-                collator.compare(
-                    packageManager.getApplicationLabel(o1.applicationInfo),
-                    packageManager.getApplicationLabel(o2.applicationInfo)
-                )
-            }
-            .map { it.packageName }
-            .toList()
-    }
-
-    val collator by lazy {
-        Collator.getInstance(Locale.getDefault()).apply {
-            strength = Collator.PRIMARY // 设置排序强度为主要级别，只比较基本的字符差异
-            // decomposition = Collator.FULL_DECOMPOSITION // 设置字符分解为完全分解，以便正确处理包含变音符号的字符
+            else -> icon = drawable.toBitmapOrNull()
         }
+
+        return icon
+    }
+
+    fun getApkPath(packageName: String): String {
+        val pm = MyApp.getAppContext().packageManager
+        val info = pm.getApplicationInfo(packageName, 0)
+        
+        return info.sourceDir
     }
 }

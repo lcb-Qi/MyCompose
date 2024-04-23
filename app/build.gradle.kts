@@ -7,6 +7,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("androidx.room")
+    id("kotlin-parcelize")
 }
 
 
