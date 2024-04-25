@@ -21,9 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,6 +35,7 @@ import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.toMillis
 import com.lcb.one.ui.screen.mcAssistant.repo.MenstrualCycleViewModel
 import com.lcb.one.ui.screen.mcAssistant.widget.Calendar
+import com.lcb.one.ui.screen.mcAssistant.widget.rememberCalendarState
 import java.time.LocalDate
 
 const val MENSTRUAL_CYCLE_INTERVAL = 28L
@@ -65,7 +64,8 @@ fun MenstrualCycleAssistantScreen() {
                 .toMillis()
         )
     }
-    var selectedDate by rememberSaveable { mutableLongStateOf(DateTimeUtils.nowMillis()) }
+    val state = rememberCalendarState()
+    val selectedDate = state.selectedDate.toMillis()
     Scaffold(
         topBar = {
             ToolBar(
@@ -83,7 +83,9 @@ fun MenstrualCycleAssistantScreen() {
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                FloatingActionButton(onClick = { selectedDate = LocalDate.now().toMillis() }) {
+                FloatingActionButton(onClick = {
+                    state.updateSelectedDate(LocalDate.now().toMillis())
+                }) {
                     Icon(imageVector = Icons.Rounded.Today, contentDescription = "")
                 }
             }
@@ -93,16 +95,22 @@ fun MenstrualCycleAssistantScreen() {
             modifier = Modifier.padding(
                 top = paddingValues.calculateTopPadding(),
                 bottom = paddingValues.calculateBottomPadding(),
-                start = 16.dp,
-                end = 16.dp
             ),
             verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Calendar(selectedDate, mcDays, predictMcDay) {
-                selectedDate = it
+            mcDays.forEach {
+                state.addPrimaryRange(it.toRange())
             }
+            predictMcDay?.let { state.addSecondaryRange(it.toRange()) }
+            Calendar(state = state)
 
-            MenstrualCycleInfo(selectedDate, mcDays, predictMcDay)
+            MenstrualCycleInfo(
+                Modifier.padding(horizontal = 16.dp),
+                selectedDate,
+                mcDays,
+                predictMcDay
+            )
 
             if (!DateTimeUtils.isAfterToday(selectedDate) && runningMcDay == null && (lastMcDay == null || selectedDate > lastMcDay!!.endTime)) {
                 Button(onClick = { mcViewmodel.startNewMenstrualCycle(selectedDate) }) {
@@ -120,11 +128,12 @@ fun MenstrualCycleAssistantScreen() {
 
 @Composable
 fun MenstrualCycleInfo(
+    modifier: Modifier = Modifier,
     selectedDate: Long,
     mcDays: List<McDay>,
     predictMcDay: McDay? = null
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(

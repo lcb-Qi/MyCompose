@@ -31,6 +31,13 @@ data class McDay(
             DateTimeUtils.getDurationDays(startTime, DateTimeUtils.nowMillis()) + 1
         }
     }
+
+    fun toRange() = if (finish) {
+        startTime..endTime
+    } else {
+        startTime..LocalDate.now().toMillis()
+    }
+
 }
 
 fun List<McDay>.getMcDay(time: Long): McDay? {

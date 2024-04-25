@@ -48,7 +48,7 @@ fun PoemInfoDialog(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(origin.content) {
-                    Text(text = it, style = MaterialTheme.typography.bodyLarge)
+                    Text(text = it, style = MaterialTheme.typography.bodyMedium)
                 }
             }
         }

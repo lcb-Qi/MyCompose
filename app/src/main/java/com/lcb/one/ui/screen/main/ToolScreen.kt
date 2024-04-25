@@ -3,7 +3,6 @@ package com.lcb.one.ui.screen.main
 import android.app.WallpaperManager
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -11,10 +10,10 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.FlowRowScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowRight
 import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material.icons.rounded.DeviceUnknown
 import androidx.compose.material.icons.rounded.MiscellaneousServices
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material3.ElevatedAssistChip
@@ -30,12 +29,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toBitmapOrNull
-import androidx.navigation.NavController
 import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.LocalNav
@@ -76,9 +73,9 @@ fun ToolScreen() {
             )
         }
 
-        // 其他
+        // 更多
         ToolBox(
-            title = stringResource(R.string.other),
+            title = stringResource(R.string.more),
             icon = { Icon(Icons.Rounded.MiscellaneousServices, "") }
         ) {
             var showClock by remember { mutableStateOf(false) }
@@ -98,19 +95,25 @@ fun ToolScreen() {
                 }
                 showClock = false
             }
+
+            ElevatedAssistChip(
+                onClick = { navController.navigateSingleTop(Route.MENSTRUAL_CYCLE_ASSISTANT) },
+                label = { Text(text = "经期助手") }
+            )
         }
 
-        DevItems(navController)
+        DevItems()
     }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun DevItems(navController: NavController) {
+private fun DevItems() {
     if (!AppGlobalConfigs.appDevMode) return
+    val navController = LocalNav.current!!
     ToolBox(
-        title = "更多",
-        icon = { Icon(Icons.Rounded.MiscellaneousServices, "") }
+        title = "Experimental",
+        icon = { Icon(Icons.Rounded.DeviceUnknown, "") }
     ) {
         ElevatedAssistChip(
             enabled = false,
@@ -121,17 +124,6 @@ private fun DevItems(navController: NavController) {
             enabled = false,
             onClick = { },
             label = { Text(text = stringResource(R.string.av_to_bv)) }
-        )
-        ElevatedAssistChip(
-            onClick = { navController.navigateSingleTop(Route.MENSTRUAL_CYCLE_ASSISTANT) },
-            label = { Text(text = "经期助手") },
-            trailingIcon = {
-                Image(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(R.drawable.icon_beta),
-                    contentDescription = ""
-                )
-            }
         )
     }
 }
@@ -162,7 +154,7 @@ private fun ToolBox(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             icon()
-            Text(text = title, Modifier.weight(1f))
+            Text(text = title, Modifier.weight(1f), fontWeight = FontWeight.Medium)
             IconButton(onClick = { showDetail = !showDetail }) {
                 Icon(
                     if (showDetail) Icons.Rounded.ArrowDropDown else Icons.AutoMirrored.Rounded.ArrowRight,

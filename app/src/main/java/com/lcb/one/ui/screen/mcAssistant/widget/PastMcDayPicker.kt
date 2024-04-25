@@ -58,18 +58,11 @@ fun PastMcDayPicker(
         onDismissRequest = onCancel,
         content = {
             Surface(
-                modifier = Modifier.padding(16.dp),
                 shape = AlertDialogDefaults.shape,
                 color = AlertDialogDefaults.containerColor,
                 tonalElevation = AlertDialogDefaults.TonalElevation,
             ) {
                 Column {
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .weight(weight = 1f, fill = false)
-                            .align(Alignment.Start)
-                    ) {
                         val dateFormatter = remember { DatePickerDefaults.dateFormatter() }
                         DateRangePicker(
                             modifier = Modifier
@@ -103,7 +96,6 @@ fun PastMcDayPicker(
                                 )
                             }
                         )
-                    }
 
                     Box(
                         modifier = Modifier
