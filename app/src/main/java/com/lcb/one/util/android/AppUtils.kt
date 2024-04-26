@@ -17,7 +17,7 @@ import androidx.core.graphics.drawable.toBitmapOrNull
 import com.lcb.one.BuildConfig
 import com.lcb.one.ui.MyApp
 
-data class AppVersionInfo(val versionCode: Int, val versionName: String)
+class AppVersionInfo(val versionCode: Int, val versionName: String)
 
 const val PACKAGE_ME = BuildConfig.APPLICATION_ID
 
@@ -121,7 +121,7 @@ object AppUtils {
     fun getApkPath(packageName: String): String {
         val pm = MyApp.getAppContext().packageManager
         val info = pm.getApplicationInfo(packageName, 0)
-        
+
         return info.sourceDir
     }
 }

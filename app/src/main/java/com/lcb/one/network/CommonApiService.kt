@@ -2,6 +2,7 @@ package com.lcb.one.network
 
 import okhttp3.ResponseBody
 import retrofit2.http.GET
+import retrofit2.http.HeaderMap
 import retrofit2.http.QueryMap
 import retrofit2.http.Streaming
 import retrofit2.http.Url
@@ -21,7 +22,11 @@ interface CommonApiService {
      * @return
      */
     @GET
-    suspend fun get(@Url url: String, @QueryMap params: Map<String, String> = emptyMap()): String
+    suspend fun get(
+        @Url url: String,
+        @QueryMap params: Map<String, String> = emptyMap(),
+        @HeaderMap headers: Map<String, String> = emptyMap()
+    ): String
 
     @Streaming
     @GET

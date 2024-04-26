@@ -44,7 +44,7 @@ fun MoreScreen() {
 
         // 关于
         SettingsMenuLink(
-            title = "关于",
+            title = "关于${stringResource(R.string.app_name)}",
             icon = { Icon(imageVector = Icons.Rounded.Info, contentDescription = "") }
         ) {
             navController.navigateSingleTop(Route.ABOUT)

@@ -46,7 +46,7 @@ enum class AppType(val label: String) {
 fun ApplicationList(
     modifier: Modifier = Modifier,
     displayType: AppType,
-    filter: (AppInfo) -> Boolean = { true },
+    filterText: String = "",
     onItemClick: (String) -> Unit = {}
 ) {
     var init by remember { mutableStateOf(false) }
@@ -66,12 +66,19 @@ fun ApplicationList(
         (it.isSystemApp && displayType != AppType.USER) || (!it.isSystemApp && displayType != AppType.SYSTEM)
     }
 
+    val filterKeyWord: (AppInfo) -> Boolean = {
+        filterText.isBlank()
+                || it.packageName.contains(filterText, true)
+                || it.label.contains(filterText, true)
+    }
+
     LazyColumn(modifier = modifier) {
         for (appInfo in all) {
             if (!filterAppType(appInfo))
                 continue
-            if (!filter(appInfo))
+            if (!filterKeyWord(appInfo))
                 continue
+
             item(appInfo.packageName) {
                 ListItem(
                     modifier = Modifier.clickable { onItemClick(appInfo.packageName) },

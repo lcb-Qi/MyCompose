@@ -28,7 +28,6 @@ fun ToolBar(
     onTitleClick: (() -> Unit)? = null,
     onTitleLongClick: (() -> Unit)? = null
 ) {
-    LLog.d("TAG", "MainScreen: ToolBar run")
     val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     TopAppBar(
         navigationIcon = {
@@ -57,5 +56,29 @@ fun ToolBar(
                     }
             )
         }
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun ToolBar(
+    text: @Composable () -> Unit,
+    enableBack: Boolean = true,
+    actions: @Composable RowScope.() -> Unit = {},
+) {
+    val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    TopAppBar(
+        navigationIcon = {
+            if (enableBack) {
+                IconButton(onClick = { backPressedDispatcher?.onBackPressed() }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                        contentDescription = ""
+                    )
+                }
+            }
+        },
+        actions = actions,
+        title = text
     )
 }
