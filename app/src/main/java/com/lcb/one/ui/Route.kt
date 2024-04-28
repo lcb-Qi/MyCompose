@@ -6,7 +6,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavHostController
 import com.lcb.one.ui.screen.about.AboutScreen
-import com.lcb.one.ui.screen.applist.AppListScreen
+import com.lcb.one.ui.screen.applist.InstalledAppsScreen
 import com.lcb.one.ui.screen.main.MainScreen
 import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
 import com.lcb.one.ui.screen.device.DeviceInfoScreen
@@ -40,7 +40,7 @@ fun getRouters(): List<RouteScreen> {
         RouteScreen(Route.DEVICE) { DeviceInfoScreen() },
         RouteScreen(Route.SETTINGS) { SettingsScreen() },
         RouteScreen(Route.ABOUT) { AboutScreen() },
-        RouteScreen(Route.APPS) { AppListScreen() },
+        RouteScreen(Route.APPS) { InstalledAppsScreen() },
         RouteScreen(Route.MENSTRUAL_CYCLE_ASSISTANT) { MenstrualCycleAssistantScreen() },
         RouteScreen(Route.MENSTRUAL_CYCLE_HISTORY) { MenstrualCycleHistoryScreen() },
     )

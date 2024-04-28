@@ -19,8 +19,8 @@ android {
         applicationId = "com.lcb.one"
         minSdk = 31
         targetSdk = 34
-        versionCode = 10406
-        versionName = "1.4.6"
+        versionCode = 10407
+        versionName = "1.4.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -153,6 +153,7 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
 
     // implementation("xyz.junerver.compose:hooks:1.0.11")
+    implementation("io.github.panpf.zoomimage:zoomimage-compose-coil:1.0.2")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

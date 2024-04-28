@@ -1,30 +1,27 @@
 package com.lcb.one.ui.screen.applist.widget
 
-import android.content.pm.ApplicationInfo
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.lcb.one.ui.MyApp
-import com.lcb.one.ui.widget.dialog.LoadingDialog
-import com.lcb.one.util.common.ThreadUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.text.Collator
-import java.util.Locale
 
 data class AppInfo(
     val packageName: String,
@@ -41,26 +38,16 @@ enum class AppType(val label: String) {
     }
 }
 
-// TODO: 性能优化、应用信息、提取图标/apk
 @Composable
-fun ApplicationList(
+fun InstalledAppList(
     modifier: Modifier = Modifier,
+    state: LazyListState = rememberLazyListState(),
+    apps: List<AppInfo>,
     displayType: AppType,
     filterText: String = "",
     onItemClick: (String) -> Unit = {}
 ) {
-    var init by remember { mutableStateOf(false) }
-    var all by remember {
-        mutableStateOf(emptyList<AppInfo>())
-    }
-
-    LaunchedEffect(Unit) {
-        if (init) return@LaunchedEffect
-        withContext(Dispatchers.IO) {
-            all = init()
-            init = true
-        }
-    }
+    val userAppCount = remember(apps) { apps.count { !it.isSystemApp } }
 
     val filterAppType: (AppInfo) -> Boolean = {
         (it.isSystemApp && displayType != AppType.USER) || (!it.isSystemApp && displayType != AppType.SYSTEM)
@@ -72,14 +59,14 @@ fun ApplicationList(
                 || it.label.contains(filterText, true)
     }
 
-    LazyColumn(modifier = modifier) {
-        for (appInfo in all) {
-            if (!filterAppType(appInfo))
-                continue
-            if (!filterKeyWord(appInfo))
-                continue
-
-            item(appInfo.packageName) {
+    LazyColumn(
+        state = state,
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        items(count = apps.size, key = { apps[it].packageName }) {
+            val appInfo = apps[it]
+            if (filterAppType(appInfo) && filterKeyWord(appInfo)) {
                 ListItem(
                     modifier = Modifier.clickable { onItemClick(appInfo.packageName) },
                     leadingContent = {
@@ -103,36 +90,27 @@ fun ApplicationList(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
+                    },
+                    trailingContent = {
+                        Icon(imageVector = Icons.Rounded.ArrowDropDown, contentDescription = "")
                     }
                 )
             }
         }
-    }
 
-    LoadingDialog(show = !init)
-}
-
-private fun init(): List<AppInfo> {
-    ThreadUtils.assertOnBackgroundThread()
-
-    val collator = Collator.getInstance(Locale.getDefault()).apply {
-        strength = Collator.PRIMARY
-        decomposition = Collator.CANONICAL_DECOMPOSITION
-    }
-
-    val pm = MyApp.getAppContext().packageManager
-
-    return pm.getInstalledPackages(0).asSequence()
-        .map {
-            val packageName = it.packageName
-            val label = it.applicationInfo.loadLabel(pm)
-            val icon = it.applicationInfo.loadIcon(pm)
-            val isSystemApp = it.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0
-
-            AppInfo(packageName, label.toString(), icon, isSystemApp)
+        if (apps.isNotEmpty()) {
+            item {
+                val count = when (displayType) {
+                    AppType.USER -> userAppCount
+                    AppType.SYSTEM -> apps.size - userAppCount
+                    AppType.ALL -> apps.size
+                }
+                Text(
+                    text = "共 $count 个应用",
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(top = 16.dp, bottom = 32.dp)
+                )
+            }
         }
-        .sortedWith { o1, o2 ->
-            collator.compare(o1.label, o2.label)
-        }
-        .toList()
+    }
 }

@@ -36,6 +36,7 @@ import com.lcb.one.util.common.toMillis
 import com.lcb.one.ui.screen.mcAssistant.repo.MenstrualCycleViewModel
 import com.lcb.one.ui.screen.mcAssistant.widget.Calendar
 import com.lcb.one.ui.screen.mcAssistant.widget.rememberCalendarState
+import com.lcb.one.util.android.LLog
 import java.time.LocalDate
 
 const val MENSTRUAL_CYCLE_INTERVAL = 28L
@@ -59,6 +60,7 @@ fun MenstrualCycleAssistantScreen() {
     val predictMcDay = lastMcDay?.let {
         val start = DateTimeUtils.toLocalDateTime(it.startTime)
         it.copy(
+            finish = true,
             startTime = start.plusDays(MENSTRUAL_CYCLE_INTERVAL).toMillis(),
             endTime = start.plusDays(MENSTRUAL_CYCLE_INTERVAL + MENSTRUAL_CYCLE_DURATION - 1)
                 .toMillis()

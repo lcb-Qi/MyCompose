@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import com.lcb.one.util.android.LLog
 import com.lcb.one.util.common.DateTimeUtils
 import java.time.LocalDate
 import java.time.YearMonth
@@ -59,11 +60,16 @@ class CalendarState(
     }
 
     fun addPrimaryRange(range: LongRange) {
-        (primaryRange as MutableSet).add(range)
+        if (primaryRange is MutableSet) {
+            primaryRange.add(range)
+        }
     }
 
-    fun addSecondaryRange(range: LongRange) {
-        (secondaryRange as MutableSet).add(range)
+    fun addSecondaryRange(range: LongRange, clearOld: Boolean = true) {
+        if (secondaryRange is MutableSet) {
+            if (clearOld) secondaryRange.clear()
+            secondaryRange.add(range)
+        }
     }
 
     fun updateSelectedDate(newDate: Long) {
