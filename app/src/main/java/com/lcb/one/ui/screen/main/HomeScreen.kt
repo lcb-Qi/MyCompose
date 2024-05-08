@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
 import com.lcb.one.ui.screen.main.widget.EventCard
+import com.lcb.one.ui.widget.common.AppTextButton
 import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
@@ -147,17 +147,19 @@ fun SalaryDayCard() {
             title = { Text(text = stringResource(R.string.settings)) },
             onDismissRequest = { showSettings = false },
             confirmButton = {
-                TextButton(onClick = {
-                    targetDay = values[selectIndex]
-                    showSettings = false
-                }) {
-                    Text(text = stringResource(R.string.ok))
-                }
+                AppTextButton(
+                    text = stringResource(R.string.ok),
+                    onClick = {
+                        targetDay = values[selectIndex]
+                        showSettings = false
+                    }
+                )
             },
             dismissButton = {
-                TextButton(onClick = { showSettings = false }) {
-                    Text(text = stringResource(R.string.cancel))
-                }
+                AppTextButton(
+                    text = stringResource(R.string.cancel),
+                    onClick = { showSettings = false }
+                )
             },
             text = {
                 SettingsListDropdown(

@@ -9,15 +9,13 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.ui.widget.common.NoRippleInteractionSource
-import com.lcb.one.util.android.LLog
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -32,12 +30,10 @@ fun ToolBar(
     TopAppBar(
         navigationIcon = {
             if (enableBack) {
-                IconButton(onClick = { backPressedDispatcher?.onBackPressed() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = ""
-                    )
-                }
+                AppIconButton(
+                    icon = Icons.AutoMirrored.Rounded.ArrowBack,
+                    onClick = { backPressedDispatcher?.onBackPressed() }
+                )
             }
         },
         actions = actions,
@@ -70,12 +66,10 @@ fun ToolBar(
     TopAppBar(
         navigationIcon = {
             if (enableBack) {
-                IconButton(onClick = { backPressedDispatcher?.onBackPressed() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = ""
-                    )
-                }
+                AppIconButton(
+                    icon = Icons.AutoMirrored.Rounded.ArrowBack,
+                    onClick = { backPressedDispatcher?.onBackPressed() }
+                )
             }
         },
         actions = actions,

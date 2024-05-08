@@ -18,7 +18,6 @@ import androidx.compose.material.icons.rounded.MiscellaneousServices
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +38,7 @@ import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.activity.ClockActivity
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.Route
+import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.android.navigateSingleTop
@@ -116,6 +116,11 @@ private fun DevItems() {
         icon = { Icon(Icons.Rounded.DeviceUnknown, "") }
     ) {
         ElevatedAssistChip(
+            onClick = { navController.navigateSingleTop(Route.TESTER) },
+            label = { Text(text = "Tester") }
+        )
+
+        ElevatedAssistChip(
             enabled = false,
             onClick = { },
             label = { Text(text = stringResource(R.string.bv_to_av)) }
@@ -155,12 +160,10 @@ private fun ToolBox(
         ) {
             icon()
             Text(text = title, Modifier.weight(1f), fontWeight = FontWeight.Medium)
-            IconButton(onClick = { showDetail = !showDetail }) {
-                Icon(
-                    if (showDetail) Icons.Rounded.ArrowDropDown else Icons.AutoMirrored.Rounded.ArrowRight,
-                    ""
-                )
-            }
+            AppIconButton(
+                icon = if (showDetail) Icons.Rounded.ArrowDropDown else Icons.AutoMirrored.Rounded.ArrowRight,
+                onClick = { showDetail = !showDetail }
+            )
         }
 
         AnimatedVisibility(visible = showDetail) {

@@ -1,8 +1,10 @@
-package com.lcb.one.ui.screen.about.repo.model
+package com.lcb.one.ui.screen.about.repo
 
 import com.lcb.one.BuildConfig
 import com.lcb.one.bean.GithubLatest
 import com.lcb.one.network.CommonApiService
+import com.lcb.one.ui.screen.about.repo.model.AppVersion
+import com.lcb.one.ui.screen.about.repo.model.UpdateInfo
 import com.lcb.one.util.common.JsonUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

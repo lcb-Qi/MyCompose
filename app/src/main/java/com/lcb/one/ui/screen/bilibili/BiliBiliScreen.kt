@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Download
-import androidx.compose.material.icons.rounded.Save
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -37,6 +35,7 @@ import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.screen.bilibili.repo.BiliServerAccessor
 import com.lcb.one.ui.widget.appbar.ToolBar
+import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
@@ -105,9 +104,7 @@ fun BiliBiliScreen() {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Button(onClick = getCoverUrl, modifier = Modifier.fillMaxWidth()) {
-                Text(text = stringResource(R.string.obtain))
-            }
+            AppButton(text = stringResource(R.string.obtain), onClick = getCoverUrl)
 
             SubcomposeAsyncImage(
                 modifier = Modifier.fillMaxWidth(),

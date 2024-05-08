@@ -13,7 +13,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.lcb.one.ui.widget.common.AppTextButton
 import com.lcb.one.ui.widget.settings.storage.SettingValueState
 
 @Composable
@@ -119,14 +119,13 @@ fun SettingsListMultiSelect(
         },
         onDismissRequest = { showDialog = false },
         confirmButton = {
-            TextButton(
+            AppTextButton(
+                text = confirmButton,
                 onClick = {
                     showDialog = false
                     onItemsSelected?.invoke(state.value.map { index -> items[index] })
-                },
-            ) {
-                Text(text = confirmButton)
-            }
+                }
+            )
         },
     )
 }

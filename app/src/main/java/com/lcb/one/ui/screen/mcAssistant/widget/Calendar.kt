@@ -11,8 +11,6 @@ import androidx.compose.material.icons.rounded.ChevronLeft
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.KeyboardDoubleArrowLeft
 import androidx.compose.material.icons.rounded.KeyboardDoubleArrowRight
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.lcb.one.ui.widget.common.AppIconButton
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
@@ -37,20 +36,19 @@ fun Calendar(modifier: Modifier = Modifier, state: CalendarState = rememberCalen
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { state.updateYear(state.year - 1) }) {
-                Icon(imageVector = Icons.Rounded.KeyboardDoubleArrowLeft, contentDescription = "")
-            }
+            AppIconButton(
+                icon = Icons.Rounded.KeyboardDoubleArrowLeft,
+                onClick = { state.updateYear(state.year - 1) }
+            )
 
-            IconButton(
+            AppIconButton(
+                icon = Icons.Rounded.ChevronLeft,
                 onClick = {
                     scope.launch {
                         pagerState.animateScrollToPage(pagerState.currentPage - 1)
                     }
-                },
-                enabled = state.month > 1
-            ) {
-                Icon(imageVector = Icons.Rounded.ChevronLeft, contentDescription = "")
-            }
+                }
+            )
 
             Text(
                 text = "${state.year}年${state.month}月",
@@ -59,17 +57,19 @@ fun Calendar(modifier: Modifier = Modifier, state: CalendarState = rememberCalen
                 textAlign = TextAlign.Center
             )
 
-            IconButton(onClick = {
-                scope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+            AppIconButton(
+                icon = Icons.Rounded.ChevronRight,
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    }
                 }
-            }, enabled = state.month < CalendarState.MONTHS_IN_YEAR) {
-                Icon(imageVector = Icons.Rounded.ChevronRight, contentDescription = "")
-            }
+            )
 
-            IconButton(onClick = { state.updateYear(state.year + 1) }) {
-                Icon(imageVector = Icons.Rounded.KeyboardDoubleArrowRight, contentDescription = "")
-            }
+            AppIconButton(
+                icon = Icons.Rounded.KeyboardDoubleArrowRight,
+                onClick = { state.updateYear(state.year + 1) }
+            )
         }
 
         state.selectedDate = LocalDate.of(state.year, pagerState.currentPage + 1, state.dayOfMonth)

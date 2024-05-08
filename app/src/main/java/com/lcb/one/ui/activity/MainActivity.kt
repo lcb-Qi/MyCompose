@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun AppScreen() {
         CompositionLocalProvider(value = LocalNav provides rememberNavController()) {
-            AppTheme(dynamicColor = AppGlobalConfigs.appDynamicColor) {
+            AppTheme() {
                 NavHost(
                     navController = LocalNav.current!!,
                     startDestination = Route.MAIN,

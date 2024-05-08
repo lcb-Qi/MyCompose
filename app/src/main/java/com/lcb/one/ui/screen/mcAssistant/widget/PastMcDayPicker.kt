@@ -18,15 +18,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.lcb.one.util.android.LLog
+import com.lcb.one.R
+import com.lcb.one.ui.widget.common.AppTextButton
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.toMillis
 import java.time.ZoneId
@@ -63,39 +64,39 @@ fun PastMcDayPicker(
                 tonalElevation = AlertDialogDefaults.TonalElevation,
             ) {
                 Column {
-                        val dateFormatter = remember { DatePickerDefaults.dateFormatter() }
-                        DateRangePicker(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(max = 520.dp),
-                            showModeToggle = false,
-                            state = pickerState,
-                            dateFormatter = dateFormatter,
-                            title = {
-                                Text(
-                                    text = "导入经期",
-                                    modifier = Modifier.padding(
-                                        start = 24.dp,
-                                        top = 16.dp,
-                                        bottom = 16.dp
-                                    ),
-                                    style = MaterialTheme.typography.titleLarge
+                    val dateFormatter = remember { DatePickerDefaults.dateFormatter() }
+                    DateRangePicker(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 520.dp),
+                        showModeToggle = false,
+                        state = pickerState,
+                        dateFormatter = dateFormatter,
+                        title = {
+                            Text(
+                                text = "导入经期",
+                                modifier = Modifier.padding(
+                                    start = 24.dp,
+                                    top = 16.dp,
+                                    bottom = 16.dp
+                                ),
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                        },
+                        headline = {
+                            DateRangePickerDefaults.DateRangePickerHeadline(
+                                selectedStartDateMillis = pickerState.selectedStartDateMillis,
+                                selectedEndDateMillis = pickerState.selectedEndDateMillis,
+                                displayMode = pickerState.displayMode,
+                                dateFormatter,
+                                modifier = Modifier.padding(
+                                    start = 24.dp,
+                                    end = 12.dp,
+                                    bottom = 12.dp
                                 )
-                            },
-                            headline = {
-                                DateRangePickerDefaults.DateRangePickerHeadline(
-                                    selectedStartDateMillis = pickerState.selectedStartDateMillis,
-                                    selectedEndDateMillis = pickerState.selectedEndDateMillis,
-                                    displayMode = pickerState.displayMode,
-                                    dateFormatter,
-                                    modifier = Modifier.padding(
-                                        start = 24.dp,
-                                        end = 12.dp,
-                                        bottom = 12.dp
-                                    )
-                                )
-                            }
-                        )
+                            )
+                        }
+                    )
 
                     Box(
                         modifier = Modifier
@@ -103,14 +104,13 @@ fun PastMcDayPicker(
                             .padding(8.dp)
                     ) {
                         FlowRow {
-                            TextButton(onClick = onCancel) {
-                                Text(
-                                    text = "取消",
-                                    style = MaterialTheme.typography.labelLarge
-                                )
-                            }
+                            AppTextButton(
+                                text = stringResource(R.string.cancel),
+                                onClick = onCancel
+                            )
 
-                            TextButton(
+                            AppTextButton(
+                                text = "添加",
                                 onClick = {
                                     val start = DateTimeUtils.toLocalDate(
                                         pickerState.selectedStartDateMillis!!,
@@ -120,16 +120,10 @@ fun PastMcDayPicker(
                                         pickerState.selectedEndDateMillis!!,
                                         ZoneId.of("UTC")
                                     )
-                                    LLog.d("TAG", ": start = $start, end = $end")
                                     onDatePicked?.invoke(start.toMillis()..end.toMillis())
                                 },
                                 enabled = pickerState.selectedStartDateMillis != null && pickerState.selectedEndDateMillis != null
-                            ) {
-                                Text(
-                                    text = "添加",
-                                    style = MaterialTheme.typography.labelLarge
-                                )
-                            }
+                            )
                         }
                     }
                 }

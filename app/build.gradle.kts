@@ -103,7 +103,7 @@ project.afterEvaluate {
 }
 
 dependencies {
-
+    implementation(kotlin("reflect"))
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.activity:activity-compose:1.8.2")
     // compose
@@ -154,6 +154,7 @@ dependencies {
 
     // implementation("xyz.junerver.compose:hooks:1.0.11")
     implementation("io.github.panpf.zoomimage:zoomimage-compose-coil:1.0.2")
+    implementation("com.materialkolor:material-kolor:1.4.4")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

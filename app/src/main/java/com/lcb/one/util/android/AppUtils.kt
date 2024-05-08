@@ -1,7 +1,9 @@
 package com.lcb.one.util.android
 
+import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.AdaptiveIconDrawable
@@ -123,5 +125,10 @@ object AppUtils {
         val info = pm.getApplicationInfo(packageName, 0)
 
         return info.sourceDir
+    }
+
+    fun isSystemDarkTheme(): Boolean {
+        val uiModeManager = MyApp.getAppContext().getSystemService(UiModeManager::class.java)
+        return uiModeManager.nightMode == Configuration.UI_MODE_NIGHT_YES
     }
 }

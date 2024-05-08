@@ -1,10 +1,12 @@
 package com.lcb.one.ui.screen.about
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.Update
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -18,11 +20,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
+import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.about.repo.model.AppVersion
-import com.lcb.one.ui.screen.about.repo.model.UpdateAccessor
+import com.lcb.one.ui.screen.about.repo.UpdateAccessor
 import com.lcb.one.ui.screen.about.repo.model.UpdateInfo
 import com.lcb.one.ui.screen.about.widget.UpdateInfoDialog
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -95,6 +99,19 @@ fun AboutScreen(modifier: Modifier = Modifier) {
 
             UpdateInfoDialog(show = showUpdate && updateInfo != null, updateInfo = updateInfo) {
                 showUpdate = false
+            }
+
+            // 项目地址
+            val url = stringResource(R.string.project_location_url)
+            SettingsMenuLink(
+                title = stringResource(R.string.project_location),
+                summary = url,
+                icon = { Icon(imageVector = Icons.Rounded.Link, contentDescription = "") }
+            ) {
+                val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                MyApp.getAppContext().startActivity(intent)
             }
         }
     }

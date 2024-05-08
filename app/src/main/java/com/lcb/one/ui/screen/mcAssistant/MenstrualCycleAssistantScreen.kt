@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Today
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,7 +34,8 @@ import com.lcb.one.util.common.toMillis
 import com.lcb.one.ui.screen.mcAssistant.repo.MenstrualCycleViewModel
 import com.lcb.one.ui.screen.mcAssistant.widget.Calendar
 import com.lcb.one.ui.screen.mcAssistant.widget.rememberCalendarState
-import com.lcb.one.util.android.LLog
+import com.lcb.one.ui.widget.common.AppButton
+import com.lcb.one.ui.widget.common.AppIconButton
 import java.time.LocalDate
 
 const val MENSTRUAL_CYCLE_INTERVAL = 28L
@@ -73,9 +72,10 @@ fun MenstrualCycleAssistantScreen() {
             ToolBar(
                 title = "经期助手",
                 actions = {
-                    IconButton(onClick = { navController.navigateSingleTop(Route.MENSTRUAL_CYCLE_HISTORY) }) {
-                        Icon(imageVector = Icons.Rounded.History, contentDescription = "")
-                    }
+                    AppIconButton(
+                        icon = Icons.Rounded.History,
+                        onClick = { navController.navigateSingleTop(Route.MENSTRUAL_CYCLE_HISTORY) }
+                    )
                 }
             )
         },
@@ -115,14 +115,16 @@ fun MenstrualCycleAssistantScreen() {
             )
 
             if (!DateTimeUtils.isAfterToday(selectedDate) && runningMcDay == null && (lastMcDay == null || selectedDate > lastMcDay!!.endTime)) {
-                Button(onClick = { mcViewmodel.startNewMenstrualCycle(selectedDate) }) {
-                    Text(text = "开始记录经期")
-                }
+                AppButton(
+                    text = "开始记录经期",
+                    onClick = { mcViewmodel.startNewMenstrualCycle(selectedDate) }
+                )
             }
             if (runningMcDay != null && selectedDate >= runningMcDay.startTime) {
-                Button(onClick = { mcViewmodel.endMenstrualCycle(selectedDate) }) {
-                    Text(text = "已结束")
-                }
+                AppButton(
+                    text = "已结束",
+                    onClick = { mcViewmodel.endMenstrualCycle(selectedDate) }
+                )
             }
         }
     }

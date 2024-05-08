@@ -4,12 +4,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.lcb.one.R
+import com.lcb.one.ui.widget.common.AppTextButton
 
 @Composable
 fun SimpleMessageDialog(
@@ -51,15 +51,7 @@ fun SimpleMessageDialog(
                 )
             }
         },
-        confirmButton = {
-            TextButton(onClick = onConfirm) {
-                Text(text = confirmText)
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onCancel) {
-                Text(text = cancelText)
-            }
-        }
+        confirmButton = { AppTextButton(text = confirmText, onClick = onConfirm) },
+        dismissButton = { AppTextButton(text = cancelText, onClick = onCancel) }
     )
 }

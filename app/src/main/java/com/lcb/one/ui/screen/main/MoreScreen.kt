@@ -29,19 +29,6 @@ fun MoreScreen() {
             navController.navigateSingleTop(Route.SETTINGS)
         }
 
-        // 项目地址
-        val url = stringResource(R.string.project_location_url)
-        SettingsMenuLink(
-            title = stringResource(R.string.project_location),
-            summary = url,
-            icon = { Icon(imageVector = Icons.Rounded.Link, contentDescription = "") }
-        ) {
-            val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            MyApp.getAppContext().startActivity(intent)
-        }
-
         // 关于
         SettingsMenuLink(
             title = "关于${stringResource(R.string.app_name)}",

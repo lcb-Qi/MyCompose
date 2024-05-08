@@ -12,15 +12,19 @@ import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
 import com.lcb.one.ui.screen.device.DeviceInfoScreen
 import com.lcb.one.ui.screen.mcAssistant.MenstrualCycleAssistantScreen
 import com.lcb.one.ui.screen.mcAssistant.MenstrualCycleHistoryScreen
+import com.lcb.one.ui.screen.settings.ThemeScreen
 import com.lcb.one.ui.screen.settings.SettingsScreen
+import com.lcb.one.ui.screen.tester.TesterScreen
 
 object Route {
+    const val TESTER = "Tester"
     const val MAIN = "Main"
     const val BILI = "BiliBili"
     const val DEVICE = "Device"
     const val SETTINGS = "Settings"
     const val ABOUT = "About"
     const val APPS = "Apps"
+    const val THEME = "Theme"
     const val MENSTRUAL_CYCLE_ASSISTANT = "MenstrualCycleAssistant"
     const val MENSTRUAL_CYCLE_HISTORY = "MenstrualCycleHistory"
 }
@@ -43,5 +47,7 @@ fun getRouters(): List<RouteScreen> {
         RouteScreen(Route.APPS) { InstalledAppsScreen() },
         RouteScreen(Route.MENSTRUAL_CYCLE_ASSISTANT) { MenstrualCycleAssistantScreen() },
         RouteScreen(Route.MENSTRUAL_CYCLE_HISTORY) { MenstrualCycleHistoryScreen() },
+        RouteScreen(Route.THEME) { ThemeScreen() },
+        RouteScreen(Route.TESTER) { TesterScreen() },
     )
 }
