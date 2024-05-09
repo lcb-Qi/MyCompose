@@ -131,12 +131,11 @@ fun SalaryDayCard() {
     val days = Duration.between(today.atStartOfDay(), targetDate.atStartOfDay()).toDays()
 
     EventCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { showSettings = true },
+        modifier = Modifier.fillMaxWidth(),
         title = "发薪还有",
         content = "$days 天",
-        icon = R.drawable.icon_rmb
+        icon = R.drawable.icon_rmb,
+        onClick = { showSettings = true }
     )
 
     if (showSettings) {

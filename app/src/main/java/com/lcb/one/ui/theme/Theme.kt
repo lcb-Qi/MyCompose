@@ -75,7 +75,7 @@ fun AppTheme(
     )
 }
 
-private fun ColorScheme.whiteBackground(darkTheme: Boolean): ColorScheme {
+fun ColorScheme.whiteBackground(darkTheme: Boolean): ColorScheme {
     return copy(
         background = if (darkTheme) Color.Black else Color.White,
         surface = if (darkTheme) Color.Black else Color.White,

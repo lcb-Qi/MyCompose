@@ -9,6 +9,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Android
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.MoreHoriz
+import androidx.compose.material.icons.rounded.Palette
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,6 +26,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
+import com.lcb.one.ui.LocalNav
+import com.lcb.one.ui.Route
 import com.lcb.one.ui.widget.appbar.BottomBar
 import com.lcb.one.ui.widget.appbar.BottomBarItem
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -32,11 +37,14 @@ import com.lcb.one.util.android.AppUtils
 import com.lcb.one.ui.screen.main.repo.MainViewModel
 import com.lcb.one.ui.screen.main.repo.MainViewModel.Event
 import com.lcb.one.ui.widget.dialog.LoadingDialog
+import com.lcb.one.util.android.navigateSingleTop
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen() {
+    val navHostController = LocalNav.current!!
+
     FriendlyExitHandler()
 
     val mainViewModel = viewModel<MainViewModel>()
@@ -62,7 +70,12 @@ fun MainScreen() {
                     }
                 },
                 onTitleLongClick = { mainViewModel.sendEvent(Event.ShowDetail) },
-                enableBack = false
+                enableBack = false,
+                actions = {
+                    IconButton(onClick = { navHostController.navigateSingleTop(Route.THEME) }) {
+                        Icon(Icons.Rounded.Palette, null)
+                    }
+                }
             )
         },
         bottomBar = {

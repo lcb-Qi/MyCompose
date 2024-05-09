@@ -18,8 +18,14 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun EventCard(modifier: Modifier = Modifier, title: String, content: String, icon: Any? = null) {
-    Card(modifier = modifier) {
+fun EventCard(
+    modifier: Modifier = Modifier,
+    title: String,
+    content: String,
+    icon: Any? = null,
+    onClick: () -> Unit = {}
+) {
+    Card(modifier = modifier, onClick = onClick) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
