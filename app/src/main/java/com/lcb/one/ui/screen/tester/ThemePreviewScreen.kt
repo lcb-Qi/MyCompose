@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +34,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import com.lcb.one.ui.screen.tester.widget.addColorSchemeList
 import com.lcb.one.ui.screen.tester.widget.addComponentsList
+import com.lcb.one.ui.screen.tester.widget.toHex
 import com.lcb.one.ui.theme.ThemeManager
+import com.lcb.one.ui.theme.createColorTheme
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.Point
 import com.materialkolor.PaletteStyle
@@ -48,10 +51,14 @@ fun ThemePreviewScreen(modifier: Modifier = Modifier) {
     val seeds = ThemeManager.seeds
     var seedState by remember { mutableStateOf(seeds.first()) }
 
-    val colorScheme = dynamicColorScheme(
+    var extendedFidelity by remember { mutableStateOf(false) }
+
+    val colorScheme = createColorTheme(
         seedColor = seedState,
-        isDark = isSystemInDarkTheme(),
-        style = styleState
+        paletteStyle = styleState,
+        dynamicColor = false,
+        darkTheme = isSystemInDarkTheme(),
+        isExtendedFidelity = extendedFidelity
     )
 
     MaterialTheme(colorScheme = colorScheme) {
@@ -66,6 +73,16 @@ fun ThemePreviewScreen(modifier: Modifier = Modifier) {
                 contentPadding = PaddingValues(bottom = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                item {
+                    Row {
+                        Text(text = "extendedFidelity: ")
+                        Switch(
+                            checked = extendedFidelity,
+                            onCheckedChange = { extendedFidelity = !extendedFidelity }
+                        )
+                    }
+                }
+
                 item {
                     Text(text = "调色板风格: ${styleState.name}")
                 }
@@ -93,6 +110,7 @@ fun ThemePreviewScreen(modifier: Modifier = Modifier) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(text = "种子色: ")
                         Point(color = seedState, size = 24.dp)
+                        Text(text = seedState.toHex())
                     }
                 }
                 item {
@@ -120,10 +138,10 @@ fun ThemePreviewScreen(modifier: Modifier = Modifier) {
                 }
 
                 addDivider()
-                addColorSchemeList(colorScheme)
+                addComponentsList()
 
                 addDivider()
-                addComponentsList()
+                addColorSchemeList(colorScheme)
             }
         }
     }

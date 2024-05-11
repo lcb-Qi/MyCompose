@@ -5,14 +5,23 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,46 +49,45 @@ fun ThemeScreen() {
             )
         ) {
             SettingsSwitch(
+                title = "AMOLED",
+                summary = "启用纯白/纯黑色背景",
+                checked = ThemeManager.amoledMode,
+                onCheckedChange = { ThemeManager.amoledMode = it }
+            )
+
+            SettingsSwitch(
                 title = stringResource(R.string.settings_dynamic_color_title),
                 summary = stringResource(R.string.settings_dynamic_color_summary),
-                checked = ThemeManager.dynamicColor
-            ) {
-                ThemeManager.changeDynamicColor(it)
-            }
+                checked = ThemeManager.dynamicColor,
+                onCheckedChange = { ThemeManager.dynamicColor = it }
+            )
 
             AnimatedVisibility(visible = !ThemeManager.dynamicColor) {
-                LazyColumn {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(5),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     val seeds = ThemeManager.seeds
-                    items(count = seeds.size, key = { seeds[it].toArgb() }) {
-
-                        val seed = seeds[it]
-                        val onclick: () -> Unit = { ThemeManager.changeTheme(seed) }
-
-                        ListItem(
-                            modifier = Modifier.clickable(role = Role.RadioButton) { onclick() },
-                            headlineContent = {
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Image(
-                                        painter = ColorPainter(seed),
-                                        contentDescription = "",
-                                        modifier = Modifier
-                                            .size(48.dp, 48.dp)
-                                            .clip(MaterialTheme.shapes.small)
-                                    )
-
-                                    Text(text = seed.toHex(), modifier = Modifier.weight(1f))
-                                }
-                            },
-                            trailingContent = {
-                                RadioButton(
-                                    selected = ThemeManager.currentTheme == seed,
-                                    onClick = onclick
+                    items(count = seeds.size, key = { seeds[it].toArgb() }) { index ->
+                        val seed = seeds[index]
+                        val checked = seed == ThemeManager.themeColor
+                        Surface(
+                            color = seed,
+                            shape = RoundedCornerShape(50),
+                            modifier = Modifier.requiredSize(48.dp),
+                            checked = checked,
+                            onCheckedChange = { if (it) ThemeManager.themeColor = seed }
+                        ) {
+                            if (checked) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Check,
+                                    contentDescription = "",
+                                    modifier = Modifier.padding(12.dp)
                                 )
                             }
-                        )
+                        }
                     }
                 }
             }

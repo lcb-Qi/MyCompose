@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
+import com.lcb.one.ui.screen.tester.widget.textColor
 import com.lcb.one.util.common.atDayMillis
 import java.time.DayOfWeek
 import java.time.YearMonth
@@ -75,14 +76,15 @@ fun CalendarMonth(
                         } else {
                             val dayNumber = cellIndex - daysFromStartOfWeekToFirstOfMonth + 1
                             val currentDate = month.atDayMillis(dayNumber)
+                            val containerColor = colors.containerColor(
+                                currentDate,
+                                primaryRange,
+                                secondaryRange
+                            )
                             CalendarDay(
                                 modifier = Modifier.weight(1f),
                                 selected = currentDate == month.atDayMillis(selectDay),
-                                color = colors.containerColor(
-                                    currentDate,
-                                    primaryRange,
-                                    secondaryRange
-                                ),
+                                color = containerColor,
                                 onClick = { onDaySelected(dayNumber) }
                             ) {
                                 Text(
@@ -98,7 +100,7 @@ fun CalendarMonth(
                                         textAlign = TextAlign.End,
                                         style = MaterialTheme.typography.labelSmall.copy(
                                             fontSize = 8.sp,
-                                            color = MaterialTheme.colorScheme.error,
+                                            color = containerColor.textColor(),
                                             lineHeight = 8.sp
                                         )
                                     )
