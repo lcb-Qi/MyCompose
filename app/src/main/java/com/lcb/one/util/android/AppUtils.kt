@@ -76,6 +76,14 @@ object AppUtils {
         return insets.top
     }
 
+    fun getScreenWidth(context: Context = MyApp.getAppContext()): Int {
+        return PhoneUtil.getResolution(context).width
+    }
+
+    fun getScreenHeight(context: Context = MyApp.getAppContext()): Int {
+        return PhoneUtil.getResolution(context).height
+    }
+
     fun installApk(context: Context = MyApp.getAppContext(), uri: Uri) {
         LLog.d(TAG, "installApk: uri = $uri")
         val installIntent = Intent(Intent.ACTION_VIEW).apply {

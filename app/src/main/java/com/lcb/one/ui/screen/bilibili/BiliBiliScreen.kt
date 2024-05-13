@@ -1,10 +1,12 @@
 package com.lcb.one.ui.screen.bilibili
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,14 +24,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
-import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.github.panpf.zoomimage.CoilZoomAsyncImage
-import com.github.panpf.zoomimage.ZoomImage
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
@@ -40,11 +43,14 @@ import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
 import kotlinx.coroutines.launch
+import com.lcb.one.ui.screen.bilibili.widget.FullScreenImage
+import com.lcb.one.ui.screen.bilibili.widget.ImageViewState
+import kotlin.math.roundToInt
 
 @Composable
 fun BiliBiliScreen() {
     var textInput by remember { mutableStateOf("") }
-    var coverUrl by remember { mutableStateOf("") }
+    var coverUrl by remember { mutableStateOf("https://patchwiki.biligame.com/images/sr/b/be/crncyly4kxzqik8h4uc98aj1c8vovbe.png") }
     val scope = rememberCoroutineScope()
 
     val getCoverUrl: () -> Unit = {
@@ -63,11 +69,13 @@ fun BiliBiliScreen() {
             DownLoadUtil.saveImageFromUrl(coverUrl)
                 .onSuccess { ToastUtils.showToast("保存成功 $it") }
                 .onFailure { ToastUtils.showToast("保存失败") }
-
         }
     }
 
+    var smallOffset = IntOffset.Zero
+    var smallSize = IntSize.Zero
 
+    val imageViewState by remember { mutableStateOf(ImageViewState()) }
     Scaffold(
         topBar = { ToolBar(title = stringResource(R.string.bibibili)) },
         floatingActionButton = {
@@ -107,9 +115,17 @@ fun BiliBiliScreen() {
             AppButton(text = stringResource(R.string.obtain), onClick = getCoverUrl)
 
             SubcomposeAsyncImage(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .width(240.dp)
+                    .clickable { imageViewState.doEnter(smallOffset, smallSize) }
+                    .onGloballyPositioned {
+                        val rect = it.boundsInRoot()
+                        smallOffset = IntOffset(rect.left.roundToInt(), rect.top.roundToInt())
+                        smallSize = it.size
+                    },
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(coverUrl)
+                    .size(coil.size.Size.ORIGINAL)
                     .placeholder(R.drawable.icon_bilibili)
                     .error(R.drawable.icon_bilibili)
                     .build(),
@@ -118,4 +134,10 @@ fun BiliBiliScreen() {
             )
         }
     }
+
+    FullScreenImage(
+        url = coverUrl,
+        state = imageViewState,
+        onClick = { imageViewState.doExit(smallOffset, smallSize) }
+    )
 }
