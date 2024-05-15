@@ -72,7 +72,7 @@ fun Calendar(modifier: Modifier = Modifier, state: CalendarState = rememberCalen
             )
         }
 
-        state.selectedDate = LocalDate.of(state.year, pagerState.currentPage + 1, state.dayOfMonth)
+        state.updateMonth(pagerState.currentPage + 1)
         HorizontalPager(
             state = pagerState,
             verticalAlignment = Alignment.Top
