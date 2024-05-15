@@ -1,11 +1,14 @@
 package com.lcb.one.ui.screen.applist
 
 import android.content.pm.ApplicationInfo
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -18,8 +21,16 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
+import com.lcb.one.ui.ANIMATE_DURATION
+import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.applist.widget.AppInfo
 import com.lcb.one.ui.screen.applist.widget.AppType
@@ -27,8 +38,10 @@ import com.lcb.one.ui.screen.applist.widget.ApplicationInfoDialog
 import com.lcb.one.ui.screen.applist.widget.InstalledAppList
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.dialog.LoadingDialog
+import com.lcb.one.util.android.LLog
 import com.lcb.one.util.android.ToastUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.text.Collator
 import java.util.Locale
@@ -44,18 +57,18 @@ fun InstalledAppsScreen() {
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding()
                 ),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             var loadSuccess by remember { mutableStateOf(false) }
             var allApps by remember { mutableStateOf(emptyList<AppInfo>()) }
-            var userAppCount by remember { mutableIntStateOf(0) }
 
             LaunchedEffect(Unit) {
                 if (loadSuccess) return@LaunchedEffect
+                delay(ANIMATE_DURATION.toLong())
                 withContext(Dispatchers.IO) {
                     val measureTime = measureTimeMillis {
                         allApps = loadInstalledApps()
-                        userAppCount = allApps.count { !it.isSystemApp }
                     }
                     loadSuccess = true
                     ToastUtils.showToast("加载完成，总计${allApps.size}个应用，耗时${measureTime}ms")
@@ -80,12 +93,18 @@ fun InstalledAppsScreen() {
 
             var showDetail by remember { mutableStateOf(false) }
             var packageName by remember { mutableStateOf("") }
-            InstalledAppList(apps = allApps, displayType = AppType.from(currentIndex)) {
-                packageName = it
-                showDetail = true
+
+            if(!loadSuccess) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                InstalledAppList(apps = allApps, displayType = AppType.from(currentIndex)) {
+                    packageName = it
+                    showDetail = true
+                }
             }
 
-            LoadingDialog(show = !loadSuccess)
             ApplicationInfoDialog(showDetail, packageName) { showDetail = false }
         }
     }

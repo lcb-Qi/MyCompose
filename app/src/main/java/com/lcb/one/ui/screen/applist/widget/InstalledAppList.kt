@@ -2,7 +2,6 @@ package com.lcb.one.ui.screen.applist.widget
 
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn

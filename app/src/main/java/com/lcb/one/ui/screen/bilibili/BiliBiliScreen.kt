@@ -50,7 +50,11 @@ import kotlin.math.roundToInt
 @Composable
 fun BiliBiliScreen() {
     var textInput by remember { mutableStateOf("") }
-    var coverUrl by remember { mutableStateOf("https://patchwiki.biligame.com/images/sr/b/be/crncyly4kxzqik8h4uc98aj1c8vovbe.png") }
+    var coverUrl by remember { mutableStateOf("") }
+    if (BuildConfig.DEBUG) {
+        coverUrl =
+            "https://patchwiki.biligame.com/images/sr/b/be/crncyly4kxzqik8h4uc98aj1c8vovbe.png"
+    }
     val scope = rememberCoroutineScope()
 
     val getCoverUrl: () -> Unit = {

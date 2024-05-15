@@ -17,6 +17,8 @@ import com.lcb.one.ui.screen.settings.SettingsScreen
 import com.lcb.one.ui.screen.tester.TesterScreen
 import com.lcb.one.ui.screen.tester.ThemePreviewScreen
 
+const val ANIMATE_DURATION = 500
+
 object Route {
     const val MAIN = "Main"
     const val BILI = "BiliBili"
