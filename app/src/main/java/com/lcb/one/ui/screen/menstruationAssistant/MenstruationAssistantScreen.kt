@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.mcAssistant
+package com.lcb.one.ui.screen.menstruationAssistant
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -23,32 +23,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lcb.one.ui.screen.mcAssistant.repo.model.McDay
-import com.lcb.one.ui.screen.mcAssistant.repo.model.getMcDay
+import com.lcb.one.localization.Localization
+import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
+import com.lcb.one.ui.screen.menstruationAssistant.repo.model.getMcDay
 import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.Route
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.util.android.navigateSingleTop
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.toMillis
-import com.lcb.one.ui.screen.mcAssistant.repo.MenstrualCycleViewModel
-import com.lcb.one.ui.screen.mcAssistant.widget.Calendar
-import com.lcb.one.ui.screen.mcAssistant.widget.rememberCalendarState
+import com.lcb.one.ui.screen.menstruationAssistant.repo.MenstruationViewModel
+import com.lcb.one.ui.screen.menstruationAssistant.widget.Calendar
+import com.lcb.one.ui.screen.menstruationAssistant.widget.rememberCalendarState
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.ui.widget.common.AppIconButton
 import java.time.LocalDate
 
-const val MENSTRUAL_CYCLE_INTERVAL = 28L
-const val MENSTRUAL_CYCLE_DURATION = 7L
+private const val MENSTRUATION_INTERVAL = 28L// 两次月经间隔
+private const val MENSTRUATION_DURATION = 7L// 月经持续时间
 
 @Composable
-fun MenstrualCycleAssistantScreen() {
+fun MenstruationAssistantScreen() {
     val navController = LocalNav.current!!
 
-    val mcViewmodel = viewModel<MenstrualCycleViewModel>()
+    val mcViewmodel = viewModel<MenstruationViewModel>()
     val mcDays by mcViewmodel.getAll().collectAsState(emptyList())
     val runningMcDay = mcDays.find { !it.finish }
-    var lastMcDay: McDay? = null
+    var lastMcDay: MenstruationDay? = null
     mcDays.forEach {
         if (lastMcDay == null) {
             lastMcDay = it
@@ -60,8 +61,8 @@ fun MenstrualCycleAssistantScreen() {
         val start = DateTimeUtils.toLocalDateTime(it.startTime)
         it.copy(
             finish = true,
-            startTime = start.plusDays(MENSTRUAL_CYCLE_INTERVAL).toMillis(),
-            endTime = start.plusDays(MENSTRUAL_CYCLE_INTERVAL + MENSTRUAL_CYCLE_DURATION - 1)
+            startTime = start.plusDays(MENSTRUATION_INTERVAL).toMillis(),
+            endTime = start.plusDays(MENSTRUATION_INTERVAL + MENSTRUATION_DURATION - 1)
                 .toMillis()
         )
     }
@@ -70,7 +71,7 @@ fun MenstrualCycleAssistantScreen() {
     Scaffold(
         topBar = {
             ToolBar(
-                title = "经期助手",
+                title = Localization.menstrualAssistant,
                 actions = {
                     AppIconButton(
                         icon = Icons.Rounded.History,
@@ -116,14 +117,14 @@ fun MenstrualCycleAssistantScreen() {
 
             if (!DateTimeUtils.isAfterToday(selectedDate) && runningMcDay == null && (lastMcDay == null || selectedDate > lastMcDay!!.endTime)) {
                 AppButton(
-                    text = "开始记录经期",
-                    onClick = { mcViewmodel.startNewMenstrualCycle(selectedDate) }
+                    text = Localization.menstruationStart,
+                    onClick = { mcViewmodel.startNewMenstruationDay(selectedDate) }
                 )
             }
             if (runningMcDay != null && selectedDate >= runningMcDay.startTime) {
                 AppButton(
-                    text = "已结束",
-                    onClick = { mcViewmodel.endMenstrualCycle(selectedDate) }
+                    text = Localization.menstruationEnded,
+                    onClick = { mcViewmodel.endMenstruationDay(selectedDate) }
                 )
             }
         }
@@ -134,8 +135,8 @@ fun MenstrualCycleAssistantScreen() {
 fun MenstrualCycleInfo(
     modifier: Modifier = Modifier,
     selectedDate: Long,
-    mcDays: List<McDay>,
-    predictMcDay: McDay? = null
+    mcDays: List<MenstruationDay>,
+    predictMcDay: MenstruationDay? = null
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Card(modifier = Modifier.fillMaxWidth()) {
@@ -145,25 +146,32 @@ fun MenstrualCycleInfo(
                     style = MaterialTheme.typography.titleLarge
                 )
 
-                val message = mcDays.getMcDay(selectedDate)?.let {
+                val mcDay = mcDays.getMcDay(selectedDate)
+                val message = if (mcDay == null) {// 1.所选日期不存在月经记录
+                    Localization.noMenstruation
+                } else {// 2.所选日期存在月经记录
                     buildString {
-                        var days = DateTimeUtils.getDurationDays(it.startTime, selectedDate)
-                        append("月经期第${days + 1}天")
-                        if (it.finish) {
-                            days = DateTimeUtils.getDurationDays(selectedDate, it.endTime)
-                            if (days > 0) {
-                                append("，还有${days}天结束")
-                            }
-                        } else {
-                            days = MENSTRUAL_CYCLE_DURATION - days
-                            if (days > 0) {
-                                append("，预计还有${days}天结束")
+                        val days = DateTimeUtils.getDurationDays(mcDay.startTime, selectedDate)
+                        // 1.1.展示第几天
+                        append(String.format(Localization.menstruationDays, days + 1))
+                        // 1.2. 如果未结束，则展示预计结束时间
+                        if (!mcDay.finish) {
+                            appendLine()
+                            // 预计{MENSTRUAL_DURATION}天内结束，如果超出，显示温馨提示
+                            val endInDays = MENSTRUATION_DURATION - days
+                            if (endInDays > 0) {
+                                append(String.format(Localization.menstruationPredictEndIn, endInDays))
                             } else {
-                                append("，已超过${MENSTRUAL_CYCLE_DURATION}天，请注意健康哦")
+                                append(
+                                    String.format(
+                                        Localization.menstruationTips,
+                                        MENSTRUATION_DURATION
+                                    )
+                                )
                             }
                         }
                     }
-                } ?: "不在月经期哦"
+                }
 
                 Text(text = message, style = MaterialTheme.typography.labelLarge)
             }
@@ -172,7 +180,7 @@ fun MenstrualCycleInfo(
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp)) columnPredict@{
                 Text(
-                    text = "经期预测",
+                    text = Localization.menstruationPrediction,
                     style = MaterialTheme.typography.titleLarge
                 )
 
@@ -182,12 +190,19 @@ fun MenstrualCycleInfo(
                 val message =
                     if (selectedDate >= lastMcDay.endTime && selectedDate < predictMcDay.startTime) {
                         val days =
-                            DateTimeUtils.getDurationDays(selectedDate, predictMcDay.startTime)
-                        "预计下一次在${days}天后"
+                            DateTimeUtils.getDurationDays(
+                                DateTimeUtils.nowMillis(),
+                                predictMcDay.startTime
+                            )
+                        String.format(
+                            Localization.nextMenstruationInfo,
+                            DateTimeUtils.format(predictMcDay.startTime, "yyyy.MM.dd"),
+                            days
+                        )
                     } else if (selectedDate in predictMcDay.startTime..predictMcDay.endTime) {
                         val days =
                             DateTimeUtils.getDurationDays(predictMcDay.startTime, selectedDate)
-                        "预计下一次经期的第${days + 1}天"
+                        String.format(Localization.nextMenstruationDays, days + 1)
                     } else {
                         null
                     }

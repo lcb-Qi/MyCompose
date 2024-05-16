@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
+import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.about.repo.model.AppVersion
@@ -38,7 +39,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AboutScreen(modifier: Modifier = Modifier) {
-    Scaffold(topBar = { ToolBar(title = "关于${stringResource(R.string.app_name)}") }) { paddingValues ->
+    Scaffold(topBar = { ToolBar(title = "${Localization.about}${Localization.appName}") }) { paddingValues ->
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -58,15 +59,16 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                 clickCount = 0
             }
             SettingsSimpleText(
-                title = stringResource(R.string.version_info),
+                title = Localization.versionInfo,
                 summary = versionInfo,
                 icon = { Icon(imageVector = Icons.Rounded.Info, contentDescription = "") }
             ) {
                 clickCount++
                 if (clickCount >= AppGlobalConfigs.COUNT_TO_ENABLE_DEV_MODE) {
                     AppGlobalConfigs.appDevMode = !AppGlobalConfigs.appDevMode
-                    val action = if (AppGlobalConfigs.appDevMode) "已处于" else "已退出"
-                    ToastUtils.showToast("${action}开发者模式")
+                    val action =
+                        if (AppGlobalConfigs.appDevMode) Localization.enterDevMode else Localization.exitDevMode
+                    ToastUtils.showToast(action)
                     clickCount = 0
                 }
             }
@@ -80,17 +82,17 @@ fun AboutScreen(modifier: Modifier = Modifier) {
             }
             val scope = rememberCoroutineScope()
             SettingsMenuLink(
-                title = "检查更新",
+                title = Localization.checkUpdates,
                 icon = { Icon(imageVector = Icons.Rounded.Update, contentDescription = "") }
             ) {
                 scope.launch {
                     updateInfo = UpdateAccessor.getLastRelease()
                     if (updateInfo == null) {
-                        ToastUtils.showToast("未检测到新版本")
+                        ToastUtils.showToast(Localization.noNewVersion)
                         return@launch
                     }
                     if (!BuildConfig.DEBUG && updateInfo!!.version <= AppVersion.current) {
-                        ToastUtils.showToast("已是最新版")
+                        ToastUtils.showToast(Localization.alreadyLast)
                         return@launch
                     }
                     showUpdate = true
@@ -104,7 +106,7 @@ fun AboutScreen(modifier: Modifier = Modifier) {
             // 项目地址
             val url = stringResource(R.string.project_location_url)
             SettingsMenuLink(
-                title = stringResource(R.string.project_location),
+                title = Localization.projectUrl,
                 summary = url,
                 icon = { Icon(imageVector = Icons.Rounded.Link, contentDescription = "") }
             ) {

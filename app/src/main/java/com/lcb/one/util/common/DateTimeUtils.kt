@@ -1,8 +1,7 @@
 package com.lcb.one.util.common
 
 import android.os.Build
-import com.lcb.one.R
-import com.lcb.one.ui.MyApp
+import com.lcb.one.localization.Localization
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -102,9 +101,13 @@ object DateTimeUtils {
         val hoursPart = duration.toHoursPart()
         val minutesPart = duration.toMinutesPart()
         val secondsPart = duration.toSecondsPart()
-
-        return MyApp.getAppContext()
-            .getString(R.string.friendly_duration, daysPart, hoursPart, minutesPart, secondsPart)
+        return String.format(
+            Localization.friendDuration,
+            daysPart,
+            hoursPart,
+            minutesPart,
+            secondsPart
+        )
     }
 
     fun getDurationDays(start: Long, end: Long): Long {

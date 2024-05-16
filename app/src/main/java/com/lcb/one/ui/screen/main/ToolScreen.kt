@@ -28,11 +28,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import com.lcb.one.R
+import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.activity.ClockActivity
@@ -55,38 +54,38 @@ fun ToolScreen() {
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         ToolBox(
-            title = stringResource(R.string.device),
+            title = Localization.device,
             icon = { Icon(Icons.Rounded.PhoneAndroid, "") }
         ) {
             ElevatedAssistChip(
                 onClick = { navController.navigateSingleTop(Route.DEVICE) },
-                label = { Text(text = stringResource(R.string.device_info)) }
+                label = { Text(text = Localization.deviceInfo) }
             )
             ElevatedAssistChip(
                 onClick = { getWallPaper() },
-                label = { Text(text = stringResource(R.string.extract_wallpaper)) }
+                label = { Text(text = Localization.extractWallpaper) }
             )
 
             ElevatedAssistChip(
                 onClick = { navController.navigateSingleTop(Route.APPS) },
-                label = { Text(text = "应用列表") }
+                label = { Text(text = Localization.appList) }
             )
         }
 
         // 更多
         ToolBox(
-            title = stringResource(R.string.more),
+            title = Localization.more,
             icon = { Icon(Icons.Rounded.MiscellaneousServices, "") }
         ) {
             var showClock by remember { mutableStateOf(false) }
 
             ElevatedAssistChip(
                 onClick = { navController.navigateSingleTop(Route.BILI) },
-                label = { Text(text = stringResource(R.string.obtain_bilibili_cover)) }
+                label = { Text(text = Localization.obtainBilibiliCover) }
             )
             ElevatedAssistChip(
                 onClick = { showClock = true },
-                label = { Text(text = stringResource(R.string.clock_screen)) }
+                label = { Text(text = Localization.clockScreen) }
             )
 
             if (showClock) {
@@ -98,7 +97,7 @@ fun ToolScreen() {
 
             ElevatedAssistChip(
                 onClick = { navController.navigateSingleTop(Route.MENSTRUAL_CYCLE_ASSISTANT) },
-                label = { Text(text = "经期助手") }
+                label = { Text(text = Localization.menstrualAssistant) }
             )
         }
 
@@ -123,12 +122,12 @@ private fun DevItems() {
         ElevatedAssistChip(
             enabled = false,
             onClick = { },
-            label = { Text(text = stringResource(R.string.bv_to_av)) }
+            label = { Text(text = Localization.bv2av) }
         )
         ElevatedAssistChip(
             enabled = false,
             onClick = { },
-            label = { Text(text = stringResource(R.string.av_to_bv)) }
+            label = { Text(text = Localization.av2bv) }
         )
     }
 }
@@ -140,8 +139,8 @@ private fun getWallPaper() {
                 WallpaperManager.getInstance(MyApp.getAppContext()).drawable?.toBitmap()
             DownLoadUtil.writeBitmapToImageFile(bitmap!!)
         }.onFailure {
-            ToastUtils.showToast("保存失败 ${it.message}")
-        }.onSuccess { ToastUtils.showToast("保存成功 $it") }
+            ToastUtils.showToast(Localization.saveFailed)
+        }.onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
     }
 }
 

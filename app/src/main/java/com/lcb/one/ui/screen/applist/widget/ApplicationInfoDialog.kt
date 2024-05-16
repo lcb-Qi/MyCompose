@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.lcb.one.localization.Localization
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
@@ -55,30 +56,30 @@ fun ApplicationInfoDialog(show: Boolean, packageName: String, onDisMiss: () -> U
             }
 
             ToolButton(
-                text = "提取桌面图标",
+                text = Localization.extractIcon,
                 leadingIcon = Icons.Rounded.Image,
                 onclick = {
                     scope.launchIOSafely {
                         val icon = AppUtils.getAppIcon(packageName = packageName)
                         if (icon != null) {
                             DownLoadUtil.writeBitmapToImageFile(icon, "${label}_logo")
-                                .onSuccess { ToastUtils.showToast("保存成功 $it") }
-                                .onFailure { ToastUtils.showToast("保存失败") }
+                                .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
+                                .onFailure { ToastUtils.showToast(Localization.saveFailed) }
                         } else {
-                            ToastUtils.showToast("保存失败")
+                            ToastUtils.showToast(Localization.saveFailed)
                         }
                     }
                 }
             )
 
             ToolButton(
-                text = "提取安装包",
+                text = Localization.extractPackage,
                 leadingIcon = Icons.Rounded.Android,
                 onclick = {
                     scope.launchIOSafely {
                         DownLoadUtil.saveApk(AppUtils.getApkPath(packageName), label)
-                            .onSuccess { ToastUtils.showToast("保存成功 $it") }
-                            .onFailure { ToastUtils.showToast("保存失败") }
+                            .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
+                            .onFailure { ToastUtils.showToast(Localization.saveFailed) }
                     }
                 }
             )

@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.mcAssistant.widget
+package com.lcb.one.ui.screen.menstruationAssistant.widget
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState

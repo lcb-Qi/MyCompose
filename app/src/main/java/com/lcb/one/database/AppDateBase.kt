@@ -3,11 +3,9 @@ package com.lcb.one.database
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.lcb.one.ui.screen.mcAssistant.repo.model.McDay
+import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
 import com.lcb.one.ui.MyApp
-import com.lcb.one.ui.screen.mcAssistant.repo.McDayDao
-
-private const val TAG = "AppDateBase"
+import com.lcb.one.ui.screen.menstruationAssistant.repo.MenstruationDayDao
 
 val appDatabase by lazy {
     KotlinVersion.CURRENT
@@ -16,9 +14,9 @@ val appDatabase by lazy {
 }
 
 @Database(
-    entities = [McDay::class],
+    entities = [MenstruationDay::class],
     version = 1,
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun getMcDayDao(): McDayDao
+    abstract fun getMenstruationDayDao(): MenstruationDayDao
 }

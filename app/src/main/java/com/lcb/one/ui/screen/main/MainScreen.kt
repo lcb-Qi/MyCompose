@@ -16,15 +16,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lcb.one.R
+import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.Route
@@ -51,9 +47,9 @@ fun MainScreen() {
     val poemState by mainViewModel.poemSate.collectAsState()
 
     val bottomItem = listOf(
-        BottomBarItem(stringResource(R.string.home), Icons.Rounded.Home),
-        BottomBarItem(stringResource(R.string.tool), Icons.Rounded.Android),
-        BottomBarItem(stringResource(R.string.more), Icons.Rounded.MoreHoriz)
+        BottomBarItem(Localization.home, Icons.Rounded.Home),
+        BottomBarItem(Localization.tool, Icons.Rounded.Android),
+        BottomBarItem(Localization.more, Icons.Rounded.MoreHoriz)
     )
 
     val pagerState = rememberPagerState { bottomItem.size }

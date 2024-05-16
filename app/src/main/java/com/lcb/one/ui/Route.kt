@@ -10,8 +10,8 @@ import com.lcb.one.ui.screen.applist.InstalledAppsScreen
 import com.lcb.one.ui.screen.main.MainScreen
 import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
 import com.lcb.one.ui.screen.device.DeviceInfoScreen
-import com.lcb.one.ui.screen.mcAssistant.MenstrualCycleAssistantScreen
-import com.lcb.one.ui.screen.mcAssistant.MenstrualCycleHistoryScreen
+import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
+import com.lcb.one.ui.screen.menstruationAssistant.MenstruationHistoryScreen
 import com.lcb.one.ui.screen.settings.ThemeScreen
 import com.lcb.one.ui.screen.settings.SettingsScreen
 import com.lcb.one.ui.screen.tester.TesterScreen
@@ -51,8 +51,8 @@ fun getRouters(): List<RouteScreen> {
         RouteScreen(Route.SETTINGS) { SettingsScreen() },
         RouteScreen(Route.ABOUT) { AboutScreen() },
         RouteScreen(Route.APPS) { InstalledAppsScreen() },
-        RouteScreen(Route.MENSTRUAL_CYCLE_ASSISTANT) { MenstrualCycleAssistantScreen() },
-        RouteScreen(Route.MENSTRUAL_CYCLE_HISTORY) { MenstrualCycleHistoryScreen() },
+        RouteScreen(Route.MENSTRUAL_CYCLE_ASSISTANT) { MenstruationAssistantScreen() },
+        RouteScreen(Route.MENSTRUAL_CYCLE_HISTORY) { MenstruationHistoryScreen() },
         RouteScreen(Route.THEME) { ThemeScreen() },
 
         // tester

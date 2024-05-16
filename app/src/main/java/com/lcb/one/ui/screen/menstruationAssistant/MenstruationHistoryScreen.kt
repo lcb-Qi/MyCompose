@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.mcAssistant
+package com.lcb.one.ui.screen.menstruationAssistant
 
 import androidx.compose.animation.core.animate
 import androidx.compose.foundation.gestures.Orientation
@@ -30,29 +30,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.lcb.one.localization.Localization
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
 import com.lcb.one.util.android.ToastUtils
-import com.lcb.one.ui.screen.mcAssistant.repo.MenstrualCycleViewModel
-import com.lcb.one.ui.screen.mcAssistant.repo.model.McDay
-import com.lcb.one.ui.screen.mcAssistant.repo.model.allFinished
-import com.lcb.one.ui.screen.mcAssistant.repo.model.averageDurationDay
-import com.lcb.one.ui.screen.mcAssistant.repo.model.averageIntervalDay
-import com.lcb.one.ui.screen.mcAssistant.widget.MenstrualCycleHistoryCard
-import com.lcb.one.ui.screen.mcAssistant.widget.PastMcDayPicker
+import com.lcb.one.ui.screen.menstruationAssistant.repo.MenstruationViewModel
+import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
+import com.lcb.one.ui.screen.menstruationAssistant.repo.model.averageDurationDay
+import com.lcb.one.ui.screen.menstruationAssistant.repo.model.averageIntervalDay
+import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstrualCycleHistoryCard
+import com.lcb.one.ui.screen.menstruationAssistant.widget.PastMcDayPicker
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 private const val DRAG_OFFSET_MAX = 400
 
 @Composable
-fun MenstrualCycleHistoryScreen() {
-    val mcViewmodel = viewModel<MenstrualCycleViewModel>()
+fun MenstruationHistoryScreen() {
+    val mcViewmodel = viewModel<MenstruationViewModel>()
     val allMcDay by mcViewmodel.getAll().collectAsState(emptyList())
     var showImportButton by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
     Scaffold(
-        topBar = { ToolBar(title = "全部经期") },
+        topBar = { ToolBar(title = Localization.allRecords) },
         floatingActionButton = {
             FloatingActionButton(onClick = { showImportButton = true }) {
                 Icon(imageVector = Icons.Rounded.Add, contentDescription = "")
@@ -71,7 +70,7 @@ fun MenstrualCycleHistoryScreen() {
         ) {
             items(count = allMcDay.size, key = { allMcDay[it].startTime }) { index ->
                 val mcDay = allMcDay[index]
-                HistoryItem(data = mcDay) { mcViewmodel.deleteMenstrualCycle(mcDay) }
+                HistoryItem(data = mcDay) { mcViewmodel.deleteMenstruationDay(mcDay) }
             }
 
             item { SummaryMessage(allMcDay) }
@@ -83,16 +82,16 @@ fun MenstrualCycleHistoryScreen() {
             !(selectRange.last < it.startTime || selectRange.first > it.endTime)
         }
         if (hasIntersect) {
-            ToastUtils.showToast("和已有记录冲突")
+            ToastUtils.showToast(Localization.conflictTips)
         } else {
-            mcViewmodel.addPastMenstrualCycle(selectRange.first, selectRange.last)
+            mcViewmodel.addPastMenstruationDay(selectRange.first, selectRange.last)
         }
         showImportButton = false
     }
 }
 
 @Composable
-fun HistoryItem(data: McDay, onDelete: (McDay) -> Unit) {
+fun HistoryItem(data: MenstruationDay, onDelete: (MenstruationDay) -> Unit) {
     var showDeleteDialog by remember { mutableStateOf(false) }
     var offsetX by remember { mutableFloatStateOf(0f) }
     val draggableState = rememberDraggableState {
@@ -128,7 +127,7 @@ fun HistoryItem(data: McDay, onDelete: (McDay) -> Unit) {
 
     SimpleMessageDialog(
         show = showDeleteDialog,
-        message = "确认删除这条记录？",
+        message = Localization.confirmDelete,
         onCancel = {
             showDeleteDialog = false
             animateOffset(0f)
@@ -144,21 +143,20 @@ fun HistoryItem(data: McDay, onDelete: (McDay) -> Unit) {
 }
 
 @Composable
-fun SummaryMessage(data: List<McDay>) {
+fun SummaryMessage(data: List<MenstruationDay>) {
     if (data.isNotEmpty()) {
         val count = data.size
-        val runningCount = if (data.allFinished()) 0 else 1
         val averageDuration = data.averageDurationDay()
         val averageInterval = data.averageIntervalDay()
 
-        Column(/* Modifier.padding(horizontal = 16.dp) */) {
+        Column {
             ProvideTextStyle(value = MaterialTheme.typography.bodyLarge) {
-                Text(text = "共 $count 条月经记录，$runningCount 条未结束")
+                Text(text = String.format(Localization.sumOfRecords, count))
                 Text(
-                    text = "平均每次持续（不含未结束） ${String.format("%.2f", averageDuration)} 天"
+                    text = String.format(Localization.averageDuration, averageDuration)
                 )
                 Text(
-                    text = "平均每次间隔 ${String.format("%.2f", averageInterval)} 天"
+                    text = String.format(Localization.averageInterval, averageInterval)
                 )
             }
         }

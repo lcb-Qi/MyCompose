@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.mcAssistant.widget
+package com.lcb.one.ui.screen.menstruationAssistant.widget
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import com.lcb.one.util.android.LLog
 import com.lcb.one.util.common.DateTimeUtils
 import java.time.LocalDate
 import java.time.YearMonth

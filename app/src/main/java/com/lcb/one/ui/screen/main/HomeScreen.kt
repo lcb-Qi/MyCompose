@@ -16,9 +16,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
+import com.lcb.one.localization.Localization
 import com.lcb.one.ui.screen.main.widget.EventCard
 import com.lcb.one.ui.widget.common.AppTextButton
 import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPrefState
@@ -40,8 +40,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         LoveCard()
-        GetOffWorkCard()
-        SalaryDayCard()
+        OffWorkCard()
+        PaydayCard()
     }
 }
 
@@ -58,7 +58,7 @@ private fun LoveCard() {
 
     EventCard(
         modifier = Modifier.fillMaxWidth(),
-        title = "在一起",
+        title = Localization.fallInLove,
         content = durationText,
         icon = R.drawable.icon_love
     )
@@ -72,11 +72,11 @@ private fun LoveCard() {
 }
 
 @Composable
-private fun GetOffWorkCard() {
+private fun OffWorkCard() {
     val startTime = LocalTime.of(9, 0)
     val endTime = LocalTime.of(18, 0)
 
-    var title by remember { mutableStateOf("下班") }
+    var title by remember { mutableStateOf(Localization.offWorkCountdown) }
     var content by remember { mutableStateOf("") }
     var icon by remember { mutableIntStateOf(R.mipmap.onwork) }
 
@@ -91,11 +91,11 @@ private fun GetOffWorkCard() {
             val minutes = duration.toMinutes() % 60
             val seconds = duration.seconds % 60
 
-            title = "下班还有"
-            content = "$hours 小时 $minutes 分 $seconds 秒"
+            title = Localization.offWorkCountdown
+            content = String.format(Localization.friendDurationNoDays, hours, minutes, seconds)
             icon = R.mipmap.onwork
         } else {
-            title = "休息时间"
+            title = Localization.breakTime
             content = ""
             icon = R.mipmap.offwork
         }
@@ -117,7 +117,7 @@ private fun GetOffWorkCard() {
 }
 
 @Composable
-fun SalaryDayCard() {
+fun PaydayCard() {
     var showSettings by remember { mutableStateOf(false) }
     var targetDay by rememberIntPrefState("salary_day", 1)
     val today = LocalDate.now()
@@ -131,8 +131,8 @@ fun SalaryDayCard() {
 
     EventCard(
         modifier = Modifier.fillMaxWidth(),
-        title = "发薪还有",
-        content = "$days 天",
+        title = Localization.paydayCountdown,
+        content = "$days ${Localization.days}",
         icon = R.drawable.icon_rmb,
         onClick = { showSettings = true }
     )
@@ -142,11 +142,11 @@ fun SalaryDayCard() {
         val options = values.map { it.toString() }
         var selectIndex by remember { mutableIntStateOf(values.indexOf(targetDay)) }
         AlertDialog(
-            title = { Text(text = stringResource(R.string.settings)) },
+            title = { Text(text = Localization.settings) },
             onDismissRequest = { showSettings = false },
             confirmButton = {
                 AppTextButton(
-                    text = stringResource(R.string.ok),
+                    text = Localization.ok,
                     onClick = {
                         targetDay = values[selectIndex]
                         showSettings = false
@@ -155,14 +155,14 @@ fun SalaryDayCard() {
             },
             dismissButton = {
                 AppTextButton(
-                    text = stringResource(R.string.cancel),
+                    text = Localization.cancel,
                     onClick = { showSettings = false }
                 )
             },
             text = {
                 SettingsListDropdown(
                     selectIndex = selectIndex,
-                    title = "发薪日",
+                    title = Localization.payday,
                     items = options,
                     onItemSelected = { index, option ->
                         selectIndex = index

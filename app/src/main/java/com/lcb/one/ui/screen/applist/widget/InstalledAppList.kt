@@ -2,7 +2,7 @@ package com.lcb.one.ui.screen.applist.widget
 
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.lcb.one.localization.Localization
 
 data class AppInfo(
     val packageName: String,
@@ -29,12 +30,19 @@ data class AppInfo(
     val isSystemApp: Boolean
 )
 
-enum class AppType(val label: String) {
-    USER("用户应用"), SYSTEM("系统应用"), ALL("所有应用");
+enum class AppType {
+    USER, SYSTEM, ALL;
 
     companion object {
         fun from(id: Int) = AppType.entries.first { it.ordinal == id }
     }
+
+    val label: String
+        get() = when (this) {
+            USER -> Localization.userApps
+            SYSTEM -> Localization.systemApps
+            ALL -> Localization.allApps
+        }
 }
 
 @Composable
@@ -61,7 +69,8 @@ fun InstalledAppList(
     LazyColumn(
         state = state,
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = PaddingValues(bottom = 32.dp)
     ) {
         items(count = apps.size, key = { apps[it].packageName }) {
             val appInfo = apps[it]
@@ -105,9 +114,8 @@ fun InstalledAppList(
                     AppType.ALL -> apps.size
                 }
                 Text(
-                    text = "共 $count 个应用",
+                    text = String.format(Localization.sumOfApps, count),
                     style = MaterialTheme.typography.labelMedium,
-                    modifier = Modifier.padding(top = 16.dp, bottom = 32.dp)
                 )
             }
         }

@@ -6,9 +6,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import com.lcb.one.R
+import com.lcb.one.localization.Localization
 import com.lcb.one.ui.widget.common.AppTextButton
 
 @Composable
@@ -17,8 +16,8 @@ fun SimpleMessageDialog(
     title: String? = null,
     message: String? = null,
     icon: @Composable (() -> Unit)? = null,
-    confirmText: String = stringResource(R.string.ok),
-    cancelText: String = stringResource(R.string.cancel),
+    confirmText: String = Localization.ok,
+    cancelText: String = Localization.cancel,
     onConfirm: () -> Unit = {},
     onCancel: () -> Unit = {}
 ) {

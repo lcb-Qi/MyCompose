@@ -9,8 +9,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import com.lcb.one.R
+import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.widget.common.AppTextButton
@@ -34,7 +33,7 @@ fun AssertInternetDialog(show: Boolean) {
         },
         dismissButton = {
             AppTextButton(
-                text = stringResource(R.string.cancel),
+                text = Localization.cancel,
                 onClick = { AppGlobalConfigs.assertNetwork = false }
             )
         },

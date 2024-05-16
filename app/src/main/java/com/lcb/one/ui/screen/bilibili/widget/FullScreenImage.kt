@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.core.animation.doOnEnd
 import com.github.panpf.zoomimage.CoilZoomAsyncImage
+import com.lcb.one.localization.Localization
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.DimenUtils
 import com.lcb.one.util.android.DownLoadUtil
@@ -109,8 +110,8 @@ fun FullScreenImage(
     val download: () -> Unit = {
         scope.launch {
             DownLoadUtil.saveImageFromUrl(url)
-                .onSuccess { ToastUtils.showToast("保存成功 $it") }
-                .onFailure { ToastUtils.showToast("保存失败") }
+                .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
+                .onFailure { ToastUtils.showToast(Localization.saveFailed) }
         }
     }
 
@@ -139,7 +140,7 @@ fun FullScreenImage(
             onClick = download,
             modifier = Modifier.padding(vertical = 32.dp),
         ) {
-            Text(text = "保存")
+            Text(text = Localization.save)
         }
     }
 }

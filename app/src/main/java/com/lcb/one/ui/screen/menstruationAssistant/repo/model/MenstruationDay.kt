@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.mcAssistant.repo.model
+package com.lcb.one.ui.screen.menstruationAssistant.repo.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -14,7 +14,7 @@ import java.time.LocalDate
         Index(value = ["start_time"], unique = true)
     ]
 )
-data class McDay(
+data class MenstruationDay(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Int? = null,
@@ -40,7 +40,7 @@ data class McDay(
 
 }
 
-fun List<McDay>.getMcDay(time: Long): McDay? {
+fun List<MenstruationDay>.getMcDay(time: Long): MenstruationDay? {
     return find {
         val range = if (it.finish) {
             it.startTime..it.endTime
@@ -52,9 +52,9 @@ fun List<McDay>.getMcDay(time: Long): McDay? {
     }
 }
 
-fun List<McDay>.allFinished() = all { it.finish }
+fun List<MenstruationDay>.allFinished() = all { it.finish }
 
-fun List<McDay>.averageDurationDay(): Float {
+fun List<MenstruationDay>.averageDurationDay(): Float {
     val finished = filter { it.finish }
     if (finished.isEmpty()) return 0f
 
@@ -63,7 +63,7 @@ fun List<McDay>.averageDurationDay(): Float {
     return (sumOf.toFloat() / finished.size.toFloat())
 }
 
-fun List<McDay>.averageIntervalDay(): Float {
+fun List<MenstruationDay>.averageIntervalDay(): Float {
     if (size <= 1) return 0f
 
     var total = 0f

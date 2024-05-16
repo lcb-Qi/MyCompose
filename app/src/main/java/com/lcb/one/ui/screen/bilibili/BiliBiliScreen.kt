@@ -12,7 +12,6 @@ import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -35,6 +33,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
+import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.screen.bilibili.repo.BiliServerAccessor
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -71,8 +70,8 @@ fun BiliBiliScreen() {
     val download: () -> Unit = {
         scope.launch {
             DownLoadUtil.saveImageFromUrl(coverUrl)
-                .onSuccess { ToastUtils.showToast("保存成功 $it") }
-                .onFailure { ToastUtils.showToast("保存失败") }
+                .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
+                .onFailure { ToastUtils.showToast(Localization.saveFailed) }
         }
     }
 
@@ -81,7 +80,7 @@ fun BiliBiliScreen() {
 
     val imageViewState by remember { mutableStateOf(ImageViewState()) }
     Scaffold(
-        topBar = { ToolBar(title = stringResource(R.string.bibibili)) },
+        topBar = { ToolBar(title = Localization.bibibili) },
         floatingActionButton = {
             if (coverUrl.isNotBlank()) {
                 FloatingActionButton(onClick = download) {
@@ -102,21 +101,15 @@ fun BiliBiliScreen() {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = "请输入av或BV号以获取封面",
-                style = MaterialTheme.typography.titleMedium
-            )
-
             OutlinedTextField(
                 singleLine = true,
                 value = textInput,
                 onValueChange = { textInput = it },
-                placeholder = { Text(text = "如BV117411r7R1") },
+                placeholder = { Text(text = Localization.getCoverHint) },
                 modifier = Modifier.fillMaxWidth()
             )
 
-            AppButton(text = stringResource(R.string.obtain), onClick = getCoverUrl)
+            AppButton(text = Localization.obtain, onClick = getCoverUrl)
 
             SubcomposeAsyncImage(
                 modifier = Modifier

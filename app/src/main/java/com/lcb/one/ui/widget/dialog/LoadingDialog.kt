@@ -9,12 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.lcb.one.R
+import com.lcb.one.localization.Localization
 
 @Composable
-fun LoadingDialog(show: Boolean, message: String = stringResource(R.string.loading)) {
+fun LoadingDialog(show: Boolean, message: String = Localization.loading) {
     if (!show) return
 
     AlertDialog(

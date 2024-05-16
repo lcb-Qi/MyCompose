@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.mcAssistant.widget
+package com.lcb.one.ui.screen.menstruationAssistant.widget
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.lcb.one.ui.widget.common.AppIconButton
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.YearMonth
 
 @OptIn(ExperimentalFoundationApi::class)

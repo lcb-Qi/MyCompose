@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.mcAssistant.widget
+package com.lcb.one.ui.screen.menstruationAssistant.widget
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,10 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.lcb.one.R
+import com.lcb.one.localization.Localization
 import com.lcb.one.ui.widget.common.AppTextButton
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.toMillis
@@ -74,7 +73,7 @@ fun PastMcDayPicker(
                         dateFormatter = dateFormatter,
                         title = {
                             Text(
-                                text = "导入经期",
+                                text = Localization.doImport,
                                 modifier = Modifier.padding(
                                     start = 24.dp,
                                     top = 16.dp,
@@ -105,12 +104,12 @@ fun PastMcDayPicker(
                     ) {
                         FlowRow {
                             AppTextButton(
-                                text = stringResource(R.string.cancel),
+                                text = Localization.cancel,
                                 onClick = onCancel
                             )
 
                             AppTextButton(
-                                text = "添加",
+                                text = Localization.ok,
                                 onClick = {
                                     val start = DateTimeUtils.toLocalDate(
                                         pickerState.selectedStartDateMillis!!,

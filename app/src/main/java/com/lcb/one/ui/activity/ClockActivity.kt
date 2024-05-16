@@ -21,14 +21,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.lcb.one.R
+import com.lcb.one.localization.Localization
 import com.lcb.one.ui.theme.AppTheme
 import com.lcb.one.ui.theme.ThemeManager
 import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPrefState
@@ -63,10 +62,10 @@ class ClockActivity : ComponentActivity() {
 
     private val positions by lazy {
         listOf(
-            RadioItem(DATE_POSITION_LEFT_BOTTOM, getString(R.string.left_bottom)),
-            RadioItem(DATE_POSITION_RIGHT_BOTTOM, getString(R.string.right_bottom)),
-            RadioItem(DATE_POSITION_CENTER_ABOVE, getString(R.string.center_above)),
-            RadioItem(DATE_POSITION_CENTER_BELOW, getString(R.string.center_below)),
+            RadioItem(DATE_POSITION_LEFT_BOTTOM, Localization.leftBottom),
+            RadioItem(DATE_POSITION_RIGHT_BOTTOM, Localization.rightBottom),
+            RadioItem(DATE_POSITION_CENTER_ABOVE, Localization.centerAbove),
+            RadioItem(DATE_POSITION_CENTER_BELOW, Localization.centerBelow),
         )
     }
 
@@ -101,16 +100,16 @@ class ClockActivity : ComponentActivity() {
                 drawerContent = {
                     ModalDrawerSheet {
                         Column(modifier = Modifier.padding(24.dp)) {
-                            SettingsGroup(title = stringResource(R.string.settings)) {
+                            SettingsGroup(title = Localization.settings) {
                                 SettingsSwitch(
                                     checked = darkTheme,
-                                    title = "深色",
-                                    summary = "仅本页面生效",
+                                    title = Localization.darkMode,
+                                    summary = Localization.onlyThisPage,
                                     onCheckedChange = { darkTheme = it }
                                 )
 
                                 SettingsSlider(
-                                    title = "时钟字号",
+                                    title = Localization.clockFontSize,
                                     summary = clockSize.toString(),
                                     value = clockSize.toFloat(),
                                     valueRange = MIN_SIZE.toFloat()..MAX_SIZE.toFloat(),
@@ -122,7 +121,7 @@ class ClockActivity : ComponentActivity() {
                                 val options = positions.map { it.label }
                                 val values = positions.map { it.id }
                                 SettingsListDropdown(
-                                    title = "日期位置",
+                                    title = Localization.positionOfDate,
                                     selectIndex = values.indexOf(datePosition).coerceAtLeast(0),
                                     items = options,
                                     onItemSelected = { index, _ ->
