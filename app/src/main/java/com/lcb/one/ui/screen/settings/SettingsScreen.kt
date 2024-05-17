@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.integerArrayResource
 import androidx.compose.ui.res.stringArrayResource
-import androidx.compose.ui.res.stringResource
 import com.lcb.one.ui.widget.settings.ui.SettingsListDropdown
 import com.lcb.one.R
 import com.lcb.one.localization.Localization
@@ -53,11 +52,10 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                 SettingsListDropdown(
                     title = Localization.poemUpdateDuration,
                     icon = { Icon(imageVector = Icons.Rounded.Autorenew, contentDescription = "") },
-                    selectIndex = values.indexOf(AppGlobalConfigs.poemUpdateDuration)
-                        .coerceAtLeast(0),
+                    selectIndex = values.indexOf(AppGlobalConfigs.poemUpdateInterval).coerceAtLeast(0),
                     items = options.toList(),
                     onItemSelected = { index, _ ->
-                        AppGlobalConfigs.poemUpdateDuration = values[index]
+                        AppGlobalConfigs.poemUpdateInterval = values[index]
                     }
                 )
             }

@@ -99,6 +99,6 @@ class MainViewModel : ViewModel() {
 
         val info = poemSate.value.poemInfo
         return info.recommend.isBlank() ||
-                (System.currentTimeMillis() - info.updateTime > AppGlobalConfigs.poemUpdateDuration)
+                (System.currentTimeMillis() - info.updateTime > AppGlobalConfigs.poemUpdateInterval)
     }
 }

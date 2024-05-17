@@ -1,36 +1,14 @@
 <resources>
     <string name="app_name">Salted Fish</string>
-
-    <string name="settings_dynamic_color_key" translatable="false">app_dynamicColor</string>
-    <string name="settings_dev_mode" translatable="false">app_dev_mode</string>
     <string name="dynamic_color">Dynamic color</string>
     <string name="dynamic_color_summary">Set theme color based on desktop wallpaper</string>
     <string name="poem_update_duration">Title poetry update interval</string>
-    <string name="settings_poem_update_duration_key" translatable="false">poem_update_duration</string>
-
-
     <string name="settings">Settings</string>
     <string name="home">Home</string>
     <string name="ok">OK</string>
     <string name="friendly_duration">%d days %02d hours %02d minutes %02d seconds</string>
     <string name="version_info">Version Info</string>
     <string name="project_url">Project URL</string>
-    <string name="project_location_url" translatable="false">https://github.com/lcb-Qi/MyCompose</string>
-
-    <string-array name="settings_duration_options">
-        <item>15分钟</item>
-        <item>30分钟</item>
-        <item>1小时</item>
-        <item>12小时</item>
-        <item>1天</item>
-    </string-array>
-    <integer-array name="settings_duration_values">
-        <item>900000</item>
-        <item>1800000</item>
-        <item>3600000</item>
-        <item>43200000</item>
-        <item>86400000</item>
-    </integer-array>
     <string name="tool">Tool</string>
     <string name="more">More</string>
     <string name="cancel">Cancel</string>

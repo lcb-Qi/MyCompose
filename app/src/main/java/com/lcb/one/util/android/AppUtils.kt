@@ -139,4 +139,10 @@ object AppUtils {
         val uiModeManager = MyApp.getAppContext().getSystemService(UiModeManager::class.java)
         return uiModeManager.nightMode == Configuration.UI_MODE_NIGHT_YES
     }
+
+    fun restart(context: Context = MyApp.getAppContext()) {
+        val intent = context.packageManager.getLaunchIntentForPackage(PACKAGE_ME)
+        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        context.startActivity(intent)
+    }
 }

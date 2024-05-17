@@ -16,6 +16,7 @@ import java.io.File
 object DownLoadUtil {
     private const val TAG = "DownLoadUtil"
 
+    private val DEFAULT_DIR = Environment.DIRECTORY_DOWNLOADS
     private const val DEFAULT_IMAGE_SUB_DIR = "SaltFish"
 
     suspend fun saveImageFromUrl(
@@ -51,7 +52,7 @@ object DownLoadUtil {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
                     bitmap.recycle()
                 }
-                Result.success(uri.toAbsolutePath(MyApp.getAppContext()))
+                Result.success(uri.toRelativePath(MyApp.getAppContext()))
             } else {
                 Result.failure(RuntimeException("Failed to create uri in storage."))
             }
@@ -75,7 +76,7 @@ object DownLoadUtil {
                 MyApp.getAppContext().contentResolver.openOutputStream(uri)?.use { os ->
                     File(apkPath).inputStream().copyTo(os)
                 }
-                Result.success(uri.toAbsolutePath(MyApp.getAppContext()))
+                Result.success(uri.toRelativePath(MyApp.getAppContext()))
             } else {
                 Result.failure(RuntimeException("Failed to create uri in storage."))
             }
@@ -100,10 +101,11 @@ object DownLoadUtil {
     }
 
     private fun getRelativePathFromMimeType(mimeType: String): String {
+        // 目前都放在Download下
         return when (mimeType) {
-            "application/vnd.android.package-archive" -> "${Environment.DIRECTORY_DOWNLOADS}/$DEFAULT_IMAGE_SUB_DIR/"
-            "image/jpeg", "image/jpg", "image/png" -> "${Environment.DIRECTORY_DOWNLOADS}/$DEFAULT_IMAGE_SUB_DIR/"
-            else -> "${Environment.DIRECTORY_DOWNLOADS}/$DEFAULT_IMAGE_SUB_DIR/"
+            "application/vnd.android.package-archive" -> "$DEFAULT_DIR/$DEFAULT_IMAGE_SUB_DIR/"
+            "image/jpeg", "image/jpg", "image/png" -> "$DEFAULT_DIR/$DEFAULT_IMAGE_SUB_DIR/"
+            else -> "$DEFAULT_DIR/$DEFAULT_IMAGE_SUB_DIR/"
         }
     }
 }

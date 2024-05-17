@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="project_location_url" translatable="false">https://github.com/lcb-Qi/MyCompose</string>
+    <string name="settings_dynamic_color_key" translatable="false">app_dynamicColor</string>
+    <string name="settings_dev_mode_key" translatable="false">app_dev_mode</string>
+    <string name="settings_poem_update_interval_key" translatable="false">poem_update_duration</string>
+</resources>

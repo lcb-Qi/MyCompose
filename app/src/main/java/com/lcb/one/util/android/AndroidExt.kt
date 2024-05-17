@@ -35,6 +35,21 @@ fun Uri.toAbsolutePath(context: Context): String {
     return path
 }
 
+fun Uri.toRelativePath(context: Context): String {
+    var path = ""
+    val proj = arrayOf(MediaStore.Images.Media.RELATIVE_PATH, MediaStore.Images.Media.DISPLAY_NAME)
+    context.contentResolver.query(this, proj, null, null)?.use {
+        if (it.moveToFirst()) {
+            val relativePath = it.getStringOrNull(it.getColumnIndexOrThrow(proj[0])) ?: ""
+            val displayName = it.getStringOrNull(it.getColumnIndexOrThrow(proj[1])) ?: ""
+
+            path = relativePath + displayName
+        }
+    }
+
+    return path
+}
+
 private fun Uri.toFilePathForNonMediaUri(context: Context): String {
     var path = ""
     context.contentResolver.query(this, null, null, null)?.use {

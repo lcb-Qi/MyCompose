@@ -140,7 +140,7 @@ private fun getWallPaper() {
             DownLoadUtil.writeBitmapToImageFile(bitmap!!)
         }.onFailure {
             ToastUtils.showToast(Localization.saveFailed)
-        }.onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
+        }.onSuccess { ToastUtils.showToast("${Localization.saveSuccess} ${it.getOrDefault("")}") }
     }
 }
 
