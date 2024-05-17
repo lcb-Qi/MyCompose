@@ -7,4 +7,4 @@ import androidx.compose.runtime.remember
 fun rememberStringPrefState(key: String, default: String = "") =
     remember { StringPrefState(key, default) }
 
-class StringPrefState(key: String, default: String) : PreferenceSettingState<String>(key, default)
+class StringPrefState(key: String, default: String) : PreferenceState<String>(key, default)

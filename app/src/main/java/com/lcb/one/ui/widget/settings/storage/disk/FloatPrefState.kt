@@ -7,4 +7,4 @@ import androidx.compose.runtime.remember
 fun rememberFloatPrefState(key: String, default: Float = 0f) =
     remember { FloatPrefState(key, default) }
 
-class FloatPrefState(key: String, default: Float) : PreferenceSettingState<Float>(key, default)
+class FloatPrefState(key: String, default: Float) : PreferenceState<Float>(key, default)

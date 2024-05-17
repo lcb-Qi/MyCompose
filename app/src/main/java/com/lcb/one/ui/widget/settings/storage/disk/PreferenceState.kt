@@ -1,19 +1,18 @@
 package com.lcb.one.ui.widget.settings.storage.disk
 
 import android.content.SharedPreferences
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.edit
 import com.lcb.one.ui.widget.settings.storage.SettingValueState
-import com.lcb.one.util.android.SharedPrefUtils
+import com.lcb.one.util.android.UserPrefManager
 import java.lang.IllegalArgumentException
 
-abstract class PreferenceSettingState<T>(
+abstract class PreferenceState<T>(
     private val key: String,
     private val defaultValue: T,
-    private val preferences: SharedPreferences = SharedPrefUtils.defaultPreferences,
+    private val preferences: SharedPreferences = UserPrefManager.defaultPref,
 ) : SettingValueState<T> {
 
     private var _value: T by mutableStateOf(preferences.get(key, defaultValue))

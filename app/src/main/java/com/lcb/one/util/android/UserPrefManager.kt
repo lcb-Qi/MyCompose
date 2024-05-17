@@ -5,54 +5,75 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.lcb.one.ui.MyApp
 
-object SharedPrefUtils {
-    val defaultPreferences: SharedPreferences =
+object UserPrefManager {
+    object Key {
+        // global
+        const val APP_DEV_MODE = "app_dev_mode"// boolean
+        const val APP_THEME_SEED = "app_theme_seed"// int
+        const val APP_DYNAMIC_COLOR = "app_dynamicColor"// boolean
+        const val APP_ALOMED_MODE = "app_amoled_mode"// boolean
+
+        // poem
+        const val POEM_TOKEN = "poem_token"// string
+        const val POEM_LAST = "last_poem"// json
+        const val POEM_UPDATE_INTERVAL = "poem_update_duration"// int
+
+        // clock screen
+        const val CLOCK_TEXT_SIZE = "clock_text_size"// int
+        const val CLOCK_DATE_POSITION = "date_position"// int
+        const val CLOCK_DARK_THEME = "clock_dark_theme"// boolean
+
+        // 首页
+        const val PAYDAY = "salary_day"
+    }
+
+    val defaultPref: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(MyApp.getAppContext())
 
     fun getString(key: String, default: String = ""): String {
         if (key.isBlank()) return default
-        return defaultPreferences.getString(key, default) ?: default
+        return defaultPref.getString(key, default) ?: default
     }
 
     fun putInt(key: String, value: Int) {
         if (key.isBlank()) return
-        defaultPreferences.edit {
+        defaultPref.edit {
             putInt(key, value)
         }
     }
 
     fun getLong(key: String, default: Long = -1): Long {
         if (key.isBlank()) return default
-        return defaultPreferences.getLong(key, default)
+        return defaultPref.getLong(key, default)
     }
 
     fun putLong(key: String, value: Long) {
         if (key.isBlank()) return
-        defaultPreferences.edit {
+        defaultPref.edit {
             putLong(key, value)
         }
     }
 
     fun getInt(key: String, default: Int = -1): Int {
         if (key.isBlank()) return default
-        return defaultPreferences.getInt(key, default)
+        return defaultPref.getInt(key, default)
     }
 
     fun putString(key: String, value: String) {
         if (key.isBlank()) return
-        defaultPreferences.edit {
+        defaultPref.edit {
             putString(key, value)
         }
     }
 
     fun getBoolean(key: String, default: Boolean = false): Boolean {
         if (key.isBlank()) return default
-        return defaultPreferences.getBoolean(key, default)
+        return defaultPref.getBoolean(key, default)
     }
 
     fun putBoolean(key: String, value: Boolean) {
         if (key.isBlank()) return
-        defaultPreferences.edit {
+        defaultPref.edit {
             putBoolean(key, value)
         }
     }

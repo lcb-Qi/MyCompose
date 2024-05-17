@@ -23,7 +23,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import com.lcb.one.ui.activity.MainActivity
-import com.lcb.one.util.android.SharedPrefUtils
+import com.lcb.one.util.android.UserPrefManager
 import com.lcb.one.util.common.JsonUtils
 import com.lcb.one.ui.screen.main.repo.MainViewModel
 import kotlinx.coroutines.delay
@@ -52,7 +52,7 @@ class PoemAppWidget : GlanceAppWidget() {
                 verticalAlignment = Alignment.Vertical.CenterVertically,
                 horizontalAlignment = Alignment.Horizontal.CenterHorizontally
             ) {
-                val lastPoem = SharedPrefUtils.getString(MainViewModel.KEY_LAST_POEM)
+                val lastPoem = UserPrefManager.getString(UserPrefManager.Key.POEM_LAST)
                 val poemInfo = JsonUtils.fromJson<MainViewModel.PoemInfo>(lastPoem)
                 val recommend = poemInfo?.recommend ?: ""
                 val author = "—— ${poemInfo?.origin?.dynasty} ${poemInfo?.origin?.author}"

@@ -7,5 +7,4 @@ import androidx.compose.runtime.remember
 fun rememberBooleanPrefState(key: String, default: Boolean) =
     remember { BooleanPrefState(key, default) }
 
-class BooleanPrefState(key: String, default: Boolean) :
-    PreferenceSettingState<Boolean>(key, default)
+class BooleanPrefState(key: String, default: Boolean) : PreferenceState<Boolean>(key, default)

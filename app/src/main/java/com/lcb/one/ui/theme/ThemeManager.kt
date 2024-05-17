@@ -9,28 +9,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.glance.color.DynamicThemeColorProviders.primary
-import androidx.glance.color.DynamicThemeColorProviders.primaryContainer
-import com.lcb.one.R
-import com.lcb.one.ui.MyApp
-import com.lcb.one.ui.theme.ThemeManager.dynamicColor
 import com.lcb.one.ui.widget.settings.storage.disk.BooleanPrefState
 import com.lcb.one.ui.widget.settings.storage.disk.IntPrefState
-import com.lcb.one.ui.widget.settings.storage.disk.StringPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
+import com.lcb.one.util.android.UserPrefManager
 import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamicColorScheme
-import com.materialkolor.ktx.toColor
-import com.materialkolor.ktx.toHct
 
 object ThemeManager {
     val seeds = defaultSeeds
 
-    // 主题种子色
+    // 主题种子
     private var themeSeed by IntPrefState(
-        key = "app_theme_seed",
-        default = seeds.first().toArgb()
+        UserPrefManager.Key.APP_THEME_SEED,
+        seeds.first().toArgb()
     )
 
     // 主题色
@@ -42,40 +35,19 @@ object ThemeManager {
         }
 
     // 是否动态取色
-    var dynamicColor by BooleanPrefState(
-        key = MyApp.getAppContext().getString(R.string.settings_dynamic_color_key),
-        default = true
-    )
-
-    // 调色版风格，影响种子色生成的主题色彩风格
-    private var _paletteStyle by StringPrefState(
-        key = "app_palette_style",
-        PaletteStyle.Vibrant.name
-    )
-
-    var paletteStyle = PaletteStyle.valueOf(_paletteStyle)
-        get() = PaletteStyle.valueOf(_paletteStyle)
-        set(value) {
-            field = value
-            _paletteStyle = value.name
-        }
-
-    var isExtendedFidelity = false
+    var dynamicColor by BooleanPrefState(UserPrefManager.Key.APP_DYNAMIC_COLOR, true)
 
     // 是否启用纯白/纯黑背景
-    var amoledMode by BooleanPrefState(
-        key = "app_amoled_mode",
-        default = false
-    )
+    var amoledMode by BooleanPrefState(UserPrefManager.Key.APP_ALOMED_MODE, false)
 }
 
 @Composable
 fun createColorTheme(
     seedColor: Color = ThemeManager.themeColor,
-    paletteStyle: PaletteStyle = ThemeManager.paletteStyle,
+    paletteStyle: PaletteStyle = PaletteStyle.Vibrant,
     dynamicColor: Boolean = ThemeManager.dynamicColor,
     darkTheme: Boolean = isSystemInDarkTheme(),
-    isExtendedFidelity: Boolean = ThemeManager.isExtendedFidelity,
+    isExtendedFidelity: Boolean = false,
     amoledMode: Boolean = ThemeManager.amoledMode
 ): ColorScheme {
     val colorScheme = when {

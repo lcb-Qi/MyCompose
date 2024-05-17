@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.screen.main.repo.model.PoemResponse
 import com.lcb.one.util.android.LLog
-import com.lcb.one.util.android.SharedPrefUtils
+import com.lcb.one.util.android.UserPrefManager
 import com.lcb.one.util.common.JsonUtils
 import com.lcb.one.util.common.launchIOSafely
 import com.lcb.one.util.common.launchSafely
@@ -18,8 +18,6 @@ import kotlinx.serialization.Serializable
 class MainViewModel : ViewModel() {
     companion object {
         private const val TAG = "PoemViewModel"
-        const val KEY_POEM_TOKEN = "poem_token"
-        const val KEY_LAST_POEM = "last_poem"
     }
 
     @Serializable
@@ -41,7 +39,8 @@ class MainViewModel : ViewModel() {
 
     init {
         viewModelScope.launchIOSafely {
-            val last = JsonUtils.fromJson<PoemInfo>(SharedPrefUtils.getString(KEY_LAST_POEM))
+            val last =
+                JsonUtils.fromJson<PoemInfo>(UserPrefManager.getString(UserPrefManager.Key.POEM_LAST))
             if (last != null) with(last) {
                 poemSate.update {
                     it.copy(poemInfo = this)
@@ -63,10 +62,10 @@ class MainViewModel : ViewModel() {
     private val poemService = PoemApiService.instance
 
     private suspend fun getToken(): String {
-        var token = SharedPrefUtils.getString(KEY_POEM_TOKEN)
+        var token = UserPrefManager.getString(UserPrefManager.Key.POEM_TOKEN)
         if (token.isNotEmpty()) return token
         token = poemService.getToken().token
-        SharedPrefUtils.putString(KEY_POEM_TOKEN, token)
+        UserPrefManager.putString(UserPrefManager.Key.POEM_TOKEN, token)
 
         return token
     }
@@ -90,7 +89,10 @@ class MainViewModel : ViewModel() {
                     )
                 )
             }
-            SharedPrefUtils.putString(KEY_LAST_POEM, JsonUtils.toJson(poemSate.value.poemInfo))
+            UserPrefManager.putString(
+                UserPrefManager.Key.POEM_LAST,
+                JsonUtils.toJson(poemSate.value.poemInfo)
+            )
         }
     }
 

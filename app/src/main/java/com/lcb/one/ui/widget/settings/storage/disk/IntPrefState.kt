@@ -6,4 +6,4 @@ import androidx.compose.runtime.remember
 @Composable
 fun rememberIntPrefState(key: String, default: Int = 0) = remember { IntPrefState(key, default) }
 
-class IntPrefState(key: String, default: Int) : PreferenceSettingState<Int>(key, default)
+class IntPrefState(key: String, default: Int) : PreferenceState<Int>(key, default)

@@ -38,7 +38,7 @@ import com.lcb.one.ui.widget.settings.ui.SettingsGroup
 import com.lcb.one.ui.widget.settings.ui.SettingsListDropdown
 import com.lcb.one.ui.widget.settings.ui.SettingsSlider
 import com.lcb.one.ui.widget.settings.ui.SettingsSwitch
-import com.lcb.one.util.android.SharedPrefUtils
+import com.lcb.one.util.android.UserPrefManager
 import java.util.Locale
 
 class ClockActivity : ComponentActivity() {
@@ -52,10 +52,6 @@ class ClockActivity : ComponentActivity() {
         private const val DATE_POSITION_RIGHT_BOTTOM = 1
         private const val DATE_POSITION_CENTER_ABOVE = 2
         private const val DATE_POSITION_CENTER_BELOW = 3
-
-        private const val KEY_CLOCK_SIZE = "clock_text_size"
-        private const val KEY_DATE_POSITION = "date_position"
-        private const val KEY_CLOCK_DARK_THEME = "clock_dark_theme"
     }
 
     data class RadioItem(val id: Int, val label: String)
@@ -75,23 +71,21 @@ class ClockActivity : ComponentActivity() {
         hideSystemBars()
     }
 
-    private fun getClockSize(): Int {
-        return SharedPrefUtils.getInt(KEY_CLOCK_SIZE, DEFAULT_CLOCK_SIZE)
-    }
-
-    private fun getDatePosition(): Int {
-        return SharedPrefUtils.getInt(KEY_DATE_POSITION, DATE_POSITION_LEFT_BOTTOM)
-    }
-
     @Composable
     fun ClockScreen() {
         var darkTheme by rememberBooleanPrefState(
-            KEY_CLOCK_DARK_THEME,
+            UserPrefManager.Key.CLOCK_DARK_THEME,
             ThemeManager.dynamicColor
         )
 
-        var clockSize by rememberIntPrefState(KEY_CLOCK_SIZE, getClockSize())
-        var datePosition by rememberIntPrefState(KEY_DATE_POSITION, getDatePosition())
+        var clockSize by rememberIntPrefState(
+            UserPrefManager.Key.CLOCK_TEXT_SIZE,
+            DEFAULT_CLOCK_SIZE
+        )
+        var datePosition by rememberIntPrefState(
+            UserPrefManager.Key.CLOCK_DATE_POSITION,
+            DATE_POSITION_LEFT_BOTTOM
+        )
 
         AppTheme(darkTheme = darkTheme) {
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
