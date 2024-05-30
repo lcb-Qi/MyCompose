@@ -12,11 +12,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.colorspace.ColorSpaces
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
-import com.lcb.one.ui.screen.tester.widget.textColor
 import com.lcb.one.util.common.atDayMillis
 import java.time.DayOfWeek
 import java.time.YearMonth
@@ -114,4 +116,8 @@ fun CalendarMonth(
             }
         }
     }
+}
+
+fun Color.textColor(): Color {
+    return if (convert(ColorSpaces.Srgb).luminance() > 0.5) Color.Black else Color.White
 }

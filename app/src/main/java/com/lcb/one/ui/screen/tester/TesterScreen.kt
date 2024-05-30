@@ -26,10 +26,7 @@ fun TesterScreen() {
                 end = 16.dp
             )
         ) {
-            AppButton(
-                text = "检查主题色",
-                onClick = { navHostController.navigateSingleTop(Route.THEME_PREVIEW) }
-            )
+
         }
     }
 }
