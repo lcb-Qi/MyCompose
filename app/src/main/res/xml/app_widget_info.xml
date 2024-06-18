@@ -3,6 +3,8 @@
     android:description="@string/app_name"
     android:initialKeyguardLayout="@layout/layout_appwidget_loading"
     android:initialLayout="@layout/layout_appwidget_loading"
+    android:minWidth="240dp"
+    android:minHeight="60dp"
     android:previewLayout="@layout/layout_poem_appwidget"
     android:resizeMode="none"
     android:targetCellWidth="4"
