@@ -1,9 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/app_name"
-    android:initialLayout="@layout/glance_default_loading_layout"
-    android:minWidth="240dp"
-    android:minHeight="60dp"
+    android:initialKeyguardLayout="@layout/layout_appwidget_loading"
+    android:initialLayout="@layout/layout_appwidget_loading"
+    android:previewLayout="@layout/layout_poem_appwidget"
     android:resizeMode="none"
     android:targetCellWidth="4"
     android:targetCellHeight="1"
+    android:updatePeriodMillis="0"
     android:widgetCategory="home_screen" />

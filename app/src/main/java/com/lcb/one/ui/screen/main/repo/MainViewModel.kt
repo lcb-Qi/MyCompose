@@ -3,19 +3,15 @@ package com.lcb.one.ui.screen.main.repo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lcb.one.ui.AppGlobalConfigs
+import com.lcb.one.ui.appwidget.PoemAppWidgetProvider
 import com.lcb.one.ui.screen.main.repo.model.PoemInfo
-import com.lcb.one.ui.screen.main.repo.model.PoemResponse
 import com.lcb.one.util.android.LLog
 import com.lcb.one.util.android.UserPrefManager
 import com.lcb.one.util.common.ExceptionHandler
 import com.lcb.one.util.common.JsonUtils
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
-import java.io.IOException
 
 class MainViewModel : ViewModel() {
     companion object {
@@ -82,8 +78,8 @@ class MainViewModel : ViewModel() {
                 UserPrefManager.Key.POEM_LAST,
                 JsonUtils.toJson(poemSate.poemInfo)
             )
-        }.invokeOnCompletion {
-            LLog.d(TAG, "refresh: invokeOnCompletion $it")
+
+            PoemAppWidgetProvider.tryUpdate()
         }
     }
 

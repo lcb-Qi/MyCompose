@@ -8,7 +8,6 @@ androidxConstraintlayoutCompose = "1.0.1"
 androidxActivityCompose = "1.9.0"
 androidxNavigationCompose = "2.7.7"
 coilCompose = "2.6.0"
-androidxGlance = "1.0.0"
 androidxCore = "1.13.1"
 androidxLifecycle = "2.8.1"
 coroutinesAndroid = "1.8.0"
@@ -40,7 +39,6 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigationCompose" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidxConstraintlayoutCompose" }
 
-androidx-glance = { module = "androidx.glance:glance-appwidget", version.ref = "androidxGlance" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 androidx-lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }

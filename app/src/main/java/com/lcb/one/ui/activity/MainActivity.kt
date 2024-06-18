@@ -11,28 +11,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.glance.appwidget.updateAll
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.Route
+import com.lcb.one.ui.appwidget.PoemAppWidgetProvider
 import com.lcb.one.ui.getRouters
-import com.lcb.one.ui.glance.PoemAppWidget
 import com.lcb.one.ui.theme.AppTheme
 import com.lcb.one.ui.widget.dialog.AssertInternetDialog
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent { AppScreen() }
-        lifecycleScope.launch {
-            PoemAppWidget().updateAll(this@MainActivity)
-        }
+        PoemAppWidgetProvider.tryUpdate(this)
     }
 
     @Composable

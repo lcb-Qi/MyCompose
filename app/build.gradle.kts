@@ -114,8 +114,6 @@ dependencies {
     implementation(libs.bundles.androidx.lifecycle)
     // preference
     implementation(libs.androidx.preference)
-    // glance
-    implementation(libs.androidx.glance)
     // retrofit2
     implementation(libs.bundles.retrofit2)
     // json
