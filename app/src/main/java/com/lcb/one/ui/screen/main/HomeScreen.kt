@@ -4,13 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,41 +35,32 @@ import java.time.LocalTime
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
-    Column(
+    LazyColumn(
         modifier = modifier.padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        LoveCard()
-        OffWorkCard()
-        PaydayCard()
+        item { LoveCard() }
+        item { OffWorkCard() }
+        item { PaydayCard() }
     }
 }
 
 @Composable
 private fun LoveCard() {
-    val startTime by remember { mutableLongStateOf(DateTimeUtils.toMillis("2020-12-23 00:00:00")) }
-    var durationText by remember {
-        mutableStateOf(DateTimeUtils.friendlyDuration(startTime))
-    }
+    val duration = remember {
+        val startTime = DateTimeUtils.toMillis("2020-12-23 00:00:00")
+        val days = DateTimeUtils.getDurationDays(startTime, DateTimeUtils.nowMillis())
 
-    val updater = {
-        durationText = DateTimeUtils.friendlyDuration(startTime)
+        "$days ${Localization.days}"
     }
 
     EventCard(
         modifier = Modifier.fillMaxWidth(),
         title = Localization.fallInLove,
-        content = durationText,
+        content = duration,
         icon = R.drawable.icon_love
     )
-
-    LaunchedEffect(updater) {
-        while (true) {
-            updater()
-            delay(1000)
-        }
-    }
 }
 
 @Composable

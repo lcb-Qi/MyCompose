@@ -41,7 +41,9 @@ import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.android.navigateSingleTop
-import com.lcb.one.util.common.ThreadPool
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.EmptyCoroutineContext
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -133,7 +135,7 @@ private fun DevItems() {
 }
 
 private fun getWallPaper() {
-    ThreadPool.executeOnBackground {
+    CoroutineScope(EmptyCoroutineContext).launch {
         runCatching {
             val bitmap =
                 WallpaperManager.getInstance(MyApp.getAppContext()).drawable?.toBitmap()

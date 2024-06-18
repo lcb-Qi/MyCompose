@@ -1,6 +1,7 @@
 package com.lcb.one.ui.screen.main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -13,9 +14,8 @@ import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +32,7 @@ import com.lcb.one.ui.screen.main.widget.PoemInfoDialog
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.ui.screen.main.repo.MainViewModel
 import com.lcb.one.ui.screen.main.repo.MainViewModel.Event
+import com.lcb.one.ui.widget.common.NoRippleInteractionSource
 import com.lcb.one.ui.widget.dialog.LoadingDialog
 import com.lcb.one.util.android.navigateSingleTop
 import kotlinx.coroutines.launch
@@ -44,7 +45,7 @@ fun MainScreen() {
     FriendlyExitHandler()
 
     val mainViewModel = viewModel<MainViewModel>()
-    val poemState by mainViewModel.poemSate.collectAsState()
+    val poemState = mainViewModel.poemSate
 
     val bottomItem = listOf(
         BottomBarItem(Localization.home, Icons.Rounded.Home),
@@ -57,15 +58,23 @@ fun MainScreen() {
     Scaffold(
         topBar = {
             ToolBar(
-                title = poemState.poemInfo.recommend,
-                onTitleClick = {
-                    if (AppUtils.isNetworkAvailable()) {
-                        mainViewModel.sendEvent(Event.Refresh(true))
-                    } else {
-                        AppGlobalConfigs.assertNetwork = true
-                    }
+                title = {
+                    Text(
+                        text = poemState.poemInfo.recommend,
+                        modifier = Modifier
+                            .combinedClickable(
+                                onLongClick = { mainViewModel.sendEvent(Event.ShowDetail(true)) },
+                                indication = null,
+                                interactionSource = NoRippleInteractionSource(),
+                            ) {
+                                if (AppUtils.isNetworkAvailable()) {
+                                    mainViewModel.sendEvent(Event.Refresh(true))
+                                } else {
+                                    AppGlobalConfigs.assertNetwork = true
+                                }
+                            }
+                    )
                 },
-                onTitleLongClick = { mainViewModel.sendEvent(Event.ShowDetail) },
                 enableBack = false,
                 actions = {
                     IconButton(onClick = { navHostController.navigateSingleTop(Route.THEME) }) {
@@ -85,10 +94,7 @@ fun MainScreen() {
         HorizontalPager(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    top = paddingValues.calculateTopPadding(),
-                    bottom = paddingValues.calculateBottomPadding()
-                ),
+                .padding(paddingValues),
             state = pagerState,
             verticalAlignment = Alignment.Top
         ) {
@@ -103,7 +109,7 @@ fun MainScreen() {
             show = poemState.showDetail,
             origin = poemState.poemInfo.origin,
             onDismiss = {
-                mainViewModel.sendEvent(Event.HideDetail)
+                mainViewModel.sendEvent(Event.ShowDetail(false))
             }
         )
 

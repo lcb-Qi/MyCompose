@@ -39,11 +39,11 @@ object DownLoadUtil {
             result
         }
 
-    fun writeBitmapToImageFile(
+    suspend fun writeBitmapToImageFile(
         bitmap: Bitmap,
         fileName: String = DateTimeUtils.nowStringShort(),
         contentType: String = "image/jpeg",
-    ): Result<String> {
+    ) = withContext(Dispatchers.IO) {
         LLog.d(TAG, "writeBitmapToImageFile: ")
         val result = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
             val uri = insertToStorage(contentType, fileName)
@@ -60,7 +60,7 @@ object DownLoadUtil {
             Result.failure(RuntimeException("Failed to access storage."))
         }
 
-        return result
+        return@withContext result
     }
 
     fun saveApk(

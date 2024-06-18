@@ -23,7 +23,7 @@ import com.lcb.one.localization.Localization
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
-import com.lcb.one.util.common.launchIOSafely
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,7 +59,7 @@ fun ApplicationInfoDialog(show: Boolean, packageName: String, onDisMiss: () -> U
                 text = Localization.extractIcon,
                 leadingIcon = Icons.Rounded.Image,
                 onclick = {
-                    scope.launchIOSafely {
+                    scope.launch {
                         val icon = AppUtils.getAppIcon(packageName = packageName)
                         if (icon != null) {
                             DownLoadUtil.writeBitmapToImageFile(icon, "${label}_logo")
@@ -76,7 +76,7 @@ fun ApplicationInfoDialog(show: Boolean, packageName: String, onDisMiss: () -> U
                 text = Localization.extractPackage,
                 leadingIcon = Icons.Rounded.Android,
                 onclick = {
-                    scope.launchIOSafely {
+                    scope.launch {
                         DownLoadUtil.saveApk(AppUtils.getApkPath(packageName), label)
                             .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
                             .onFailure { ToastUtils.showToast(Localization.saveFailed) }

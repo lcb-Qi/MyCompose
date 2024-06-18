@@ -6,7 +6,7 @@ import com.lcb.one.database.appDatabase
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
 import com.lcb.one.util.android.LLog
 import com.lcb.one.util.common.DateTimeUtils
-import com.lcb.one.util.common.launchSafely
+import kotlinx.coroutines.launch
 
 class MenstruationViewModel : ViewModel() {
     companion object {
@@ -19,14 +19,14 @@ class MenstruationViewModel : ViewModel() {
 
     fun startNewMenstruationDay(startTime: Long) {
         LLog.d(TAG, "startNewMenstruation: startTime = ${DateTimeUtils.toLocalDate(startTime)}")
-        viewModelScope.launchSafely {
+        viewModelScope.launch {
             dao.insert(MenstruationDay(startTime = startTime, finish = false))
         }
     }
 
     fun endMenstruationDay(endTime: Long) {
         LLog.d(TAG, "endMenstruation: endTime = ${DateTimeUtils.toLocalDate(endTime)}")
-        viewModelScope.launchSafely {
+        viewModelScope.launch {
             dao.getRunningMcDay()?.let {
                 updateMenstruationDay(it.copy(finish = true, endTime = endTime))
             }
@@ -34,7 +34,7 @@ class MenstruationViewModel : ViewModel() {
     }
 
     fun addPastMenstruationDay(startTime: Long, endTime: Long) {
-        viewModelScope.launchSafely {
+        viewModelScope.launch {
             dao.insert(
                 MenstruationDay(
                     finish = true,
@@ -47,14 +47,14 @@ class MenstruationViewModel : ViewModel() {
 
     fun updateMenstruationDay(mcDay: MenstruationDay) {
         LLog.d(TAG, "updateMenstruationDay: $mcDay")
-        viewModelScope.launchSafely {
+        viewModelScope.launch {
             dao.update(mcDay)
         }
     }
 
     fun deleteMenstruationDay(mcDay: MenstruationDay) {
         LLog.d(TAG, "deleteMenstruationDay: mcDay = $mcDay")
-        viewModelScope.launchSafely {
+        viewModelScope.launch {
             dao.delete(mcDay)
         }
     }
