@@ -14,7 +14,6 @@ import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
 import com.lcb.one.ui.screen.menstruationAssistant.MenstruationHistoryScreen
 import com.lcb.one.ui.screen.settings.ThemeScreen
 import com.lcb.one.ui.screen.settings.SettingsScreen
-import com.lcb.one.ui.screen.tester.TesterScreen
 
 const val ANIMATE_DURATION = 500
 
@@ -28,9 +27,6 @@ object Route {
     const val THEME = "Theme"
     const val MENSTRUAL_CYCLE_ASSISTANT = "MenstrualCycleAssistant"
     const val MENSTRUAL_CYCLE_HISTORY = "MenstrualCycleHistory"
-
-    // tester
-    const val TESTER = "Tester"
 }
 
 @Stable
@@ -52,8 +48,5 @@ fun getRouters(): List<RouteScreen> {
         RouteScreen(Route.MENSTRUAL_CYCLE_ASSISTANT) { MenstruationAssistantScreen() },
         RouteScreen(Route.MENSTRUAL_CYCLE_HISTORY) { MenstruationHistoryScreen() },
         RouteScreen(Route.THEME) { ThemeScreen() },
-
-        // tester
-        RouteScreen(Route.TESTER) { TesterScreen() },
     )
 }

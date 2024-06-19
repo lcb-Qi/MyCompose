@@ -2,17 +2,11 @@ package com.lcb.one.ui.screen.main
 
 import android.app.WallpaperManager
 import android.content.Intent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.FlowRowScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowRight
-import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.DeviceUnknown
 import androidx.compose.material.icons.rounded.MiscellaneousServices
 import androidx.compose.material.icons.rounded.PhoneAndroid
@@ -23,12 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.lcb.one.localization.Localization
@@ -37,7 +28,7 @@ import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.activity.ClockActivity
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.Route
-import com.lcb.one.ui.widget.common.AppIconButton
+import com.lcb.one.ui.screen.main.widget.ToolCard
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.android.navigateSingleTop
@@ -53,9 +44,9 @@ fun ToolScreen() {
     // 设备
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        ToolBox(
+        ToolCard(
             title = Localization.device,
             icon = { Icon(Icons.Rounded.PhoneAndroid, "") }
         ) {
@@ -75,7 +66,7 @@ fun ToolScreen() {
         }
 
         // 更多
-        ToolBox(
+        ToolCard(
             title = Localization.more,
             icon = { Icon(Icons.Rounded.MiscellaneousServices, "") }
         ) {
@@ -112,15 +103,10 @@ fun ToolScreen() {
 private fun DevItems() {
     if (!AppGlobalConfigs.appDevMode) return
     val navController = LocalNav.current!!
-    ToolBox(
-        title = "Experimental",
+    ToolCard(
+        title = "On going",
         icon = { Icon(Icons.Rounded.DeviceUnknown, "") }
     ) {
-        ElevatedAssistChip(
-            onClick = { navController.navigateSingleTop(Route.TESTER) },
-            label = { Text(text = "Tester") }
-        )
-
         ElevatedAssistChip(
             enabled = false,
             onClick = { },
@@ -143,37 +129,5 @@ private fun getWallPaper() {
         }.onFailure {
             ToastUtils.showToast(Localization.saveFailed)
         }.onSuccess { ToastUtils.showToast("${Localization.saveSuccess} ${it.getOrDefault("")}") }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun ToolBox(
-    title: String,
-    icon: @Composable () -> Unit,
-    content: @Composable FlowRowScope.() -> Unit
-) {
-    var showDetail by rememberSaveable { mutableStateOf(false) }
-    Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            icon()
-            Text(text = title, Modifier.weight(1f), fontWeight = FontWeight.Medium)
-            AppIconButton(
-                icon = if (showDetail) Icons.Rounded.ArrowDropDown else Icons.AutoMirrored.Rounded.ArrowRight,
-                onClick = { showDetail = !showDetail }
-            )
-        }
-
-        AnimatedVisibility(visible = showDetail) {
-            FlowRow(
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                content()
-            }
-        }
     }
 }
