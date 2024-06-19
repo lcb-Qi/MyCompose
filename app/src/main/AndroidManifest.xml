@@ -41,7 +41,7 @@
         <receiver
             android:name=".ui.appwidget.PoemAppWidgetProvider"
             android:exported="true"
-            android:label="每日诗词">
+            android:label="@string/daily_poetry">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="${applicationId}.appwidget.poem.ACTION_DATA_CHANGED" />

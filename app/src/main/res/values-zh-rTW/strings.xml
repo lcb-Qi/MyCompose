@@ -83,4 +83,6 @@
     <string name="extract_installation_package">提取安裝包</string>
     <string name="friendly_exit_tips">再按一次返回鍵退出</string>
     <string name="to_download">去下載</string>
+    <string name="go_settings">前徃設置</string>
+    <string name="daily_poetry">每日詩詞</string>
 </resources>

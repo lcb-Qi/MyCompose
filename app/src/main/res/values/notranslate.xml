@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="project_location_url" translatable="false">https://github.com/lcb-Qi/MyCompose</string>
+    <string name="default_poem_content" translatable="false">接天莲叶无穷碧，映日荷花别样红。</string>
+    <string name="default_poem_author" translatable="false">—— 杨万里《小池》</string>
 </resources>

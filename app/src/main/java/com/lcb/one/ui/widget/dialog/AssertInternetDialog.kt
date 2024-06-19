@@ -22,7 +22,7 @@ fun AssertInternetDialog(show: Boolean) {
         onDismissRequest = {},
         confirmButton = {
             AppTextButton(
-                text = "前往设置",
+                text = Localization.goSettings,
                 onClick = {
                     val intent =
                         Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

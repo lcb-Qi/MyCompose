@@ -60,6 +60,8 @@ class MainViewModel : ViewModel() {
     }
 
     private fun refresh(force: Boolean = false) {
+        if (poemSate.loading) return
+
         if (!needRefresh(force)) return
 
         viewModelScope.launch(exceptionHandler) {

@@ -1,7 +1,6 @@
 package com.lcb.one.ui.screen.main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -14,9 +13,7 @@ import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,9 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.LocalNav
-import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.Route
-import com.lcb.one.ui.appwidget.PoemAppWidgetProvider
 import com.lcb.one.ui.widget.appbar.BottomBar
 import com.lcb.one.ui.widget.appbar.BottomBarItem
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -35,8 +30,7 @@ import com.lcb.one.ui.screen.main.widget.PoemInfoDialog
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.ui.screen.main.repo.MainViewModel
 import com.lcb.one.ui.screen.main.repo.MainViewModel.Event
-import com.lcb.one.ui.widget.common.NoRippleInteractionSource
-import com.lcb.one.ui.widget.dialog.LoadingDialog
+import com.lcb.one.ui.screen.main.widget.PoemTitle
 import com.lcb.one.util.android.navigateSingleTop
 import kotlinx.coroutines.launch
 
@@ -60,22 +54,22 @@ fun MainScreen() {
     val scope = rememberCoroutineScope()
     Scaffold(
         topBar = {
+            val updatePoem: () -> Unit = {
+                if (AppUtils.isNetworkAvailable()) {
+                    mainViewModel.sendEvent(Event.Refresh(true))
+                } else {
+                    AppGlobalConfigs.assertNetwork = true
+                }
+            }
+
+            val showDetail: () -> Unit = { mainViewModel.sendEvent(Event.ShowDetail(true)) }
+
             ToolBar(
                 title = {
-                    Text(
-                        text = poemState.poemInfo.recommend,
-                        modifier = Modifier
-                            .combinedClickable(
-                                onLongClick = { mainViewModel.sendEvent(Event.ShowDetail(true)) },
-                                indication = null,
-                                interactionSource = NoRippleInteractionSource(),
-                            ) {
-                                if (AppUtils.isNetworkAvailable()) {
-                                    mainViewModel.sendEvent(Event.Refresh(true))
-                                } else {
-                                    AppGlobalConfigs.assertNetwork = true
-                                }
-                            }
+                    PoemTitle(
+                        poem = poemState.poemInfo.recommend,
+                        onLongClick = showDetail,
+                        onClick = updatePoem
                     )
                 },
                 enableBack = false,
@@ -115,8 +109,6 @@ fun MainScreen() {
                 mainViewModel.sendEvent(Event.ShowDetail(false))
             }
         )
-
-        LoadingDialog(poemState.loading)
     }
     // TODO: 仅在app启动时执行一次
     if (AppUtils.isNetworkAvailable()) {

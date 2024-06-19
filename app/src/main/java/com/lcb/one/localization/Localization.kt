@@ -6,6 +6,7 @@ import com.lcb.one.ui.MyApp
 
 class Localization private constructor(@StringRes private val resId: Int) {
     companion object {
+        val goSettings get() = Localization(R.string.go_settings).toString()
         val appName get() = Localization(R.string.app_name).toString()
         val ok get() = Localization(R.string.ok).toString()
         val cancel get() = Localization(R.string.cancel).toString()
