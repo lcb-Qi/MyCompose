@@ -41,11 +41,11 @@ import kotlin.coroutines.EmptyCoroutineContext
 fun ToolScreen() {
     val navController = LocalNav.current!!
 
-    // 设备
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        // 设备
         ToolCard(
             title = Localization.device,
             icon = { Icon(Icons.Rounded.PhoneAndroid, "") }

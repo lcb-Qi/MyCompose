@@ -2,7 +2,6 @@ package com.lcb.one.ui.screen.device.repo.model
 
 import com.lcb.one.util.android.PhoneUtil
 
-
 data class BasicInfo(
     var brand: String = "",
     var deviceModel: String = "",
@@ -21,4 +20,13 @@ data class BasicInfo(
             return deviceInfo
         }
     }
+}
+
+fun BasicInfo.toMap(): Map<String, String> {
+    return mapOf(
+        "Device Model" to deviceModel,
+        "Brand" to brand,
+        "OS Version" to osVersion,
+        "SDK Version" to sdkVersion.toString()
+    )
 }

@@ -55,3 +55,15 @@ data class DisplayInfo(
         }
     }
 }
+
+fun DisplayInfo.toMap(): Map<String, String> {
+    return mapOf(
+        "Resolution" to "$resolution px",
+        "Display Size" to "$displaySize px",
+        "Small Width" to "$smallWidth dp",
+        "DPI" to dpi.toString(),
+        "Density" to density.toString(),
+        "StatusBars Height" to "$statusBarsHeight px",
+        "NavigationBars Height" to "$navigationBarsHeight px",
+    )
+}
