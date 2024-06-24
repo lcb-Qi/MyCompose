@@ -24,7 +24,7 @@ import com.lcb.one.ui.widget.common.AppTextButton
 import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
-import com.lcb.one.ui.widget.settings.ui.SettingsListDropdown
+import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
 import com.lcb.one.util.android.UserPrefManager
 import com.lcb.one.util.common.DateTimeUtils
 import kotlinx.coroutines.delay
@@ -152,13 +152,11 @@ fun PaydayCard() {
                 )
             },
             text = {
-                SettingsListDropdown(
+                SettingSingleChoice(
                     selectIndex = selectIndex,
                     title = Localization.payday,
-                    items = options,
-                    onItemSelected = { index, option ->
-                        selectIndex = index
-                    }
+                    options = options.toTypedArray(),
+                    onItemSelected = { selectIndex = it }
                 )
             }
         )

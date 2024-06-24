@@ -12,7 +12,7 @@ import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
 import com.lcb.one.ui.screen.device.DeviceInfoScreen
 import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
 import com.lcb.one.ui.screen.menstruationAssistant.MenstruationHistoryScreen
-import com.lcb.one.ui.screen.settings.ThemeScreen
+import com.lcb.one.ui.screen.settings.ThemeSettingsScreen
 import com.lcb.one.ui.screen.settings.SettingsScreen
 
 const val ANIMATE_DURATION = 500
@@ -47,6 +47,6 @@ fun getRouters(): List<RouteScreen> {
         RouteScreen(Route.APPS) { InstalledAppsScreen() },
         RouteScreen(Route.MENSTRUAL_CYCLE_ASSISTANT) { MenstruationAssistantScreen() },
         RouteScreen(Route.MENSTRUAL_CYCLE_HISTORY) { MenstruationHistoryScreen() },
-        RouteScreen(Route.THEME) { ThemeScreen() },
+        RouteScreen(Route.THEME) { ThemeSettingsScreen() },
     )
 }

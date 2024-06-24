@@ -126,6 +126,7 @@ dependencies {
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
 
+    implementation(libs.bundles.settings.ui)
     // for test
     addTestDependencies()
 }

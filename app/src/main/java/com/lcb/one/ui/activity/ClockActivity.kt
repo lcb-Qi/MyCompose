@@ -34,10 +34,10 @@ import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPrefState
 import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
-import com.lcb.one.ui.widget.settings.ui.SettingsGroup
-import com.lcb.one.ui.widget.settings.ui.SettingsListDropdown
-import com.lcb.one.ui.widget.settings.ui.SettingsSlider
-import com.lcb.one.ui.widget.settings.ui.SettingsSwitch
+import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
+import com.lcb.one.ui.widget.settings.ui.SimpleSettingsGroup
+import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSlider
+import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
 import com.lcb.one.util.android.UserPrefManager
 import java.util.Locale
 
@@ -94,15 +94,15 @@ class ClockActivity : ComponentActivity() {
                 drawerContent = {
                     ModalDrawerSheet {
                         Column(modifier = Modifier.padding(24.dp)) {
-                            SettingsGroup(title = Localization.settings) {
-                                SettingsSwitch(
+                            SimpleSettingsGroup(title = Localization.settings) {
+                                SimpleSettingsSwitch(
                                     checked = darkTheme,
                                     title = Localization.darkMode,
                                     summary = Localization.onlyThisPage,
                                     onCheckedChange = { darkTheme = it }
                                 )
 
-                                SettingsSlider(
+                                SimpleSettingsSlider(
                                     title = Localization.clockFontSize,
                                     summary = clockSize.toString(),
                                     value = clockSize.toFloat(),
@@ -114,13 +114,11 @@ class ClockActivity : ComponentActivity() {
 
                                 val options = positions.map { it.label }
                                 val values = positions.map { it.id }
-                                SettingsListDropdown(
+                                SettingSingleChoice(
                                     title = Localization.positionOfDate,
                                     selectIndex = values.indexOf(datePosition).coerceAtLeast(0),
-                                    items = options,
-                                    onItemSelected = { index, _ ->
-                                        datePosition = index
-                                    }
+                                    options = options.toTypedArray(),
+                                    onItemSelected = { datePosition = it }
                                 )
                             }
                         }

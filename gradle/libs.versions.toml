@@ -18,6 +18,7 @@ androidxRoom = "2.6.1"
 # others
 retrofit = "2.11.0"
 okhttpLogger = "4.12.0"
+settingsUi = "2.4.0"
 zoomimage = "1.0.2"
 kolor = "1.4.4"
 # for test
@@ -61,6 +62,8 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose"
 kolor = { module = "com.materialkolor:material-kolor", version.ref = "kolor" }
 zoomimage-compose-coil = { module = "io.github.panpf.zoomimage:zoomimage-compose-coil", version.ref = "zoomimage" }
 markdown = { module = "io.noties.markwon:core", version.ref = "markdown" }
+settings-ui = { module = "com.github.alorma.compose-settings:ui-tiles", version.ref = "settingsUi" }
+settings-ui-extended = { module = "com.github.alorma.compose-settings:ui-tiles-extended", version.ref = "settingsUi" }
 
 # for test
 test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
@@ -80,12 +83,17 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 room = { id = "androidx.room", version.ref = "androidxRoom" }
 
 [bundles]
-androidx-compose = ["androidx-compose-ui", "androidx-compose-graphics", "androidx-compose-material3",
-    "androidx-compose-icons", "androidx-compose-preview", "androidx-compose-livedata"]
+androidx-compose = ["androidx-compose-ui", "androidx-compose-graphics",
+    "androidx-compose-material3", "androidx-compose-icons",
+    "androidx-compose-preview", "androidx-compose-livedata"]
 
-androidx-compose-support = ["androidx-navigation-compose", "androidx-activity-compose", "androidx-constraintlayout-compose"]
+androidx-compose-support = ["androidx-navigation-compose", "androidx-activity-compose",
+    "androidx-constraintlayout-compose"]
 
 androidx-lifecycle = ["androidx-lifecycle-livedata", "androidx-lifecycle-viewmodel"]
 
-retrofit2 = ["retrofit", "retrofit-converter-scalars", "retrofit-converter-serialization", "okhttp-logger"]
+retrofit2 = ["retrofit", "okhttp-logger",
+    "retrofit-converter-scalars", "retrofit-converter-serialization"]
+
+settings-ui = ["settings-ui", "settings-ui-extended"]
 

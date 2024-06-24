@@ -3,11 +3,13 @@ package com.lcb.one.ui.screen.about
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.Update
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
@@ -31,7 +34,8 @@ import com.lcb.one.ui.screen.about.repo.UpdateAccessor
 import com.lcb.one.ui.screen.about.repo.model.UpdateInfo
 import com.lcb.one.ui.screen.about.widget.UpdateInfoDialog
 import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.settings.ui.SettingsMenuLink
+import com.lcb.one.ui.widget.common.listItemColorOnCard
+import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
 import com.lcb.one.util.android.ToastUtils
 import kotlinx.coroutines.delay
@@ -40,12 +44,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun AboutScreen(modifier: Modifier = Modifier) {
     Scaffold(topBar = { ToolBar(title = "${Localization.about}${Localization.appName}") }) { paddingValues ->
-        Column(
+        Card(
             modifier = modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(
                     top = paddingValues.calculateTopPadding(),
-                    bottom = paddingValues.calculateBottomPadding()
+                    bottom = paddingValues.calculateBottomPadding(),
+                    start = 16.dp,
+                    end = 16.dp
                 )
         ) {
             // 版本信息
@@ -59,19 +65,21 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                 clickCount = 0
             }
             SettingsSimpleText(
+                colors = listItemColorOnCard(),
                 title = Localization.versionInfo,
                 summary = versionInfo,
-                icon = { Icon(imageVector = Icons.Rounded.Info, contentDescription = "") }
-            ) {
-                clickCount++
-                if (clickCount >= AppGlobalConfigs.COUNT_TO_ENABLE_DEV_MODE) {
-                    AppGlobalConfigs.appDevMode = !AppGlobalConfigs.appDevMode
-                    val action =
-                        if (AppGlobalConfigs.appDevMode) Localization.enterDevMode else Localization.exitDevMode
-                    ToastUtils.showToast(action)
-                    clickCount = 0
+                icon = { Icon(imageVector = Icons.Rounded.Info, contentDescription = "") },
+                onClick = {
+                    clickCount++
+                    if (clickCount >= AppGlobalConfigs.COUNT_TO_ENABLE_DEV_MODE) {
+                        AppGlobalConfigs.appDevMode = !AppGlobalConfigs.appDevMode
+                        val action =
+                            if (AppGlobalConfigs.appDevMode) Localization.enterDevMode else Localization.exitDevMode
+                        ToastUtils.showToast(action)
+                        clickCount = 0
+                    }
                 }
-            }
+            )
 
 
             // 检查更新
@@ -81,23 +89,25 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                 updateInfo = UpdateAccessor.getLastRelease()
             }
             val scope = rememberCoroutineScope()
-            SettingsMenuLink(
+            SimpleSettingsMenuLink(
+                colors = listItemColorOnCard(),
                 title = Localization.checkUpdates,
-                icon = { Icon(imageVector = Icons.Rounded.Update, contentDescription = "") }
-            ) {
-                scope.launch {
-                    updateInfo = UpdateAccessor.getLastRelease()
-                    if (updateInfo == null) {
-                        ToastUtils.showToast(Localization.noNewVersion)
-                        return@launch
+                icon = { Icon(imageVector = Icons.Rounded.Update, contentDescription = "") },
+                onClick = {
+                    scope.launch {
+                        updateInfo = UpdateAccessor.getLastRelease()
+                        if (updateInfo == null) {
+                            ToastUtils.showToast(Localization.noNewVersion)
+                            return@launch
+                        }
+                        if (!BuildConfig.DEBUG && updateInfo!!.version <= AppVersion.current) {
+                            ToastUtils.showToast(Localization.alreadyLast)
+                            return@launch
+                        }
+                        showUpdate = true
                     }
-                    if (!BuildConfig.DEBUG && updateInfo!!.version <= AppVersion.current) {
-                        ToastUtils.showToast(Localization.alreadyLast)
-                        return@launch
-                    }
-                    showUpdate = true
                 }
-            }
+            )
 
             UpdateInfoDialog(show = showUpdate && updateInfo != null, updateInfo = updateInfo) {
                 showUpdate = false
@@ -105,16 +115,19 @@ fun AboutScreen(modifier: Modifier = Modifier) {
 
             // 项目地址
             val url = stringResource(R.string.project_location_url)
-            SettingsMenuLink(
+            SimpleSettingsMenuLink(
+                colors = listItemColorOnCard(),
                 title = Localization.projectUrl,
                 summary = url,
-                icon = { Icon(imageVector = Icons.Rounded.Link, contentDescription = "") }
-            ) {
-                val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                icon = { Icon(imageVector = Icons.Rounded.Link, contentDescription = "") },
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                        .setData(url.toUri())
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                    MyApp.getAppContext().startActivity(intent)
                 }
-                MyApp.getAppContext().startActivity(intent)
-            }
+            )
         }
     }
 }
