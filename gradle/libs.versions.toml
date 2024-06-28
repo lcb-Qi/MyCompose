@@ -16,6 +16,7 @@ kotlinxSerializationJson = "1.7.0"
 markdown = "4.6.2"
 androidxRoom = "2.6.1"
 # others
+composeDest = "2.1.0-beta09"
 retrofit = "2.11.0"
 okhttpLogger = "4.12.0"
 settingsUi = "2.4.0"
@@ -37,7 +38,6 @@ androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
 
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivityCompose" }
-androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigationCompose" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidxConstraintlayoutCompose" }
 
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
@@ -53,6 +53,9 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 # others
+# 导航
+compose-destinations = { module = "io.github.raamcosta.compose-destinations:core", version.ref = "composeDest" }
+compose-destinations-ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "composeDest" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 retrofit-converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
@@ -87,8 +90,7 @@ androidx-compose = ["androidx-compose-ui", "androidx-compose-graphics",
     "androidx-compose-material3", "androidx-compose-icons",
     "androidx-compose-preview", "androidx-compose-livedata"]
 
-androidx-compose-support = ["androidx-navigation-compose", "androidx-activity-compose",
-    "androidx-constraintlayout-compose"]
+androidx-compose-support = ["androidx-activity-compose", "androidx-constraintlayout-compose"]
 
 androidx-lifecycle = ["androidx-lifecycle-livedata", "androidx-lifecycle-viewmodel"]
 

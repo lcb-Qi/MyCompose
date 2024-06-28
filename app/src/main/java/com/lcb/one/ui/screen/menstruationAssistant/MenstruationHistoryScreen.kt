@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lcb.one.localization.Localization
+import com.lcb.one.ui.MenstruationAssistantNavGraph
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
 import com.lcb.one.util.android.ToastUtils
@@ -40,11 +41,13 @@ import com.lcb.one.ui.screen.menstruationAssistant.repo.model.averageDurationDay
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.averageIntervalDay
 import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstrualCycleHistoryCard
 import com.lcb.one.ui.screen.menstruationAssistant.widget.PastMcDayPicker
+import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 private const val DRAG_OFFSET_MAX = 400
 
+@Destination<MenstruationAssistantNavGraph>
 @Composable
 fun MenstruationHistoryScreen() {
     val mcViewmodel = viewModel<MenstruationViewModel>()

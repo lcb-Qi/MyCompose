@@ -28,6 +28,7 @@ import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.lcb.one.localization.Localization
+import com.lcb.one.ui.AppNavGraph
 import com.lcb.one.ui.theme.AppTheme
 import com.lcb.one.ui.theme.ThemeManager
 import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPrefState
@@ -39,8 +40,10 @@ import com.lcb.one.ui.widget.settings.ui.SimpleSettingsGroup
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSlider
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
 import com.lcb.one.util.android.UserPrefManager
+import com.ramcosta.composedestinations.annotation.ActivityDestination
 import java.util.Locale
 
+@ActivityDestination<AppNavGraph>
 class ClockActivity : ComponentActivity() {
     companion object {
         private const val MAX_SIZE = 48/* sp */

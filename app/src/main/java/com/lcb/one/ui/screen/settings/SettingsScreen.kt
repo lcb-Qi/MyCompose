@@ -17,19 +17,20 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
 import com.lcb.one.localization.Localization
+import com.lcb.one.route.destinations.ThemeSettingsScreenDestination
 import com.lcb.one.ui.AppGlobalConfigs
-import com.lcb.one.ui.LocalNav
-import com.lcb.one.ui.Route
+import com.lcb.one.ui.SettingsNavGraph
+import com.lcb.one.ui.navController
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.listItemColorOnCard
 import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsGroup
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
-import com.lcb.one.util.android.navigateSingleTop
+import com.ramcosta.composedestinations.annotation.Destination
 
+@Destination<SettingsNavGraph>(start = true)
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier) {
-    val navHostController = LocalNav.current!!
     Scaffold(topBar = { ToolBar(title = Localization.settings) }) { paddingValues ->
         Column(
             modifier = modifier
@@ -49,7 +50,7 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                         colors = listItemColorOnCard(),
                         title = Localization.theme,
                         icon = { Icon(Icons.Rounded.Palette, null) },
-                        onClick = { navHostController.navigateSingleTop(Route.THEME) }
+                        onClick = { navController.navigate(ThemeSettingsScreenDestination) }
                     )
 
                     // 语言
@@ -58,7 +59,7 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                         colors = listItemColorOnCard(),
                         title = "语言",
                         icon = { Icon(Icons.Rounded.Language, null) },
-                        onClick = {  }
+                        onClick = { }
                     )
                 }
             }

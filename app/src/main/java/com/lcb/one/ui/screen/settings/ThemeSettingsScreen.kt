@@ -10,12 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.lcb.one.localization.Localization
+import com.lcb.one.ui.SettingsNavGraph
 import com.lcb.one.ui.screen.settings.widget.ThemSelector
 import com.lcb.one.ui.theme.ThemeManager
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.listItemColorOnCard
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
+import com.ramcosta.composedestinations.annotation.Destination
 
+@Destination<SettingsNavGraph>
 @Composable
 fun ThemeSettingsScreen() {
     Scaffold(topBar = { ToolBar(title = Localization.theme) }) {

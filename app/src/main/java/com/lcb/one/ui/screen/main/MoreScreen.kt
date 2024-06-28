@@ -11,15 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.lcb.one.localization.Localization
-import com.lcb.one.ui.LocalNav
-import com.lcb.one.ui.Route
+import com.lcb.one.route.NavGraphs
+import com.lcb.one.route.destinations.AboutScreenDestination
+import com.lcb.one.ui.navController
 import com.lcb.one.ui.widget.common.listItemColorOnCard
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
-import com.lcb.one.util.android.navigateSingleTop
 
 @Composable
 fun MoreScreen() {
-    val navController = LocalNav.current!!
     Card(modifier = Modifier.padding(horizontal = 16.dp)) {
         Column {
             // 设置
@@ -27,7 +26,7 @@ fun MoreScreen() {
                 colors = listItemColorOnCard(),
                 title = Localization.settings,
                 icon = { Icon(imageVector = Icons.Rounded.Settings, contentDescription = null) },
-                onClick = { navController.navigateSingleTop(Route.SETTINGS) }
+                onClick = { navController.navigate(NavGraphs.settings) }
             )
 
             // 关于
@@ -35,7 +34,7 @@ fun MoreScreen() {
                 colors = listItemColorOnCard(),
                 title = "${Localization.about}${Localization.appName}",
                 icon = { Icon(imageVector = Icons.Rounded.Info, contentDescription = null) },
-                onClick = { navController.navigateSingleTop(Route.ABOUT) }
+                onClick = { navController.navigate(AboutScreenDestination) }
             )
         }
     }

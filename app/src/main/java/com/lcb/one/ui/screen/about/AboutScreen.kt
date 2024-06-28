@@ -1,8 +1,6 @@
 package com.lcb.one.ui.screen.about
 
 import android.content.Intent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -28,6 +26,7 @@ import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
+import com.lcb.one.ui.AppNavGraph
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.about.repo.model.AppVersion
 import com.lcb.one.ui.screen.about.repo.UpdateAccessor
@@ -38,9 +37,11 @@ import com.lcb.one.ui.widget.common.listItemColorOnCard
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
 import com.lcb.one.util.android.ToastUtils
+import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@Destination<AppNavGraph>
 @Composable
 fun AboutScreen(modifier: Modifier = Modifier) {
     Scaffold(topBar = { ToolBar(title = "${Localization.about}${Localization.appName}") }) { paddingValues ->

@@ -73,6 +73,7 @@ android {
 ksp {
     arg("room.incremental", "true")
     arg("room.generateKotlin", "true")
+    arg("compose-destinations.codeGenPackageName", "${project.android.defaultConfig.applicationId}.route")
 }
 
 tasks.register("copyTask") {
@@ -127,6 +128,9 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.bundles.settings.ui)
+    implementation(libs.compose.destinations)
+    ksp(libs.compose.destinations.ksp)
+
     // for test
     addTestDependencies()
 }

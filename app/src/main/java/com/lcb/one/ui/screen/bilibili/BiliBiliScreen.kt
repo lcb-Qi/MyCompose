@@ -35,6 +35,7 @@ import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
+import com.lcb.one.ui.AppNavGraph
 import com.lcb.one.ui.screen.bilibili.repo.BiliServerAccessor
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppButton
@@ -44,8 +45,10 @@ import com.lcb.one.util.android.ToastUtils
 import kotlinx.coroutines.launch
 import com.lcb.one.ui.screen.bilibili.widget.FullScreenImage
 import com.lcb.one.ui.screen.bilibili.widget.ImageViewState
+import com.ramcosta.composedestinations.annotation.Destination
 import kotlin.math.roundToInt
 
+@Destination<AppNavGraph>
 @Composable
 fun BiliBiliScreen() {
     var textInput by remember { mutableStateOf("") }

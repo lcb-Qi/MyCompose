@@ -11,7 +11,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -20,13 +19,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.lcb.one.localization.Localization
+import com.lcb.one.ui.AppNavGraph
 import com.lcb.one.ui.screen.device.repo.model.BasicInfo
 import com.lcb.one.ui.screen.device.repo.model.DisplayInfo
 import com.lcb.one.ui.screen.device.repo.model.toMap
 import com.lcb.one.ui.screen.device.widget.SimpleInfoCard
 import com.lcb.one.ui.widget.appbar.ToolBar
+import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
 
+@Destination<AppNavGraph>
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun DeviceInfoScreen() {

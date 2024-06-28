@@ -24,12 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lcb.one.localization.Localization
+import com.lcb.one.route.destinations.MenstruationHistoryScreenDestination
+import com.lcb.one.ui.MenstruationAssistantNavGraph
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.getMcDay
-import com.lcb.one.ui.LocalNav
-import com.lcb.one.ui.Route
+import com.lcb.one.ui.navController
 import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.util.android.navigateSingleTop
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.toMillis
 import com.lcb.one.ui.screen.menstruationAssistant.repo.MenstruationViewModel
@@ -37,14 +37,15 @@ import com.lcb.one.ui.screen.menstruationAssistant.widget.Calendar
 import com.lcb.one.ui.screen.menstruationAssistant.widget.rememberCalendarState
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.ui.widget.common.AppIconButton
+import com.ramcosta.composedestinations.annotation.Destination
 import java.time.LocalDate
 
 private const val MENSTRUATION_INTERVAL = 28L// 两次月经间隔
 private const val MENSTRUATION_DURATION = 7L// 月经持续时间
 
+@Destination<MenstruationAssistantNavGraph>(start = true)
 @Composable
 fun MenstruationAssistantScreen() {
-    val navController = LocalNav.current!!
 
     val mcViewmodel = viewModel<MenstruationViewModel>()
     val mcDays by mcViewmodel.getAll().collectAsState(emptyList())
@@ -75,7 +76,7 @@ fun MenstruationAssistantScreen() {
                 actions = {
                     AppIconButton(
                         icon = Icons.Rounded.History,
-                        onClick = { navController.navigateSingleTop(Route.MENSTRUAL_CYCLE_HISTORY) }
+                        onClick = { navController.navigate(MenstruationHistoryScreenDestination) }
                     )
                 }
             )
@@ -160,7 +161,12 @@ fun MenstrualCycleInfo(
                             // 预计{MENSTRUAL_DURATION}天内结束，如果超出，显示温馨提示
                             val endInDays = MENSTRUATION_DURATION - days
                             if (endInDays > 0) {
-                                append(String.format(Localization.menstruationPredictEndIn, endInDays))
+                                append(
+                                    String.format(
+                                        Localization.menstruationPredictEndIn,
+                                        endInDays
+                                    )
+                                )
                             } else {
                                 append(
                                     String.format(

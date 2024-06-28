@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.lcb.one.localization.Localization
 import com.lcb.one.ui.ANIMATE_DURATION
+import com.lcb.one.ui.AppNavGraph
 import com.lcb.one.ui.screen.applist.repo.AppInfo
 import com.lcb.one.ui.screen.applist.repo.loadInstalledApps
 import com.lcb.one.ui.screen.applist.widget.AppType
@@ -30,9 +31,11 @@ import com.lcb.one.ui.screen.applist.widget.InstalledAppList
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.util.android.ToastUtils
+import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.delay
 import kotlin.system.measureTimeMillis
 
+@Destination<AppNavGraph>
 @Composable
 fun InstalledAppsScreen() {
     var appType by remember { mutableStateOf(AppType.USER) }

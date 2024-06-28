@@ -19,9 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lcb.one.localization.Localization
+import com.lcb.one.route.destinations.ThemeSettingsScreenDestination
 import com.lcb.one.ui.AppGlobalConfigs
-import com.lcb.one.ui.LocalNav
-import com.lcb.one.ui.Route
+import com.lcb.one.ui.AppNavGraph
 import com.lcb.one.ui.widget.appbar.BottomBar
 import com.lcb.one.ui.widget.appbar.BottomBarItem
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -31,13 +31,14 @@ import com.lcb.one.util.android.AppUtils
 import com.lcb.one.ui.screen.main.repo.MainViewModel
 import com.lcb.one.ui.screen.main.repo.MainViewModel.Event
 import com.lcb.one.ui.screen.main.widget.PoemTitle
-import com.lcb.one.util.android.navigateSingleTop
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 
+@Destination<AppNavGraph>(start = true)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainScreen() {
-    val navHostController = LocalNav.current!!
+fun MainScreen(nav:DestinationsNavigator) {
 
     FriendlyExitHandler()
 
@@ -74,7 +75,7 @@ fun MainScreen() {
                 },
                 enableBack = false,
                 actions = {
-                    IconButton(onClick = { navHostController.navigateSingleTop(Route.THEME) }) {
+                    IconButton(onClick = { nav.navigate(ThemeSettingsScreenDestination) }) {
                         Icon(Icons.Rounded.Palette, null)
                     }
                 }

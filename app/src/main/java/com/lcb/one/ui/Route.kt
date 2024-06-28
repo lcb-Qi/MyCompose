@@ -1,52 +1,44 @@
 package com.lcb.one.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ProvidableCompositionLocal
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.navigation.NavHostController
-import com.lcb.one.ui.screen.about.AboutScreen
-import com.lcb.one.ui.screen.applist.InstalledAppsScreen
-import com.lcb.one.ui.screen.main.MainScreen
-import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
-import com.lcb.one.ui.screen.device.DeviceInfoScreen
-import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
-import com.lcb.one.ui.screen.menstruationAssistant.MenstruationHistoryScreen
-import com.lcb.one.ui.screen.settings.ThemeSettingsScreen
-import com.lcb.one.ui.screen.settings.SettingsScreen
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.navigation.NavBackStackEntry
+import com.ramcosta.composedestinations.animations.NavHostAnimatedDestinationStyle
+import com.ramcosta.composedestinations.annotation.NavGraph
+import com.ramcosta.composedestinations.annotation.NavHostGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 const val ANIMATE_DURATION = 500
 
-object Route {
-    const val MAIN = "Main"
-    const val BILI = "BiliBili"
-    const val DEVICE = "Device"
-    const val SETTINGS = "Settings"
-    const val ABOUT = "About"
-    const val APPS = "Apps"
-    const val THEME = "Theme"
-    const val MENSTRUAL_CYCLE_ASSISTANT = "MenstrualCycleAssistant"
-    const val MENSTRUAL_CYCLE_HISTORY = "MenstrualCycleHistory"
+object DefaultAnimation : NavHostAnimatedDestinationStyle() {
+    override val enterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition
+        get() = { slideInHorizontally(animationSpec = tween(ANIMATE_DURATION)) { it } }
+
+
+    override val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition
+        get() = { slideOutHorizontally(animationSpec = tween(ANIMATE_DURATION)) { -it } }
+
+    override val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition
+        get() = { slideInHorizontally(animationSpec = tween(ANIMATE_DURATION)) { -it } }
+
+    override val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition
+        get() = { slideOutHorizontally(animationSpec = tween(ANIMATE_DURATION)) { it } }
 }
 
-@Stable
-class RouteScreen(
-    val route: String,
-    val content: @Composable () -> Unit
-)
+@NavHostGraph(defaultTransitions = DefaultAnimation::class)
+annotation class AppNavGraph
 
-val LocalNav: ProvidableCompositionLocal<NavHostController?> = staticCompositionLocalOf { null }
+@NavGraph<AppNavGraph>
+annotation class SettingsNavGraph
 
-fun getRouters(): List<RouteScreen> {
-    return listOf(
-        RouteScreen(Route.MAIN) { MainScreen() },
-        RouteScreen(Route.BILI) { BiliBiliScreen() },
-        RouteScreen(Route.DEVICE) { DeviceInfoScreen() },
-        RouteScreen(Route.SETTINGS) { SettingsScreen() },
-        RouteScreen(Route.ABOUT) { AboutScreen() },
-        RouteScreen(Route.APPS) { InstalledAppsScreen() },
-        RouteScreen(Route.MENSTRUAL_CYCLE_ASSISTANT) { MenstruationAssistantScreen() },
-        RouteScreen(Route.MENSTRUAL_CYCLE_HISTORY) { MenstruationHistoryScreen() },
-        RouteScreen(Route.THEME) { ThemeSettingsScreen() },
-    )
-}
+@NavGraph<AppNavGraph>
+annotation class MenstruationAssistantNavGraph
+
+/**
+ * fixme: ugly implementation
+ */
+lateinit var navController: DestinationsNavigator
