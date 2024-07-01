@@ -20,8 +20,8 @@ android {
         applicationId = "com.lcb.one"
         minSdk = 31
         targetSdk = 34
-        versionCode = 10500
-        versionName = "1.5.0"
+        versionCode = 10600
+        versionName = "1.6.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -130,6 +130,8 @@ dependencies {
     implementation(libs.bundles.settings.ui)
     implementation(libs.compose.destinations)
     ksp(libs.compose.destinations.ksp)
+
+    implementation(libs.compose.webview)
 
     // for test
     addTestDependencies()

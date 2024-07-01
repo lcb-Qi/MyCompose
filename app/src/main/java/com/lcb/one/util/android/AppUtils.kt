@@ -16,6 +16,7 @@ import android.net.Uri
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.core.graphics.drawable.toBitmapOrNull
+import androidx.core.net.toUri
 import com.lcb.one.BuildConfig
 import com.lcb.one.ui.MyApp
 
@@ -84,16 +85,6 @@ object AppUtils {
         return PhoneUtil.getResolution(context).height
     }
 
-    fun installApk(context: Context = MyApp.getAppContext(), uri: Uri) {
-        LLog.d(TAG, "installApk: uri = $uri")
-        val installIntent = Intent(Intent.ACTION_VIEW).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            setDataAndType(uri, "application/vnd.android.package-archive")
-        }
-        context.startActivity(installIntent)
-    }
-
     fun getAllPackageName(context: Context = MyApp.getAppContext()): List<String> {
         val pm = context.packageManager
         val info = pm.getInstalledPackages(0)
@@ -143,6 +134,14 @@ object AppUtils {
     fun restart(context: Context = MyApp.getAppContext()) {
         val intent = context.packageManager.getLaunchIntentForPackage(PACKAGE_ME)
         intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        context.startActivity(intent)
+    }
+
+    fun launchSystemBrowser(context: Context = MyApp.getAppContext(), uri: Uri) {
+        val intent = Intent(Intent.ACTION_VIEW)
+            .setData(uri)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
         context.startActivity(intent)
     }
 }

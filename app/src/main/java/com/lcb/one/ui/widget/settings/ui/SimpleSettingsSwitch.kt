@@ -25,10 +25,10 @@ fun SimpleSettingsSwitch(
         modifier = modifier.minSettingsHeight(),
         colors = colors,
         state = checked,
-        title = { Text(text = title, fontWeight = FontWeight.Medium) },
+        title = { SettingsDefaults.Title(title = title) },
         icon = icon,
         enabled = enabled,
-        subtitle = summary?.let { { Text(text = it) } },
+        subtitle = summary?.let { { SettingsDefaults.Summary(summary = summary) } },
         onCheckedChange = onCheckedChange
     )
 }

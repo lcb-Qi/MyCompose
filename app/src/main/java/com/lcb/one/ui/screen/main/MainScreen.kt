@@ -7,6 +7,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Android
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.Palette
@@ -22,6 +23,7 @@ import com.lcb.one.localization.Localization
 import com.lcb.one.route.destinations.ThemeSettingsScreenDestination
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.AppNavGraph
+import com.lcb.one.ui.navController
 import com.lcb.one.ui.widget.appbar.BottomBar
 import com.lcb.one.ui.widget.appbar.BottomBarItem
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -31,6 +33,7 @@ import com.lcb.one.util.android.AppUtils
 import com.lcb.one.ui.screen.main.repo.MainViewModel
 import com.lcb.one.ui.screen.main.repo.MainViewModel.Event
 import com.lcb.one.ui.screen.main.widget.PoemTitle
+import com.lcb.one.ui.widget.common.AppIconButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
@@ -38,7 +41,7 @@ import kotlinx.coroutines.launch
 @Destination<AppNavGraph>(start = true)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainScreen(nav:DestinationsNavigator) {
+fun MainScreen() {
 
     FriendlyExitHandler()
 
@@ -73,9 +76,9 @@ fun MainScreen(nav:DestinationsNavigator) {
                         onClick = updatePoem
                     )
                 },
-                enableBack = false,
+                navigationIcon = null,
                 actions = {
-                    IconButton(onClick = { nav.navigate(ThemeSettingsScreenDestination) }) {
+                    IconButton(onClick = { navController.navigate(ThemeSettingsScreenDestination) }) {
                         Icon(Icons.Rounded.Palette, null)
                     }
                 }

@@ -25,9 +25,11 @@ import androidx.core.net.toUri
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.localization.Localization
+import com.lcb.one.route.destinations.WebScreenDestination
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.AppNavGraph
 import com.lcb.one.ui.MyApp
+import com.lcb.one.ui.navController
 import com.lcb.one.ui.screen.about.repo.model.AppVersion
 import com.lcb.one.ui.screen.about.repo.UpdateAccessor
 import com.lcb.one.ui.screen.about.repo.model.UpdateInfo
@@ -36,6 +38,7 @@ import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.listItemColorOnCard
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
+import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.ToastUtils
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.delay
@@ -122,11 +125,11 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                 summary = url,
                 icon = { Icon(imageVector = Icons.Rounded.Link, contentDescription = "") },
                 onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                        .setData(url.toUri())
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-                    MyApp.getAppContext().startActivity(intent)
+                    if (AppGlobalConfigs.useBuiltinBrowser) {
+                        navController.navigate(WebScreenDestination(url))
+                    } else {
+                        AppUtils.launchSystemBrowser(uri = url.toUri())
+                    }
                 }
             )
         }

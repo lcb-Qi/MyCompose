@@ -21,8 +21,8 @@ fun SimpleSettingsSlider(
     SettingsSlider(
         modifier = Modifier.minSettingsHeight(),
         enabled = enabled,
-        title = { Text(text = title, fontWeight = FontWeight.Medium) },
-        subtitle = summary?.let { { Text(text = it) } },
+        title = { SettingsDefaults.Title(title = title) },
+        subtitle = summary?.let { { SettingsDefaults.Summary(summary = summary) } },
         icon = icon,
         valueRange = valueRange,
         steps = steps,

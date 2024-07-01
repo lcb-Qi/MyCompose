@@ -12,6 +12,7 @@ object UserPrefManager {
         const val APP_THEME_SEED = "app_theme_seed"// int
         const val APP_DYNAMIC_COLOR = "app_dynamicColor"// boolean
         const val APP_ALOMED_MODE = "app_amoled_mode"// boolean
+        const val USE_BUILTIN_BROWSER = "use_builtin_browser"// boolean
 
         // poem
         const val POEM_TOKEN = "poem_token"// string

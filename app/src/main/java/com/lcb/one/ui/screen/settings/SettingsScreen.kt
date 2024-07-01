@@ -7,6 +7,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Autorenew
 import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.Palette
+import androidx.compose.material.icons.rounded.PrivacyTip
+import androidx.compose.material.icons.rounded.TravelExplore
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -26,6 +28,7 @@ import com.lcb.one.ui.widget.common.listItemColorOnCard
 import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsGroup
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
+import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination<SettingsNavGraph>(start = true)
@@ -45,6 +48,14 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
             // 通用
             SimpleSettingsGroup(title = Localization.common) {
                 Card {
+                    SimpleSettingsSwitch(
+                        colors = listItemColorOnCard(),
+                        checked = AppGlobalConfigs.useBuiltinBrowser,
+                        icon = { Icon(Icons.Rounded.TravelExplore, null) },
+                        title = "使用内置浏览器",
+                        onCheckedChange = { AppGlobalConfigs.useBuiltinBrowser = it }
+                    )
+
                     // 主题
                     SimpleSettingsMenuLink(
                         colors = listItemColorOnCard(),
@@ -77,6 +88,14 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                             .coerceAtLeast(0),
                         options = options,
                         onItemSelected = { AppGlobalConfigs.poemUpdateInterval = values[it] }
+                    )
+
+                    SimpleSettingsMenuLink(
+                        enabled = false,
+                        colors = listItemColorOnCard(),
+                        title = "权限管理",
+                        icon = { Icon(Icons.Rounded.PrivacyTip, null) },
+                        onClick = { }
                     )
                 }
             }

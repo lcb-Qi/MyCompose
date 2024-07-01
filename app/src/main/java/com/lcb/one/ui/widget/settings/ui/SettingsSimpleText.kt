@@ -30,8 +30,8 @@ fun SettingsSimpleText(
             .minSettingsHeight()
             .clickable(enabled = enabled, onClick = onClick)
             .then(modifier),
-        title = { Text(text = title, fontWeight = FontWeight.Medium) },
-        subtitle = summary?.let { { Text(text = summary) } },
+        title = { SettingsDefaults.Title(title = title) },
+        subtitle = summary?.let { { SettingsDefaults.Summary(summary = summary) } },
         icon = icon,
         action = null,
     )
