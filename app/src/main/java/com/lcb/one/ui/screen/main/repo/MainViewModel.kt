@@ -28,8 +28,11 @@ class MainViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             val last =
-                JsonUtils.fromJson<PoemInfo>(UserPrefManager.getString(UserPrefManager.Key.POEM_LAST))
-            if (last != null) with(last) {
+                JsonUtils.fromJsonOrDefault(
+                    UserPrefManager.getString(UserPrefManager.Key.POEM_LAST),
+                    PoemInfo.serializer()
+                )
+            last?.run {
                 poemSate.poemInfo = this
             }
         }

@@ -1,13 +1,14 @@
 package com.lcb.one.util.common
 
 import com.lcb.one.util.android.LLog
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 object JsonUtils {
-    const val TAG = "JsonUtils"
+    private const val TAG = "JsonUtils"
 
     val json by lazy {
         Json(from = Json) {
@@ -16,23 +17,36 @@ object JsonUtils {
         }
     }
 
-    fun getConverterFactory() =
-        json.asConverterFactory("application/json; charset=UTF8".toMediaType())
+    @Throws(SerializationException::class, IllegalArgumentException::class)
+    inline fun <reified T> toJson(src: T) = json.encodeToString(src)
 
-    inline fun <reified T> toJson(src: T, default: String = ""): String {
+    fun <T> toJsonOrDefault(
+        src: T,
+        serializer: SerializationStrategy<T>,
+        default: String = ""
+    ): String {
         return try {
-            json.encodeToString(src)
+            json.encodeToString(serializer, src)
         } catch (e: Exception) {
-            LLog.d(TAG, "toJson failed: $e")
+            LLog.d(TAG, "toJsonOrDefault failed: src = ${src.toString()}")
+            e.printStackTrace()
             default
         }
     }
 
-    inline fun <reified T> fromJson(src: String, default: T? = null): T? {
+    @Throws(SerializationException::class, IllegalArgumentException::class)
+    inline fun <reified T> fromJson(src: String) = json.decodeFromString<T>(src)
+
+    fun <T> fromJsonOrDefault(
+        src: String,
+        deserializer: DeserializationStrategy<T>,
+        default: T? = null
+    ): T? {
         return try {
-            json.decodeFromString<T>(src)
+            json.decodeFromString(deserializer, src)
         } catch (e: Exception) {
-            LLog.d(TAG, "fromJson failed: $e")
+            LLog.d(TAG, "fromJsonOrDefault failed: src = $src")
+            e.printStackTrace()
             default
         }
     }

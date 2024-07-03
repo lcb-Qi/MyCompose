@@ -18,6 +18,6 @@ class MyApp : Application() {
         super.onCreate()
         app = this
         LLog.d(TAG, "Application onCreate...")
-        registerActivityLifecycleCallbacks(LifecycleCallbackImpl)
+        registerActivityLifecycleCallbacks(LifecycleCallbackImpl())
     }
 }

@@ -1,9 +1,7 @@
 package com.lcb.one.util.android
 
-import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.AdaptiveIconDrawable
@@ -13,20 +11,16 @@ import android.graphics.drawable.LayerDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
+import android.provider.Settings
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.core.graphics.drawable.toBitmapOrNull
-import androidx.core.net.toUri
 import com.lcb.one.BuildConfig
 import com.lcb.one.ui.MyApp
-
-class AppVersionInfo(val versionCode: Int, val versionName: String)
 
 const val PACKAGE_ME = BuildConfig.APPLICATION_ID
 
 object AppUtils {
-    private const val TAG = "AppUtils"
-
     fun isNetworkAvailable(context: Context = MyApp.getAppContext()): Boolean {
         val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
@@ -39,30 +33,6 @@ object AppUtils {
             networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                     || networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
         }
-    }
-
-    fun getAppVersionInfo(
-        context: Context = MyApp.getAppContext(),
-        packageName: String
-    ): AppVersionInfo {
-        val pm = context.packageManager
-        val packageInfo = pm.getPackageInfo(packageName, 0)
-
-        return AppVersionInfo(packageInfo.versionCode, packageInfo.versionName)
-    }
-
-    fun getAppVersionName(context: Context = MyApp.getAppContext(), packageName: String): String {
-        val pm = context.packageManager
-        val packageInfo = pm.getPackageInfo(packageName, 0)
-
-        return packageInfo.versionName
-    }
-
-    fun getAppVersionCode(context: Context = MyApp.getAppContext(), packageName: String): Int {
-        val pm = context.packageManager
-        val packageInfo = pm.getPackageInfo(packageName, 0)
-
-        return packageInfo.versionCode
     }
 
     fun getNavigationBarsHeight(context: Context = MyApp.getAppContext()): Int {
@@ -83,12 +53,6 @@ object AppUtils {
 
     fun getScreenHeight(context: Context = MyApp.getAppContext()): Int {
         return PhoneUtil.getResolution(context).height
-    }
-
-    fun getAllPackageName(context: Context = MyApp.getAppContext()): List<String> {
-        val pm = context.packageManager
-        val info = pm.getInstalledPackages(0)
-        return info.map { it.packageName }
     }
 
     fun getAppIcon(context: Context = MyApp.getAppContext(), packageName: String): Bitmap? {
@@ -126,22 +90,23 @@ object AppUtils {
         return info.sourceDir
     }
 
-    fun isSystemDarkTheme(): Boolean {
-        val uiModeManager = MyApp.getAppContext().getSystemService(UiModeManager::class.java)
-        return uiModeManager.nightMode == Configuration.UI_MODE_NIGHT_YES
-    }
-
-    fun restart(context: Context = MyApp.getAppContext()) {
-        val intent = context.packageManager.getLaunchIntentForPackage(PACKAGE_ME)
-        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        context.startActivity(intent)
-    }
-
     fun launchSystemBrowser(context: Context = MyApp.getAppContext(), uri: Uri) {
         val intent = Intent(Intent.ACTION_VIEW)
             .setData(uri)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         context.startActivity(intent)
+    }
+
+    fun getAppDetailSettingsIntent(appId: String = PACKAGE_ME): Intent {
+        return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            .setData(Uri.fromParts("package", appId, null))
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+
+    fun getAllFileAccessIntent(appId: String = PACKAGE_ME): Intent {
+        return Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .setData(Uri.fromParts("package", appId, null))
     }
 }

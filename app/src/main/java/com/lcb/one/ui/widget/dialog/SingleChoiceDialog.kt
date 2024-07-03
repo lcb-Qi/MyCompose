@@ -28,14 +28,17 @@ fun SingleChoiceDialog(
     if (!show) return
 
     var selectedIndex by remember { mutableIntStateOf(selected) }
-    val update: (Int) -> Unit = {
-        selectedIndex = it
-        onItemSelected(it)
-    }
+    val update: (Int) -> Unit = { selectedIndex = it }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        confirmButton = { AppTextButton(text = Localization.cancel, onClick = onDismiss) },
+        confirmButton = {
+            AppTextButton(
+                text = Localization.ok,
+                onClick = { onItemSelected(selectedIndex) }
+            )
+        },
+        dismissButton = { AppTextButton(text = Localization.cancel, onClick = onDismiss) },
         title = { Text(text = title) },
         text = {
             LazyColumn(modifier = Modifier.requiredHeightIn(max = 240.dp)) {

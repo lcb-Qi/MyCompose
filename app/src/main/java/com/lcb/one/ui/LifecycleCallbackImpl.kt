@@ -5,48 +5,43 @@ import android.app.Application
 import android.os.Bundle
 import com.lcb.one.util.android.LLog
 
-private const val TAG = "LifecycleCallbackImpl"
 
-object LifecycleCallbackImpl : Application.ActivityLifecycleCallbacks {
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+class LifecycleCallbackImpl : Application.ActivityLifecycleCallbacks {
+    companion object {
+        private const val TAG = "LifecycleCallback"
+    }
+
+    private fun logLifecycle(activity: Activity, lifecycleName: String) {
         val name = activity.javaClass.name
         val hashCode = activity.hashCode()
-        LLog.d(TAG, "onActivityCreated: $name@$hashCode")
+        LLog.i(TAG, "$lifecycleName: $name@$hashCode")
+    }
+
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        logLifecycle(activity, "onActivityCreated")
     }
 
     override fun onActivityStarted(activity: Activity) {
-        val name = activity.javaClass.name
-        val hashCode = activity.hashCode()
-        LLog.d(TAG, "onActivityStarted: $name@$hashCode")
+        logLifecycle(activity, "onActivityStarted")
     }
 
     override fun onActivityResumed(activity: Activity) {
-        val name = activity.javaClass.name
-        val hashCode = activity.hashCode()
-        LLog.d(TAG, "onActivityResumed: $name@$hashCode")
+        logLifecycle(activity, "onActivityResumed")
     }
 
     override fun onActivityPaused(activity: Activity) {
-        val name = activity.javaClass.name
-        val hashCode = activity.hashCode()
-        LLog.d(TAG, "onActivityPaused: $name@$hashCode")
+        logLifecycle(activity, "onActivityPaused")
     }
 
     override fun onActivityStopped(activity: Activity) {
-        val name = activity.javaClass.name
-        val hashCode = activity.hashCode()
-        LLog.d(TAG, "onActivityStopped: $name@$hashCode")
+        logLifecycle(activity, "onActivityStopped")
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-        val name = activity.javaClass.name
-        val hashCode = activity.hashCode()
-        LLog.d(TAG, "onActivitySaveInstanceState: $name@$hashCode")
+        logLifecycle(activity, "onActivitySaveInstanceState")
     }
 
     override fun onActivityDestroyed(activity: Activity) {
-        val name = activity.javaClass.name
-        val hashCode = activity.hashCode()
-        LLog.d(TAG, "onActivityDestroyed: $name@$hashCode")
+        logLifecycle(activity, "onActivityDestroyed")
     }
 }

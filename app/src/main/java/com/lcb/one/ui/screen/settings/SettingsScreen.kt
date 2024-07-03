@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
 import com.lcb.one.localization.Localization
+import com.lcb.one.route.destinations.PrivacyScreenDestination
 import com.lcb.one.route.destinations.ThemeSettingsScreenDestination
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.SettingsNavGraph
@@ -91,11 +92,10 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                     )
 
                     SimpleSettingsMenuLink(
-                        enabled = false,
                         colors = listItemColorOnCard(),
                         title = "权限管理",
                         icon = { Icon(Icons.Rounded.PrivacyTip, null) },
-                        onClick = { }
+                        onClick = { navController.navigate(PrivacyScreenDestination) }
                     )
                 }
             }

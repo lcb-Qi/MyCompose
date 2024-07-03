@@ -2,9 +2,11 @@ package com.lcb.one.network
 
 import com.lcb.one.network.core.OkhttpFactory
 import com.lcb.one.util.common.JsonUtils
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object RetrofitHelper {
@@ -18,7 +20,7 @@ object RetrofitHelper {
             baseUrl(baseUrl)
             client(client)
             addConverterFactory(ScalarsConverterFactory.create())
-            addConverterFactory(JsonUtils.getConverterFactory())
+            addConverterFactory(JsonUtils.json.asConverterFactory("application/json; charset=UTF8".toMediaType()))
             converterFactory.forEach {
                 addConverterFactory(it)
             }

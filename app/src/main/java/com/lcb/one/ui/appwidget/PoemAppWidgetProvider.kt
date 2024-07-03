@@ -68,7 +68,7 @@ class PoemAppWidgetProvider : AppWidgetProvider() {
         remoteViews.setOnClickPendingIntent(R.id.container, createPendingIntent(context))
 
         val lastPoem = UserPrefManager.getString(UserPrefManager.Key.POEM_LAST)
-        val poemInfo = JsonUtils.fromJson<PoemInfo>(lastPoem)
+        val poemInfo = JsonUtils.fromJsonOrDefault(lastPoem, PoemInfo.serializer())
 
         poemInfo?.let {
             remoteViews.setTextViewText(R.id.tv_content, it.recommend)
