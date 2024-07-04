@@ -39,7 +39,7 @@ import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsGroup
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSlider
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
-import com.lcb.one.util.android.UserPrefManager
+import com.lcb.one.util.android.UserPref
 import com.ramcosta.composedestinations.annotation.ActivityDestination
 import java.util.Locale
 
@@ -77,16 +77,16 @@ class ClockActivity : ComponentActivity() {
     @Composable
     fun ClockScreen() {
         var darkTheme by rememberBooleanPrefState(
-            UserPrefManager.Key.CLOCK_DARK_THEME,
+            UserPref.Key.CLOCK_DARK_THEME,
             ThemeManager.dynamicColor
         )
 
         var clockSize by rememberIntPrefState(
-            UserPrefManager.Key.CLOCK_TEXT_SIZE,
+            UserPref.Key.CLOCK_TEXT_SIZE,
             DEFAULT_CLOCK_SIZE
         )
         var datePosition by rememberIntPrefState(
-            UserPrefManager.Key.CLOCK_DATE_POSITION,
+            UserPref.Key.CLOCK_DATE_POSITION,
             DATE_POSITION_LEFT_BOTTOM
         )
 

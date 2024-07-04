@@ -6,13 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.edit
 import com.lcb.one.ui.widget.settings.storage.SettingValueState
-import com.lcb.one.util.android.UserPrefManager
+import com.lcb.one.util.android.UserPref
 import java.lang.IllegalArgumentException
 
 abstract class PreferenceState<T>(
     private val key: String,
     private val defaultValue: T,
-    private val preferences: SharedPreferences = UserPrefManager.defaultPref,
+    private val preferences: SharedPreferences = UserPref.defaultPref,
 ) : SettingValueState<T> {
 
     private var _value: T by mutableStateOf(preferences.get(key, defaultValue))

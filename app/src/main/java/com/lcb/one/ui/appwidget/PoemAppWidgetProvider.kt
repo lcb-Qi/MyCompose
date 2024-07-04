@@ -14,7 +14,7 @@ import com.lcb.one.ui.activity.MainActivity
 import com.lcb.one.ui.screen.main.repo.model.PoemInfo
 import com.lcb.one.util.android.LLog
 import com.lcb.one.util.android.PACKAGE_ME
-import com.lcb.one.util.android.UserPrefManager
+import com.lcb.one.util.android.UserPref
 import com.lcb.one.util.common.JsonUtils
 
 class PoemAppWidgetProvider : AppWidgetProvider() {
@@ -67,7 +67,7 @@ class PoemAppWidgetProvider : AppWidgetProvider() {
 
         remoteViews.setOnClickPendingIntent(R.id.container, createPendingIntent(context))
 
-        val lastPoem = UserPrefManager.getString(UserPrefManager.Key.POEM_LAST)
+        val lastPoem = UserPref.getString(UserPref.Key.POEM_LAST)
         val poemInfo = JsonUtils.fromJsonOrDefault(lastPoem, PoemInfo.serializer())
 
         poemInfo?.let {

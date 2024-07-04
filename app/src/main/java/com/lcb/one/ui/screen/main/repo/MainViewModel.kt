@@ -6,7 +6,7 @@ import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.appwidget.PoemAppWidgetProvider
 import com.lcb.one.ui.screen.main.repo.model.PoemInfo
 import com.lcb.one.util.android.LLog
-import com.lcb.one.util.android.UserPrefManager
+import com.lcb.one.util.android.UserPref
 import com.lcb.one.util.common.ExceptionHandler
 import com.lcb.one.util.common.JsonUtils
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +29,7 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             val last =
                 JsonUtils.fromJsonOrDefault(
-                    UserPrefManager.getString(UserPrefManager.Key.POEM_LAST),
+                    UserPref.getString(UserPref.Key.POEM_LAST),
                     PoemInfo.serializer()
                 )
             last?.run {
@@ -50,10 +50,10 @@ class MainViewModel : ViewModel() {
     private val poemService = PoemApiService.instance
 
     private suspend fun getToken(): String {
-        var token = UserPrefManager.getString(UserPrefManager.Key.POEM_TOKEN)
+        var token = UserPref.getString(UserPref.Key.POEM_TOKEN)
         if (token.isNotEmpty()) return token
         token = poemService.getToken().token
-        UserPrefManager.putString(UserPrefManager.Key.POEM_TOKEN, token)
+        UserPref.putString(UserPref.Key.POEM_TOKEN, token)
 
         return token
     }
@@ -79,8 +79,8 @@ class MainViewModel : ViewModel() {
                 updateTime = System.currentTimeMillis(),
                 origin = poemResponse.data.origin
             )
-            UserPrefManager.putString(
-                UserPrefManager.Key.POEM_LAST,
+            UserPref.putString(
+                UserPref.Key.POEM_LAST,
                 JsonUtils.toJson(poemSate.poemInfo)
             )
 

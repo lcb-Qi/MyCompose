@@ -1,7 +1,6 @@
 package com.lcb.one.ui.screen.main
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,7 +24,7 @@ import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
 import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
-import com.lcb.one.util.android.UserPrefManager
+import com.lcb.one.util.android.UserPref
 import com.lcb.one.util.common.DateTimeUtils
 import kotlinx.coroutines.delay
 import java.time.DayOfWeek
@@ -111,7 +110,7 @@ private fun OffWorkCard() {
 @Composable
 fun PaydayCard() {
     var showSettings by remember { mutableStateOf(false) }
-    var targetDay by rememberIntPrefState(UserPrefManager.Key.PAYDAY, 1)
+    var targetDay by rememberIntPrefState(UserPref.Key.PAYDAY, 1)
     val today = LocalDate.now()
 
     var targetDate = today.withDayOfMonth(targetDay)

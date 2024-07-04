@@ -25,11 +25,11 @@ private fun DefaultNavIcon() {
 fun ToolBar(
     title: String,
     titleStyle: TextStyle = MaterialTheme.typography.titleLarge,
-    navigationIcon: (@Composable () -> Unit)? = { DefaultNavIcon() },
+    navIcon: (@Composable () -> Unit)? = { DefaultNavIcon() },
     actions: (@Composable RowScope.() -> Unit)? = null,
 ) = ToolBar(
     title = { Text(text = title, style = titleStyle) },
-    navigationIcon = navigationIcon,
+    navIcon = navIcon,
     actions = actions
 )
 
@@ -38,10 +38,10 @@ fun ToolBar(
 @Composable
 fun ToolBar(
     title: @Composable () -> Unit,
-    navigationIcon: (@Composable () -> Unit)? = { DefaultNavIcon() },
+    navIcon: (@Composable () -> Unit)? = { DefaultNavIcon() },
     actions: (@Composable RowScope.() -> Unit)? = null,
 ) = TopAppBar(
     title = title,
-    navigationIcon = navigationIcon ?: {},
+    navigationIcon = navIcon ?: {},
     actions = actions ?: {},
 )

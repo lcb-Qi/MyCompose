@@ -5,7 +5,7 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.lcb.one.ui.MyApp
 
-object UserPrefManager {
+object UserPref {
     object Key {
         // global
         const val APP_DEV_MODE = "app_dev_mode"// boolean

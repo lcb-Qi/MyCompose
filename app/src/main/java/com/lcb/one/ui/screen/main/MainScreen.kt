@@ -1,5 +1,6 @@
 package com.lcb.one.ui.screen.main
 
+import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,8 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lcb.one.localization.Localization
+import com.lcb.one.route.destinations.MenstruationAssistantScreenDestination
 import com.lcb.one.route.destinations.ThemeSettingsScreenDestination
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.AppNavGraph
@@ -34,6 +37,7 @@ import com.lcb.one.ui.screen.main.repo.MainViewModel
 import com.lcb.one.ui.screen.main.repo.MainViewModel.Event
 import com.lcb.one.ui.screen.main.widget.PoemTitle
 import com.lcb.one.ui.widget.common.AppIconButton
+import com.lcb.one.util.android.LLog
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
@@ -69,19 +73,8 @@ fun MainScreen() {
             val showDetail: () -> Unit = { mainViewModel.sendEvent(Event.ShowDetail(true)) }
 
             ToolBar(
-                title = {
-                    PoemTitle(
-                        poem = poemState.poemInfo.recommend,
-                        onLongClick = showDetail,
-                        onClick = updatePoem
-                    )
-                },
-                navigationIcon = null,
-                actions = {
-                    IconButton(onClick = { navController.navigate(ThemeSettingsScreenDestination) }) {
-                        Icon(Icons.Rounded.Palette, null)
-                    }
-                }
+                title = { PoemTitle(poemState.poemInfo.recommend, showDetail, updatePoem) },
+                navIcon = null,
             )
         },
         bottomBar = {
@@ -118,4 +111,12 @@ fun MainScreen() {
     if (AppUtils.isNetworkAvailable()) {
         mainViewModel.sendEvent(Event.Refresh(false))
     }
+
+    // val activity = LocalContext.current as Activity
+    // val route = activity.intent.getStringExtra("route")
+    // LLog.d("TAG", "MainScreen: route = $route")
+    // if (route == MenstruationAssistantScreenDestination.route) {
+    //     navController.navigate(MenstruationAssistantScreenDestination)
+    //     activity.intent.removeExtra("route")
+    // }
 }

@@ -4,9 +4,9 @@ kotlin = "2.0.0"
 ksp = "2.0.0-1.0.22"
 agp = "8.1.4"
 androidxComposeBom = "2024.05.00"
+androidxComposeBomSnapshots = "2024.07.00-SNAPSHOT"
 androidxConstraintlayoutCompose = "1.0.1"
 androidxActivityCompose = "1.9.0"
-androidxNavigationCompose = "2.7.7"
 coilCompose = "2.6.0"
 androidxCore = "1.13.1"
 androidxLifecycle = "2.8.1"
@@ -31,6 +31,7 @@ extJunit = "1.1.5"
 [libraries]
 # bom对照表：https://developer.android.google.cn/develop/ui/compose/bom/bom-mapping
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
+androidx-compose-bom-snapshosts = { module = "dev.chrisbanes.compose:compose-bom", version.ref = "androidxComposeBomSnapshots" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-graphics = { module = "androidx.compose.ui:ui-graphics" }
 androidx-compose-preview = { module = "androidx.compose.ui:ui-tooling-preview" }

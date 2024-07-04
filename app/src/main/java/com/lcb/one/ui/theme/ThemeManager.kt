@@ -13,7 +13,7 @@ import com.lcb.one.ui.widget.settings.storage.disk.BooleanPrefState
 import com.lcb.one.ui.widget.settings.storage.disk.IntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
-import com.lcb.one.util.android.UserPrefManager
+import com.lcb.one.util.android.UserPref
 import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamicColorScheme
 
@@ -22,7 +22,7 @@ object ThemeManager {
 
     // 主题种子
     private var themeSeed by IntPrefState(
-        UserPrefManager.Key.APP_THEME_SEED,
+        UserPref.Key.APP_THEME_SEED,
         seeds.first().toArgb()
     )
 
@@ -35,10 +35,10 @@ object ThemeManager {
         }
 
     // 是否动态取色
-    var dynamicColor by BooleanPrefState(UserPrefManager.Key.APP_DYNAMIC_COLOR, true)
+    var dynamicColor by BooleanPrefState(UserPref.Key.APP_DYNAMIC_COLOR, true)
 
     // 是否启用纯白/纯黑背景
-    var amoledMode by BooleanPrefState(UserPrefManager.Key.APP_ALOMED_MODE, false)
+    var amoledMode by BooleanPrefState(UserPref.Key.APP_ALOMED_MODE, false)
 }
 
 @Composable

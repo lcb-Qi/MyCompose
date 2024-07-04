@@ -102,7 +102,8 @@ project.afterEvaluate {
 dependencies {
     implementation(libs.androidx.core)
     // compose
-    implementation(platform(libs.androidx.compose.bom))
+    // implementation(platform(libs.androidx.compose.bom))
+    implementation(platform(libs.androidx.compose.bom.snapshosts))
     implementation(libs.bundles.androidx.compose)
     implementation(libs.bundles.androidx.compose.support)
 

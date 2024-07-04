@@ -8,15 +8,15 @@ import com.lcb.one.ui.widget.settings.storage.disk.BooleanPrefState
 import com.lcb.one.ui.widget.settings.storage.disk.IntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
-import com.lcb.one.util.android.UserPrefManager
+import com.lcb.one.util.android.UserPref
 
 object AppGlobalConfigs {
     const val COUNT_TO_ENABLE_DEV_MODE = 10
-    var appDevMode by BooleanPrefState(UserPrefManager.Key.APP_DEV_MODE, BuildConfig.DEBUG)
-    var useBuiltinBrowser by BooleanPrefState(UserPrefManager.Key.USE_BUILTIN_BROWSER, false)
+    var appDevMode by BooleanPrefState(UserPref.Key.APP_DEV_MODE, BuildConfig.DEBUG)
+    var useBuiltinBrowser by BooleanPrefState(UserPref.Key.USE_BUILTIN_BROWSER, false)
 
     var poemUpdateInterval by IntPrefState(
-        UserPrefManager.Key.POEM_UPDATE_INTERVAL,
+        UserPref.Key.POEM_UPDATE_INTERVAL,
         24 * 60 * 60 * 1000
     )
 
