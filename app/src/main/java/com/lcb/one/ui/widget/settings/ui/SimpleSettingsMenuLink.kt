@@ -4,7 +4,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.NavigateNext
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItemColors
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.alorma.compose.settings.ui.SettingsMenuLink
@@ -17,7 +16,7 @@ fun SimpleSettingsMenuLink(
     title: String,
     summary: String? = null,
     action: (@Composable () -> Unit)? = { Icon(Icons.AutoMirrored.Rounded.NavigateNext, null) },
-    colors: ListItemColors = ListItemDefaults.colors(),
+    colors: ListItemColors = SettingsDefaults.colors(),
     onClick: () -> Unit,
 ) {
     SettingsMenuLink(

@@ -1,6 +1,5 @@
 package com.lcb.one.ui.screen.about
 
-import android.content.Intent
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -28,14 +27,14 @@ import com.lcb.one.localization.Localization
 import com.lcb.one.route.destinations.WebScreenDestination
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.AppNavGraph
-import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.navController
 import com.lcb.one.ui.screen.about.repo.model.AppVersion
 import com.lcb.one.ui.screen.about.repo.UpdateAccessor
 import com.lcb.one.ui.screen.about.repo.model.UpdateInfo
 import com.lcb.one.ui.screen.about.widget.UpdateInfoDialog
 import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.common.listItemColorOnCard
+import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
+import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
 import com.lcb.one.util.android.AppUtils
@@ -68,70 +67,69 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                 delay(1000)
                 clickCount = 0
             }
-            SettingsSimpleText(
-                colors = listItemColorOnCard(),
-                title = Localization.versionInfo,
-                summary = versionInfo,
-                icon = { Icon(imageVector = Icons.Rounded.Info, contentDescription = "") },
-                onClick = {
-                    clickCount++
-                    if (clickCount >= AppGlobalConfigs.COUNT_TO_ENABLE_DEV_MODE) {
-                        AppGlobalConfigs.appDevMode = !AppGlobalConfigs.appDevMode
-                        val action =
-                            if (AppGlobalConfigs.appDevMode) Localization.enterDevMode else Localization.exitDevMode
-                        ToastUtils.showToast(action)
-                        clickCount = 0
-                    }
-                }
-            )
 
-
-            // 检查更新
-            var showUpdate by remember { mutableStateOf(false) }
-            var updateInfo: UpdateInfo? by remember { mutableStateOf(null) }
-            LaunchedEffect(Unit) {
-                updateInfo = UpdateAccessor.getLastRelease()
-            }
-            val scope = rememberCoroutineScope()
-            SimpleSettingsMenuLink(
-                colors = listItemColorOnCard(),
-                title = Localization.checkUpdates,
-                icon = { Icon(imageVector = Icons.Rounded.Update, contentDescription = "") },
-                onClick = {
-                    scope.launch {
-                        updateInfo = UpdateAccessor.getLastRelease()
-                        if (updateInfo == null) {
-                            ToastUtils.showToast(Localization.noNewVersion)
-                            return@launch
+            ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
+                SettingsSimpleText(
+                    title = Localization.versionInfo,
+                    summary = versionInfo,
+                    icon = { Icon(imageVector = Icons.Rounded.Info, contentDescription = "") },
+                    onClick = {
+                        clickCount++
+                        if (clickCount >= AppGlobalConfigs.COUNT_TO_ENABLE_DEV_MODE) {
+                            AppGlobalConfigs.appDevMode = !AppGlobalConfigs.appDevMode
+                            val action =
+                                if (AppGlobalConfigs.appDevMode) Localization.enterDevMode else Localization.exitDevMode
+                            ToastUtils.showToast(action)
+                            clickCount = 0
                         }
-                        if (!BuildConfig.DEBUG && updateInfo!!.version <= AppVersion.current) {
-                            ToastUtils.showToast(Localization.alreadyLast)
-                            return@launch
+                    }
+                )
+
+                // 检查更新
+                var showUpdate by remember { mutableStateOf(false) }
+                var updateInfo: UpdateInfo? by remember { mutableStateOf(null) }
+                LaunchedEffect(Unit) {
+                    updateInfo = UpdateAccessor.getLastRelease()
+                }
+                val scope = rememberCoroutineScope()
+                SimpleSettingsMenuLink(
+                    title = Localization.checkUpdates,
+                    icon = { Icon(imageVector = Icons.Rounded.Update, contentDescription = "") },
+                    onClick = {
+                        scope.launch {
+                            updateInfo = UpdateAccessor.getLastRelease()
+                            if (updateInfo == null) {
+                                ToastUtils.showToast(Localization.noNewVersion)
+                                return@launch
+                            }
+                            if (!BuildConfig.DEBUG && updateInfo!!.version <= AppVersion.current) {
+                                ToastUtils.showToast(Localization.alreadyLast)
+                                return@launch
+                            }
+                            showUpdate = true
                         }
-                        showUpdate = true
                     }
-                }
-            )
+                )
 
-            UpdateInfoDialog(show = showUpdate && updateInfo != null, updateInfo = updateInfo) {
-                showUpdate = false
+                UpdateInfoDialog(show = showUpdate && updateInfo != null, updateInfo = updateInfo) {
+                    showUpdate = false
+                }
+
+                // 项目地址
+                val url = stringResource(R.string.project_location_url)
+                SimpleSettingsMenuLink(
+                    title = Localization.projectUrl,
+                    summary = url,
+                    icon = { Icon(imageVector = Icons.Rounded.Link, contentDescription = "") },
+                    onClick = {
+                        if (AppGlobalConfigs.useBuiltinBrowser) {
+                            navController.navigate(WebScreenDestination(url))
+                        } else {
+                            AppUtils.launchSystemBrowser(uri = url.toUri())
+                        }
+                    }
+                )
             }
-
-            // 项目地址
-            val url = stringResource(R.string.project_location_url)
-            SimpleSettingsMenuLink(
-                colors = listItemColorOnCard(),
-                title = Localization.projectUrl,
-                summary = url,
-                icon = { Icon(imageVector = Icons.Rounded.Link, contentDescription = "") },
-                onClick = {
-                    if (AppGlobalConfigs.useBuiltinBrowser) {
-                        navController.navigate(WebScreenDestination(url))
-                    } else {
-                        AppUtils.launchSystemBrowser(uri = url.toUri())
-                    }
-                }
-            )
         }
     }
 }

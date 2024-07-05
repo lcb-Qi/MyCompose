@@ -7,7 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.lcb.one.ui.widget.common.listItemColorOnCard
+import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 
 @Composable
 fun SimpleInfoCard(modifier: Modifier = Modifier, data: Map<String, String>) {
@@ -16,7 +16,7 @@ fun SimpleInfoCard(modifier: Modifier = Modifier, data: Map<String, String>) {
             data.forEach { (key, value) ->
                 item {
                     ListItem(
-                        colors = listItemColorOnCard(),
+                        colors = SettingsDefaults.colorOnCard(),
                         headlineContent = { Text(text = key, fontWeight = FontWeight.Medium) },
                         supportingContent = { Text(text = value) }
                     )

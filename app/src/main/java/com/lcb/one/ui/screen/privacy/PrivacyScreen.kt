@@ -26,7 +26,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lcb.one.ui.SettingsNavGraph
 import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.common.listItemColorOnCard
+import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
+import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 import com.lcb.one.util.android.AppUtils
 import com.ramcosta.composedestinations.annotation.Destination
@@ -55,24 +56,24 @@ fun PrivacyScreen() {
                 modifier = Modifier.padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Card {
-                    SimpleSettingsMenuLink(
-                        colors = listItemColorOnCard(),
-                        title = "访问照片和视频",
-                        summary = "用于提取桌面壁纸",
-                        action = { PrivacyAction(hasPermission = privacy.readImg) },
-                        onClick = { activityLauncher.launch(AppUtils.getAppDetailSettingsIntent()) }
-                    )
-                }
+                ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
+                    Card {
+                        SimpleSettingsMenuLink(
+                            title = "访问照片和视频",
+                            summary = "用于提取桌面壁纸",
+                            action = { PrivacyAction(hasPermission = privacy.readImg) },
+                            onClick = { activityLauncher.launch(AppUtils.getAppDetailSettingsIntent()) }
+                        )
+                    }
 
-                Card {
-                    SimpleSettingsMenuLink(
-                        colors = listItemColorOnCard(),
-                        title = "访问全部文件",
-                        summary = "用于提取桌面壁纸",
-                        action = { PrivacyAction(hasPermission = privacy.allFile) },
-                        onClick = { activityLauncher.launch(AppUtils.getAllFileAccessIntent()) }
-                    )
+                    Card {
+                        SimpleSettingsMenuLink(
+                            title = "访问全部文件",
+                            summary = "用于提取桌面壁纸",
+                            action = { PrivacyAction(hasPermission = privacy.allFile) },
+                            onClick = { activityLauncher.launch(AppUtils.getAllFileAccessIntent()) }
+                        )
+                    }
                 }
             }
         }

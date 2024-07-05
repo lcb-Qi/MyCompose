@@ -25,9 +25,10 @@ import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.SettingsNavGraph
 import com.lcb.one.ui.navController
 import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.common.listItemColorOnCard
+import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
 import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
-import com.lcb.one.ui.widget.settings.ui.SimpleSettingsGroup
+import com.lcb.one.ui.widget.settings.ui.SettingsCategory
+import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
 import com.ramcosta.composedestinations.annotation.Destination
@@ -47,56 +48,57 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                 )
         ) {
             // 通用
-            SimpleSettingsGroup(title = Localization.common) {
+            SettingsCategory(title = Localization.common) {
                 Card {
-                    SimpleSettingsSwitch(
-                        colors = listItemColorOnCard(),
-                        checked = AppGlobalConfigs.useBuiltinBrowser,
-                        icon = { Icon(Icons.Rounded.TravelExplore, null) },
-                        title = "使用内置浏览器",
-                        onCheckedChange = { AppGlobalConfigs.useBuiltinBrowser = it }
-                    )
+                    ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
+                        SimpleSettingsSwitch(
+                            checked = AppGlobalConfigs.useBuiltinBrowser,
+                            icon = { Icon(Icons.Rounded.TravelExplore, null) },
+                            title = "使用内置浏览器",
+                            onCheckedChange = { AppGlobalConfigs.useBuiltinBrowser = it }
+                        )
 
-                    // 主题
-                    SimpleSettingsMenuLink(
-                        colors = listItemColorOnCard(),
-                        title = Localization.theme,
-                        icon = { Icon(Icons.Rounded.Palette, null) },
-                        onClick = { navController.navigate(ThemeSettingsScreenDestination) }
-                    )
+                        // 主题
+                        SimpleSettingsMenuLink(
+                            title = Localization.theme,
+                            icon = { Icon(Icons.Rounded.Palette, null) },
+                            onClick = { navController.navigate(ThemeSettingsScreenDestination) }
+                        )
 
-                    // 语言
-                    SimpleSettingsMenuLink(
-                        enabled = false,
-                        colors = listItemColorOnCard(),
-                        title = "语言",
-                        icon = { Icon(Icons.Rounded.Language, null) },
-                        onClick = { }
-                    )
+                        // 语言
+                        SimpleSettingsMenuLink(
+                            enabled = false,
+                            title = "语言",
+                            icon = { Icon(Icons.Rounded.Language, null) },
+                            onClick = { }
+                        )
+                    }
                 }
-            }
 
-            SimpleSettingsGroup(title = Localization.other) {
-                // 标题更新间隔
-                val options = stringArrayResource(R.array.settings_duration_options)
-                val values = integerArrayResource(R.array.settings_duration_values)
-                Card {
-                    SettingSingleChoice(
-                        colors = listItemColorOnCard(),
-                        title = Localization.poemUpdateDuration,
-                        icon = { Icon(Icons.Rounded.Autorenew, null) },
-                        selectIndex = values.indexOf(AppGlobalConfigs.poemUpdateInterval)
-                            .coerceAtLeast(0),
-                        options = options,
-                        onItemSelected = { AppGlobalConfigs.poemUpdateInterval = values[it] }
-                    )
+                SettingsCategory(title = Localization.other) {
+                    // 标题更新间隔
+                    val options = stringArrayResource(R.array.settings_duration_options)
+                    val values = integerArrayResource(R.array.settings_duration_values)
+                    Card {
+                        ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
+                            SettingSingleChoice(
+                                title = Localization.poemUpdateDuration,
+                                icon = { Icon(Icons.Rounded.Autorenew, null) },
+                                selectIndex = values.indexOf(AppGlobalConfigs.poemUpdateInterval)
+                                    .coerceAtLeast(0),
+                                options = options,
+                                onItemSelected = {
+                                    AppGlobalConfigs.poemUpdateInterval = values[it]
+                                }
+                            )
 
-                    SimpleSettingsMenuLink(
-                        colors = listItemColorOnCard(),
-                        title = "权限管理",
-                        icon = { Icon(Icons.Rounded.PrivacyTip, null) },
-                        onClick = { navController.navigate(PrivacyScreenDestination) }
-                    )
+                            SimpleSettingsMenuLink(
+                                title = "权限管理",
+                                icon = { Icon(Icons.Rounded.PrivacyTip, null) },
+                                onClick = { navController.navigate(PrivacyScreenDestination) }
+                            )
+                        }
+                    }
                 }
             }
         }

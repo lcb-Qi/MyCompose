@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,7 +24,9 @@ import com.lcb.one.ui.widget.common.AppTextButton
 import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
+import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
 import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
+import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.util.android.UserPref
 import com.lcb.one.util.common.DateTimeUtils
 import kotlinx.coroutines.delay
@@ -151,12 +154,14 @@ fun PaydayCard() {
                 )
             },
             text = {
-                SettingSingleChoice(
-                    selectIndex = selectIndex,
-                    title = Localization.payday,
-                    options = options.toTypedArray(),
-                    onItemSelected = { selectIndex = it }
-                )
+                ProvideSettingsItemColor(SettingsDefaults.colorOnContainer(AlertDialogDefaults.containerColor)) {
+                    SettingSingleChoice(
+                        selectIndex = selectIndex,
+                        title = Localization.payday,
+                        options = options.toTypedArray(),
+                        onItemSelected = { selectIndex = it }
+                    )
+                }
             }
         )
     }

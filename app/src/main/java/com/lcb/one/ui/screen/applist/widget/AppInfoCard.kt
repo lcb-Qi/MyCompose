@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.lcb.one.ui.widget.common.listItemColorOnCard
+import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 
 @Composable
 fun AppInfoCard(
@@ -51,7 +51,7 @@ fun AppInfoCard(
 
     Card(modifier = modifier, onClick = { onClick(appId) }) {
         ListItem(
-            colors = listItemColorOnCard(),
+            colors = SettingsDefaults.colorOnCard(),
             leadingContent = iconContent,
             headlineContent = labelContent,
             supportingContent = appIdContent,

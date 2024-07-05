@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.lcb.one.ui.widget.common.listItemColorOnCard
+import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 
 @Composable
 fun EventCard(
@@ -26,7 +26,7 @@ fun EventCard(
 ) {
     Card(modifier = modifier.fillMaxWidth(), onClick = onClick) {
         ListItem(
-            colors = listItemColorOnCard(),
+            colors = SettingsDefaults.colorOnCard(),
             headlineContent = { Text(text = title, fontWeight = FontWeight.Medium) },
             supportingContent = { Text(text = content) },
             trailingContent = {

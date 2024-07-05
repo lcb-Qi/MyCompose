@@ -2,7 +2,6 @@ package com.lcb.one.ui.widget.settings.ui
 
 import androidx.annotation.IntRange
 import androidx.compose.material3.ListItemColors
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +19,7 @@ fun SettingSingleChoice(
     title: String,
     options: Array<String>,
     icon: (@Composable () -> Unit)? = null,
-    colors: ListItemColors = ListItemDefaults.colors(),
+    colors: ListItemColors = SettingsDefaults.colors(),
     onItemSelected: ((Int) -> Unit)? = null,
 ) {
     var showDialog by remember { mutableStateOf(false) }

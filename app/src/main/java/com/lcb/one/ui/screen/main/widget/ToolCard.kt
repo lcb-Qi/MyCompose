@@ -23,7 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.lcb.one.ui.widget.common.listItemColorOnCard
+import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -36,7 +36,7 @@ fun ToolCard(
     Card(onClick = { expand = !expand }) {
         Column(modifier = Modifier.fillMaxWidth()) {
             ListItem(
-                colors = listItemColorOnCard(),
+                colors = SettingsDefaults.colorOnCard(),
                 headlineContent = {
                     Text(text = title, fontWeight = FontWeight.Medium)
                 },

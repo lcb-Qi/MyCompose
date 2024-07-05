@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -35,8 +36,10 @@ import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPrefState
 import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
+import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
 import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
-import com.lcb.one.ui.widget.settings.ui.SimpleSettingsGroup
+import com.lcb.one.ui.widget.settings.ui.SettingsCategory
+import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSlider
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
 import com.lcb.one.util.android.UserPref
@@ -96,33 +99,37 @@ class ClockActivity : ComponentActivity() {
                 drawerState = drawerState,
                 drawerContent = {
                     ModalDrawerSheet {
-                        Column(modifier = Modifier.padding(24.dp)) {
-                            SimpleSettingsGroup(title = Localization.settings) {
-                                SimpleSettingsSwitch(
-                                    checked = darkTheme,
-                                    title = Localization.darkMode,
-                                    summary = Localization.onlyThisPage,
-                                    onCheckedChange = { darkTheme = it }
-                                )
+                        ProvideSettingsItemColor(SettingsDefaults.colorOnContainer(DrawerDefaults.modalContainerColor)) {
 
-                                SimpleSettingsSlider(
-                                    title = Localization.clockFontSize,
-                                    summary = clockSize.toString(),
-                                    value = clockSize.toFloat(),
-                                    valueRange = MIN_SIZE.toFloat()..MAX_SIZE.toFloat(),
-                                    onValueChange = {
-                                        clockSize = it.toInt()
-                                    }
-                                )
+                            Column(modifier = Modifier.padding(24.dp)) {
+                                SettingsCategory(
+                                    title = Localization.settings,
+                                    color = DrawerDefaults.modalContainerColor
+                                ) {
+                                    SimpleSettingsSwitch(
+                                        checked = darkTheme,
+                                        title = Localization.darkMode,
+                                        summary = Localization.onlyThisPage,
+                                        onCheckedChange = { darkTheme = it }
+                                    )
 
-                                val options = positions.map { it.label }
-                                val values = positions.map { it.id }
-                                SettingSingleChoice(
-                                    title = Localization.positionOfDate,
-                                    selectIndex = values.indexOf(datePosition).coerceAtLeast(0),
-                                    options = options.toTypedArray(),
-                                    onItemSelected = { datePosition = it }
-                                )
+                                    SimpleSettingsSlider(
+                                        title = Localization.clockFontSize,
+                                        summary = clockSize.toString(),
+                                        value = clockSize.toFloat(),
+                                        valueRange = MIN_SIZE.toFloat()..MAX_SIZE.toFloat(),
+                                        onValueChange = { clockSize = it.toInt() }
+                                    )
+
+                                    val options = positions.map { it.label }
+                                    val values = positions.map { it.id }
+                                    SettingSingleChoice(
+                                        title = Localization.positionOfDate,
+                                        selectIndex = values.indexOf(datePosition).coerceAtLeast(0),
+                                        options = options.toTypedArray(),
+                                        onItemSelected = { datePosition = it }
+                                    )
+                                }
                             }
                         }
                     }
