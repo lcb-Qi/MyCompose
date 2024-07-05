@@ -20,8 +20,8 @@ android {
         applicationId = "com.lcb.one"
         minSdk = 31
         targetSdk = 34
-        versionCode = 10601
-        versionName = "1.6.1"
+        versionCode = 10602
+        versionName = "1.6.2-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -142,7 +142,8 @@ fun DependencyHandlerScope.addTestDependencies() {
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.test.espresso)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
+    // androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(platform(libs.androidx.compose.bom.snapshosts))
     androidTestImplementation(libs.test.ui.junit4)
     debugImplementation(libs.test.ui.tooling)
     debugImplementation(libs.test.ui.manifest)

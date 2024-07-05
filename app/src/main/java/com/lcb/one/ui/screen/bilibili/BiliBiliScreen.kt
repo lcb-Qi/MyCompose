@@ -1,5 +1,8 @@
 package com.lcb.one.ui.screen.bilibili
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,34 +26,70 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.boundsInRoot
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import coil.size.Size
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.AppNavGraph
 import com.lcb.one.ui.screen.bilibili.repo.BiliServerAccessor
+import com.lcb.one.ui.screen.bilibili.widget.BigImageViewer
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.DownLoadUtil
 import com.lcb.one.util.android.ToastUtils
 import kotlinx.coroutines.launch
-import com.lcb.one.ui.screen.bilibili.widget.FullScreenImage
-import com.lcb.one.ui.screen.bilibili.widget.ImageViewState
 import com.ramcosta.composedestinations.annotation.Destination
-import kotlin.math.roundToInt
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Destination<AppNavGraph>
 @Composable
 fun BiliBiliScreen() {
+
+    SharedTransitionLayout(modifier = Modifier.fillMaxSize()) {
+        var showBig by remember { mutableStateOf(false) }
+        var url by remember { mutableStateOf("") }
+
+        AnimatedContent(
+            targetState = showBig,
+            label = "",
+        ) { targetState ->
+            if (targetState) {
+                BigImageViewer(
+                    modifier = Modifier.sharedElement(
+                        state = rememberSharedContentState(key = "big"),
+                        animatedVisibilityScope = this@AnimatedContent,
+                    ),
+                    url = url,
+                    onBack = { showBig = false },
+                )
+            } else {
+                BiliScreenImpl(
+                    modifier = Modifier
+                        .sharedElement(
+                            state = rememberSharedContentState(key = "small"),
+                            animatedVisibilityScope = this@AnimatedContent,
+                        ),
+                    onShowBigImage = {
+                        showBig = true
+                        url = it
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun BiliScreenImpl(
+    modifier: Modifier = Modifier,
+    onShowBigImage: (url: String) -> Unit = {},
+) {
     var textInput by remember { mutableStateOf("") }
     var coverUrl by remember { mutableStateOf("") }
     if (BuildConfig.DEBUG) {
@@ -77,12 +116,8 @@ fun BiliBiliScreen() {
                 .onFailure { ToastUtils.showToast(Localization.saveFailed) }
         }
     }
-
-    var smallOffset = IntOffset.Zero
-    var smallSize = IntSize.Zero
-
-    val imageViewState by remember { mutableStateOf(ImageViewState()) }
     Scaffold(
+        modifier = modifier.fillMaxSize(),
         topBar = { ToolBar(title = Localization.bibibili) },
         floatingActionButton = {
             if (coverUrl.isNotBlank()) {
@@ -114,30 +149,20 @@ fun BiliBiliScreen() {
 
             AppButton(text = Localization.obtain, onClick = getCoverUrl)
 
+
             SubcomposeAsyncImage(
                 modifier = Modifier
                     .width(240.dp)
-                    .clickable { imageViewState.doEnter(smallOffset, smallSize) }
-                    .onGloballyPositioned {
-                        val rect = it.boundsInRoot()
-                        smallOffset = IntOffset(rect.left.roundToInt(), rect.top.roundToInt())
-                        smallSize = it.size
-                    },
+                    .clickable { onShowBigImage(coverUrl) },
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(coverUrl)
-                    .size(coil.size.Size.ORIGINAL)
+                    .size(Size.ORIGINAL)
                     .placeholder(R.drawable.icon_bilibili)
                     .error(R.drawable.icon_bilibili)
                     .build(),
-                contentDescription = "",
+                contentDescription = null,
                 loading = { CircularProgressIndicator() }
             )
         }
     }
-
-    FullScreenImage(
-        url = coverUrl,
-        state = imageViewState,
-        onClick = { imageViewState.doExit(smallOffset, smallSize) }
-    )
 }
