@@ -1,9 +1,7 @@
 package com.lcb.one.ui.screen.webview.widget
 
-import android.content.Intent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
-import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.DropdownMenu
@@ -12,9 +10,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.core.net.toUri
-import com.lcb.one.ui.MyApp
-import com.lcb.one.util.android.ClipboardUtils
 
 sealed class WebAction {
     data object Refresh : WebAction()
