@@ -6,8 +6,10 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.vector.ImageVector
 
+@Stable
 data class BottomBarItem(
     val label: String,
     val icon: ImageVector
@@ -16,7 +18,7 @@ data class BottomBarItem(
 @Composable
 fun BottomBar(selectedIndex: Int, items: List<BottomBarItem>, onItemChanged: (Int) -> Unit) {
     require(selectedIndex in items.indices) {
-        throw IllegalArgumentException("selectedIndex must in items.indices(${items.indices})")
+        "selectedIndex must in items.indices(${items.indices})"
     }
     NavigationBar {
         items.forEachIndexed { index, item ->

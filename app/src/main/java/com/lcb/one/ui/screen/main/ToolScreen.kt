@@ -28,6 +28,7 @@ import com.lcb.one.route.destinations.ClockActivityDestination
 import com.lcb.one.route.destinations.DeviceInfoScreenDestination
 import com.lcb.one.route.destinations.InstalledAppsScreenDestination
 import com.lcb.one.route.destinations.PrivacyScreenDestination
+import com.lcb.one.route.destinations.QrCodeScreenDestination
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.navController
@@ -99,30 +100,24 @@ fun ToolScreen() {
                 onClick = { navController.navigate(NavGraphs.menstruationAssistant) },
                 label = { Text(text = Localization.menstrualAssistant) }
             )
+
+            ElevatedAssistChip(
+                enabled = false,
+                onClick = { navController.navigate(QrCodeScreenDestination) },
+                label = { Text(text = "二维码工具") }
+            )
+
+            ElevatedAssistChip(
+                enabled = false,
+                onClick = { },
+                label = { Text(text = Localization.bv2av) }
+            )
+            ElevatedAssistChip(
+                enabled = false,
+                onClick = { },
+                label = { Text(text = Localization.av2bv) }
+            )
         }
-
-        DevItems()
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun DevItems() {
-    if (!AppGlobalConfigs.appDevMode) return
-    ToolCard(
-        title = "On going",
-        icon = { Icon(Icons.Rounded.DeviceUnknown, "") }
-    ) {
-        ElevatedAssistChip(
-            enabled = false,
-            onClick = { },
-            label = { Text(text = Localization.bv2av) }
-        )
-        ElevatedAssistChip(
-            enabled = false,
-            onClick = { },
-            label = { Text(text = Localization.av2bv) }
-        )
     }
 }
 

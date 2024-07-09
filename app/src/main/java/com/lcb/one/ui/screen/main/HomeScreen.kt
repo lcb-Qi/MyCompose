@@ -22,6 +22,7 @@ import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -57,7 +58,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -78,9 +79,9 @@ private fun LoveCard() {
 
     EventCard(
         modifier = Modifier.fillMaxWidth(),
-        title = Localization.fallInLove,
-        content = duration,
-        icon = { Icon(Icons.Rounded.Favorite, null) }
+        title = { Localization.fallInLove },
+        content = { duration },
+        icon = { Image(painterResource(R.drawable.icon_love), null) }
     )
 }
 
@@ -88,6 +89,7 @@ private fun LoveCard() {
 private fun OffWorkCard() {
     val startTime = LocalTime.of(9, 0)
     val endTime = LocalTime.of(18, 0)
+    var onWorkTime by remember { mutableStateOf(false) }
 
     var title by remember { mutableStateOf(Localization.offWorkCountdown) }
     var content by remember { mutableStateOf("") }
@@ -116,14 +118,19 @@ private fun OffWorkCard() {
 
     EventCard(
         modifier = Modifier.fillMaxWidth(),
-        title = title,
-        content = content,
+        title = { title },
+        content = { content },
         icon = { Image(painterResource(icon), null) },
     )
 
-    LaunchedEffect(updater) {
+    LaunchedEffect(Unit) {
         while (true) {
             updater()
+            // val nowTime = LocalTime.now()
+            // val dayOfWeek = LocalDate.now().dayOfWeek
+            //
+            // val isWorkday = (dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY)
+            // onWorkTime = isWorkday && nowTime.isAfter(startTime) && nowTime.isBefore(endTime)
             delay(1000)
         }
     }
@@ -144,8 +151,8 @@ private fun PaydayCard() {
 
     EventCard(
         modifier = Modifier.fillMaxWidth(),
-        title = Localization.paydayCountdown,
-        content = "$days ${Localization.days}",
+        title = { Localization.paydayCountdown },
+        content = { "$days ${Localization.days}" },
         icon = { Icon(painterResource(R.drawable.icon_rmb), null) },
         onClick = { showSettings = true }
     )

@@ -34,12 +34,14 @@ fun ToolCard(
 ) {
     var expand by rememberSaveable { mutableStateOf(false) }
     Card(onClick = { expand = !expand }) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
             ListItem(
                 colors = SettingsDefaults.colorOnCard(),
-                headlineContent = {
-                    Text(text = title, fontWeight = FontWeight.Medium)
-                },
+                headlineContent = { Text(text = title, fontWeight = FontWeight.Medium) },
                 leadingContent = { icon() },
                 trailingContent = {
                     Icon(

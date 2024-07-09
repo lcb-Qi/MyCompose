@@ -19,11 +19,40 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun EventCard(
     modifier: Modifier = Modifier,
-    title: String,
-    content: String,
+    title: () -> String,
+    content: () -> String,
     icon: @Composable () -> Unit = { Icon(Icons.Rounded.Event, null) },
     bottomContent: (@Composable () -> Unit)? = null,
-    onClick: () -> Unit = {}
+) {
+    Card(modifier = modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+
+            Box(modifier = Modifier.size(32.dp), propagateMinConstraints = true) {
+                icon()
+            }
+
+            Text(text = title(), style = MaterialTheme.typography.titleMedium)
+
+            Text(text = content(), style = MaterialTheme.typography.bodyMedium)
+
+            bottomContent?.let {
+                Box(content = { it() })
+            }
+        }
+    }
+}
+
+@Composable
+fun EventCard(
+    modifier: Modifier = Modifier,
+    title: () -> String,
+    content: () -> String,
+    icon: @Composable () -> Unit = { Icon(Icons.Rounded.Event, null) },
+    bottomContent: (@Composable () -> Unit)? = null,
+    onClick: () -> Unit
 ) {
     Card(modifier = modifier.fillMaxWidth(), onClick = onClick) {
         Column(
@@ -35,9 +64,9 @@ fun EventCard(
                 icon()
             }
 
-            Text(text = title, style = MaterialTheme.typography.titleMedium)
+            Text(text = title(), style = MaterialTheme.typography.titleMedium)
 
-            Text(text = content, style = MaterialTheme.typography.bodyMedium)
+            Text(text = content(), style = MaterialTheme.typography.bodyMedium)
 
             bottomContent?.let {
                 Box(content = { it() })

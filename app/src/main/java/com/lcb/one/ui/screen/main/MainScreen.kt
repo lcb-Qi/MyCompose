@@ -1,6 +1,7 @@
 package com.lcb.one.ui.screen.main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -9,9 +10,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Android
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.MoreHoriz
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,10 +33,10 @@ import com.lcb.one.ui.widget.common.FriendlyExitHandler
 import com.lcb.one.ui.screen.main.widget.PoemInfoDialog
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.ui.screen.main.repo.MainViewModel
-import com.lcb.one.ui.screen.main.repo.MainViewModel.Event
-import com.lcb.one.ui.screen.main.widget.PoemTitle
+import com.lcb.one.ui.widget.common.NoRippleInteractionSource
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
+
 
 @Destination<AppNavGraph>(start = true)
 @OptIn(ExperimentalFoundationApi::class)
@@ -38,13 +46,16 @@ fun MainScreen() {
     FriendlyExitHandler()
 
     val mainViewModel = viewModel<MainViewModel>()
-    val poemState = mainViewModel.poemSate
+    val poemState by mainViewModel.poemInfo.collectAsState()
+    var showDetail by remember { mutableStateOf(false) }
 
-    val bottomItem = listOf(
-        BottomBarItem(Localization.home, Icons.Rounded.Home),
-        BottomBarItem(Localization.tool, Icons.Rounded.Android),
-        BottomBarItem(Localization.more, Icons.Rounded.MoreHoriz)
-    )
+    val bottomItem = remember(Unit) {
+        listOf(
+            BottomBarItem(Localization.home, Icons.Rounded.Home),
+            BottomBarItem(Localization.tool, Icons.Rounded.Android),
+            BottomBarItem(Localization.more, Icons.Rounded.MoreHoriz)
+        )
+    }
 
     val pagerState = rememberPagerState { bottomItem.size }
     val scope = rememberCoroutineScope()
@@ -52,16 +63,26 @@ fun MainScreen() {
         topBar = {
             val updatePoem: () -> Unit = {
                 if (AppUtils.isNetworkAvailable()) {
-                    mainViewModel.sendEvent(Event.Refresh(true))
+                    mainViewModel.updatePoem(true)
                 } else {
                     AppGlobalConfigs.assertNetwork = true
                 }
             }
 
-            val showDetail: () -> Unit = { mainViewModel.sendEvent(Event.ShowDetail(true)) }
-
             ToolBar(
-                title = { PoemTitle(poemState.poemInfo.recommend, updatePoem, showDetail) },
+                title = {
+                    Text(
+                        text = poemState.recommend,
+                        modifier = Modifier
+                            .combinedClickable(
+                                onLongClick = { showDetail = true },
+                                indication = null,
+                                interactionSource = NoRippleInteractionSource(),
+                                onClick = updatePoem
+                            ),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                },
                 navIcon = null,
             )
         },
@@ -88,15 +109,13 @@ fun MainScreen() {
         }
 
         PoemInfoDialog(
-            show = poemState.showDetail,
-            origin = poemState.poemInfo.origin,
-            onDismiss = {
-                mainViewModel.sendEvent(Event.ShowDetail(false))
-            }
+            show = showDetail,
+            origin = { poemState.origin },
+            onDismiss = { showDetail = false }
         )
     }
     // TODO: 仅在app启动时执行一次
     if (AppUtils.isNetworkAvailable()) {
-        mainViewModel.sendEvent(Event.Refresh(false))
+        mainViewModel.updatePoem(false)
     }
 }

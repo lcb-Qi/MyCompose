@@ -19,7 +19,7 @@ import com.lcb.one.ui.widget.common.AppTextButton
 @Composable
 fun PoemInfoDialog(
     show: Boolean,
-    origin: PoemResponse.Data.Origin,
+    origin: () -> PoemResponse.Data.Origin,
     onDismiss: () -> Unit,
 ) {
     if (!show) return
@@ -31,9 +31,9 @@ fun PoemInfoDialog(
         },
         title = {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = origin.title, style = MaterialTheme.typography.titleLarge)
+                Text(text = origin().title, style = MaterialTheme.typography.titleLarge)
                 Text(
-                    text = "${origin.dynasty} ${origin.author}",
+                    text = "${origin().dynasty} ${origin().author}",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -46,7 +46,7 @@ fun PoemInfoDialog(
                     .heightIn(max = 240.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                items(origin.content) {
+                items(origin().content) {
                     Text(text = it, style = MaterialTheme.typography.bodyMedium)
                 }
             }

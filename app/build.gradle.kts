@@ -137,6 +137,7 @@ dependencies {
     ksp(libs.compose.destinations.ksp)
 
     implementation(libs.compose.webview)
+    implementation("com.google.zxing:core:3.5.3")
 
     // for test
     addTestDependencies()

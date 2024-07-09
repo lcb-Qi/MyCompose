@@ -1,6 +1,5 @@
 package com.lcb.one.ui.screen.applist.widget
 
-import android.graphics.drawable.Drawable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
@@ -14,27 +13,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.lcb.one.ui.screen.applist.repo.AppInfo
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 
 @Composable
 fun AppInfoCard(
     modifier: Modifier = Modifier,
-    icon: Drawable,
-    label: String,
-    appId: String,
+    appInfo: AppInfo,
     onClick: (appId: String) -> Unit = {}
 ) {
     val iconContent: @Composable () -> Unit = {
         AsyncImage(
-            modifier = Modifier.size(24.dp),
-            model = icon,
-            contentDescription = label
+            modifier = Modifier.size(48.dp),
+            model = appInfo.icon,
+            contentDescription = appInfo.label
         )
     }
 
     val labelContent: @Composable () -> Unit = {
         Text(
-            text = label,
+            text = appInfo.label,
             fontWeight = FontWeight.Medium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -43,13 +41,13 @@ fun AppInfoCard(
 
     val appIdContent: @Composable () -> Unit = {
         Text(
-            text = appId,
+            text = appInfo.packageName,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
     }
 
-    Card(modifier = modifier, onClick = { onClick(appId) }) {
+    Card(modifier = modifier, onClick = { onClick(appInfo.packageName) }) {
         ListItem(
             colors = SettingsDefaults.colorOnCard(),
             leadingContent = iconContent,

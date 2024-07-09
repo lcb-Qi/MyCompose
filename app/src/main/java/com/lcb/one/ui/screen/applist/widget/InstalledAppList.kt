@@ -47,12 +47,7 @@ fun InstalledAppList(
         for (appInfo in apps) {
             if (!filterAppType(appInfo) || !filterKeyWord(appInfo)) continue
             item(key = appInfo.packageName) {
-                AppInfoCard(
-                    icon = appInfo.icon,
-                    label = appInfo.label,
-                    appId = appInfo.packageName,
-                    onClick = onItemClick
-                )
+                AppInfoCard(appInfo = appInfo, onClick = onItemClick)
             }
         }
 

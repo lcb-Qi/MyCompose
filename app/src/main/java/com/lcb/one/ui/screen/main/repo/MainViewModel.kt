@@ -10,6 +10,8 @@ import com.lcb.one.util.android.UserPref
 import com.lcb.one.util.common.ExceptionHandler
 import com.lcb.one.util.common.JsonUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -18,12 +20,7 @@ class MainViewModel : ViewModel() {
         private const val TAG = "PoemViewModel"
     }
 
-    sealed class Event {
-        data class Refresh(val force: Boolean = false) : Event()
-        data class ShowDetail(val show: Boolean) : Event()
-    }
-
-    val poemSate = PoemState()
+    val poemInfo: MutableStateFlow<PoemInfo> = MutableStateFlow(PoemInfo())
 
     init {
         viewModelScope.launch {
@@ -32,20 +29,9 @@ class MainViewModel : ViewModel() {
                     UserPref.getString(UserPref.Key.POEM_LAST),
                     PoemInfo.serializer()
                 )
-            last?.run {
-                poemSate.poemInfo = this
-            }
+            poemInfo.update { last ?: it }
         }
     }
-
-    fun sendEvent(event: Event) {
-        LLog.d(TAG, "sendEvent: $event")
-        when (event) {
-            is Event.Refresh -> refresh(event.force)
-            is Event.ShowDetail -> poemSate.showDetail = event.show
-        }
-    }
-
 
     private val poemService = PoemApiService.instance
 
@@ -58,32 +44,32 @@ class MainViewModel : ViewModel() {
         return token
     }
 
+    private var loading = false
     private val exceptionHandler = ExceptionHandler { exception ->
-        poemSate.loading = false
+        loading = false
     }
 
-    private fun refresh(force: Boolean = false) {
-        if (poemSate.loading) return
+    fun updatePoem(force: Boolean = false) {
+        LLog.d(TAG, "updatePoem: force = $force")
+        if (loading) return
 
         if (!needRefresh(force)) return
 
         viewModelScope.launch(exceptionHandler) {
-            poemSate.loading = true
+            loading = true
             val poemResponse = withContext(Dispatchers.IO) {
                 val token = getToken()
                 poemService.getPoem(token)
             }
-            poemSate.loading = false
-            poemSate.poemInfo = PoemInfo(
-                recommend = poemResponse.data.recommend,
-                updateTime = System.currentTimeMillis(),
-                origin = poemResponse.data.origin
-            )
-            UserPref.putString(
-                UserPref.Key.POEM_LAST,
-                JsonUtils.toJson(poemSate.poemInfo)
-            )
-
+            loading = false
+            poemInfo.update {
+                PoemInfo(
+                    recommend = poemResponse.data.recommend,
+                    updateTime = System.currentTimeMillis(),
+                    origin = poemResponse.data.origin
+                )
+            }
+            UserPref.putString(UserPref.Key.POEM_LAST, JsonUtils.toJson(poemInfo.value))
             PoemAppWidgetProvider.tryUpdate()
         }
     }
@@ -91,7 +77,7 @@ class MainViewModel : ViewModel() {
     private fun needRefresh(force: Boolean): Boolean {
         if (force) return true
 
-        val info = poemSate.poemInfo
+        val info = poemInfo.value
         return info.recommend.isBlank() ||
                 (System.currentTimeMillis() - info.updateTime > AppGlobalConfigs.poemUpdateInterval)
     }
