@@ -32,6 +32,11 @@ data class MenstruationDay(
         }
     }
 
+    /**
+     * 已结束：起止时间
+     *
+     * 未结束：开始时间到今天
+     */
     fun toRange() = if (finish) {
         startTime..endTime
     } else {

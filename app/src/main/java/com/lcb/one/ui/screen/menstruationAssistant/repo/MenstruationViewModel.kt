@@ -15,7 +15,7 @@ class MenstruationViewModel : ViewModel() {
 
     private val dao by lazy { appDatabase.getMenstruationDayDao() }
 
-    fun getAll() = dao.queryAll()
+    val all = dao.queryAll()
 
     fun startNewMenstruationDay(startTime: Long) {
         LLog.d(TAG, "startNewMenstruation: startTime = ${DateTimeUtils.toLocalDate(startTime)}")

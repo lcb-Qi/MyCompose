@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.lcb.one.ui.theme.fullCorners
 
 @Composable
 fun CalendarDay(
@@ -27,7 +28,7 @@ fun CalendarDay(
         modifier = modifier
             .requiredSize(48.dp)
             .padding(2.dp),
-        shape = MaterialTheme.shapes.small,
+        shape = MaterialTheme.shapes.fullCorners(),
         selected = selected,
         onClick = onClick,
         border = if (selected) {
@@ -35,7 +36,7 @@ fun CalendarDay(
         } else {
             null
         },
-        color = color
+        color = color,
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

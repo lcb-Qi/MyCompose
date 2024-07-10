@@ -4,75 +4,73 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.util.fastAny
 import com.lcb.one.util.common.DateTimeUtils
+import com.lcb.one.util.common.toMillis
 import java.time.LocalDate
-import java.time.YearMonth
 
 @Composable
 fun rememberCalendarState(
+    yearRange: IntRange = 1900..2100,
     selectedDate: LocalDate = LocalDate.now(),
     colors: CalendarColor = CalendarColor.default(),
-    primaryRange: Set<LongRange> = mutableSetOf(),
-    secondaryRange: Set<LongRange> = mutableSetOf(),
+    primaryRange: List<LongRange> = emptyList(),
+    secondaryRange: List<LongRange> = emptyList(),
 ): CalendarState {
     return remember {
-        CalendarState(selectedDate, colors, primaryRange, secondaryRange)
+        CalendarState(selectedDate, yearRange, colors, primaryRange, secondaryRange)
     }
 }
 
 
 class CalendarState(
     initDate: LocalDate,
+    val yearRange: IntRange,
     val colors: CalendarColor,
-    val primaryRange: Set<LongRange> = mutableSetOf(),
-    val secondaryRange: Set<LongRange> = mutableSetOf(),
+    primaryRange: List<LongRange> = emptyList(),
+    secondaryRange: List<LongRange> = emptyList(),
 ) {
     companion object {
         const val DAYS_IN_WEEK = 7
         const val MONTHS_IN_YEAR = 12
     }
 
-    var selectedDate by mutableStateOf(initDate)
-    val year
+    var primaryRange by mutableStateOf(primaryRange)
+        private set
+
+    var secondaryRange by mutableStateOf(secondaryRange)
+        private set
+
+    var selectedMillis by mutableLongStateOf(initDate.toMillis())
+        private set
+
+    fun updateSelectedDate(millis: Long) {
+        selectedMillis = millis
+        selectedDate = DateTimeUtils.toLocalDate(millis)
+    }
+
+    fun updateSelectedDate(localDate: LocalDate) = updateSelectedDate(localDate.toMillis())
+
+    var selectedDate = DateTimeUtils.toLocalDate(selectedMillis)
+        private set
+    val selectedYear: Int
         get() = selectedDate.year
-    val month
+    val selectedMonth: Int
         get() = selectedDate.monthValue
-    val dayOfMonth
+    val selectedDay: Int
         get() = selectedDate.dayOfMonth
 
-    fun updateYear(newYear: Int) {
-        selectedDate = LocalDate.of(newYear, month, dayOfMonth)
+    fun addPrimaryRange(range: List<LongRange>) {
+        primaryRange = range
     }
 
-    fun updateMonth(newMonth: Int) {
-        val yearMonth = YearMonth.of(year, newMonth)
-        selectedDate =
-            LocalDate.of(year, newMonth, dayOfMonth.coerceAtMost(yearMonth.lengthOfMonth()))
-    }
-
-    fun updateDay(newDay: Int) {
-        selectedDate = LocalDate.of(year, month, newDay)
-    }
-
-    fun addPrimaryRange(range: LongRange) {
-        if (primaryRange is MutableSet) {
-            primaryRange.add(range)
-        }
-    }
-
-    fun addSecondaryRange(range: LongRange, clearOld: Boolean = true) {
-        if (secondaryRange is MutableSet) {
-            if (clearOld) secondaryRange.clear()
-            secondaryRange.add(range)
-        }
-    }
-
-    fun updateSelectedDate(newDate: Long) {
-        this.selectedDate = DateTimeUtils.toLocalDate(newDate)
+    fun addSecondaryRange(range: List<LongRange>, clearOld: Boolean = true) {
+        secondaryRange = range
     }
 }
 
@@ -89,12 +87,12 @@ class CalendarColor(val default: Color, val primary: Color, val secondary: Color
 
     fun containerColor(
         date: Long,
-        primaryRange: Set<LongRange>,
-        secondaryRange: Set<LongRange>
+        primaryRange: List<LongRange>,
+        secondaryRange: List<LongRange>
     ): Color {
-        return if (primaryRange.contains(date)) {
+        return if (primaryRange.containsValue(date)) {
             primary
-        } else if (secondaryRange.contains(date)) {
+        } else if (secondaryRange.containsValue(date)) {
             secondary
         } else {
             default
@@ -102,4 +100,4 @@ class CalendarColor(val default: Color, val primary: Color, val secondary: Color
     }
 }
 
-fun Set<LongRange>.contains(value: Long) = any { value in it }
+fun List<LongRange>.containsValue(value: Long) = fastAny { value in it }

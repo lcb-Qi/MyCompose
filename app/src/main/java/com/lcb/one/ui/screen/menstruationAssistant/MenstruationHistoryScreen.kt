@@ -51,7 +51,7 @@ private const val DRAG_OFFSET_MAX = 400
 @Composable
 fun MenstruationHistoryScreen() {
     val mcViewmodel = viewModel<MenstruationViewModel>()
-    val allMcDay by mcViewmodel.getAll().collectAsState(emptyList())
+    val allMcDay by mcViewmodel.all.collectAsState(emptyList())
     var showImportButton by remember { mutableStateOf(false) }
     Scaffold(
         topBar = { ToolBar(title = Localization.allRecords) },
