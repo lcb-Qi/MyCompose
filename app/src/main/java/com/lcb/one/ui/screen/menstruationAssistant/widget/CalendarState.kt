@@ -20,7 +20,7 @@ fun rememberCalendarState(
     selectedDate: LocalDate = LocalDate.now(),
     colors: CalendarColor = CalendarColor.default(),
     primaryRange: List<LongRange> = emptyList(),
-    secondaryRange: List<LongRange> = emptyList(),
+    secondaryRange: LongRange? = null,
 ): CalendarState {
     return remember {
         CalendarState(selectedDate, yearRange, colors, primaryRange, secondaryRange)
@@ -33,7 +33,7 @@ class CalendarState(
     val yearRange: IntRange,
     val colors: CalendarColor,
     primaryRange: List<LongRange> = emptyList(),
-    secondaryRange: List<LongRange> = emptyList(),
+    secondaryRange: LongRange? = null,
 ) {
     companion object {
         const val DAYS_IN_WEEK = 7
@@ -65,11 +65,11 @@ class CalendarState(
     val selectedDay: Int
         get() = selectedDate.dayOfMonth
 
-    fun addPrimaryRange(range: List<LongRange>) {
+    fun updatePrimaryRange(range: List<LongRange>) {
         primaryRange = range
     }
 
-    fun addSecondaryRange(range: List<LongRange>, clearOld: Boolean = true) {
+    fun updateSecondaryRange(range: LongRange?) {
         secondaryRange = range
     }
 }
@@ -88,11 +88,11 @@ class CalendarColor(val default: Color, val primary: Color, val secondary: Color
     fun containerColor(
         date: Long,
         primaryRange: List<LongRange>,
-        secondaryRange: List<LongRange>
+        secondaryRange: LongRange?
     ): Color {
         return if (primaryRange.containsValue(date)) {
             primary
-        } else if (secondaryRange.containsValue(date)) {
+        } else if (secondaryRange != null && date in secondaryRange) {
             secondary
         } else {
             default

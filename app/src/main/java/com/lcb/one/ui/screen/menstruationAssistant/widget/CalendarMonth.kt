@@ -32,38 +32,19 @@ fun CalendarMonth(
     month: YearMonth,
     selectMillis: Long,
     primaryRange: List<LongRange> = emptyList(),
-    secondaryRange: List<LongRange> = emptyList(),
+    secondaryRange: LongRange? = null,
     colors: CalendarColor,
     onDateSelected: (Long) -> Unit
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek.value
-        Row(modifier = Modifier.fillMaxWidth()) {
-            val dayNames = arrayListOf<String>()
-            val weekdays = DayOfWeek.entries.map {
-                it.getDisplayName(TextStyle.NARROW, Locale.getDefault())
-            }
-
-            for (i in firstDayOfWeek - 1 until weekdays.size) {
-                dayNames.add(weekdays[i])
-            }
-            for (i in 0 until firstDayOfWeek - 1) {
-                dayNames.add(weekdays[i])
-            }
-            dayNames.fastForEach {
-                Text(
-                    text = it,
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
+        WeekHeadLine(firstDayOfWeek = firstDayOfWeek)
 
         var cellIndex = 0
         Column(
             modifier = Modifier.wrapContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
             val difference = month.atDay(1).dayOfWeek.value - firstDayOfWeek
             val daysFromStartOfWeekToFirstOfMonth = if (difference < 0) {
@@ -74,7 +55,7 @@ fun CalendarMonth(
             for (weekIndex in 0 until 6) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     for (dayIndex in 0 until CalendarState.DAYS_IN_WEEK) {
                         if (cellIndex < daysFromStartOfWeekToFirstOfMonth ||
@@ -116,6 +97,30 @@ fun CalendarMonth(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun WeekHeadLine(modifier: Modifier = Modifier, firstDayOfWeek: Int) {
+    Row(modifier = modifier.fillMaxWidth()) {
+        val dayNames = arrayListOf<String>()
+        val weekdays = DayOfWeek.entries.map {
+            it.getDisplayName(TextStyle.NARROW, Locale.getDefault())
+        }
+
+        for (i in firstDayOfWeek - 1 until weekdays.size) {
+            dayNames.add(weekdays[i])
+        }
+        for (i in 0 until firstDayOfWeek - 1) {
+            dayNames.add(weekdays[i])
+        }
+        dayNames.fastForEach {
+            Text(
+                text = it,
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

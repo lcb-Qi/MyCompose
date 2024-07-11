@@ -26,14 +26,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastFirstOrNull
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lcb.one.localization.Localization
 import com.lcb.one.route.destinations.MenstruationHistoryScreenDestination
 import com.lcb.one.ui.MenstruationAssistantNavGraph
+import com.lcb.one.ui.MenstruationAssistantQsService
 import com.lcb.one.ui.navController
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.util.common.DateTimeUtils
-import com.lcb.one.util.common.toMillis
 import com.lcb.one.ui.screen.menstruationAssistant.repo.MenstruationViewModel
 import com.lcb.one.ui.screen.menstruationAssistant.widget.Calendar
 import com.lcb.one.ui.screen.menstruationAssistant.widget.CalendarColor
@@ -46,6 +47,7 @@ import com.lcb.one.ui.widget.common.AppIconButton
 import com.ramcosta.composedestinations.annotation.Destination
 import java.time.LocalDate
 
+private const val ONE_DAY_MILLIS = 24 * 60 * 60 * 1000L// 一天的毫秒数
 private const val MENSTRUATION_INTERVAL = 28L// 两次月经间隔
 private const val MENSTRUATION_DURATION = 7L// 月经持续时间
 
@@ -54,25 +56,26 @@ private const val MENSTRUATION_DURATION = 7L// 月经持续时间
 fun MenstruationAssistantScreen() {
     val mcViewmodel = viewModel<MenstruationViewModel>()
     val mcDays by mcViewmodel.all.collectAsState(emptyList())
-    val runningMcDay by remember { derivedStateOf { mcDays.find { !it.finish } } }
+    val runningMcDay by remember { derivedStateOf { mcDays.fastFirstOrNull { !it.finish } } }
     val lastMcDay by remember { derivedStateOf { mcDays.lastOrNull() } }
     val predictMcDay by remember {
         derivedStateOf {
             lastMcDay?.let {
-                val start = DateTimeUtils.toLocalDateTime(it.startTime)
                 it.copy(
                     finish = true,
-                    startTime = start.plusDays(MENSTRUATION_INTERVAL).toMillis(),
-                    endTime = start.plusDays(MENSTRUATION_INTERVAL + MENSTRUATION_DURATION - 1)
-                        .toMillis()
+                    startTime = it.startTime + MENSTRUATION_INTERVAL * ONE_DAY_MILLIS,
+                    endTime = it.startTime + (MENSTRUATION_INTERVAL + MENSTRUATION_DURATION - 1) * ONE_DAY_MILLIS
                 )
             }
         }
     }
-    val calendarState = rememberCalendarState()
+    val calendarState = rememberCalendarState(
+        primaryRange = mcDays.map { it.toRange() },
+        secondaryRange = predictMcDay?.toRange()
+    )
     LaunchedEffect(mcDays) {
-        calendarState.addPrimaryRange(mcDays.map { it.toRange() })
-        predictMcDay?.let { calendarState.addSecondaryRange(listOf(it.toRange())) }
+        calendarState.updatePrimaryRange(mcDays.map { it.toRange() })
+        calendarState.updateSecondaryRange(predictMcDay?.toRange())
     }
 
     Scaffold(
@@ -92,10 +95,8 @@ fun MenstruationAssistantScreen() {
                 derivedStateOf { !DateTimeUtils.isToday(calendarState.selectedMillis) }
             }
             if (showFab) {
-                FloatingActionButton(onClick = {
-                    calendarState.updateSelectedDate(LocalDate.now())
-                }) {
-                    Icon(imageVector = Icons.Rounded.Today, contentDescription = "")
+                FloatingActionButton(onClick = { calendarState.updateSelectedDate(LocalDate.now()) }) {
+                    Icon(Icons.Rounded.Today, null)
                 }
             }
         }
@@ -160,6 +161,11 @@ fun MenstruationAssistantScreen() {
             }
         }
     }
+
+    LaunchedEffect(Unit) {
+        MenstruationAssistantQsService.tryAddQs()
+    }
+
 }
 
 @Composable

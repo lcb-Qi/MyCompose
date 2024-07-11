@@ -85,7 +85,7 @@ fun Calendar(modifier: Modifier = Modifier, state: CalendarState = rememberCalen
             state = listState,
             flingBehavior = rememberMySnapFlingBehavior(lazyListState = listState)
         ) {
-            items((state.yearRange.last - state.yearRange.first + 1) * 12) {index->
+            items((state.yearRange.last - state.yearRange.first + 1) * 12, key = { it }) { index ->
                 Box(modifier = Modifier.fillParentMaxWidth()) {
                     val date = firstDay.plusMonths(index.toLong())
                     CalendarMonth(
