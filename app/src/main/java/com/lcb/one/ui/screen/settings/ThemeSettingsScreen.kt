@@ -1,11 +1,13 @@
 package com.lcb.one.ui.screen.settings
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.lcb.one.localization.Localization
@@ -34,13 +36,19 @@ fun ThemeSettingsScreen() {
         ) {
             ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
                 SimpleSettingsSwitch(
+                    modifier = Modifier.padding(top = 8.dp),
                     title = "AMOLED",
                     summary = Localization.amoledModeSummary,
                     checked = ThemeManager.amoledMode,
                     onCheckedChange = { ThemeManager.amoledMode = it }
                 )
 
+                val bottomPadding by animateDpAsState(
+                    targetValue = if (ThemeManager.dynamicColor) 8.dp else 0.dp,
+                    label = "dynamicColor"
+                )
                 SimpleSettingsSwitch(
+                    modifier = Modifier.padding(bottom = bottomPadding),
                     title = Localization.dynamicColor,
                     summary = Localization.dynamicColorSummary,
                     checked = ThemeManager.dynamicColor,
@@ -49,6 +57,7 @@ fun ThemeSettingsScreen() {
 
                 AnimatedVisibility(visible = !ThemeManager.dynamicColor) {
                     ThemSelector(
+                        modifier = Modifier.padding(bottom = 8.dp),
                         selected = ThemeManager.themeColor,
                         onColorSelected = { ThemeManager.themeColor = it }
                     )

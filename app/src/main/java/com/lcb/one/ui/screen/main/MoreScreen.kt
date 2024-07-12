@@ -22,23 +22,21 @@ import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 fun MoreScreen() {
     Card(modifier = Modifier.padding(horizontal = 16.dp)) {
         ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
-            Column {
-                // 设置
-                SimpleSettingsMenuLink(
-                    title = Localization.settings,
-                    icon = {
-                        Icon(Icons.Rounded.Settings, null)
-                    },
-                    onClick = { navController.navigate(NavGraphs.settings) }
-                )
+            // 设置
+            SimpleSettingsMenuLink(
+                modifier = Modifier.padding(top = 8.dp),
+                title = Localization.settings,
+                icon = { Icon(Icons.Rounded.Settings, null) },
+                onClick = { navController.navigate(NavGraphs.settings) }
+            )
 
-                // 关于
-                SimpleSettingsMenuLink(
-                    title = "${Localization.about}${Localization.appName}",
-                    icon = { Icon(Icons.Rounded.Info, null) },
-                    onClick = { navController.navigate(AboutScreenDestination) }
-                )
-            }
+            // 关于
+            SimpleSettingsMenuLink(
+                modifier = Modifier.padding(bottom = 8.dp),
+                title = "${Localization.about}${Localization.appName}",
+                icon = { Icon(Icons.Rounded.Info, null) },
+                onClick = { navController.navigate(AboutScreenDestination) }
+            )
         }
     }
 }

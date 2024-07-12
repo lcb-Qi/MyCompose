@@ -1,7 +1,10 @@
 package com.lcb.one.ui.screen.settings
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Autorenew
@@ -47,11 +50,13 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                     end = 16.dp
                 )
         ) {
-            // 通用
+            // 1.通用设置
             SettingsCategory(title = Localization.common) {
                 Card {
                     ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
+                        // 内置浏览器
                         SimpleSettingsSwitch(
+                            modifier = Modifier.padding(top = 8.dp),
                             checked = AppGlobalConfigs.useBuiltinBrowser,
                             icon = { Icon(Icons.Rounded.TravelExplore, null) },
                             title = "使用内置浏览器",
@@ -67,6 +72,7 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
 
                         // 语言
                         SimpleSettingsMenuLink(
+                            modifier = Modifier.padding(bottom = 8.dp),
                             enabled = false,
                             title = "语言",
                             icon = { Icon(Icons.Rounded.Language, null) },
@@ -74,30 +80,36 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                         )
                     }
                 }
+            }
 
-                SettingsCategory(title = Localization.other) {
-                    // 标题更新间隔
-                    val options = stringArrayResource(R.array.settings_duration_options)
-                    val values = integerArrayResource(R.array.settings_duration_values)
-                    Card {
-                        ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
-                            SettingSingleChoice(
-                                title = Localization.poemUpdateDuration,
-                                icon = { Icon(Icons.Rounded.Autorenew, null) },
-                                selectIndex = values.indexOf(AppGlobalConfigs.poemUpdateInterval)
-                                    .coerceAtLeast(0),
-                                options = options,
-                                onItemSelected = {
-                                    AppGlobalConfigs.poemUpdateInterval = values[it]
-                                }
-                            )
+            Spacer(Modifier.height(16.dp))
 
-                            SimpleSettingsMenuLink(
-                                title = "权限管理",
-                                icon = { Icon(Icons.Rounded.PrivacyTip, null) },
-                                onClick = { navController.navigate(PrivacyScreenDestination) }
-                            )
-                        }
+            // 2.其他设置
+            SettingsCategory(title = Localization.other) {
+                Card {
+                    ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
+                        // 标题诗词更新间隔
+                        val options = stringArrayResource(R.array.settings_duration_options)
+                        val values = integerArrayResource(R.array.settings_duration_values)
+                        SettingSingleChoice(
+                            modifier = Modifier.padding(top = 8.dp),
+                            title = Localization.poemUpdateDuration,
+                            icon = { Icon(Icons.Rounded.Autorenew, null) },
+                            selectIndex = values.indexOf(AppGlobalConfigs.poemUpdateInterval)
+                                .coerceAtLeast(0),
+                            options = options,
+                            onItemSelected = {
+                                AppGlobalConfigs.poemUpdateInterval = values[it]
+                            }
+                        )
+
+                        // 权限
+                        SimpleSettingsMenuLink(
+                            modifier = Modifier.padding(bottom = 8.dp),
+                            title = "权限管理",
+                            icon = { Icon(Icons.Rounded.PrivacyTip, null) },
+                            onClick = { navController.navigate(PrivacyScreenDestination) }
+                        )
                     }
                 }
             }

@@ -12,7 +12,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -31,59 +30,39 @@ import com.lcb.one.ui.navController
 import com.lcb.one.ui.screen.about.repo.model.AppVersion
 import com.lcb.one.ui.screen.about.repo.UpdateAccessor
 import com.lcb.one.ui.screen.about.repo.model.UpdateInfo
+import com.lcb.one.ui.screen.about.widget.AboutSaltFishDialog
 import com.lcb.one.ui.screen.about.widget.UpdateInfoDialog
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
-import com.lcb.one.ui.widget.settings.ui.SettingsSimpleText
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.ToastUtils
 import com.ramcosta.composedestinations.annotation.Destination
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Destination<AppNavGraph>
 @Composable
 fun AboutScreen(modifier: Modifier = Modifier) {
-    Scaffold(topBar = { ToolBar(title = "${Localization.about}${Localization.appName}") }) { paddingValues ->
+    Scaffold(topBar = { ToolBar(title = "${Localization.about}${Localization.appName}") }) { innerPadding ->
         Card(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(
-                    top = paddingValues.calculateTopPadding(),
-                    bottom = paddingValues.calculateBottomPadding(),
-                    start = 16.dp,
-                    end = 16.dp
-                )
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp)
         ) {
             // 版本信息
-            val versionName = BuildConfig.VERSION_NAME
-            val buildTime = stringResource(R.string.BUILD_TIME)
-            val versionInfo = "$versionName($buildTime)"
-
-            var clickCount by remember { mutableIntStateOf(0) }
-            LaunchedEffect(clickCount) {
-                delay(1000)
-                clickCount = 0
-            }
-
+            var showDetail by remember { mutableStateOf(false) }
             ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
-                SettingsSimpleText(
+                SimpleSettingsMenuLink(
+                    modifier = Modifier.padding(top = 8.dp),
                     title = Localization.versionInfo,
-                    summary = versionInfo,
+                    summary = BuildConfig.VERSION_NAME,
                     icon = { Icon(imageVector = Icons.Rounded.Info, contentDescription = "") },
-                    onClick = {
-                        clickCount++
-                        if (clickCount >= AppGlobalConfigs.COUNT_TO_ENABLE_DEV_MODE) {
-                            AppGlobalConfigs.appDevMode = !AppGlobalConfigs.appDevMode
-                            val action =
-                                if (AppGlobalConfigs.appDevMode) Localization.enterDevMode else Localization.exitDevMode
-                            ToastUtils.showToast(action)
-                            clickCount = 0
-                        }
-                    }
+                    onClick = { showDetail = true }
                 )
+
+                AboutSaltFishDialog(showDetail) { showDetail = false }
 
                 // 检查更新
                 var showUpdate by remember { mutableStateOf(false) }
@@ -118,6 +97,7 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                 // 项目地址
                 val url = stringResource(R.string.project_location_url)
                 SimpleSettingsMenuLink(
+                    modifier = Modifier.padding(bottom = 8.dp),
                     title = Localization.projectUrl,
                     summary = url,
                     icon = { Icon(imageVector = Icons.Rounded.Link, contentDescription = "") },

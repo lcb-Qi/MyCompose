@@ -12,7 +12,6 @@ import com.lcb.one.util.android.UserPref
 
 object AppGlobalConfigs {
     const val COUNT_TO_ENABLE_DEV_MODE = 10
-    var appDevMode by BooleanPrefState(UserPref.Key.APP_DEV_MODE, BuildConfig.DEBUG)
     var useBuiltinBrowser by BooleanPrefState(UserPref.Key.USE_BUILTIN_BROWSER, false)
 
     var poemUpdateInterval by IntPrefState(
