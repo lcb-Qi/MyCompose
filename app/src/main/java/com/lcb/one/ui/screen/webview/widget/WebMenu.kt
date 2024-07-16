@@ -10,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import kotlinx.serialization.json.JsonNull.content
 
 sealed class WebAction {
     data object Refresh : WebAction()
@@ -19,11 +20,15 @@ sealed class WebAction {
 
 @Composable
 fun WebMenu(
-    modifier: Modifier = Modifier,
     expanded: Boolean,
     onDismiss: () -> Unit,
     onAction: (action: WebAction) -> Unit
 ) {
+    val onMenuClick: (action: WebAction) -> Unit = {
+        onDismiss()
+        onAction(it)
+    }
+
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismiss,
@@ -36,7 +41,7 @@ fun WebMenu(
                         contentDescription = null
                     )
                 },
-                onClick = { onAction(WebAction.OpenInBrowser) }
+                onClick = { onMenuClick(WebAction.OpenInBrowser) }
             )
 
             DropdownMenuItem(
@@ -47,7 +52,7 @@ fun WebMenu(
                         contentDescription = null
                     )
                 },
-                onClick = { onAction(WebAction.CopyUrl) }
+                onClick = { onMenuClick(WebAction.CopyUrl) }
             )
 
             DropdownMenuItem(
@@ -58,7 +63,7 @@ fun WebMenu(
                         contentDescription = null
                     )
                 },
-                onClick = { onAction(WebAction.Refresh) }
+                onClick = { onMenuClick(WebAction.Refresh) }
             )
         }
     )

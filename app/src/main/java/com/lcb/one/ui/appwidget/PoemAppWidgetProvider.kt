@@ -22,7 +22,7 @@ class PoemAppWidgetProvider : AppWidgetProvider() {
         private const val TAG = "PoemAppWidget"
         private const val ACTION_DATA_CHANGED = "com.lcb.one.appwidget.poem.ACTION_DATA_CHANGED"
 
-        fun tryUpdate(context: Context = MyApp.getAppContext()) {
+        fun tryUpdate(context: Context = MyApp.get()) {
             val intent = Intent().apply {
                 setPackage(PACKAGE_ME)
                 setAction(ACTION_DATA_CHANGED)

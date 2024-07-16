@@ -18,7 +18,7 @@ class PrivacyViewModel : ViewModel() {
 
     val privacyState: MutableStateFlow<Privacy> = MutableStateFlow(Privacy())
 
-    fun checkPermission(context: Context = MyApp.getAppContext()) {
+    fun checkPermission(context: Context = MyApp.get()) {
         LLog.d(TAG, "checkPermission: ")
         privacyState.update { last ->
             last.copy(

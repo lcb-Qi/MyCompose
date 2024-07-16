@@ -11,10 +11,10 @@ object ToastUtils {
         if (msg.isBlank()) return
 
         if (ThreadUtils.isOnMainThread()) {
-            Toast.makeText(MyApp.getAppContext(), msg, duration).show()
+            Toast.makeText(MyApp.get(), msg, duration).show()
         } else {
             Handler(Looper.getMainLooper()).post {
-                Toast.makeText(MyApp.getAppContext(), msg, duration).show()
+                Toast.makeText(MyApp.get(), msg, duration).show()
             }
         }
     }

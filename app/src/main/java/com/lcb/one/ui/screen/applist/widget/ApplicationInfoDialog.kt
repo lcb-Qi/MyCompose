@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.lcb.one.localization.Localization
 import com.lcb.one.util.android.AppUtils
-import com.lcb.one.util.android.DownLoadUtil
+import com.lcb.one.util.android.StorageUtils
 import com.lcb.one.util.android.ToastUtils
 import kotlinx.coroutines.launch
 
@@ -62,7 +62,7 @@ fun ApplicationInfoDialog(show: Boolean, packageName: String, onDisMiss: () -> U
                     scope.launch {
                         val icon = AppUtils.getAppIcon(packageName = packageName)
                         if (icon != null) {
-                            DownLoadUtil.writeBitmapToImageFile(icon, "${label}_logo")
+                            StorageUtils.createImageFile(icon, "${label}_logo")
                                 .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
                                 .onFailure { ToastUtils.showToast(Localization.saveFailed) }
                         } else {
@@ -77,7 +77,7 @@ fun ApplicationInfoDialog(show: Boolean, packageName: String, onDisMiss: () -> U
                 leadingIcon = Icons.Rounded.Android,
                 onclick = {
                     scope.launch {
-                        DownLoadUtil.saveApk(AppUtils.getApkPath(packageName), label)
+                        StorageUtils.saveApk(AppUtils.getApkPath(packageName), label)
                             .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
                             .onFailure { ToastUtils.showToast(Localization.saveFailed) }
                     }

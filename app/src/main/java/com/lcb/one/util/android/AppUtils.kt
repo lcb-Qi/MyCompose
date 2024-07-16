@@ -21,7 +21,7 @@ import com.lcb.one.ui.MyApp
 const val PACKAGE_ME = BuildConfig.APPLICATION_ID
 
 object AppUtils {
-    fun isNetworkAvailable(context: Context = MyApp.getAppContext()): Boolean {
+    fun isNetworkAvailable(context: Context = MyApp.get()): Boolean {
         val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
         val networkCapabilities =
@@ -35,27 +35,27 @@ object AppUtils {
         }
     }
 
-    fun getNavigationBarsHeight(context: Context = MyApp.getAppContext()): Int {
+    fun getNavigationBarsHeight(context: Context = MyApp.get()): Int {
         val metrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
         val insets = metrics.windowInsets.getInsets(WindowInsets.Type.systemBars())
         return insets.bottom
     }
 
-    fun getStatusBarsHeight(context: Context = MyApp.getAppContext()): Int {
+    fun getStatusBarsHeight(context: Context = MyApp.get()): Int {
         val metrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
         val insets = metrics.windowInsets.getInsets(WindowInsets.Type.systemBars())
         return insets.top
     }
 
-    fun getScreenWidth(context: Context = MyApp.getAppContext()): Int {
+    fun getScreenWidth(context: Context = MyApp.get()): Int {
         return PhoneUtil.getResolution(context).width
     }
 
-    fun getScreenHeight(context: Context = MyApp.getAppContext()): Int {
+    fun getScreenHeight(context: Context = MyApp.get()): Int {
         return PhoneUtil.getResolution(context).height
     }
 
-    fun getAppIcon(context: Context = MyApp.getAppContext(), packageName: String): Bitmap? {
+    fun getAppIcon(context: Context = MyApp.get(), packageName: String): Bitmap? {
         val icon: Bitmap?
         val pm = context.packageManager
 
@@ -84,13 +84,13 @@ object AppUtils {
     }
 
     fun getApkPath(packageName: String): String {
-        val pm = MyApp.getAppContext().packageManager
+        val pm = MyApp.get().packageManager
         val info = pm.getApplicationInfo(packageName, 0)
 
         return info.sourceDir
     }
 
-    fun launchSystemBrowser(context: Context = MyApp.getAppContext(), uri: Uri) {
+    fun launchSystemBrowser(context: Context = MyApp.get(), uri: Uri) {
         val intent = Intent(Intent.ACTION_VIEW)
             .setData(uri)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

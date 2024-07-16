@@ -6,8 +6,11 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.toMillis
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.time.LocalDate
 
+@Serializable
 @Entity(
     tableName = "mc_day",
     indices = [
@@ -17,6 +20,7 @@ import java.time.LocalDate
 data class MenstruationDay(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
+    @Transient
     val id: Int? = null,
     val finish: Boolean = false,
     @ColumnInfo(name = "start_time", defaultValue = "${Long.MIN_VALUE}")

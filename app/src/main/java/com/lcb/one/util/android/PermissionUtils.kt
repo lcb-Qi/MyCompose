@@ -24,7 +24,7 @@ object PermissionUtils {
 
     fun hasAllFileAccess() = Environment.isExternalStorageManager()
 
-    fun hasPermission(context: Context = MyApp.getAppContext(), permission: String): Boolean {
+    fun hasPermission(context: Context = MyApp.get(), permission: String): Boolean {
         val hasSelfPermission =
             context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
         LLog.d(TAG, "hasPermission: $permission == $hasSelfPermission")

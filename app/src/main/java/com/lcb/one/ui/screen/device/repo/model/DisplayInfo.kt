@@ -31,7 +31,7 @@ data class DisplayInfo(
     }
 
     companion object {
-        fun obtain(context: Context = MyApp.getAppContext()): DisplayInfo {
+        fun obtain(context: Context = MyApp.get()): DisplayInfo {
             val displayInfo = DisplayInfo()
 
             val outMetrics = DisplayMetrics()

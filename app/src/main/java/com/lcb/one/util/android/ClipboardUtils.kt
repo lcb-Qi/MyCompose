@@ -6,7 +6,7 @@ import android.content.Context
 import com.lcb.one.ui.MyApp
 
 object ClipboardUtils {
-    fun copyText(context: Context = MyApp.getAppContext(), text: String) {
+    fun copyText(context: Context = MyApp.get(), text: String) {
         val clipboard = context.getSystemService(ClipboardManager::class.java)
 
         val plainText = ClipData.newPlainText(null, text)

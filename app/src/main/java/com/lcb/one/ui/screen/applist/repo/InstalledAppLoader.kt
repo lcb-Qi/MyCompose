@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 import java.text.Collator
 import java.util.Locale
 
-suspend fun loadInstalledApps(context: Context = MyApp.getAppContext()) =
+suspend fun loadInstalledApps(context: Context = MyApp.get()) =
     withContext(Dispatchers.IO) {
         val collator = Collator.getInstance(Locale.getDefault()).apply {
             strength = Collator.PRIMARY

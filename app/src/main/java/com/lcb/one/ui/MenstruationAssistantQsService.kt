@@ -17,7 +17,7 @@ import java.util.concurrent.Executors
 
 class MenstruationAssistantQsService : TileService() {
     companion object {
-        fun tryAddQs(context: Context = MyApp.getAppContext()) {
+        fun tryAddQs(context: Context = MyApp.get()) {
             LLog.d(TAG, "tryAddQs: ")
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
                 return

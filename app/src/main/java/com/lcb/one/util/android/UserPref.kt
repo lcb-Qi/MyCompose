@@ -29,7 +29,7 @@ object UserPref {
     }
 
     val defaultPref: SharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(MyApp.getAppContext())
+        PreferenceManager.getDefaultSharedPreferences(MyApp.get())
 
     fun getString(key: String, default: String = ""): String {
         if (key.isBlank()) return default

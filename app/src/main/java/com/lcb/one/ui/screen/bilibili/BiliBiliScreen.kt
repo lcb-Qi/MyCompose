@@ -41,8 +41,9 @@ import com.lcb.one.ui.screen.bilibili.widget.BigImageViewer
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.util.android.AppUtils
-import com.lcb.one.util.android.DownLoadUtil
+import com.lcb.one.util.android.StorageUtils
 import com.lcb.one.util.android.ToastUtils
+import com.lcb.one.util.common.DateTimeUtils
 import kotlinx.coroutines.launch
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -111,7 +112,7 @@ private fun BiliScreenImpl(
 
     val download: () -> Unit = {
         scope.launch {
-            DownLoadUtil.saveImageFromUrl(coverUrl)
+            StorageUtils.createImageFromUrl(coverUrl, DateTimeUtils.nowStringShort())
                 .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
                 .onFailure { ToastUtils.showToast(Localization.saveFailed) }
         }

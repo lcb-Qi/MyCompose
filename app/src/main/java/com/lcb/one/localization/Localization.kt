@@ -93,7 +93,7 @@ class Localization private constructor(@StringRes private val resId: Int) {
     }
 
     override fun toString(): String {
-        val resources = MyApp.getAppContext().resources
+        val resources = MyApp.get().resources
         return resources.getString(resId)
     }
 }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.DeviceUnknown
 import androidx.compose.material.icons.rounded.MiscellaneousServices
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material3.ElevatedAssistChip
@@ -29,12 +28,11 @@ import com.lcb.one.route.destinations.DeviceInfoScreenDestination
 import com.lcb.one.route.destinations.InstalledAppsScreenDestination
 import com.lcb.one.route.destinations.PrivacyScreenDestination
 import com.lcb.one.route.destinations.QrCodeScreenDestination
-import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.navController
 import com.lcb.one.ui.screen.main.widget.ToolCard
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
-import com.lcb.one.util.android.DownLoadUtil
+import com.lcb.one.util.android.StorageUtils
 import com.lcb.one.util.android.ToastUtils
 import kotlinx.coroutines.launch
 
@@ -124,8 +122,8 @@ fun ToolScreen() {
 private suspend fun getWallPaper(): Boolean {
     var success = false
     runCatching {
-        val drawable = WallpaperManager.getInstance(MyApp.getAppContext()).drawable
-        DownLoadUtil.writeBitmapToImageFile(drawable!!.toBitmap())
+        val drawable = WallpaperManager.getInstance(MyApp.get()).drawable
+        StorageUtils.createImageFile(drawable!!.toBitmap(), "wallpaper")
     }.onFailure {
         ToastUtils.showToast(Localization.saveFailed)
     }.onSuccess {

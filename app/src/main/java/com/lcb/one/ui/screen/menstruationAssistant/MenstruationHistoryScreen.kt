@@ -1,5 +1,7 @@
 package com.lcb.one.ui.screen.menstruationAssistant
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animate
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -11,7 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.WarningAmber
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lcb.one.localization.Localization
 import com.lcb.one.ui.MenstruationAssistantNavGraph
+import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
 import com.lcb.one.util.android.ToastUtils
@@ -40,7 +46,10 @@ import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.averageDurationDay
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.averageIntervalDay
 import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstrualCycleHistoryCard
+import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationMenu
+import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationMenuAction
 import com.lcb.one.ui.screen.menstruationAssistant.widget.PastMcDayPicker
+import com.lcb.one.ui.widget.common.AppIconButton
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -54,7 +63,31 @@ fun MenstruationHistoryScreen() {
     val allMcDay by mcViewmodel.all.collectAsState(emptyList())
     var showImportButton by remember { mutableStateOf(false) }
     Scaffold(
-        topBar = { ToolBar(title = Localization.allRecords) },
+        topBar = {
+            ToolBar(
+                title = Localization.allRecords,
+                actions = {
+                    var showMenu by remember { mutableStateOf(false) }
+                    val launcher =
+                        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+                            if (it != null) {
+                                MyApp.getContentResolver().openInputStream(it)?.use { input ->
+                                    mcViewmodel.importFromFile(input)
+                                }
+                            }
+                        }
+
+                    AppIconButton(icon = Icons.Rounded.MoreVert, onClick = { showMenu = true })
+
+                    MenstruationMenu(showMenu, { showMenu = false }) {
+                        when (it) {
+                            MenstruationMenuAction.IMPORT -> launcher.launch("text/plain")
+                            MenstruationMenuAction.EXPORT -> mcViewmodel.export()
+                        }
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = { showImportButton = true }) {
                 Icon(imageVector = Icons.Rounded.Add, contentDescription = "")

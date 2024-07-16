@@ -50,7 +50,6 @@ fun WebScreen(url: String) {
                     var showMenu by remember { mutableStateOf(false) }
                     AppIconButton(icon = Icons.Rounded.MoreVert, onClick = { showMenu = true })
                     val handleMenuAction: (WebAction) -> Unit = { action ->
-                        showMenu = false
                         webViewState.lastLoadedUrl?.let {
                             when (action) {
                                 WebAction.CopyUrl -> ClipboardUtils.copyText(text = it)

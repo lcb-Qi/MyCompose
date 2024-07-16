@@ -3,8 +3,8 @@ package com.lcb.one.util.android
 import com.lcb.one.ui.MyApp
 
 object DimenUtils {
-    private val density = MyApp.getAppContext().resources.displayMetrics.density
-    private val scaledDensity = MyApp.getAppContext().resources.displayMetrics.scaledDensity
+    private val density = MyApp.get().resources.displayMetrics.density
+    private val scaledDensity = MyApp.get().resources.displayMetrics.scaledDensity
     fun dp2px(dpValue: Int): Int {
 
         return (dpValue * density + 0.5f).toInt()

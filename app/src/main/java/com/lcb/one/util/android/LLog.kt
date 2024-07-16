@@ -5,7 +5,7 @@ import com.lcb.one.ui.MyApp
 import com.lcb.one.R
 
 object LLog {
-    private val COMMON_TAG = "SaltFish#" + MyApp.getAppContext().getString(R.string.BUILD_ID)
+    private val COMMON_TAG = "SaltFish#" + MyApp.get().getString(R.string.BUILD_ID)
 
     fun e(tag: String, vararg message: String) {
         println(Log.ERROR, buildLogMessage(tag, *message))
