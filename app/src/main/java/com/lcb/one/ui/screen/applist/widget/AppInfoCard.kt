@@ -24,7 +24,7 @@ fun AppInfoCard(
 ) {
     val iconContent: @Composable () -> Unit = {
         AsyncImage(
-            modifier = Modifier.size(48.dp),
+            modifier = Modifier.size(36.dp),
             model = appInfo.icon,
             contentDescription = appInfo.label
         )

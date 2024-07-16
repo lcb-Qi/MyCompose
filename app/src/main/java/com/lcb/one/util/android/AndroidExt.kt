@@ -4,9 +4,10 @@ import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.database.getStringOrNull
+import com.lcb.one.ui.MyApp
 
 // Uri
-fun Uri.toRelativePath(context: Context): String {
+fun Uri.toRelativePath(context: Context = MyApp.get()): String {
     var path = ""
     val proj = arrayOf(MediaStore.Images.Media.RELATIVE_PATH, MediaStore.Images.Media.DISPLAY_NAME)
     context.contentResolver.query(this, proj, null, null)?.use {

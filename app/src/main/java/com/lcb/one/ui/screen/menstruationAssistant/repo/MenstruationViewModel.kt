@@ -11,6 +11,8 @@ import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.JsonUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import okio.buffer
+import okio.source
 import java.io.InputStream
 
 class MenstruationViewModel : ViewModel() {
@@ -25,8 +27,8 @@ class MenstruationViewModel : ViewModel() {
     fun importFromFile(input: InputStream) {
         viewModelScope.launch {
             runCatching {
-                input.reader().use { reader ->
-                    val text = reader.readText().replace("\\s".toRegex(), "")
+                input.source().buffer().use { reader ->
+                    val text = reader.readString(Charsets.UTF_8).replace("\\s".toRegex(), "")
                     val data = JsonUtils.fromJson<List<MenstruationDay>>(text)
                     data.fastForEach { dao.insert(it) }
                 }
