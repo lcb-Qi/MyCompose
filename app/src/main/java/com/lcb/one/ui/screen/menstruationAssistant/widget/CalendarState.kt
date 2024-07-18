@@ -9,7 +9,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.util.fastAny
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.toMillis
 import java.time.LocalDate
@@ -100,4 +99,4 @@ class CalendarColor(val default: Color, val primary: Color, val secondary: Color
     }
 }
 
-fun List<LongRange>.containsValue(value: Long) = fastAny { value in it }
+fun List<LongRange>.containsValue(value: Long) = any { value in it }

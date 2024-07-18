@@ -1,23 +1,14 @@
 package com.lcb.one.ui.screen.zxing
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import android.os.Bundle
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.lcb.one.ui.AppNavGraph
-import com.ramcosta.composedestinations.annotation.Destination
+import com.lcb.one.ui.Screen
 
-@Destination<AppNavGraph>
-@Composable
-fun QrCodeScreen() {
-    Scaffold { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-        ) {
-        }
+object QrCodeScreen : Screen {
+    override val route: String
+        get() = "QrCode"
+
+    @Composable
+    override fun Content(args: Bundle?) {
     }
 }

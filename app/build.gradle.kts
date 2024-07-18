@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.room)
+
+    // id("kotlin-parcelize")
 }
 
 composeCompiler {}
@@ -77,7 +79,10 @@ android {
 ksp {
     arg("room.incremental", "true")
     arg("room.generateKotlin", "true")
-    arg("compose-destinations.codeGenPackageName", "${project.android.defaultConfig.applicationId}.route")
+    arg(
+        "compose-destinations.codeGenPackageName",
+        "${project.android.defaultConfig.applicationId}.route"
+    )
 }
 
 tasks.register("copyTask") {
@@ -103,11 +108,16 @@ project.afterEvaluate {
     assembleRelease.finalizedBy("copyTask")
 }
 
+val stableCompose = false
+
 dependencies {
     implementation(libs.androidx.core)
     // compose
-    // implementation(platform(libs.androidx.compose.bom))
-    implementation(platform(libs.androidx.compose.bom.snapshosts))
+    if (stableCompose) {
+        implementation(platform(libs.androidx.compose.bom))
+    } else {
+        implementation(platform(libs.androidx.compose.bom.snapshosts))
+    }
     implementation(libs.bundles.androidx.compose)
     implementation(libs.bundles.androidx.compose.support)
 
@@ -133,9 +143,6 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.bundles.settings.ui)
-    implementation(libs.compose.destinations)
-    ksp(libs.compose.destinations.ksp)
-
     implementation(libs.compose.webview)
     implementation("com.google.zxing:core:3.5.3")
 
@@ -144,11 +151,14 @@ dependencies {
 }
 
 fun DependencyHandlerScope.addTestDependencies() {
+    if (stableCompose) {
+        androidTestImplementation(platform(libs.androidx.compose.bom))
+    } else {
+        androidTestImplementation(platform(libs.androidx.compose.bom.snapshosts))
+    }
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.test.espresso)
-    // androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(platform(libs.androidx.compose.bom.snapshosts))
     androidTestImplementation(libs.test.ui.junit4)
     debugImplementation(libs.test.ui.tooling)
     debugImplementation(libs.test.ui.manifest)

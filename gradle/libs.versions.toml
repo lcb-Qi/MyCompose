@@ -7,6 +7,7 @@ androidxComposeBom = "2024.05.00"
 androidxComposeBomSnapshots = "2024.07.00-SNAPSHOT"
 androidxConstraintlayoutCompose = "1.0.1"
 androidxActivityCompose = "1.9.0"
+androidxNavigationCompose = "2.7.7"
 coilCompose = "2.6.0"
 androidxCore = "1.13.1"
 androidxLifecycle = "2.8.1"
@@ -17,7 +18,6 @@ markdown = "4.6.2"
 androidxRoom = "2.6.1"
 # others
 composeWebview = "0.33.6"
-composeDest = "2.1.0-beta09"
 retrofit = "2.11.0"
 okhttpLogger = "4.12.0"
 settingsUi = "2.4.0"
@@ -40,6 +40,7 @@ androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
 
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivityCompose" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigationCompose" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidxConstraintlayoutCompose" }
 
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
@@ -56,9 +57,6 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 # others
 compose-webview = { module = "io.github.kevinnzou:compose-webview", version.ref = "composeWebview" }
-# 导航
-compose-destinations = { module = "io.github.raamcosta.compose-destinations:core", version.ref = "composeDest" }
-compose-destinations-ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "composeDest" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 retrofit-converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
@@ -83,7 +81,7 @@ test-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 agp = { id = "com.android.application", version.ref = "agp" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinxSerializationJson" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 room = { id = "androidx.room", version.ref = "androidxRoom" }
@@ -93,7 +91,7 @@ androidx-compose = ["androidx-compose-ui", "androidx-compose-graphics",
     "androidx-compose-material3", "androidx-compose-icons",
     "androidx-compose-preview", "androidx-compose-livedata"]
 
-androidx-compose-support = ["androidx-activity-compose", "androidx-constraintlayout-compose"]
+androidx-compose-support = ["androidx-navigation-compose", "androidx-activity-compose", "androidx-constraintlayout-compose"]
 
 androidx-lifecycle = ["androidx-lifecycle-livedata", "androidx-lifecycle-viewmodel"]
 

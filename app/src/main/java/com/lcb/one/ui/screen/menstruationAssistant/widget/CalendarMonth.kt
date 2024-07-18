@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.fastForEach
 import com.lcb.one.util.common.atDayMillis
 import com.lcb.one.util.common.toMillis
 import java.time.DayOfWeek
@@ -115,7 +114,7 @@ private fun WeekHeadLine(modifier: Modifier = Modifier, firstDayOfWeek: Int) {
         for (i in 0 until firstDayOfWeek - 1) {
             dayNames.add(weekdays[i])
         }
-        dayNames.fastForEach {
+        dayNames.forEach {
             Text(
                 text = it,
                 modifier = Modifier.weight(1f),

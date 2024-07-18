@@ -1,11 +1,14 @@
 package com.lcb.one.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -83,6 +86,6 @@ fun AppTheme(
     MaterialTheme(
         colorScheme = createColorTheme(darkTheme = darkTheme),
         typography = Typography,
-        content = content
+        content = { Surface(modifier = Modifier.fillMaxSize(), content = { content() }) }
     )
 }

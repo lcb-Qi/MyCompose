@@ -5,45 +5,55 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.rememberNavController
-import com.lcb.one.route.NavGraphs
-import com.lcb.one.route.destinations.MenstruationAssistantScreenDestination
 import com.lcb.one.ui.AppGlobalConfigs
+import com.lcb.one.ui.AppNavHost
 import com.lcb.one.ui.appwidget.PoemAppWidgetProvider
-import com.lcb.one.ui.navController
+import com.lcb.one.ui.screen.about.AboutScreen
+import com.lcb.one.ui.screen.applist.InstalledAppsScreen
+import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
+import com.lcb.one.ui.screen.device.DeviceInfoScreen
+import com.lcb.one.ui.screen.main.MainScreen
+import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
+import com.lcb.one.ui.screen.menstruationAssistant.MenstruationHistoryScreen
+import com.lcb.one.ui.screen.privacy.PrivacyScreen
+import com.lcb.one.ui.screen.settings.SettingsScreen
+import com.lcb.one.ui.screen.settings.ThemeSettingsScreen
+import com.lcb.one.ui.screen.webview.WebScreen
+import com.lcb.one.ui.screen.zxing.QrCodeScreen
 import com.lcb.one.ui.theme.AppTheme
 import com.lcb.one.ui.widget.dialog.AssertInternetDialog
-import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.spec.Route
-import com.ramcosta.composedestinations.utils.toDestinationsNavigator
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-
-        val route = intent.getStringExtra("route")
-        val startRoute = if (route == MenstruationAssistantScreenDestination.route) {
-            NavGraphs.menstruationAssistant
-        } else {
-            NavGraphs.app.startRoute
-        }
-
-        setContent { AppScreen(startRoute) }
+        setContent { AppScreen(intent.getStringExtra("route")) }
         PoemAppWidgetProvider.tryUpdate(this)
     }
 
     @Composable
-    private fun AppScreen(start: Route = NavGraphs.app.startRoute) {
+    private fun AppScreen(startRoute: String? = null) {
         AppTheme {
-            val controller = rememberNavController()
-            navController = controller.toDestinationsNavigator()
-            DestinationsNavHost(
-                navGraph = NavGraphs.app,
-                navController = controller,
-                startRoute = start
-            )
-            AssertInternetDialog(AppGlobalConfigs.assertNetwork)
+            AppNavHost(start = startRoute ?: MainScreen.route, screens = allScreens) {
+                AssertInternetDialog(AppGlobalConfigs.assertNetwork)
+            }
         }
     }
+}
+
+private val allScreens by lazy {
+    listOf(
+        MainScreen,
+        BiliBiliScreen,
+        DeviceInfoScreen,
+        SettingsScreen,
+        AboutScreen,
+        InstalledAppsScreen,
+        MenstruationAssistantScreen,
+        MenstruationHistoryScreen,
+        ThemeSettingsScreen,
+        PrivacyScreen,
+        QrCodeScreen,
+        WebScreen
+    )
 }

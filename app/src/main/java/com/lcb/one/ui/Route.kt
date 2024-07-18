@@ -1,44 +1,85 @@
 package com.lcb.one.ui
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
+import android.os.Bundle
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.navigation.NavBackStackEntry
-import com.ramcosta.composedestinations.animations.NavHostAnimatedDestinationStyle
-import com.ramcosta.composedestinations.annotation.NavGraph
-import com.ramcosta.composedestinations.annotation.NavHostGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavHostController
+import androidx.navigation.Navigator
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 
 const val ANIMATE_DURATION = 500
 
-object DefaultAnimation : NavHostAnimatedDestinationStyle() {
-    override val enterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition
-        get() = { slideInHorizontally(animationSpec = tween(ANIMATE_DURATION)) { it } }
+val LocalNav: ProvidableCompositionLocal<NavHostController?> = staticCompositionLocalOf { null }
 
+@Composable
+fun AppNavHost(
+    start: String,
+    screens: List<Screen>,
+    navHostController: NavHostController = rememberNavController(),
+    content: @Composable () -> Unit = {}
+) {
+    CompositionLocalProvider(LocalNav provides navHostController) {
+        NavHost(
+            navController = LocalNav.current!!,
+            startDestination = start,
+            modifier = Modifier.fillMaxSize(),
+            enterTransition = { slideInHorizontally(tween(ANIMATE_DURATION)) { it } },
+            exitTransition = { slideOutHorizontally(tween(ANIMATE_DURATION)) { -it } },
+            popEnterTransition = { slideInHorizontally(tween(ANIMATE_DURATION)) { -it } },
+            popExitTransition = { slideOutHorizontally(tween(ANIMATE_DURATION)) { it } },
+            builder = {
+                screens.forEach { screen ->
+                    composable(
+                        route = screen.route,
+                        arguments = screen.args,
+                        content = { screen.Content(it.arguments) }
+                    )
+                }
+            }
+        )
 
-    override val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition
-        get() = { slideOutHorizontally(animationSpec = tween(ANIMATE_DURATION)) { -it } }
-
-    override val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition
-        get() = { slideInHorizontally(animationSpec = tween(ANIMATE_DURATION)) { -it } }
-
-    override val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition
-        get() = { slideOutHorizontally(animationSpec = tween(ANIMATE_DURATION)) { it } }
+        content()
+    }
 }
 
-@NavHostGraph(defaultTransitions = DefaultAnimation::class)
-annotation class AppNavGraph
+@Stable
+interface Screen {
+    val route: String
+    val args: List<NamedNavArgument>
+        get() = emptyList()
 
-@NavGraph<AppNavGraph>
-annotation class SettingsNavGraph
+    @Composable
+    fun Content(args: Bundle?)
+}
 
-@NavGraph<AppNavGraph>
-annotation class MenstruationAssistantNavGraph
+fun NavHostController.launchSingleTop(route: String, extras: Navigator.Extras? = null) {
+    navigate(
+        route = route,
+        navOptions = navOptions {
+            launchSingleTop = true
+        },
+        navigatorExtras = extras
+    )
+}
 
-/**
- * fixme: ugly implementation
- */
-lateinit var navController: DestinationsNavigator
+fun NavHostController.launchSingleTop(screen: Screen, extras: Navigator.Extras? = null) {
+    navigate(
+        route = screen.route,
+        navOptions = navOptions {
+            launchSingleTop = true
+        },
+        navigatorExtras = extras
+    )
+}

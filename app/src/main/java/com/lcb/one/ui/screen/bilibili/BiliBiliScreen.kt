@@ -1,5 +1,6 @@
 package com.lcb.one.ui.screen.bilibili
 
+import android.os.Bundle
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
@@ -35,7 +36,7 @@ import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
-import com.lcb.one.ui.AppNavGraph
+import com.lcb.one.ui.Screen
 import com.lcb.one.ui.screen.bilibili.repo.BiliServerAccessor
 import com.lcb.one.ui.screen.bilibili.widget.BigImageViewer
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -45,125 +46,123 @@ import com.lcb.one.util.android.StorageUtils
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.common.DateTimeUtils
 import kotlinx.coroutines.launch
-import com.ramcosta.composedestinations.annotation.Destination
 
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Destination<AppNavGraph>
-@Composable
-fun BiliBiliScreen() {
+object BiliBiliScreen : Screen {
+    override val route: String
+        get() = "Bilibili"
 
-    SharedTransitionLayout(modifier = Modifier.fillMaxSize()) {
-        var showBig by remember { mutableStateOf(false) }
-        var url by remember { mutableStateOf("") }
+    @OptIn(ExperimentalSharedTransitionApi::class)
+    @Composable
+    override fun Content(args: Bundle?) {
+        SharedTransitionLayout(modifier = Modifier.fillMaxSize()) {
+            var showBig by remember { mutableStateOf(false) }
+            var url by remember { mutableStateOf("") }
 
-        AnimatedContent(
-            targetState = showBig,
-            label = "",
-        ) { targetState ->
-            if (targetState) {
-                BigImageViewer(
-                    modifier = Modifier.sharedElement(
-                        state = rememberSharedContentState(key = "big"),
-                        animatedVisibilityScope = this@AnimatedContent,
-                    ),
-                    url = url,
-                    onBack = { showBig = false },
-                )
-            } else {
-                BiliScreenImpl(
-                    modifier = Modifier
-                        .sharedElement(
-                            state = rememberSharedContentState(key = "small"),
+            AnimatedContent(
+                targetState = showBig,
+                label = "",
+            ) { targetState ->
+                if (targetState) {
+                    BigImageViewer(
+                        modifier = Modifier.sharedElement(
+                            state = rememberSharedContentState(key = "big"),
                             animatedVisibilityScope = this@AnimatedContent,
                         ),
-                    onShowBigImage = {
-                        showBig = true
-                        url = it
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun BiliScreenImpl(
-    modifier: Modifier = Modifier,
-    onShowBigImage: (url: String) -> Unit = {},
-) {
-    var textInput by remember { mutableStateOf("") }
-    var coverUrl by remember { mutableStateOf("") }
-    if (BuildConfig.DEBUG) {
-        coverUrl =
-            "https://patchwiki.biligame.com/images/sr/b/be/crncyly4kxzqik8h4uc98aj1c8vovbe.png"
-    }
-    val scope = rememberCoroutineScope()
-
-    val getCoverUrl: () -> Unit = {
-        if (AppUtils.isNetworkAvailable()) {
-            if (BuildConfig.DEBUG) textInput = "BV1Jp421y768"
-            scope.launch {
-                coverUrl = BiliServerAccessor.getVideoCoverUrl(textInput)
-            }
-        } else {
-            AppGlobalConfigs.assertNetwork = true
-        }
-    }
-
-    val download: () -> Unit = {
-        scope.launch {
-            StorageUtils.createImageFromUrl(coverUrl, DateTimeUtils.nowStringShort())
-                .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
-                .onFailure { ToastUtils.showToast(Localization.saveFailed) }
-        }
-    }
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        topBar = { ToolBar(title = Localization.bibibili) },
-        floatingActionButton = {
-            if (coverUrl.isNotBlank()) {
-                FloatingActionButton(onClick = download) {
-                    Icon(imageVector = Icons.Rounded.Download, contentDescription = "")
+                        url = url,
+                        onBack = { showBig = false },
+                    )
+                } else {
+                    BiliScreenImpl(
+                        modifier = Modifier
+                            .sharedElement(
+                                state = rememberSharedContentState(key = "small"),
+                                animatedVisibilityScope = this@AnimatedContent,
+                            ),
+                        onShowBigImage = {
+                            showBig = true
+                            url = it
+                        }
+                    )
                 }
             }
         }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = paddingValues.calculateTopPadding(),
-                    bottom = paddingValues.calculateBottomPadding()
-                ),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            OutlinedTextField(
-                singleLine = true,
-                value = textInput,
-                onValueChange = { textInput = it },
-                placeholder = { Text(text = Localization.getCoverHint) },
-                modifier = Modifier.fillMaxWidth()
-            )
+    }
 
-            AppButton(text = Localization.obtain, onClick = getCoverUrl)
+    @Composable
+    private fun BiliScreenImpl(
+        modifier: Modifier = Modifier,
+        onShowBigImage: (url: String) -> Unit = {},
+    ) {
+        var textInput by remember { mutableStateOf("") }
+        var coverUrl by remember { mutableStateOf("") }
+        if (BuildConfig.DEBUG) {
+            coverUrl =
+                "https://patchwiki.biligame.com/images/sr/b/be/crncyly4kxzqik8h4uc98aj1c8vovbe.png"
+        }
+        val scope = rememberCoroutineScope()
 
+        val getCoverUrl: () -> Unit = {
+            if (AppUtils.isNetworkAvailable()) {
+                if (BuildConfig.DEBUG) textInput = "BV1Jp421y768"
+                scope.launch {
+                    coverUrl = BiliServerAccessor.getVideoCoverUrl(textInput)
+                }
+            } else {
+                AppGlobalConfigs.assertNetwork = true
+            }
+        }
 
-            SubcomposeAsyncImage(
+        val download: () -> Unit = {
+            scope.launch {
+                StorageUtils.createImageFromUrl(coverUrl, DateTimeUtils.nowStringShort())
+                    .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
+                    .onFailure { ToastUtils.showToast(Localization.saveFailed) }
+            }
+        }
+        Scaffold(
+            modifier = modifier.fillMaxSize(),
+            topBar = { ToolBar(title = Localization.bibibili) },
+            floatingActionButton = {
+                if (coverUrl.isNotBlank()) {
+                    FloatingActionButton(onClick = download) {
+                        Icon(imageVector = Icons.Rounded.Download, contentDescription = "")
+                    }
+                }
+            }
+        ) { innerPadding ->
+            Column(
                 modifier = Modifier
-                    .width(240.dp)
-                    .clickable { onShowBigImage(coverUrl) },
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(coverUrl)
-                    .size(Size.ORIGINAL)
-                    .placeholder(R.drawable.icon_bilibili)
-                    .error(R.drawable.icon_bilibili)
-                    .build(),
-                contentDescription = null,
-                loading = { CircularProgressIndicator() }
-            )
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                OutlinedTextField(
+                    singleLine = true,
+                    value = textInput,
+                    onValueChange = { textInput = it },
+                    placeholder = { Text(text = Localization.getCoverHint) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                AppButton(text = Localization.obtain, onClick = getCoverUrl)
+
+
+                SubcomposeAsyncImage(
+                    modifier = Modifier
+                        .width(240.dp)
+                        .clickable { onShowBigImage(coverUrl) },
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(coverUrl)
+                        .size(Size.ORIGINAL)
+                        .placeholder(R.drawable.icon_bilibili)
+                        .error(R.drawable.icon_bilibili)
+                        .build(),
+                    contentDescription = null,
+                    loading = { CircularProgressIndicator() }
+                )
+            }
         }
     }
 }

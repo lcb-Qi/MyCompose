@@ -10,8 +10,8 @@ import android.os.Build
 import android.service.quicksettings.TileService
 import androidx.core.app.PendingIntentCompat
 import com.lcb.one.R
-import com.lcb.one.route.destinations.MenstruationAssistantScreenDestination
 import com.lcb.one.ui.activity.MainActivity
+import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
 import com.lcb.one.util.android.LLog
 import java.util.concurrent.Executors
 
@@ -49,7 +49,7 @@ class MenstruationAssistantQsService : TileService() {
         LLog.d(TAG, "onClick: ")
         val intent = Intent(this, MainActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            .putExtra("route", MenstruationAssistantScreenDestination.route)
+            .putExtra("route", MenstruationAssistantScreen.route)
 
         val pendingIntent = PendingIntentCompat.getActivity(
             this,

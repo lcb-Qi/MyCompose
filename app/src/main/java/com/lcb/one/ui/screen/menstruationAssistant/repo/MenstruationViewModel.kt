@@ -1,6 +1,5 @@
 package com.lcb.one.ui.screen.menstruationAssistant.repo
 
-import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lcb.one.database.appDatabase
@@ -30,7 +29,7 @@ class MenstruationViewModel : ViewModel() {
                 input.source().buffer().use { reader ->
                     val text = reader.readString(Charsets.UTF_8).replace("\\s".toRegex(), "")
                     val data = JsonUtils.fromJson<List<MenstruationDay>>(text)
-                    data.fastForEach { dao.insert(it) }
+                    data.forEach { dao.insert(it) }
                 }
             }.onFailure {
                 LLog.d(TAG, "importFromFile failed: $it")

@@ -1,5 +1,6 @@
 package com.lcb.one.ui.screen.main
 
+import android.os.Bundle
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
-import com.lcb.one.ui.AppNavGraph
+import com.lcb.one.ui.Screen
 import com.lcb.one.ui.widget.appbar.BottomBar
 import com.lcb.one.ui.widget.appbar.BottomBarItem
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -34,88 +35,90 @@ import com.lcb.one.ui.screen.main.widget.PoemInfoDialog
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.ui.screen.main.repo.MainViewModel
 import com.lcb.one.ui.widget.common.NoRippleInteractionSource
-import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
 
 
-@Destination<AppNavGraph>(start = true)
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun MainScreen() {
+object MainScreen : Screen {
+    override val route: String
+        get() = "Main"
 
-    FriendlyExitHandler()
+    @OptIn(ExperimentalFoundationApi::class)
+    @Composable
+    override fun Content(args: Bundle?) {
+        FriendlyExitHandler()
 
-    val mainViewModel = viewModel<MainViewModel>()
-    val poemState by mainViewModel.poemInfo.collectAsState()
-    var showDetail by remember { mutableStateOf(false) }
+        val mainViewModel = viewModel<MainViewModel>()
+        val poemState by mainViewModel.poemInfo.collectAsState()
+        var showDetail by remember { mutableStateOf(false) }
 
-    val bottomItem = remember(Unit) {
-        listOf(
-            BottomBarItem(Localization.home, Icons.Rounded.Home),
-            BottomBarItem(Localization.tool, Icons.Rounded.Android),
-            BottomBarItem(Localization.more, Icons.Rounded.MoreHoriz)
-        )
-    }
+        val bottomItem = remember(Unit) {
+            listOf(
+                BottomBarItem(Localization.home, Icons.Rounded.Home),
+                BottomBarItem(Localization.tool, Icons.Rounded.Android),
+                BottomBarItem(Localization.more, Icons.Rounded.MoreHoriz)
+            )
+        }
 
-    val pagerState = rememberPagerState { bottomItem.size }
-    val scope = rememberCoroutineScope()
-    Scaffold(
-        topBar = {
-            val updatePoem: () -> Unit = {
-                if (AppUtils.isNetworkAvailable()) {
-                    mainViewModel.updatePoem(true)
-                } else {
-                    AppGlobalConfigs.assertNetwork = true
+        val pagerState = rememberPagerState { bottomItem.size }
+        val scope = rememberCoroutineScope()
+        Scaffold(
+            topBar = {
+                val updatePoem: () -> Unit = {
+                    if (AppUtils.isNetworkAvailable()) {
+                        mainViewModel.updatePoem(true)
+                    } else {
+                        AppGlobalConfigs.assertNetwork = true
+                    }
+                }
+
+                ToolBar(
+                    title = {
+                        Text(
+                            text = poemState.recommend,
+                            modifier = Modifier
+                                .combinedClickable(
+                                    onLongClick = { showDetail = true },
+                                    indication = null,
+                                    interactionSource = NoRippleInteractionSource(),
+                                    onClick = updatePoem
+                                ),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    },
+                    navIcon = null,
+                )
+            },
+            bottomBar = {
+                BottomBar(
+                    selectedIndex = pagerState.currentPage,
+                    items = bottomItem,
+                    onItemChanged = { scope.launch { pagerState.animateScrollToPage(it) } }
+                )
+            }
+        ) { innerPadding ->
+            HorizontalPager(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                state = pagerState,
+                verticalAlignment = Alignment.Top
+            ) {
+                when (it) {
+                    0 -> HomeScreen()
+                    1 -> ToolScreen()
+                    2 -> MoreScreen()
                 }
             }
 
-            ToolBar(
-                title = {
-                    Text(
-                        text = poemState.recommend,
-                        modifier = Modifier
-                            .combinedClickable(
-                                onLongClick = { showDetail = true },
-                                indication = null,
-                                interactionSource = NoRippleInteractionSource(),
-                                onClick = updatePoem
-                            ),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                },
-                navIcon = null,
-            )
-        },
-        bottomBar = {
-            BottomBar(
-                selectedIndex = pagerState.currentPage,
-                items = bottomItem,
-                onItemChanged = { scope.launch { pagerState.animateScrollToPage(it) } }
+            PoemInfoDialog(
+                show = showDetail,
+                origin = { poemState.origin },
+                onDismiss = { showDetail = false }
             )
         }
-    ) { paddingValues ->
-        HorizontalPager(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            state = pagerState,
-            verticalAlignment = Alignment.Top
-        ) {
-            when (it) {
-                0 -> HomeScreen()
-                1 -> ToolScreen()
-                2 -> MoreScreen()
-            }
+        // TODO: 仅在app启动时执行一次
+        if (AppUtils.isNetworkAvailable()) {
+            mainViewModel.updatePoem(false)
         }
-
-        PoemInfoDialog(
-            show = showDetail,
-            origin = { poemState.origin },
-            onDismiss = { showDetail = false }
-        )
-    }
-    // TODO: 仅在app启动时执行一次
-    if (AppUtils.isNetworkAvailable()) {
-        mainViewModel.updatePoem(false)
     }
 }

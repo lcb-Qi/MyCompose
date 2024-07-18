@@ -1,6 +1,7 @@
 package com.lcb.one.ui.screen.main
 
 import android.app.WallpaperManager
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -18,19 +19,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.lcb.one.localization.Localization
-import com.lcb.one.route.NavGraphs
-import com.lcb.one.route.destinations.BiliBiliScreenDestination
-import com.lcb.one.route.destinations.ClockActivityDestination
-import com.lcb.one.route.destinations.DeviceInfoScreenDestination
-import com.lcb.one.route.destinations.InstalledAppsScreenDestination
-import com.lcb.one.route.destinations.PrivacyScreenDestination
-import com.lcb.one.route.destinations.QrCodeScreenDestination
+import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.MyApp
-import com.lcb.one.ui.navController
+import com.lcb.one.ui.activity.ClockActivity
+import com.lcb.one.ui.launchSingleTop
+import com.lcb.one.ui.screen.applist.InstalledAppsScreen
+import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
+import com.lcb.one.ui.screen.device.DeviceInfoScreen
 import com.lcb.one.ui.screen.main.widget.ToolCard
+import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
+import com.lcb.one.ui.screen.privacy.PrivacyScreen
+import com.lcb.one.ui.screen.zxing.QrCodeScreen
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
 import com.lcb.one.util.android.StorageUtils
 import com.lcb.one.util.android.ToastUtils
@@ -39,7 +42,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ToolScreen() {
-
+    val navController = LocalNav.current!!
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -50,7 +53,7 @@ fun ToolScreen() {
             icon = { Icon(Icons.Rounded.PhoneAndroid, "") }
         ) {
             ElevatedAssistChip(
-                onClick = { navController.navigate(DeviceInfoScreenDestination) },
+                onClick = { navController.launchSingleTop(DeviceInfoScreen) },
                 label = { Text(text = Localization.deviceInfo) }
             )
             var showPermissionDialog by remember { mutableStateOf(false) }
@@ -71,12 +74,12 @@ fun ToolScreen() {
                 onCancel = { showPermissionDialog = false },
                 onConfirm = {
                     showPermissionDialog = false
-                    navController.navigate(PrivacyScreenDestination)
+                    navController.launchSingleTop(PrivacyScreen)
                 }
             )
 
             ElevatedAssistChip(
-                onClick = { navController.navigate(InstalledAppsScreenDestination) },
+                onClick = { navController.launchSingleTop(InstalledAppsScreen) },
                 label = { Text(text = Localization.appList) }
             )
         }
@@ -87,21 +90,22 @@ fun ToolScreen() {
             icon = { Icon(Icons.Rounded.MiscellaneousServices, "") }
         ) {
             ElevatedAssistChip(
-                onClick = { navController.navigate(BiliBiliScreenDestination) },
+                onClick = { navController.launchSingleTop(BiliBiliScreen) },
                 label = { Text(text = Localization.obtainBilibiliCover) }
             )
+            val context = LocalContext.current
             ElevatedAssistChip(
-                onClick = { navController.navigate(ClockActivityDestination) },
+                onClick = { context.startActivity(Intent(context, ClockActivity::class.java)) },
                 label = { Text(text = Localization.clockScreen) }
             )
             ElevatedAssistChip(
-                onClick = { navController.navigate(NavGraphs.menstruationAssistant) },
+                onClick = { navController.launchSingleTop(MenstruationAssistantScreen) },
                 label = { Text(text = Localization.menstrualAssistant) }
             )
 
             ElevatedAssistChip(
                 enabled = false,
-                onClick = { navController.navigate(QrCodeScreenDestination) },
+                onClick = { navController.launchSingleTop(QrCodeScreen) },
                 label = { Text(text = "二维码工具") }
             )
 

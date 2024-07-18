@@ -1,5 +1,6 @@
 package com.lcb.one.ui.screen.menstruationAssistant
 
+import android.os.Bundle
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animate
@@ -15,8 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.WarningAmber
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,8 +35,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lcb.one.localization.Localization
-import com.lcb.one.ui.MenstruationAssistantNavGraph
 import com.lcb.one.ui.MyApp
+import com.lcb.one.ui.Screen
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
 import com.lcb.one.util.android.ToastUtils
@@ -50,150 +49,150 @@ import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationMenu
 import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationMenuAction
 import com.lcb.one.ui.screen.menstruationAssistant.widget.PastMcDayPicker
 import com.lcb.one.ui.widget.common.AppIconButton
-import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 private const val DRAG_OFFSET_MAX = 400
 
-@Destination<MenstruationAssistantNavGraph>
-@Composable
-fun MenstruationHistoryScreen() {
-    val mcViewmodel = viewModel<MenstruationViewModel>()
-    val allMcDay by mcViewmodel.all.collectAsState(emptyList())
-    var showImportButton by remember { mutableStateOf(false) }
-    Scaffold(
-        topBar = {
-            ToolBar(
-                title = Localization.allRecords,
-                actions = {
-                    var showMenu by remember { mutableStateOf(false) }
-                    val launcher =
-                        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
-                            if (it != null) {
-                                MyApp.getContentResolver().openInputStream(it)?.use { input ->
-                                    mcViewmodel.importFromFile(input)
+object MenstruationHistoryScreen : Screen {
+    override val route: String
+        get() = "MenstruationHistory"
+
+    @Composable
+    override fun Content(args: Bundle?) {
+        val mcViewmodel = viewModel<MenstruationViewModel>()
+        val allMcDay by mcViewmodel.all.collectAsState(emptyList())
+        var showImportButton by remember { mutableStateOf(false) }
+        Scaffold(
+            topBar = {
+                ToolBar(
+                    title = Localization.allRecords,
+                    actions = {
+                        var showMenu by remember { mutableStateOf(false) }
+                        val launcher =
+                            rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+                                if (it != null) {
+                                    MyApp.getContentResolver().openInputStream(it)?.use { input ->
+                                        mcViewmodel.importFromFile(input)
+                                    }
                                 }
                             }
-                        }
 
-                    AppIconButton(icon = Icons.Rounded.MoreVert, onClick = { showMenu = true })
+                        AppIconButton(icon = Icons.Rounded.MoreVert, onClick = { showMenu = true })
 
-                    MenstruationMenu(showMenu, { showMenu = false }) {
-                        when (it) {
-                            MenstruationMenuAction.IMPORT -> launcher.launch("text/plain")
-                            MenstruationMenuAction.EXPORT -> mcViewmodel.export()
+                        MenstruationMenu(showMenu, { showMenu = false }) {
+                            when (it) {
+                                MenstruationMenuAction.IMPORT -> launcher.launch("text/plain")
+                                MenstruationMenuAction.EXPORT -> mcViewmodel.export()
+                            }
                         }
                     }
+                )
+            },
+            floatingActionButton = {
+                FloatingActionButton(onClick = { showImportButton = true }) {
+                    Icon(imageVector = Icons.Rounded.Add, contentDescription = "")
                 }
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { showImportButton = true }) {
-                Icon(imageVector = Icons.Rounded.Add, contentDescription = "")
+            }
+        ) { innerPadding ->
+            LazyColumn(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                reverseLayout = true
+            ) {
+                items(count = allMcDay.size, key = { allMcDay[it].startTime }) { index ->
+                    val mcDay = allMcDay[index]
+                    HistoryItem(data = mcDay) { mcViewmodel.deleteMenstruationDay(mcDay) }
+                }
+
+                item { SummaryMessage(allMcDay) }
             }
         }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier.padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = paddingValues.calculateTopPadding(),
-                bottom = paddingValues.calculateBottomPadding()
-            ),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            reverseLayout = true
-        ) {
-            items(count = allMcDay.size, key = { allMcDay[it].startTime }) { index ->
-                val mcDay = allMcDay[index]
-                HistoryItem(data = mcDay) { mcViewmodel.deleteMenstruationDay(mcDay) }
+
+        PastMcDayPicker(showImportButton, onCancel = { showImportButton = false }) { selectRange ->
+            val hasIntersect = allMcDay.any {
+                !(selectRange.last < it.startTime || selectRange.first > it.endTime)
             }
-
-            item { SummaryMessage(allMcDay) }
+            if (hasIntersect) {
+                ToastUtils.showToast(Localization.conflictTips)
+            } else {
+                mcViewmodel.addPastMenstruationDay(selectRange.first, selectRange.last)
+            }
+            showImportButton = false
         }
     }
 
-    PastMcDayPicker(showImportButton, onCancel = { showImportButton = false }) { selectRange ->
-        val hasIntersect = allMcDay.any {
-            !(selectRange.last < it.startTime || selectRange.first > it.endTime)
-        }
-        if (hasIntersect) {
-            ToastUtils.showToast(Localization.conflictTips)
-        } else {
-            mcViewmodel.addPastMenstruationDay(selectRange.first, selectRange.last)
-        }
-        showImportButton = false
-    }
-}
-
-@Composable
-fun HistoryItem(data: MenstruationDay, onDelete: (MenstruationDay) -> Unit) {
-    var showDeleteDialog by remember { mutableStateOf(false) }
-    var offsetX by remember { mutableFloatStateOf(0f) }
-    val draggableState = rememberDraggableState {
-        offsetX = (offsetX + it).coerceIn(0f, Float.MAX_VALUE)
-        if (offsetX > DRAG_OFFSET_MAX) {
-            showDeleteDialog = true
-        }
-    }
-    val scope = rememberCoroutineScope()
-    val animateOffset: (target: Float) -> Unit = {
-        scope.launch {
-            animate(initialValue = offsetX, targetValue = it) { value, _ ->
-                offsetX = value
+    @Composable
+    fun HistoryItem(data: MenstruationDay, onDelete: (MenstruationDay) -> Unit) {
+        var showDeleteDialog by remember { mutableStateOf(false) }
+        var offsetX by remember { mutableFloatStateOf(0f) }
+        val draggableState = rememberDraggableState {
+            offsetX = (offsetX + it).coerceIn(0f, Float.MAX_VALUE)
+            if (offsetX > DRAG_OFFSET_MAX) {
+                showDeleteDialog = true
             }
         }
-    }
-    MenstrualCycleHistoryCard(
-        modifier = Modifier
-            .offset { IntOffset(-offsetX.roundToInt(), 0) }
-            .draggable(
-                enabled = !showDeleteDialog,
-                state = draggableState,
-                orientation = Orientation.Horizontal,
-                reverseDirection = true,
-                onDragStopped = {
-                    if (!showDeleteDialog) {
-                        animateOffset(0f)
+        val scope = rememberCoroutineScope()
+        val animateOffset: (target: Float) -> Unit = {
+            scope.launch {
+                animate(initialValue = offsetX, targetValue = it) { value, _ ->
+                    offsetX = value
+                }
+            }
+        }
+        MenstrualCycleHistoryCard(
+            modifier = Modifier
+                .offset { IntOffset(-offsetX.roundToInt(), 0) }
+                .draggable(
+                    enabled = !showDeleteDialog,
+                    state = draggableState,
+                    orientation = Orientation.Horizontal,
+                    reverseDirection = true,
+                    onDragStopped = {
+                        if (!showDeleteDialog) {
+                            animateOffset(0f)
+                        }
                     }
+                ),
+            mcDay = data,
+        )
+
+        SimpleMessageDialog(
+            show = showDeleteDialog,
+            message = Localization.confirmDelete,
+            onCancel = {
+                showDeleteDialog = false
+                animateOffset(0f)
+            },
+            onConfirm = {
+                onDelete(data)
+                showDeleteDialog = false
+            },
+            icon = {
+                Icon(imageVector = Icons.Rounded.WarningAmber, contentDescription = "")
+            }
+        )
+    }
+
+    @Composable
+    fun SummaryMessage(data: List<MenstruationDay>) {
+        if (data.isNotEmpty()) {
+            val count = data.size
+            val averageDuration = data.averageDurationDay()
+            val averageInterval = data.averageIntervalDay()
+
+            Column {
+                ProvideTextStyle(value = MaterialTheme.typography.bodyLarge) {
+                    Text(text = String.format(Localization.sumOfRecords, count))
+                    Text(
+                        text = String.format(Localization.averageDuration, averageDuration)
+                    )
+                    Text(
+                        text = String.format(Localization.averageInterval, averageInterval)
+                    )
                 }
-            ),
-        mcDay = data,
-    )
-
-    SimpleMessageDialog(
-        show = showDeleteDialog,
-        message = Localization.confirmDelete,
-        onCancel = {
-            showDeleteDialog = false
-            animateOffset(0f)
-        },
-        onConfirm = {
-            onDelete(data)
-            showDeleteDialog = false
-        },
-        icon = {
-            Icon(imageVector = Icons.Rounded.WarningAmber, contentDescription = "")
-        }
-    )
-}
-
-@Composable
-fun SummaryMessage(data: List<MenstruationDay>) {
-    if (data.isNotEmpty()) {
-        val count = data.size
-        val averageDuration = data.averageDurationDay()
-        val averageInterval = data.averageIntervalDay()
-
-        Column {
-            ProvideTextStyle(value = MaterialTheme.typography.bodyLarge) {
-                Text(text = String.format(Localization.sumOfRecords, count))
-                Text(
-                    text = String.format(Localization.averageDuration, averageDuration)
-                )
-                Text(
-                    text = String.format(Localization.averageInterval, averageInterval)
-                )
             }
         }
     }
