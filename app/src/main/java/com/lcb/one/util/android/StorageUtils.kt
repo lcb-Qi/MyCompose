@@ -9,8 +9,6 @@ import com.lcb.one.network.CommonApiService
 import com.lcb.one.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okio.buffer
-import okio.sink
 import okio.source
 import java.io.File
 import java.io.InputStream
@@ -28,15 +26,17 @@ object StorageUtils {
         if (!isStorageAvailable()) throw RuntimeException("Storage not mounted.")
     }
 
-    private fun Uri.outputStream() = MyApp.getContentResolver().openOutputStream(this)
+    fun insertToStorage(
+        mimeType: String,
+        filename: String,
+        relativePath: String = getRelativePathFromMimeType(mimeType)
+    ): Uri? {
+        LLog.d(TAG, "insertToStorage: mimeType = $mimeType, filename = $filename, relativePath = $relativePath")
 
-    private fun Uri.bufferedSink() = outputStream()?.sink()?.buffer()
-
-    private fun insertToStorage(mimeType: String, fileName: String): Uri? {
         val values = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
             put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
-            put(MediaStore.MediaColumns.RELATIVE_PATH, getRelativePathFromMimeType(mimeType))
+            put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
         }
 
         return MyApp.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
@@ -78,7 +78,7 @@ object StorageUtils {
         val result = uri?.outputStream()?.use {
             input.copyTo(it)
 
-            Result.success(uri.toRelativePath())
+            Result.success(uri.getRelativePath())
         } ?: failureOfCreatingFile()
 
         return@withContext result
@@ -92,7 +92,7 @@ object StorageUtils {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
             bitmap.recycle()
 
-            Result.success(uri.toRelativePath())
+            Result.success(uri.getRelativePath())
         } ?: failureOfCreatingFile()
 
         return@withContext result
@@ -108,7 +108,7 @@ object StorageUtils {
                 sink.writeAll(source)
             }
 
-            Result.success(uri.toRelativePath())
+            Result.success(uri.getRelativePath())
         } ?: failureOfCreatingFile()
 
         return@withContext result
@@ -121,7 +121,7 @@ object StorageUtils {
         val result = uri?.bufferedSink()?.use { sink ->
             sink.writeUtf8(text)
 
-            Result.success(uri.toRelativePath())
+            Result.success(uri.getRelativePath())
         } ?: failureOfCreatingFile()
 
 

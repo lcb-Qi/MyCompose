@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MiscellaneousServices
 import androidx.compose.material.icons.rounded.PhoneAndroid
+import androidx.compose.material.icons.rounded.Transform
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -33,6 +34,7 @@ import com.lcb.one.ui.screen.device.DeviceInfoScreen
 import com.lcb.one.ui.screen.main.widget.ToolCard
 import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
+import com.lcb.one.ui.screen.qmc.QmcConverterScreen
 import com.lcb.one.ui.screen.zxing.QrCodeScreen
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
 import com.lcb.one.util.android.StorageUtils
@@ -81,6 +83,14 @@ fun ToolScreen() {
             ElevatedAssistChip(
                 onClick = { navController.launchSingleTop(InstalledAppsScreen) },
                 label = { Text(text = Localization.appList) }
+            )
+        }
+
+        // 转换工具
+        ToolCard(title = "转换类", icon = { Icon(Icons.Rounded.Transform, null) }) {
+            ElevatedAssistChip(
+                onClick = { navController.launchSingleTop(QmcConverterScreen) },
+                label = { Text(text = "Qmc 转换器（QQ 音乐解密）") }
             )
         }
 

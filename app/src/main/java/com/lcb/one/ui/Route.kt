@@ -18,15 +18,46 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.lcb.one.ui.screen.about.AboutScreen
+import com.lcb.one.ui.screen.applist.InstalledAppsScreen
+import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
+import com.lcb.one.ui.screen.device.DeviceInfoScreen
+import com.lcb.one.ui.screen.main.MainScreen
+import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
+import com.lcb.one.ui.screen.menstruationAssistant.MenstruationHistoryScreen
+import com.lcb.one.ui.screen.privacy.PrivacyScreen
+import com.lcb.one.ui.screen.qmc.QmcConverterScreen
+import com.lcb.one.ui.screen.settings.SettingsScreen
+import com.lcb.one.ui.screen.settings.ThemeSettingsScreen
+import com.lcb.one.ui.screen.webview.WebScreen
+import com.lcb.one.ui.screen.zxing.QrCodeScreen
 
 const val ANIMATE_DURATION = 500
 
 val LocalNav: ProvidableCompositionLocal<NavHostController?> = staticCompositionLocalOf { null }
 
+private val defaultScreens by lazy {
+    listOf(
+        MainScreen,
+        BiliBiliScreen,
+        DeviceInfoScreen,
+        SettingsScreen,
+        AboutScreen,
+        InstalledAppsScreen,
+        MenstruationAssistantScreen,
+        MenstruationHistoryScreen,
+        ThemeSettingsScreen,
+        PrivacyScreen,
+        QrCodeScreen,
+        WebScreen,
+        QmcConverterScreen
+    )
+}
+
 @Composable
 fun AppNavHost(
     start: String,
-    screens: List<Screen>,
+    screens: List<Screen> = defaultScreens,
     navHostController: NavHostController = rememberNavController(),
     content: @Composable () -> Unit = {}
 ) {
