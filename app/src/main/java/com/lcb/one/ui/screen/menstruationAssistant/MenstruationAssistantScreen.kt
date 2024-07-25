@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lcb.one.localization.Localization
 import com.lcb.one.ui.LocalNav
-import com.lcb.one.ui.MenstruationAssistantQsService
+import com.lcb.one.ui.service.MenstruationAssistantQsService
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.widget.appbar.ToolBar

@@ -1,4 +1,4 @@
-package com.lcb.one.ui
+package com.lcb.one.ui.service
 
 import android.app.PendingIntent
 import android.app.StatusBarManager
@@ -10,6 +10,7 @@ import android.os.Build
 import android.service.quicksettings.TileService
 import androidx.core.app.PendingIntentCompat
 import com.lcb.one.R
+import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.activity.MainActivity
 import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
 import com.lcb.one.util.android.LLog

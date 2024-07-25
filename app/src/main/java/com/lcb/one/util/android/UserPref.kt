@@ -26,6 +26,9 @@ object UserPref {
 
         // 首页
         const val PAYDAY = "salary_day"
+        const val PLAYER_REPEAT_MODE = "player_repeat_mode"
+        const val PLAYER_IS_SHUFFLE = "player_is_SHUFFLE"
+        const val PLAYER_LAST_MUSIC = "player_last_music"
     }
 
     val defaultPref: SharedPreferences =

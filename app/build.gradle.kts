@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.room)
 
-    // id("kotlin-parcelize")
+    id("kotlin-parcelize")
 }
 
 composeCompiler {}
@@ -111,6 +111,7 @@ project.afterEvaluate {
 val stableCompose = false
 
 dependencies {
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(libs.androidx.core)
     // compose
     if (stableCompose) {
@@ -146,6 +147,11 @@ dependencies {
     implementation(libs.compose.webview)
     implementation("com.google.zxing:core:3.5.3")
 
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.session)
+    implementation(files("libs/androidx-media3-decoder-ffmpeg.aar"))
+
+    implementation("com.airbnb.android:lottie-compose:6.4.1")
     // for test
     addTestDependencies()
 }

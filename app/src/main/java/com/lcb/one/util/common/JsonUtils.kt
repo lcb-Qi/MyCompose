@@ -13,7 +13,7 @@ object JsonUtils {
     val json by lazy {
         Json(from = Json) {
             ignoreUnknownKeys = true
-            prettyPrint = true
+            // prettyPrint = true
         }
     }
 

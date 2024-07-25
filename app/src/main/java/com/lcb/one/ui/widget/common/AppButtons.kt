@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 
 typealias OnButtonClick = () -> Unit
@@ -95,5 +96,26 @@ fun AppIconButton(
         interactionSource = interactionSource,
     ) {
         Icon(imageVector = icon, contentDescription = desc)
+    }
+}
+
+@Composable
+fun AppIconButton(
+    modifier: Modifier = Modifier,
+    painter: Painter,
+    desc: String? = null,
+    onClick: () -> Unit,
+    enabled: Boolean = true,
+    colors: IconButtonColors = IconButtonDefaults.iconButtonColors(),
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier,
+        enabled = enabled,
+        colors = colors,
+        interactionSource = interactionSource,
+    ) {
+        Icon(painter = painter, contentDescription = desc)
     }
 }

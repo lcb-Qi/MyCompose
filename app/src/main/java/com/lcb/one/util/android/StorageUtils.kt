@@ -1,12 +1,15 @@
 package com.lcb.one.util.android
 
+import android.content.ContentUris
 import android.content.ContentValues
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import com.lcb.one.network.CommonApiService
 import com.lcb.one.ui.MyApp
+import com.lcb.one.ui.screen.player.repo.Music
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.source
@@ -31,7 +34,10 @@ object StorageUtils {
         filename: String,
         relativePath: String = getRelativePathFromMimeType(mimeType)
     ): Uri? {
-        LLog.d(TAG, "insertToStorage: mimeType = $mimeType, filename = $filename, relativePath = $relativePath")
+        LLog.d(
+            TAG,
+            "insertToStorage: mimeType = $mimeType, filename = $filename, relativePath = $relativePath"
+        )
 
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
@@ -126,5 +132,32 @@ object StorageUtils {
 
 
         return@withContext result
+    }
+
+    private val audioContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+    suspend fun findMusics(context: Context = MyApp.get()) = withContext(Dispatchers.IO) {
+        val audios = mutableListOf<Music>()
+        val proj = arrayOf(
+            MediaStore.Audio.AudioColumns._ID,
+            MediaStore.Audio.AudioColumns.TITLE,
+            MediaStore.Audio.AudioColumns.ARTIST,
+            MediaStore.Audio.AudioColumns.DURATION,
+        )
+        context.contentResolver.query(audioContentUri, proj, null, null, null)?.use { cursor ->
+            cursor.moveToFirst()
+            do {
+                val id = cursor.getInt(0)
+                val uri = ContentUris.withAppendedId(audioContentUri, id.toLong())
+
+                val title = cursor.getString(1)
+                val artist = cursor.getString(2)
+                val duration = cursor.getLong(3)
+
+
+                audios.add(Music(uri, title, artist, duration))
+            } while (cursor.moveToNext())
+        }
+
+        return@withContext audios
     }
 }

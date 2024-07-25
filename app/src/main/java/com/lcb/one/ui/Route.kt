@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.lcb.one.ui.screen.player.MusicPlayerScreen
 import com.lcb.one.ui.screen.about.AboutScreen
 import com.lcb.one.ui.screen.applist.InstalledAppsScreen
 import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
@@ -50,7 +51,8 @@ private val defaultScreens by lazy {
         PrivacyScreen,
         QrCodeScreen,
         WebScreen,
-        QmcConverterScreen
+        QmcConverterScreen,
+        MusicPlayerScreen,
     )
 }
 

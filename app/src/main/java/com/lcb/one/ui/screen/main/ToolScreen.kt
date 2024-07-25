@@ -28,6 +28,7 @@ import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.activity.ClockActivity
 import com.lcb.one.ui.launchSingleTop
+import com.lcb.one.ui.screen.player.MusicPlayerScreen
 import com.lcb.one.ui.screen.applist.InstalledAppsScreen
 import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
 import com.lcb.one.ui.screen.device.DeviceInfoScreen
@@ -111,6 +112,11 @@ fun ToolScreen() {
             ElevatedAssistChip(
                 onClick = { navController.launchSingleTop(MenstruationAssistantScreen) },
                 label = { Text(text = Localization.menstrualAssistant) }
+            )
+
+            ElevatedAssistChip(
+                onClick = { navController.launchSingleTop(MusicPlayerScreen) },
+                label = { Text(text = "player") }
             )
 
             ElevatedAssistChip(

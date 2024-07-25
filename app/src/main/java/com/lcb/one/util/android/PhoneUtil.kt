@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Size
 import android.view.WindowManager
+import com.lcb.one.ui.MyApp
 
 object PhoneUtil {
     private const val BRAND_XIAOMI = "Xiaomi"
