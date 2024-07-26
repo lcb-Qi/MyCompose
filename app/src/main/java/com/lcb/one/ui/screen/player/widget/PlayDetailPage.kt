@@ -3,11 +3,12 @@ package com.lcb.one.ui.screen.player.widget
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.annotation.OptIn
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -50,19 +53,12 @@ import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.ui.screen.player.repo.MusicPlayer
 import com.lcb.one.ui.screen.player.repo.ControllerEvent
+import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.util.android.DimenUtils
 import com.lcb.one.util.android.PhoneUtil
 import kotlinx.coroutines.delay
 
 private val horizontalPadding = 32.dp
-private val verticalPadding = 32.dp
-private val defaultPadding =
-    PaddingValues(
-        start = horizontalPadding,
-        end = horizontalPadding,
-        top = verticalPadding * 2,
-        bottom = verticalPadding
-    )
 
 private fun calculateImageSize(): Dp {
     val screenWidth = DimenUtils.px2dp(PhoneUtil.getResolution(MyApp.get()).width)
@@ -73,34 +69,65 @@ private fun calculateImageSize(): Dp {
 @OptIn(UnstableApi::class)
 @Composable
 fun PlayDetailPage(
+    player: MusicPlayer,
     playList: List<Music>,
     playingMusic: Music?,
     showPlay: Boolean,
 ) {
-    BackHandler { MusicPlayer.showPlayListScreen() }
+    BackHandler { player.showPlayListPage() }
 
-    Scaffold(containerColor = MaterialTheme.colorScheme.surfaceContainer) { innerPadding ->
+    Scaffold(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(defaultPadding),
+            modifier = Modifier.padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
 
-            val isPlaying by MusicPlayer.isPlaying.collectAsState()
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
+            ) {
+                val (backIconRef, textRef) = createRefs()
+                AppIconButton(
+                    modifier = Modifier.constrainAs(backIconRef) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    },
+                    icon = Icons.Rounded.KeyboardArrowDown,
+                    onClick = { player.showPlayListPage() }
+                )
+
+                Text(
+                    text = "歌曲",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.constrainAs(textRef) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+                )
+            }
+
+            val isPlaying by player.isPlaying.collectAsState()
             val composition by rememberLottieComposition(LottieCompositionSpec.Asset("player.json"))
             LottieAnimation(
                 composition = composition,
                 modifier = Modifier
                     .size(calculateImageSize())
-                    .scale(2.0f),
+                    .scale(2.0f)
+                    .padding(horizontal = horizontalPadding),
                 iterations = LottieConstants.IterateForever,
                 isPlaying = isPlaying,
                 restartOnPlay = true
             )
 
-            PlayingAudioInfo(playingAudio = playingMusic)
+            PlayingMusicInfo(
+                modifier = Modifier.padding(horizontal = horizontalPadding),
+                playingAudio = playingMusic
+            )
 
             val currentMax by remember(playingMusic) {
                 derivedStateOf { playingMusic?.duration ?: 0 }
@@ -110,36 +137,38 @@ fun PlayDetailPage(
             LaunchedEffect(Unit) {
                 while (true) {
                     activity.runOnUiThread {
-                        currentPosition = MusicPlayer.getCurrentPosition()
+                        currentPosition = player.getCurrentPosition()
                     }
                     delay(1000)
                 }
             }
             PlayerProgressIndicator(
+                modifier = Modifier.padding(horizontal = horizontalPadding),
                 value = currentPosition.toFloat(),
                 maxValue = currentMax.toFloat(),
                 onValueChange = { currentPosition = it.toLong() },
                 onValueChangeFinished = {
                     val event = ControllerEvent.SeekToPosition(currentPosition)
-                    MusicPlayer.handleCommand(event)
+                    player.handleCommand(event)
                 },
                 nowPosition = currentPosition,
             )
 
             PlayerController(
+                modifier = Modifier.padding(horizontal = horizontalPadding),
                 playList = playList,
-                repeatMode = MusicPlayer.repeatMode,
-                isShuffle = MusicPlayer.isShuffle,
+                repeatMode = player.repeatMode,
+                isShuffle = player.isShuffle,
                 playing = playingMusic,
                 showPlay = showPlay,
-                onEvent = { MusicPlayer.handleCommand(it) }
+                onEvent = { player.handleCommand(it) }
             )
         }
     }
 }
 
 @Composable
-private fun PlayingAudioInfo(modifier: Modifier = Modifier, playingAudio: Music?) {
+private fun PlayingMusicInfo(modifier: Modifier = Modifier, playingAudio: Music?) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -148,11 +177,18 @@ private fun PlayingAudioInfo(modifier: Modifier = Modifier, playingAudio: Music?
         content = {
             Text(
                 text = playingAudio?.title ?: "",
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE),
+                maxLines = 1
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             Text(
-                text = playingAudio?.artist ?: "",
-                style = MaterialTheme.typography.titleMedium
+                text = playingAudio?.artistAndAlbum ?: "",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE),
+                maxLines = 1
             )
         }
     )
@@ -160,13 +196,14 @@ private fun PlayingAudioInfo(modifier: Modifier = Modifier, playingAudio: Music?
 
 @Composable
 private fun PlayerProgressIndicator(
+    modifier: Modifier = Modifier,
     value: Float = 0f,
     maxValue: Float = 0f,
     onValueChange: (Float) -> Unit = {},
     onValueChangeFinished: () -> Unit = {},
     nowPosition: Long,
 ) {
-    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+    ConstraintLayout(modifier = modifier.fillMaxWidth()) {
         val (sliderRef, nowPositionRef, durationRef) = createRefs()
         LegacySlider(
             modifier = Modifier.constrainAs(sliderRef) {

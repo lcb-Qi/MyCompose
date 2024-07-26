@@ -23,8 +23,8 @@ class MusicPlayerService : MediaSessionService() {
         }.build()
 
         player.apply {
-            repeatMode = MusicPlayer.repeatMode
-            shuffleModeEnabled = MusicPlayer.isShuffle
+            repeatMode = MusicPlayer.instance.repeatMode
+            shuffleModeEnabled = MusicPlayer.instance.isShuffle
         }
     }
 

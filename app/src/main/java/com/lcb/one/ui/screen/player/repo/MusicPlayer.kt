@@ -34,27 +34,32 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 
 @OptIn(UnstableApi::class)
-object MusicPlayer {
-    private const val TAG = "MusicPlayer"
+class MusicPlayer {
+    companion object {
+        private const val TAG = "MusicPlayer"
+        private const val EXT_MUSIC = "ext_music"
+        val instance by lazy { MusicPlayer() }
 
-    fun formatDuration(duration: Long): String {
-        val minutes = duration / 1000 / 60
-        val seconds = duration / 1000 % 60
-        return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
+        fun formatDuration(duration: Long): String {
+            val minutes = duration / 1000 / 60
+            val seconds = duration / 1000 % 60
+            return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
+        }
     }
 
-    var showPlayingScreen by mutableStateOf(false)
+
+    var showPlayDetailPage by mutableStateOf(false)
         private set
     val playList: MutableStateFlow<List<Music>> = MutableStateFlow(emptyList())
 
     val isPlaying: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    fun showPlayListScreen() {
-        showPlayingScreen = false
+    fun showPlayListPage() {
+        showPlayDetailPage = false
     }
 
-    fun showPlayingScreen() {
-        showPlayingScreen = true
+    fun showPlayDetailPage() {
+        showPlayDetailPage = true
     }
 
     private lateinit var player: MediaController
@@ -82,7 +87,6 @@ object MusicPlayer {
         }
     }
 
-    private const val EXT_MUSIC = "ext_music"
     private fun MediaItem.getExtraAudioItem(): Music? {
         val extras = mediaMetadata.extras ?: return null
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

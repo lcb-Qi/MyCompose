@@ -2,9 +2,11 @@ package com.lcb.one.ui.screen.player.widget
 
 import androidx.annotation.OptIn
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -116,24 +118,31 @@ fun SimplePlayerController(
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Image(
-            modifier = Modifier
-                .size(48.dp)
-                .padding(4.dp),
+            modifier = Modifier.size(48.dp),
             painter = painterResource(R.mipmap.ic_launcher),
             contentDescription = null
         )
 
-        Column(modifier = Modifier.weight(1f)) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(8.dp)
+                .defaultMinSize(minHeight = 48.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
             Text(
+                modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE),
                 text = playingAudio?.title ?: "",
-                style = MaterialTheme.typography.labelLarge
+                style = MaterialTheme.typography.labelLarge,
+                maxLines = 1
             )
             Text(
-                text = playingAudio?.artist ?: "",
-                style = MaterialTheme.typography.labelMedium
+                modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE),
+                text = playingAudio?.artistAndAlbum ?: "",
+                style = MaterialTheme.typography.labelMedium,
+                maxLines = 1
             )
         }
 

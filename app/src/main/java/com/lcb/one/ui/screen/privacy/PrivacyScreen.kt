@@ -64,7 +64,7 @@ object PrivacyScreen : Screen {
                             SimpleSettingsMenuLink(
                                 title = "访问照片和视频",
                                 summary = "用于提取桌面壁纸",
-                                action = { PrivacyAction(hasPermission = privacy.readImg) },
+                                action = { PrivacyAction(hasPermission = privacy.canReadImage) },
                                 onClick = { activityLauncher.launch(AppUtils.getAppDetailSettingsIntent()) }
                             )
                         }
@@ -73,8 +73,17 @@ object PrivacyScreen : Screen {
                             SimpleSettingsMenuLink(
                                 title = "访问全部文件",
                                 summary = "用于提取桌面壁纸",
-                                action = { PrivacyAction(hasPermission = privacy.allFile) },
+                                action = { PrivacyAction(hasPermission = privacy.canAccessAllFile) },
                                 onClick = { activityLauncher.launch(AppUtils.getAllFileAccessIntent()) }
+                            )
+                        }
+
+                        Card {
+                            SimpleSettingsMenuLink(
+                                title = "访问音乐和音频",
+                                summary = "用于读取本地音乐文件",
+                                action = { PrivacyAction(hasPermission = privacy.canReadAudio) },
+                                onClick = { activityLauncher.launch(AppUtils.getAppDetailSettingsIntent()) }
                             )
                         }
                     }

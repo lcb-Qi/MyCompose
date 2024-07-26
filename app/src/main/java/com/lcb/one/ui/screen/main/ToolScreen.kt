@@ -116,7 +116,7 @@ fun ToolScreen() {
 
             ElevatedAssistChip(
                 onClick = { navController.launchSingleTop(MusicPlayerScreen) },
-                label = { Text(text = "player") }
+                label = { Text(text = "音乐播放器") }
             )
 
             ElevatedAssistChip(

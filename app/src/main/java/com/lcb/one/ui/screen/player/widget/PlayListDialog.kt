@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.ui.widget.common.NoRippleInteractionSource
+import com.lcb.one.ui.widget.common.noRippleClickable
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -52,12 +53,7 @@ fun PlayListDialog(
 
                 Column(modifier = Modifier
                     .fillMaxWidth()
-                    .combinedClickable(
-                        interactionSource = NoRippleInteractionSource(),
-                        indication = null
-                    ) {
-                        onItemSelected(index)
-                    }
+                    .noRippleClickable { onItemSelected(index) }
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(4.dp),

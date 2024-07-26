@@ -7,6 +7,8 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import androidx.core.database.getLongOrNull
+import androidx.core.database.getStringOrNull
 import com.lcb.one.network.CommonApiService
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.player.repo.Music
@@ -142,6 +144,7 @@ object StorageUtils {
             MediaStore.Audio.AudioColumns.TITLE,
             MediaStore.Audio.AudioColumns.ARTIST,
             MediaStore.Audio.AudioColumns.DURATION,
+            MediaStore.Audio.AudioColumns.ALBUM,
         )
         context.contentResolver.query(audioContentUri, proj, null, null, null)?.use { cursor ->
             cursor.moveToFirst()
@@ -149,12 +152,13 @@ object StorageUtils {
                 val id = cursor.getInt(0)
                 val uri = ContentUris.withAppendedId(audioContentUri, id.toLong())
 
-                val title = cursor.getString(1)
-                val artist = cursor.getString(2)
-                val duration = cursor.getLong(3)
+                val title = cursor.getStringOrNull(1) ?: ""
+                val artist = cursor.getStringOrNull(2) ?: ""
+                val duration = cursor.getLongOrNull(3) ?: 0
+                val album = cursor.getStringOrNull(4) ?: ""
 
 
-                audios.add(Music(uri, title, artist, duration))
+                audios.add(Music(uri, title, artist, duration, album))
             } while (cursor.moveToNext())
         }
 

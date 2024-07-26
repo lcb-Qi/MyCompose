@@ -35,6 +35,7 @@ import com.lcb.one.ui.screen.main.widget.PoemInfoDialog
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.ui.screen.main.repo.MainViewModel
 import com.lcb.one.ui.widget.common.NoRippleInteractionSource
+import com.lcb.one.ui.widget.common.noRippleClickable
 import kotlinx.coroutines.launch
 
 
@@ -76,10 +77,8 @@ object MainScreen : Screen {
                         Text(
                             text = poemState.recommend,
                             modifier = Modifier
-                                .combinedClickable(
+                                .noRippleClickable(
                                     onLongClick = { showDetail = true },
-                                    indication = null,
-                                    interactionSource = NoRippleInteractionSource(),
                                     onClick = updatePoem
                                 ),
                             style = MaterialTheme.typography.titleMedium
