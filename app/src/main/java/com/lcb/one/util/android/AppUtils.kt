@@ -1,7 +1,10 @@
 package com.lcb.one.util.android
 
+import android.app.Activity
+import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.AdaptiveIconDrawable
@@ -15,6 +18,7 @@ import android.provider.Settings
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.core.graphics.drawable.toBitmapOrNull
+import androidx.core.view.WindowInsetsControllerCompat
 import com.lcb.one.BuildConfig
 import com.lcb.one.ui.MyApp
 
@@ -108,5 +112,18 @@ object AppUtils {
         return Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .setData(Uri.fromParts("package", appId, null))
+    }
+
+    fun isSystemInDarkTheme(context: Context = MyApp.get()): Boolean {
+        val uiMode = context.getSystemService(UiModeManager::class.java).nightMode
+        return (uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+    }
+
+    fun lightStatusBars(activity: Activity, light: Boolean) {
+        val window = activity.window
+
+        WindowInsetsControllerCompat(window, window.decorView).run {
+            isAppearanceLightStatusBars = light
+        }
     }
 }

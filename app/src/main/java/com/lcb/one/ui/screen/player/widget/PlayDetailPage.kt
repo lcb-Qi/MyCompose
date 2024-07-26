@@ -186,7 +186,7 @@ private fun PlayingMusicInfo(modifier: Modifier = Modifier, playingAudio: Music?
 
             Text(
                 text = playingAudio?.artistAndAlbum ?: "",
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE),
                 maxLines = 1
             )

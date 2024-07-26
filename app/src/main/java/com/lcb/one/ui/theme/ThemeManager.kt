@@ -1,5 +1,6 @@
 package com.lcb.one.ui.theme
 
+import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ColorScheme
@@ -16,6 +17,7 @@ import com.lcb.one.ui.widget.settings.storage.disk.BooleanPrefState
 import com.lcb.one.ui.widget.settings.storage.disk.IntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
+import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.UserPref
 import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamicColorScheme
@@ -42,17 +44,40 @@ object ThemeManager {
 
     // 是否启用纯白/纯黑背景
     var amoledMode by BooleanPrefState(UserPref.Key.APP_ALOMED_MODE, false)
+
+    private const val DARK_MODE_AUTO = -1
+    private const val DARK_MODE_LIGHT = 0
+    private const val DARK_MODE_DARK = 1
+    val darkModeValues: IntArray = intArrayOf(DARK_MODE_AUTO, DARK_MODE_LIGHT, DARK_MODE_DARK)
+    var darkMode by IntPrefState(UserPref.Key.DARK_MODE, DARK_MODE_AUTO)
+
+    @Composable
+    fun calculateDarkTheme(): Boolean {
+        val activity = LocalContext.current as? Activity
+
+        checkNotNull(activity) { "current activity is null" }
+
+        return if (darkMode == DARK_MODE_AUTO) {
+            val systemInDarkTheme = isSystemInDarkTheme()
+            AppUtils.lightStatusBars(activity, !systemInDarkTheme)
+
+            systemInDarkTheme
+        } else {
+            AppUtils.lightStatusBars(activity, darkMode == DARK_MODE_LIGHT)
+
+            darkMode == DARK_MODE_DARK
+        }
+    }
 }
 
 @Composable
-fun createColorTheme(
-    seedColor: Color = ThemeManager.themeColor,
-    paletteStyle: PaletteStyle = PaletteStyle.Vibrant,
+fun AppTheme(
+    darkTheme: Boolean = ThemeManager.calculateDarkTheme(),
     dynamicColor: Boolean = ThemeManager.dynamicColor,
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    isExtendedFidelity: Boolean = false,
-    amoledMode: Boolean = ThemeManager.amoledMode
-): ColorScheme {
+    seedColor: Color = ThemeManager.themeColor,
+    amoledMode: Boolean = ThemeManager.amoledMode,
+    content: @Composable () -> Unit
+) {
     val colorScheme = when {
         dynamicColor -> {
             val context = LocalContext.current
@@ -62,29 +87,22 @@ fun createColorTheme(
         else -> dynamicColorScheme(
             seedColor = seedColor,
             isDark = darkTheme,
-            style = paletteStyle,
-            isExtendedFidelity = isExtendedFidelity
+            style = PaletteStyle.Vibrant,
         )
+    }.let {
+        if (amoledMode) {
+            it.copy(
+                background = if (darkTheme) Color.Black else Color.White,
+                surface = if (darkTheme) Color.Black else Color.White,
+            )
+        } else {
+            it
+        }
+
     }
 
-    return if (amoledMode) colorScheme.withAmoledMode(darkTheme) else colorScheme
-}
-
-
-private fun ColorScheme.withAmoledMode(darkTheme: Boolean): ColorScheme {
-    return copy(
-        background = if (darkTheme) Color.Black else Color.White,
-        surface = if (darkTheme) Color.Black else Color.White,
-    )
-}
-
-@Composable
-fun AppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
-) {
     MaterialTheme(
-        colorScheme = createColorTheme(darkTheme = darkTheme),
+        colorScheme = colorScheme,
         typography = Typography,
         content = { Surface(modifier = Modifier.fillMaxSize(), content = { content() }) }
     )

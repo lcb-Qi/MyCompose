@@ -141,7 +141,7 @@ fun SimplePlayerController(
             Text(
                 modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE),
                 text = playingAudio?.artistAndAlbum ?: "",
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 maxLines = 1
             )
         }

@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Autorenew
+import androidx.compose.material.icons.rounded.DisplaySettings
 import androidx.compose.material.icons.rounded.Language
-import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material.icons.rounded.TravelExplore
 import androidx.compose.material3.Card
@@ -62,10 +62,10 @@ object SettingsScreen : Screen {
                                 onCheckedChange = { AppGlobalConfigs.useBuiltinBrowser = it }
                             )
 
-                            // 主题
+                            // 界面显示
                             SimpleSettingsMenuLink(
-                                title = Localization.theme,
-                                icon = { Icon(Icons.Rounded.Palette, null) },
+                                title = "界面显示",
+                                icon = { Icon(Icons.Rounded.DisplaySettings, null) },
                                 onClick = { navController.launchSingleTop(ThemeSettingsScreen) }
                             )
 

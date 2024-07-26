@@ -1,11 +1,14 @@
 package com.lcb.one.ui.screen.player.widget
 
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
@@ -42,9 +45,7 @@ fun PlayListPage(
                 modifier = Modifier.weight(1f),
                 playList = playList,
                 playingAudio = playingMusic,
-                onItemClick = {
-                    player.handleCommand(ControllerEvent.SeekTo(it))
-                }
+                onItemClick = { player.handleCommand(ControllerEvent.SeekTo(it)) }
             )
 
             Card(
@@ -94,7 +95,7 @@ private fun PlayListItem(modifier: Modifier = Modifier, music: Music, selected: 
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Surface(
             color = tint,
@@ -103,20 +104,29 @@ private fun PlayListItem(modifier: Modifier = Modifier, music: Music, selected: 
             content = {}
         )
 
+        Spacer(modifier = Modifier.width(8.dp))
+
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = music.title,
                 color = tint,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                maxLines = 1,
+                modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
             )
             Text(
                 text = music.artistAndAlbum,
                 color = tint,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 1,
+                modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
             )
         }
+        
+        Spacer(modifier = Modifier.width(16.dp))
 
         Text(
+            modifier = Modifier.padding(horizontal = 4.dp),
             text = MusicPlayer.formatDuration(music.duration),
             color = tint,
             style = MaterialTheme.typography.labelMedium

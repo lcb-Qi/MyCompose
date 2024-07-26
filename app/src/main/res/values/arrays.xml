@@ -14,4 +14,10 @@
         <item>43200000</item>
         <item>86400000</item>
     </integer-array>
+
+    <string-array name="settings_dark_mode_options">
+        <item>更随系统</item>
+        <item>浅色</item>
+        <item>深色</item>
+    </string-array>
 </resources>
