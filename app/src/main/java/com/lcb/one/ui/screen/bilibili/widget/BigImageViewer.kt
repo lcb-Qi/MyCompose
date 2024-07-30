@@ -12,9 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.panpf.zoomimage.CoilZoomAsyncImage
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 
 @Composable
 fun BigImageViewer(
@@ -46,7 +47,7 @@ fun BigImageViewer(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 64.dp),
-                content = { Text(text = Localization.save) }
+                content = { Text(text = stringResource(R.string.save)) }
             )
         }
     )

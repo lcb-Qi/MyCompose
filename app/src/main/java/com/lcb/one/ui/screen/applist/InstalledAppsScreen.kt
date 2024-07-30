@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.ANIMATE_DURATION
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.screen.applist.repo.AppInfo
@@ -31,6 +31,7 @@ import com.lcb.one.ui.screen.applist.widget.ApplicationInfoDialog
 import com.lcb.one.ui.screen.applist.widget.InstalledAppList
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppIconButton
+import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.ToastUtils
 import kotlinx.coroutines.delay
 import kotlin.system.measureTimeMillis
@@ -38,6 +39,9 @@ import kotlin.system.measureTimeMillis
 object InstalledAppsScreen : Screen {
     override val route: String
         get() = "AppList"
+
+    override val label: String
+        get() = Res.string(R.string.app_list)
 
     @Composable
     override fun Content(args: Bundle?) {
@@ -50,14 +54,14 @@ object InstalledAppsScreen : Screen {
             delay(ANIMATE_DURATION.toLong())
             val costTime = measureTimeMillis { allApps = loadInstalledApps() }
             loadSuccess = true
-            val msg = String.format(Localization.loadSuccessMsg, allApps.size, costTime)
+            val msg = Res.string(R.string.load_success_msg, allApps.size, costTime)
             ToastUtils.showToast(msg)
         }
 
         Scaffold(
             topBar = {
                 ToolBar(
-                    title = Localization.appList,
+                    title = label,
                     actions = {
                         var showTypeSelector by remember { mutableStateOf(false) }
                         AppIconButton(

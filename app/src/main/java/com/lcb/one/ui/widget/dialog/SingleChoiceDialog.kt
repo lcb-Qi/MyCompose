@@ -12,8 +12,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.widget.common.AppTextButton
 
 @Composable
@@ -34,11 +35,11 @@ fun SingleChoiceDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
             AppTextButton(
-                text = Localization.ok,
+                text = stringResource(R.string.ok),
                 onClick = { onItemSelected(selectedIndex) }
             )
         },
-        dismissButton = { AppTextButton(text = Localization.cancel, onClick = onDismiss) },
+        dismissButton = { AppTextButton(text = stringResource(R.string.cancel), onClick = onDismiss) },
         title = { Text(text = title) },
         text = {
             LazyColumn(modifier = Modifier.requiredHeightIn(max = 240.dp)) {

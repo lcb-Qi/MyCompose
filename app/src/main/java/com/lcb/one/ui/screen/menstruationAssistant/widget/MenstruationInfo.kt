@@ -7,8 +7,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.getMcDay
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
@@ -32,12 +33,12 @@ fun MenstruationInfo(
             supportingContent = {
                 val mcDay = mcDays.getMcDay(selectedDate)
                 val message = if (mcDay == null) {// 1.所选日期不存在月经记录
-                    Localization.noMenstruation
+                    stringResource(R.string.no_menstruation)
                 } else {// 2.所选日期存在月经记录
                     buildString {
                         val days = DateTimeUtils.getDurationDays(mcDay.startTime, selectedDate)
                         // 展示第几天
-                        append(String.format(Localization.menstruationDays, days + 1))
+                        append(stringResource(R.string.menstruation_days), days + 1)
                     }
                 }
                 Text(text = message, style = MaterialTheme.typography.labelLarge)

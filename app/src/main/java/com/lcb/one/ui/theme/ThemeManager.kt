@@ -3,7 +3,6 @@ package com.lcb.one.ui.theme
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.dynamicDarkColorScheme

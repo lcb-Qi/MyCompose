@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
@@ -14,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.lcb.one.ui.theme.fullCorners
 
 @Composable
 fun CalendarDay(
@@ -28,7 +28,7 @@ fun CalendarDay(
         modifier = modifier
             .requiredSize(48.dp)
             .padding(2.dp),
-        shape = MaterialTheme.shapes.fullCorners(),
+        shape = CircleShape,
         selected = selected,
         onClick = onClick,
         border = if (selected) {

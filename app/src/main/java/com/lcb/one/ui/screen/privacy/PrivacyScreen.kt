@@ -20,21 +20,27 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.lcb.one.R
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 import com.lcb.one.util.android.AppUtils
+import com.lcb.one.util.android.Res
 
 object PrivacyScreen : Screen {
     override val route: String
         get() = "Privacy"
+
+    override val label: String
+        get() = Res.string(R.string.permissions_management)
 
     @Composable
     override fun Content(args: Bundle?) {
@@ -53,7 +59,7 @@ object PrivacyScreen : Screen {
                 privacyViewModel.checkPermission()
             }
 
-        Scaffold(topBar = { ToolBar(title = "权限管理") }) { innerPadding ->
+        Scaffold(topBar = { ToolBar(title = label) }) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -62,8 +68,8 @@ object PrivacyScreen : Screen {
                     ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
                         Card {
                             SimpleSettingsMenuLink(
-                                title = "访问照片和视频",
-                                summary = "用于提取桌面壁纸",
+                                title = stringResource(R.string.permission_access_image_and_video),
+                                summary = stringResource(R.string.permission_access_image_and_video_desc),
                                 action = { PrivacyAction(hasPermission = privacy.canReadImage) },
                                 onClick = { activityLauncher.launch(AppUtils.getAppDetailSettingsIntent()) }
                             )
@@ -71,8 +77,8 @@ object PrivacyScreen : Screen {
 
                         Card {
                             SimpleSettingsMenuLink(
-                                title = "访问全部文件",
-                                summary = "用于提取桌面壁纸",
+                                title = stringResource(R.string.permission_access_all_files),
+                                summary = stringResource(R.string.permission_access_all_files_desc),
                                 action = { PrivacyAction(hasPermission = privacy.canAccessAllFile) },
                                 onClick = { activityLauncher.launch(AppUtils.getAllFileAccessIntent()) }
                             )
@@ -80,8 +86,8 @@ object PrivacyScreen : Screen {
 
                         Card {
                             SimpleSettingsMenuLink(
-                                title = "访问音乐和音频",
-                                summary = "用于读取本地音乐文件",
+                                title = stringResource(R.string.permission_access_music_and_audio),
+                                summary = stringResource(R.string.permission_access_music_and_audio_desc),
                                 action = { PrivacyAction(hasPermission = privacy.canReadAudio) },
                                 onClick = { activityLauncher.launch(AppUtils.getAppDetailSettingsIntent()) }
                             )
@@ -95,7 +101,7 @@ object PrivacyScreen : Screen {
     @Composable
     fun PrivacyAction(modifier: Modifier = Modifier, hasPermission: Boolean) {
         Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-            Text(text = if (hasPermission) "已授权" else "去设置")
+            Text(text = if (hasPermission) stringResource(R.string.allowed) else stringResource(R.string.go_settings))
             Icon(Icons.AutoMirrored.Rounded.NavigateNext, null)
         }
     }

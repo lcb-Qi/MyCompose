@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Today
@@ -26,9 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.service.MenstruationAssistantQsService
 import com.lcb.one.ui.Screen
@@ -41,9 +43,9 @@ import com.lcb.one.ui.screen.menstruationAssistant.widget.CalendarColor
 import com.lcb.one.ui.screen.menstruationAssistant.widget.PredictMessages
 import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationInfo
 import com.lcb.one.ui.screen.menstruationAssistant.widget.rememberCalendarState
-import com.lcb.one.ui.theme.fullCorners
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.ui.widget.common.AppIconButton
+import com.lcb.one.util.android.Res
 import java.time.LocalDate
 
 
@@ -54,6 +56,9 @@ object MenstruationAssistantScreen : Screen {
 
     override val route: String
         get() = "MenstruationAssistant"
+
+    override val label: String
+        get() = Res.string(R.string.menstruation_assistant)
 
     @Composable
     override fun Content(args: Bundle?) {
@@ -86,7 +91,7 @@ object MenstruationAssistantScreen : Screen {
         Scaffold(
             topBar = {
                 ToolBar(
-                    title = Localization.menstrualAssistant,
+                    title = label,
                     actions = {
                         AppIconButton(
                             icon = Icons.Rounded.History,
@@ -144,7 +149,7 @@ object MenstruationAssistantScreen : Screen {
 
                 if (showStart) {
                     AppButton(
-                        text = Localization.menstruationStart,
+                        text = stringResource(R.string.menstruation_start),
                         onClick = { mcViewmodel.startNewMenstruationDay(calendarState.selectedMillis) }
                     )
                 }
@@ -160,7 +165,7 @@ object MenstruationAssistantScreen : Screen {
                 }
                 if (showEnd) {
                     AppButton(
-                        text = Localization.menstruationEnded,
+                        text = stringResource(R.string.menstruation_ended),
                         onClick = { mcViewmodel.endMenstruationDay(calendarState.selectedMillis) }
                     )
                 }
@@ -187,10 +192,10 @@ object MenstruationAssistantScreen : Screen {
                     contentDescription = null,
                     modifier = Modifier
                         .size(16.dp)
-                        .clip(MaterialTheme.shapes.fullCorners())
+                        .clip(CircleShape)
                 )
 
-                Text(text = "经期")
+                Text(text = stringResource(R.string.menstruation))
             }
 
             Row(
@@ -202,10 +207,10 @@ object MenstruationAssistantScreen : Screen {
                     contentDescription = null,
                     modifier = Modifier
                         .size(16.dp)
-                        .clip(MaterialTheme.shapes.fullCorners())
+                        .clip(CircleShape)
                 )
 
-                Text(text = "预测经期")
+                Text(text = stringResource(R.string.predict_menstruation))
             }
         }
     }

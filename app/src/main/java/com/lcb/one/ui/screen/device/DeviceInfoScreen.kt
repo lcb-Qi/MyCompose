@@ -1,7 +1,6 @@
 package com.lcb.one.ui.screen.device
 
 import android.os.Bundle
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,25 +17,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.screen.device.repo.model.BasicInfo
 import com.lcb.one.ui.screen.device.repo.model.DisplayInfo
 import com.lcb.one.ui.screen.device.repo.model.toMap
 import com.lcb.one.ui.screen.device.widget.SimpleInfoCard
 import com.lcb.one.ui.widget.appbar.ToolBar
+import com.lcb.one.util.android.Res
 import kotlinx.coroutines.launch
 
 object DeviceInfoScreen : Screen {
     override val route: String
         get() = "Device"
 
+    override val label: String
+        get() = Res.string(R.string.device_info)
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content(args: Bundle?) {
-        Scaffold(topBar = { ToolBar(title = Localization.deviceInfo) }) { innerPadding ->
-            val tabTitles = listOf(Localization.device, Localization.display)
+        Scaffold(topBar = { ToolBar(title = label) }) { innerPadding ->
+            val tabTitles = listOf(stringResource(R.string.device), stringResource(R.string.display))
             val pagerState = rememberPagerState { tabTitles.size }
             val coroutineScope = rememberCoroutineScope()
 

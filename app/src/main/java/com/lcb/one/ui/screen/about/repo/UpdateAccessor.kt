@@ -15,7 +15,7 @@ object UpdateAccessor {
             var updateInfo: UpdateInfo? = null
             val response =
                 CommonApiService.instance.get("https://api.github.com/repos/lcb-Qi/MyCompose/releases/latest")
-            JsonUtils.fromJson<GithubLatest>(response)?.let {
+            JsonUtils.fromJson<GithubLatest>(response).let {
                 updateInfo = UpdateInfo(
                     AppVersion.valueOf(it.tagName),
                     it.assets[0].browserDownloadUrl,

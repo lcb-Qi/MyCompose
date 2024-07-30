@@ -31,10 +31,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -49,6 +50,7 @@ import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationMenu
 import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationMenuAction
 import com.lcb.one.ui.screen.menstruationAssistant.widget.PastMcDayPicker
 import com.lcb.one.ui.widget.common.AppIconButton
+import com.lcb.one.util.android.Res
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -58,6 +60,9 @@ object MenstruationHistoryScreen : Screen {
     override val route: String
         get() = "MenstruationHistory"
 
+    override val label: String
+        get() = Res.string(R.string.menstruation_history)
+
     @Composable
     override fun Content(args: Bundle?) {
         val mcViewmodel = viewModel<MenstruationViewModel>()
@@ -66,7 +71,7 @@ object MenstruationHistoryScreen : Screen {
         Scaffold(
             topBar = {
                 ToolBar(
-                    title = Localization.allRecords,
+                    title = label,
                     actions = {
                         var showMenu by remember { mutableStateOf(false) }
                         val launcher =
@@ -116,7 +121,7 @@ object MenstruationHistoryScreen : Screen {
                 !(selectRange.last < it.startTime || selectRange.first > it.endTime)
             }
             if (hasIntersect) {
-                ToastUtils.showToast(Localization.conflictTips)
+                ToastUtils.showToast(Res.string(R.string.conflict_tips))
             } else {
                 mcViewmodel.addPastMenstruationDay(selectRange.first, selectRange.last)
             }
@@ -161,7 +166,7 @@ object MenstruationHistoryScreen : Screen {
 
         SimpleMessageDialog(
             show = showDeleteDialog,
-            message = Localization.confirmDelete,
+            message = stringResource(R.string.confirm_delete),
             onCancel = {
                 showDeleteDialog = false
                 animateOffset(0f)
@@ -185,13 +190,9 @@ object MenstruationHistoryScreen : Screen {
 
             Column {
                 ProvideTextStyle(value = MaterialTheme.typography.bodyLarge) {
-                    Text(text = String.format(Localization.sumOfRecords, count))
-                    Text(
-                        text = String.format(Localization.averageDuration, averageDuration)
-                    )
-                    Text(
-                        text = String.format(Localization.averageInterval, averageInterval)
-                    )
+                    Text(text = stringResource(R.string.sum_of_records, count))
+                    Text(text = stringResource(R.string.average_duration, averageDuration))
+                    Text(text = stringResource(R.string.average_interval, averageInterval))
                 }
             }
         }

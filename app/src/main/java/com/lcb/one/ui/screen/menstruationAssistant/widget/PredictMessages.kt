@@ -7,8 +7,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.util.common.DateTimeUtils
@@ -24,7 +25,7 @@ fun PredictMessages(
             colors = SettingsDefaults.colorOnCard(),
             headlineContent = {
                 Text(
-                    text = Localization.menstruationPrediction,
+                    text = stringResource(R.string.menstruation_prediction),
                     fontWeight = FontWeight.Medium
                 )
             },
@@ -36,8 +37,8 @@ fun PredictMessages(
                                 DateTimeUtils.nowMillis(),
                                 predictMcDay.startTime
                             )
-                        String.format(
-                            Localization.nextMenstruationInfo,
+                        stringResource(
+                            R.string.next_menstruation_info,
                             DateTimeUtils.format(predictMcDay.startTime, "yyyy.MM.dd"),
                             days
                         )
@@ -47,9 +48,12 @@ fun PredictMessages(
                                 predictMcDay.startTime,
                                 selectedDate
                             )
-                        String.format(Localization.nextMenstruationDays, days + 1)
+                        stringResource(
+                            R.string.next_menstruation_days,
+                            days + 1
+                        )
                     } else {
-                        "暂无更多信息"
+                        stringResource(R.string.no_more_info)
                     }
                 Text(text = message, style = MaterialTheme.typography.labelLarge)
             }

@@ -1,7 +1,6 @@
 package com.lcb.one.util.common
 
 import android.os.Build
-import com.lcb.one.localization.Localization
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -88,26 +87,6 @@ object DateTimeUtils {
     fun toMillis(text: String, pattern: String = FORMAT_DEFAULT): Long {
         val dateTime = LocalDateTime.parse(text, DateTimeFormatter.ofPattern(pattern))
         return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-    }
-
-    fun friendlyDuration(start: Long, end: Long = nowMillis()): String {
-        val startTime =
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(start), ZoneId.systemDefault())
-        val endTime =
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(end), ZoneId.systemDefault())
-        val duration = Duration.between(startTime, endTime)
-
-        val daysPart = duration.toDaysPart()
-        val hoursPart = duration.toHoursPart()
-        val minutesPart = duration.toMinutesPart()
-        val secondsPart = duration.toSecondsPart()
-        return String.format(
-            Localization.friendDuration,
-            daysPart,
-            hoursPart,
-            minutesPart,
-            secondsPart
-        )
     }
 
     fun getDurationDays(start: Long, end: Long): Long {

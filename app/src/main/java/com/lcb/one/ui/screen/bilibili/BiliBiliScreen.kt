@@ -28,13 +28,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
-import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.screen.bilibili.repo.BiliServerAccessor
@@ -42,6 +42,7 @@ import com.lcb.one.ui.screen.bilibili.widget.BigImageViewer
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.util.android.AppUtils
+import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.StorageUtils
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.common.DateTimeUtils
@@ -50,6 +51,9 @@ import kotlinx.coroutines.launch
 object BiliBiliScreen : Screen {
     override val route: String
         get() = "Bilibili"
+
+    override val label: String
+        get() = Res.string(R.string.bibibili)
 
     @OptIn(ExperimentalSharedTransitionApi::class)
     @Composable
@@ -115,13 +119,13 @@ object BiliBiliScreen : Screen {
         val download: () -> Unit = {
             scope.launch {
                 StorageUtils.createImageFromUrl(coverUrl, DateTimeUtils.nowStringShort())
-                    .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
-                    .onFailure { ToastUtils.showToast(Localization.saveFailed) }
+                    .onSuccess { ToastUtils.showToast("${Res.string(R.string.save_success)} $it") }
+                    .onFailure { ToastUtils.showToast(Res.string(R.string.save_failed)) }
             }
         }
         Scaffold(
             modifier = modifier.fillMaxSize(),
-            topBar = { ToolBar(title = Localization.bibibili) },
+            topBar = { ToolBar(title = label) },
             floatingActionButton = {
                 if (coverUrl.isNotBlank()) {
                     FloatingActionButton(onClick = download) {
@@ -142,11 +146,11 @@ object BiliBiliScreen : Screen {
                     singleLine = true,
                     value = textInput,
                     onValueChange = { textInput = it },
-                    placeholder = { Text(text = Localization.getCoverHint) },
+                    placeholder = { Text(text = stringResource(R.string.get_cover_hint)) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                AppButton(text = Localization.obtain, onClick = getCoverUrl)
+                AppButton(text = stringResource(R.string.obtain), onClick = getCoverUrl)
 
 
                 SubcomposeAsyncImage(

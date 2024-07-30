@@ -10,8 +10,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
 import com.lcb.one.util.common.DateTimeUtils
 
@@ -39,16 +40,16 @@ fun MenstrualCycleHistoryCard(
     ) {
         ListItem(
             colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-            headlineContent = { Text(text = Localization.menstruation, style = MaterialTheme.typography.titleMedium) },
+            headlineContent = { Text(text = stringResource(R.string.menstruation), style = MaterialTheme.typography.titleMedium) },
             supportingContent = {
                 Text(
-                    text = "$startTime ${Localization.to} ${endTime ?: Localization.going}",
+                    text = "$startTime ${stringResource(R.string.to)} ${endTime ?: stringResource(R.string.going)}",
                     style = MaterialTheme.typography.titleSmall
                 )
             },
             trailingContent = {
                 Text(
-                    text = "${mcDay.getDurationDay()} ${Localization.days}",
+                    text = "${mcDay.getDurationDay()} ${stringResource(R.string.device)}",
                     style = MaterialTheme.typography.titleSmall
                 )
             }

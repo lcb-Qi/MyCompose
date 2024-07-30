@@ -17,10 +17,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.util.android.AppUtils
+import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.StorageUtils
 import com.lcb.one.util.android.ToastUtils
 import kotlinx.coroutines.launch
@@ -56,30 +58,30 @@ fun ApplicationInfoDialog(show: Boolean, packageName: String, onDisMiss: () -> U
             }
 
             ToolButton(
-                text = Localization.extractIcon,
+                text = stringResource(R.string.extract_icon),
                 leadingIcon = Icons.Rounded.Image,
                 onclick = {
                     scope.launch {
                         val icon = AppUtils.getAppIcon(packageName = packageName)
                         if (icon != null) {
                             StorageUtils.createImageFile(icon, "${label}_logo")
-                                .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
-                                .onFailure { ToastUtils.showToast(Localization.saveFailed) }
+                                .onSuccess { ToastUtils.showToast("${Res.string(R.string.save_success)} $it") }
+                                .onFailure { ToastUtils.showToast(Res.string(R.string.save_failed)) }
                         } else {
-                            ToastUtils.showToast(Localization.saveFailed)
+                            ToastUtils.showToast(Res.string(R.string.save_failed))
                         }
                     }
                 }
             )
 
             ToolButton(
-                text = Localization.extractPackage,
+                text = stringResource(R.string.extract_installation_package),
                 leadingIcon = Icons.Rounded.Android,
                 onclick = {
                     scope.launch {
                         StorageUtils.saveApk(AppUtils.getApkPath(packageName), label)
-                            .onSuccess { ToastUtils.showToast("${Localization.saveSuccess} $it") }
-                            .onFailure { ToastUtils.showToast(Localization.saveFailed) }
+                            .onSuccess { ToastUtils.showToast("${Res.string(R.string.save_success)} $it") }
+                            .onFailure { ToastUtils.showToast(Res.string(R.string.save_failed)) }
                     }
                 }
             )

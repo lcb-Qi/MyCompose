@@ -9,7 +9,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.lcb.one.localization.Localization
+import androidx.compose.ui.res.stringResource
+import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.widget.common.AppTextButton
@@ -22,7 +23,7 @@ fun AssertInternetDialog(show: Boolean) {
         onDismissRequest = {},
         confirmButton = {
             AppTextButton(
-                text = Localization.goSettings,
+                text = stringResource(R.string.go_settings),
                 onClick = {
                     val intent =
                         Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -33,7 +34,7 @@ fun AssertInternetDialog(show: Boolean) {
         },
         dismissButton = {
             AppTextButton(
-                text = Localization.cancel,
+                text = stringResource(R.string.cancel),
                 onClick = { AppGlobalConfigs.assertNetwork = false }
             )
         },
@@ -46,7 +47,7 @@ fun AssertInternetDialog(show: Boolean) {
         },
         text = {
             Text(
-                text = "无法连接网络，请检查网络后重试",
+                text = stringResource(R.string.msg_no_internet),
                 style = MaterialTheme.typography.titleMedium
             )
         }

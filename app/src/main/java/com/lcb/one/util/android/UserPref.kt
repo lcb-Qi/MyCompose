@@ -13,6 +13,7 @@ object UserPref {
         const val APP_ALOMED_MODE = "app_amoled_mode"// boolean
         const val USE_BUILTIN_BROWSER = "use_builtin_browser"// boolean
         const val DARK_MODE = "dark_mode"// int
+        const val QUICK_NAV = "quick_nav"// list
 
         // poem
         const val POEM_TOKEN = "poem_token"// string

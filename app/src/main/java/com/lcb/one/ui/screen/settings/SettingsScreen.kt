@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Autorenew
 import androidx.compose.material.icons.rounded.DisplaySettings
-import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material.icons.rounded.TravelExplore
 import androidx.compose.material3.Card
@@ -19,9 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.integerArrayResource
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
-import com.lcb.one.localization.Localization
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.Screen
@@ -34,15 +33,19 @@ import com.lcb.one.ui.widget.settings.ui.SettingsCategory
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
+import com.lcb.one.util.android.Res
 
 object SettingsScreen : Screen {
     override val route: String
         get() = "Settings"
 
+    override val label: String
+        get() = Res.string(R.string.settings)
+
     @Composable
     override fun Content(args: Bundle?) {
         val navController = LocalNav.current!!
-        Scaffold(topBar = { ToolBar(title = Localization.settings) }) { innerPadding ->
+        Scaffold(topBar = { ToolBar(title = label) }) { innerPadding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -50,7 +53,7 @@ object SettingsScreen : Screen {
                     .padding(horizontal = 16.dp)
             ) {
                 // 1.通用设置
-                SettingsCategory(title = Localization.common) {
+                SettingsCategory(title = stringResource(R.string.common)) {
                     Card {
                         ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
                             // 内置浏览器
@@ -58,24 +61,16 @@ object SettingsScreen : Screen {
                                 modifier = Modifier.padding(top = 8.dp),
                                 checked = AppGlobalConfigs.useBuiltinBrowser,
                                 icon = { Icon(Icons.Rounded.TravelExplore, null) },
-                                title = "使用内置浏览器",
+                                title = stringResource(R.string.use_built_in_browser),
                                 onCheckedChange = { AppGlobalConfigs.useBuiltinBrowser = it }
                             )
 
                             // 界面显示
                             SimpleSettingsMenuLink(
-                                title = "界面显示",
+                                modifier = Modifier.padding(bottom = 8.dp),
+                                title = stringResource(R.string.interface_and_display),
                                 icon = { Icon(Icons.Rounded.DisplaySettings, null) },
                                 onClick = { navController.launchSingleTop(ThemeSettingsScreen) }
-                            )
-
-                            // 语言
-                            SimpleSettingsMenuLink(
-                                modifier = Modifier.padding(bottom = 8.dp),
-                                enabled = false,
-                                title = "语言",
-                                icon = { Icon(Icons.Rounded.Language, null) },
-                                onClick = { }
                             )
                         }
                     }
@@ -84,7 +79,7 @@ object SettingsScreen : Screen {
                 Spacer(Modifier.height(16.dp))
 
                 // 2.其他设置
-                SettingsCategory(title = Localization.other) {
+                SettingsCategory(title = stringResource(R.string.other)) {
                     Card {
                         ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
                             // 标题诗词更新间隔
@@ -92,7 +87,7 @@ object SettingsScreen : Screen {
                             val values = integerArrayResource(R.array.settings_duration_values)
                             SettingSingleChoice(
                                 modifier = Modifier.padding(top = 8.dp),
-                                title = Localization.poemUpdateDuration,
+                                title = stringResource(R.string.poem_update_duration),
                                 icon = { Icon(Icons.Rounded.Autorenew, null) },
                                 selectIndex = values.indexOf(AppGlobalConfigs.poemUpdateInterval)
                                     .coerceAtLeast(0),
@@ -105,7 +100,7 @@ object SettingsScreen : Screen {
                             // 权限
                             SimpleSettingsMenuLink(
                                 modifier = Modifier.padding(bottom = 8.dp),
-                                title = "权限管理",
+                                title = stringResource(R.string.permissions_management),
                                 icon = { Icon(Icons.Rounded.PrivacyTip, null) },
                                 onClick = { navController.launchSingleTop(PrivacyScreen) }
                             )

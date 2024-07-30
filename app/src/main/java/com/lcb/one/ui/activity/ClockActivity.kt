@@ -22,13 +22,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.theme.AppTheme
 import com.lcb.one.ui.theme.ThemeManager
 import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPrefState
@@ -41,6 +42,7 @@ import com.lcb.one.ui.widget.settings.ui.SettingsCategory
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSlider
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
+import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.UserPref
 import java.util.Locale
 
@@ -61,10 +63,10 @@ class ClockActivity : ComponentActivity() {
 
     private val positions by lazy {
         listOf(
-            RadioItem(DATE_POSITION_LEFT_BOTTOM, Localization.leftBottom),
-            RadioItem(DATE_POSITION_RIGHT_BOTTOM, Localization.rightBottom),
-            RadioItem(DATE_POSITION_CENTER_ABOVE, Localization.centerAbove),
-            RadioItem(DATE_POSITION_CENTER_BELOW, Localization.centerBelow),
+            RadioItem(DATE_POSITION_LEFT_BOTTOM, Res.string(R.string.left_bottom)),
+            RadioItem(DATE_POSITION_RIGHT_BOTTOM, Res.string(R.string.right_bottom)),
+            RadioItem(DATE_POSITION_CENTER_ABOVE, Res.string(R.string.center_above)),
+            RadioItem(DATE_POSITION_CENTER_BELOW, Res.string(R.string.center_below)),
         )
     }
 
@@ -100,18 +102,18 @@ class ClockActivity : ComponentActivity() {
 
                             Column(modifier = Modifier.padding(24.dp)) {
                                 SettingsCategory(
-                                    title = Localization.settings,
+                                    title = stringResource(R.string.settings),
                                     color = DrawerDefaults.modalContainerColor
                                 ) {
                                     SimpleSettingsSwitch(
                                         checked = darkTheme,
-                                        title = Localization.darkMode,
-                                        summary = Localization.onlyThisPage,
+                                        title = stringResource(R.string.dark_mode),
+                                        summary = stringResource(R.string.effective_this_page),
                                         onCheckedChange = { darkTheme = it }
                                     )
 
                                     SimpleSettingsSlider(
-                                        title = Localization.clockFontSize,
+                                        title = stringResource(R.string.clock_font_size),
                                         summary = clockSize.toString(),
                                         value = clockSize.toFloat(),
                                         valueRange = MIN_SIZE.toFloat()..MAX_SIZE.toFloat(),
@@ -121,7 +123,7 @@ class ClockActivity : ComponentActivity() {
                                     val options = positions.map { it.label }
                                     val values = positions.map { it.id }
                                     SettingSingleChoice(
-                                        title = Localization.positionOfDate,
+                                        title = stringResource(R.string.date_position),
                                         selectIndex = values.indexOf(datePosition).coerceAtLeast(0),
                                         options = options.toTypedArray(),
                                         onItemSelected = { datePosition = it }

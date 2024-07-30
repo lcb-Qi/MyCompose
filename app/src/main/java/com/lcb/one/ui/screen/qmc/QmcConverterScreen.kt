@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,11 +25,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.lcb.one.R
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.ui.widget.dialog.LoadingDialog
+import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.android.getRelativePath
 import kotlinx.coroutines.launch
@@ -37,9 +42,12 @@ object QmcConverterScreen : Screen {
     override val route: String
         get() = "QmcConverter"
 
+    override val label: String
+        get() = Res.string(R.string.qmc_converter)
+
     @Composable
     override fun Content(args: Bundle?) {
-        Scaffold(topBar = { ToolBar(title = "Qmc 转换器") }) { innerPadding ->
+        Scaffold(topBar = { ToolBar(title = label) }) { innerPadding ->
 
             var loading by remember { mutableStateOf(false) }
             val scope = rememberCoroutineScope()
@@ -62,14 +70,22 @@ object QmcConverterScreen : Screen {
                             .fillMaxWidth()
                             .padding(16.dp)
                     ) {
-                        Text(text = "已选中文件：")
+                        Text(
+                            text = stringResource(R.string.selected_files),
+                            style = MaterialTheme.typography.titleMedium
+                        )
 
                         LazyColumn(
                             modifier = Modifier.height(240.dp),
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             items(selectedFile.size, key = { it }) { index ->
-                                Text(text = selectedFile[index].getRelativePath())
+                                Text(
+                                    text = selectedFile[index].getRelativePath(),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
                             }
                         }
                     }
@@ -79,7 +95,7 @@ object QmcConverterScreen : Screen {
                     Box(modifier = Modifier.padding(16.dp)) {
                         val guideMessage = remember {
                             buildString {
-                                appendLine("目前支持如下类型：")
+                                appendLine(Res.string(R.string.supported_formats))
                                 val supportFormat = QmcConverter.qmcFormatMap.keys.joinToString()
                                 append(supportFormat)
                             }
@@ -90,22 +106,22 @@ object QmcConverterScreen : Screen {
 
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     AppButton(
-                        text = "选择文件",
+                        text = stringResource(R.string.select_file),
                         onClick = { launcher.launch("*/*") },
                         modifier = Modifier.weight(1f)
                     )
                     AppButton(
                         modifier = Modifier.weight(1f),
                         enabled = selectedFile.isNotEmpty(),
-                        text = "点击转换",
+                        text = stringResource(R.string.click_to_convert),
                         onClick = {
                             scope.launch {
                                 loading = true
 
                                 selectedFile.forEach { uri ->
                                     val result = QmcConverter.convert(uri)
-                                    result.onFailure { ToastUtils.showToast("转换失败：${it.message}") }
-                                        .onSuccess { ToastUtils.showToast("转换成功: $it") }
+                                    result.onFailure { ToastUtils.showToast("${Res.string(R.string.convert_failed)} ${it.message}") }
+                                        .onSuccess { ToastUtils.showToast("${Res.string(R.string.convert_success)} $it") }
                                 }
 
                                 loading = false

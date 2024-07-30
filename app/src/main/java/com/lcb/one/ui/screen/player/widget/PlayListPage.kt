@@ -20,7 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.lcb.one.R
 import com.lcb.one.ui.screen.player.repo.ControllerEvent
 import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.ui.screen.player.repo.MusicPlayer
@@ -34,7 +37,7 @@ fun PlayListPage(
     playingMusic: Music?,
     showPlay: Boolean,
 ) {
-    Scaffold(topBar = { ToolBar(title = "音乐播放器") }) { innerPadding ->
+    Scaffold(topBar = { ToolBar(title = stringResource(R.string.music_player)) }) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -112,14 +115,14 @@ private fun PlayListItem(modifier: Modifier = Modifier, music: Music, selected: 
                 color = tint,
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
-                modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = music.artistAndAlbum,
                 color = tint,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
-                modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
+                overflow = TextOverflow.Ellipsis
             )
         }
         

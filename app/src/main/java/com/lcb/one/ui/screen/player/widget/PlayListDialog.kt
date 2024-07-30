@@ -1,7 +1,6 @@
 package com.lcb.one.ui.screen.player.widget
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,9 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.lcb.one.R
 import com.lcb.one.ui.screen.player.repo.Music
-import com.lcb.one.ui.widget.common.NoRippleInteractionSource
 import com.lcb.one.ui.widget.common.noRippleClickable
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -37,7 +37,7 @@ fun PlayListDialog(
         LazyColumn(modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 32.dp)) {
             item {
                 Text(
-                    text = "播放列表",
+                    text = stringResource(R.string.play_list),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )

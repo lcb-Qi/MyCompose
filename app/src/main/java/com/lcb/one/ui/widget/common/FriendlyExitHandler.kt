@@ -5,7 +5,8 @@ import android.os.SystemClock
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
+import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.ToastUtils
 
 private const val TIP_DURATION = 2000L
@@ -20,7 +21,7 @@ fun FriendlyExitHandler(enable: Boolean = true) {
             (context as? Activity)?.finishAffinity()
             0
         } else {
-            ToastUtils.showToast(Localization.friendlyExitTips)
+            ToastUtils.showToast(Res.string(R.string.friendly_exit_tips))
             nowMillis
         }
     }

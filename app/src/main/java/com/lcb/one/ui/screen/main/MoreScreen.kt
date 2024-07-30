@@ -8,8 +8,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.about.AboutScreen
@@ -28,7 +29,7 @@ fun MoreScreen() {
             // 设置
             SimpleSettingsMenuLink(
                 modifier = Modifier.padding(top = 8.dp),
-                title = Localization.settings,
+                title = stringResource(R.string.settings),
                 icon = { Icon(Icons.Rounded.Settings, null) },
                 onClick = { navController.launchSingleTop(SettingsScreen) }
             )
@@ -36,7 +37,7 @@ fun MoreScreen() {
             // 关于
             SimpleSettingsMenuLink(
                 modifier = Modifier.padding(bottom = 8.dp),
-                title = "${Localization.about}${Localization.appName}",
+                title = stringResource(R.string.about),
                 icon = { Icon(Icons.Rounded.Info, null) },
                 onClick = { navController.launchSingleTop(AboutScreen) }
             )

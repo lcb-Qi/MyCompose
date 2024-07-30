@@ -18,7 +18,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.lcb.one.ui.screen.player.MusicPlayerScreen
 import com.lcb.one.ui.screen.about.AboutScreen
 import com.lcb.one.ui.screen.applist.InstalledAppsScreen
 import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
@@ -26,6 +25,7 @@ import com.lcb.one.ui.screen.device.DeviceInfoScreen
 import com.lcb.one.ui.screen.main.MainScreen
 import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
 import com.lcb.one.ui.screen.menstruationAssistant.MenstruationHistoryScreen
+import com.lcb.one.ui.screen.player.MusicPlayerScreen
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
 import com.lcb.one.ui.screen.qmc.QmcConverterScreen
 import com.lcb.one.ui.screen.settings.SettingsScreen
@@ -37,7 +37,7 @@ const val ANIMATE_DURATION = 500
 
 val LocalNav: ProvidableCompositionLocal<NavHostController?> = staticCompositionLocalOf { null }
 
-private val defaultScreens by lazy {
+val defaultScreens by lazy {
     listOf(
         MainScreen,
         BiliBiliScreen,
@@ -54,6 +54,12 @@ private val defaultScreens by lazy {
         QmcConverterScreen,
         MusicPlayerScreen,
     )
+}
+
+val supportQuickNavScreens by lazy {
+    defaultScreens.filter {
+        it !is WebScreen && it !is MenstruationHistoryScreen && it !is MainScreen
+    }
 }
 
 @Composable
@@ -92,6 +98,9 @@ interface Screen {
     val route: String
     val args: List<NamedNavArgument>
         get() = emptyList()
+
+    val label: String
+        get() = route
 
     @Composable
     fun Content(args: Bundle?)

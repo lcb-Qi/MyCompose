@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
@@ -49,6 +50,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.lcb.one.R
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.ui.screen.player.repo.MusicPlayer
@@ -100,7 +102,7 @@ fun PlayDetailPage(
                 )
 
                 Text(
-                    text = "歌曲",
+                    text = stringResource(R.string.song),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.constrainAs(textRef) {
                         start.linkTo(parent.start)

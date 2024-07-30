@@ -15,7 +15,6 @@ import androidx.compose.material.icons.rounded.PauseCircle
 import androidx.compose.material.icons.rounded.PlayCircle
 import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.SkipPrevious
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi

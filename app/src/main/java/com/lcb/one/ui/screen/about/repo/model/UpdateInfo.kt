@@ -1,6 +1,7 @@
 package com.lcb.one.ui.screen.about.repo.model
 
 import com.lcb.one.BuildConfig
+import java.util.Locale
 
 class AppVersion private constructor(major: Int, minor: Int, patch: Int) : Comparable<AppVersion> {
     val versionCode = versionCodeOf(major, minor, patch)
@@ -10,7 +11,7 @@ class AppVersion private constructor(major: Int, minor: Int, patch: Int) : Compa
         require(major >= 0 && minor >= 0 && patch >= 0) {
             "Version components are out of range: $major.$minor.$patch"
         }
-        return String.format("%02d%02d%02d", major, minor, patch).toInt()
+        return String.format(Locale.getDefault(), "%02d%02d%02d", major, minor, patch).toInt()
     }
 
     override fun compareTo(other: AppVersion) = versionCode - other.versionCode

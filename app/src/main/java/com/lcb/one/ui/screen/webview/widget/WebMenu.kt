@@ -9,8 +9,8 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import kotlinx.serialization.json.JsonNull.content
+import androidx.compose.ui.res.stringResource
+import com.lcb.one.R
 
 sealed class WebAction {
     data object Refresh : WebAction()
@@ -34,7 +34,7 @@ fun WebMenu(
         onDismissRequest = onDismiss,
         content = {
             DropdownMenuItem(
-                text = { Text(text = "在浏览器中打开") },
+                text = { Text(text = stringResource(R.string.open_in_your_browser)) },
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
@@ -45,7 +45,7 @@ fun WebMenu(
             )
 
             DropdownMenuItem(
-                text = { Text(text = "复制链接") },
+                text = { Text(text = stringResource(R.string.copy_link)) },
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Rounded.Link,
@@ -56,7 +56,7 @@ fun WebMenu(
             )
 
             DropdownMenuItem(
-                text = { Text(text = "刷新") },
+                text = { Text(text = stringResource(R.string.refresh)) },
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Rounded.Refresh,

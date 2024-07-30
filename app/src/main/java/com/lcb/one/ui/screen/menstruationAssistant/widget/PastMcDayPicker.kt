@@ -15,8 +15,9 @@ import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.widget.common.AppTextButton
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.toMillis
@@ -49,7 +50,7 @@ fun PastMcDayPicker(
         onDismissRequest = onCancel,
         confirmButton = {
             AppTextButton(
-                text = Localization.ok,
+                text = stringResource(R.string.ok),
                 onClick = {
                     val start = DateTimeUtils.toLocalDate(
                         pickerState.selectedStartDateMillis!!,
@@ -65,7 +66,7 @@ fun PastMcDayPicker(
             )
         },
         dismissButton = {
-            AppTextButton(text = Localization.cancel, onClick = onCancel)
+            AppTextButton(text = stringResource(R.string.cancel), onClick = onCancel)
         },
         content = {
             val dateFormatter = remember { DatePickerDefaults.dateFormatter() }
@@ -75,7 +76,7 @@ fun PastMcDayPicker(
                 dateFormatter = dateFormatter,
                 title = {
                     Text(
-                        text = Localization.doImport,
+                        text = stringResource(R.string.do_import),
                         modifier = Modifier.padding(
                             start = 24.dp,
                             top = 16.dp,

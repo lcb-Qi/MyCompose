@@ -11,8 +11,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.screen.main.repo.model.PoemResponse
 import com.lcb.one.ui.widget.common.AppTextButton
 
@@ -27,7 +28,7 @@ fun PoemInfoDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-            AppTextButton(text = Localization.ok, onClick = onDismiss)
+            AppTextButton(text = stringResource(R.string.ok), onClick = onDismiss)
         },
         title = {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {

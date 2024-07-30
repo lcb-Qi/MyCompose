@@ -16,7 +16,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.media3.common.util.UnstableApi
+import com.lcb.one.R
 import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.launchSingleTop
@@ -26,12 +28,16 @@ import com.lcb.one.ui.screen.player.widget.PlayDetailPage
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
 import com.lcb.one.util.android.PermissionUtils
+import com.lcb.one.util.android.Res
 
 
 @OptIn(UnstableApi::class)
 object MusicPlayerScreen : Screen {
     override val route: String
         get() = "MusicPlayer"
+
+    override val label: String
+        get() = Res.string(R.string.music_player)
 
     private val musicPlayer = MusicPlayer.instance
 
@@ -42,8 +48,8 @@ object MusicPlayerScreen : Screen {
             var show by remember { mutableStateOf(true) }
             SimpleMessageDialog(
                 show = show,
-                title = "Music Player",
-                message = "请开启“读取音乐和音频”权限",
+                title = stringResource(R.string.music_player),
+                message = stringResource(R.string.msg_request_audio_permission),
                 onCancel = {
                     show = false
                     navController.popBackStack()

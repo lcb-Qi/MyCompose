@@ -4,6 +4,8 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.lcb.one.R
 
 enum class MenstruationMenuAction {
     IMPORT, EXPORT
@@ -22,10 +24,10 @@ fun MenstruationMenu(
 
     DropdownMenu(expanded = expanded, onDismissRequest = onDismiss) {
         DropdownMenuItem(
-            text = { Text(text = "导出") },
+            text = { Text(text = stringResource(R.string.export)) },
             onClick = { onMenuClick(MenstruationMenuAction.EXPORT) })
         DropdownMenuItem(
-            text = { Text(text = "导入") },
+            text = { Text(text = stringResource(R.string.do_import)) },
             onClick = { onMenuClick(MenstruationMenuAction.IMPORT) }
         )
     }

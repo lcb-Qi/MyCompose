@@ -2,7 +2,6 @@ package com.lcb.one.ui.screen.main
 
 import android.os.Bundle
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -24,9 +23,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.Screen
+import com.lcb.one.ui.screen.main.home.HomeScreen
 import com.lcb.one.ui.widget.appbar.BottomBar
 import com.lcb.one.ui.widget.appbar.BottomBarItem
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -34,14 +34,17 @@ import com.lcb.one.ui.widget.common.FriendlyExitHandler
 import com.lcb.one.ui.screen.main.widget.PoemInfoDialog
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.ui.screen.main.repo.MainViewModel
-import com.lcb.one.ui.widget.common.NoRippleInteractionSource
 import com.lcb.one.ui.widget.common.noRippleClickable
+import com.lcb.one.util.android.Res
 import kotlinx.coroutines.launch
 
 
 object MainScreen : Screen {
     override val route: String
         get() = "Main"
+
+    override val label: String
+        get() = Res.string(R.string.main_screen)
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
@@ -54,9 +57,9 @@ object MainScreen : Screen {
 
         val bottomItem = remember(Unit) {
             listOf(
-                BottomBarItem(Localization.home, Icons.Rounded.Home),
-                BottomBarItem(Localization.tool, Icons.Rounded.Android),
-                BottomBarItem(Localization.more, Icons.Rounded.MoreHoriz)
+                BottomBarItem(Res.string(R.string.home), Icons.Rounded.Home),
+                BottomBarItem(Res.string(R.string.tool), Icons.Rounded.Android),
+                BottomBarItem(Res.string(R.string.more), Icons.Rounded.MoreHoriz)
             )
         }
 

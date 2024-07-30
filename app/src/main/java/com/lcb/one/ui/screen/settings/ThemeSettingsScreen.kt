@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
-import com.lcb.one.localization.Localization
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.screen.settings.widget.ThemSelector
 import com.lcb.one.ui.theme.ThemeManager
@@ -27,14 +26,18 @@ import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
 import com.lcb.one.ui.widget.settings.ui.SettingsCategory
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
+import com.lcb.one.util.android.Res
 
 object ThemeSettingsScreen : Screen {
     override val route: String
         get() = "ThemeSettings"
 
+    override val label: String
+        get() = Res.string(R.string.theme)
+
     @Composable
     override fun Content(args: Bundle?) {
-        Scaffold(topBar = { ToolBar(title = Localization.theme) }) { innerPadding ->
+        Scaffold(topBar = { ToolBar(title = label) }) { innerPadding ->
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
@@ -46,7 +49,7 @@ object ThemeSettingsScreen : Screen {
                             SimpleSettingsSwitch(
                                 modifier = Modifier.padding(top = 8.dp),
                                 title = "AMOLED",
-                                summary = Localization.amoledModeSummary,
+                                summary = stringResource(R.string.amoled_mode_summary),
                                 checked = ThemeManager.amoledMode,
                                 onCheckedChange = { ThemeManager.amoledMode = it }
                             )
@@ -57,8 +60,8 @@ object ThemeSettingsScreen : Screen {
                             )
                             SimpleSettingsSwitch(
                                 modifier = Modifier.padding(bottom = bottomPadding),
-                                title = Localization.dynamicColor,
-                                summary = Localization.dynamicColorSummary,
+                                title = stringResource(R.string.dynamic_color),
+                                summary = stringResource(R.string.dynamic_color_summary),
                                 checked = ThemeManager.dynamicColor,
                                 onCheckedChange = { ThemeManager.dynamicColor = it }
                             )
@@ -76,14 +79,14 @@ object ThemeSettingsScreen : Screen {
 
                 Spacer(Modifier.height(16.dp))
 
-                SettingsCategory(title = "深色模式") {
+                SettingsCategory(title = stringResource(R.string.dark_mode)) {
                     Card(modifier = Modifier.fillMaxWidth()) {
                         val options = stringArrayResource(R.array.settings_dark_mode_options)
                         val values = ThemeManager.darkModeValues
                         SettingSingleChoice(
                             modifier = Modifier.padding(vertical = 8.dp),
                             colors = SettingsDefaults.colorOnCard(),
-                            title = "深色模式",
+                            title = stringResource(R.string.dark_mode),
                             options = options,
                             selectIndex = values.indexOf(ThemeManager.darkMode),
                             onItemSelected = {

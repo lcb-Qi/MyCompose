@@ -9,9 +9,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
-import com.lcb.one.localization.Localization
+import com.lcb.one.R
 import com.lcb.one.ui.screen.about.repo.model.UpdateInfo
 import com.lcb.one.ui.widget.common.AppTextButton
 import io.noties.markwon.Markwon
@@ -45,14 +46,14 @@ fun UpdateInfoDialog(show: Boolean, updateInfo: UpdateInfo?, onCancel: () -> Uni
         onDismissRequest = {},
         confirmButton = {
             AppTextButton(
-                text = Localization.toDownload,
+                text = stringResource(R.string.to_download),
                 onClick = {
                     launcher.launch(Intent(Intent.ACTION_VIEW, updateInfo.url.toUri()))
                 }
             )
         },
         dismissButton = {
-            AppTextButton(text = Localization.cancel, onClick = onCancel)
+            AppTextButton(text = stringResource(R.string.cancel), onClick = onCancel)
         }
     )
 }
