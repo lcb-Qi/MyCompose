@@ -43,9 +43,8 @@ object Route {
     }
 
     val supportShortcutScreens by lazy {
-        defaultScreens.filter {
-            it !is WebScreen && it !is MenstruationHistoryScreen && it !is MainScreen
-        }
+        val notSupport = setOf(WebScreen, MainScreen)
+        defaultScreens.subtract(notSupport).toList()
     }
 }
 

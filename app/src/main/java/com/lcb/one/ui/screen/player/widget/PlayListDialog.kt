@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,50 +36,61 @@ fun PlayListDialog(
 ) {
     if (!show || playList.isEmpty()) return
 
-    ModalBottomSheet(onDismissRequest = onDismiss) {
-        LazyColumn(modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 32.dp)) {
-            item {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        modifier = Modifier.statusBarsPadding()
+    ) {
+        Column(
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            content = {
                 Text(
                     text = stringResource(R.string.play_list),
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(vertical = 8.dp)
                 )
-            }
 
-            items(count = playList.size, key = { it }) { index ->
-                val audio = playList[index]
-                val textColor = if (playingAudio?.uri == audio.uri) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    Color.Unspecified
-                }
+                val listState =
+                    rememberLazyListState(playList.indexOf(playingAudio), 0)
+                LazyColumn(state = listState) {
 
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .noRippleClickable { onItemSelected(index) }
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(vertical = 16.dp)
-                    ) {
-                        Text(
-                            text = audio.title,
-                            color = textColor,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = " - ${audio.artist}",
-                            color = textColor,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                    items(count = playList.size, key = { it }) { index ->
+                        val audio = playList[index]
+                        val textColor = if (playingAudio?.uri == audio.uri) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            Color.Unspecified
+                        }
+
+                        Column(modifier = Modifier
+                            .fillMaxWidth()
+                            .noRippleClickable { onItemSelected(index) }
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(vertical = 16.dp)
+                            ) {
+                                Text(
+                                    text = audio.title,
+                                    color = textColor,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Text(
+                                    text = " - ${audio.artist}",
+                                    color = textColor,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+
+                            if (index != playList.size - 1) {
+                                HorizontalDivider()
+                            }
+                        }
                     }
-
-                    if (index != playList.size - 1) {
-                        HorizontalDivider()
-                    }
                 }
             }
-        }
+        )
     }
 }

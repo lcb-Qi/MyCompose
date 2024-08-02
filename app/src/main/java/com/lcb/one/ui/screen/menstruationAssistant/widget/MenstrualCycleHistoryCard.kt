@@ -49,7 +49,7 @@ fun MenstrualCycleHistoryCard(
             },
             trailingContent = {
                 Text(
-                    text = "${mcDay.getDurationDay()} ${stringResource(R.string.device)}",
+                    text = "${mcDay.getDurationDay()} ${stringResource(R.string.days)}",
                     style = MaterialTheme.typography.titleSmall
                 )
             }

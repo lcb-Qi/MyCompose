@@ -1,6 +1,6 @@
 package com.lcb.one.ui.screen.player.widget
 
-import androidx.compose.foundation.basicMarquee
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,13 +10,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.MyLocation
 import androidx.compose.material3.Card
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +44,7 @@ import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.ui.screen.player.repo.MusicPlayer
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.noRippleClickable
+import kotlinx.coroutines.launch
 
 @Composable
 fun PlayListPage(
@@ -36,20 +52,61 @@ fun PlayListPage(
     playList: List<Music>,
     playingMusic: Music?,
     showPlay: Boolean,
+    listState: LazyListState = rememberLazyListState()
 ) {
-    Scaffold(topBar = { ToolBar(title = stringResource(R.string.music_player)) }) { innerPadding ->
+    val selectedIndex = remember(playList, playingMusic) {
+        playList.indexOf(playingMusic).coerceAtLeast(0)
+    }
+
+    Scaffold(topBar = { ToolBar(title = stringResource(R.string.music_player)) },
+        floatingActionButton = {
+            val scope = rememberCoroutineScope()
+
+            var showBack2Current by remember { mutableStateOf(false) }
+            LaunchedEffect(listState, selectedIndex) {
+                snapshotFlow { listState.layoutInfo.visibleItemsInfo }.collect {
+                    showBack2Current = selectedIndex !in it.map { it.index }
+                }
+            }
+
+            if (showBack2Current) {
+                SmallFloatingActionButton(
+                    modifier = Modifier.padding(bottom = 80.dp),
+                    onClick = {
+                        scope.launch { listState.animateScrollToItem(selectedIndex) }
+                    },
+                    content = {
+                        Icon(imageVector = Icons.Rounded.MyLocation, contentDescription = null)
+                    }
+                )
+            }
+        }) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            PlayList(
-                modifier = Modifier.weight(1f),
-                playList = playList,
-                playingAudio = playingMusic,
-                onItemClick = { player.handleCommand(ControllerEvent.SeekTo(it)) }
-            )
+
+            LazyColumn(
+                state = listState, modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            ) {
+                items(playList.size, key = { it }) { index ->
+                    PlayListItem(
+                        modifier = Modifier.noRippleClickable {
+                            player.handleCommand(ControllerEvent.SeekTo(index))
+                        },
+                        selected = selectedIndex == index,
+                        music = playList[index],
+                    )
+
+                    if (index != playList.size - 1) {
+                        HorizontalDivider()
+                    }
+                }
+            }
 
             Card(
                 onClick = { player.showPlayDetailPage() },
@@ -62,26 +119,6 @@ fun PlayListPage(
                     onControllerEvent = { player.handleCommand(it) },
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun PlayList(
-    modifier: Modifier = Modifier,
-    playList: List<Music>,
-    playingAudio: Music?,
-    onItemClick: (index: Int) -> Unit = {}
-) {
-    LazyColumn(modifier = modifier.fillMaxWidth()) {
-        items(playList.size, key = { it }) { index ->
-            val music = playList[index]
-            val selected = playingAudio?.uri == music.uri
-            PlayListItem(
-                modifier = Modifier.noRippleClickable { onItemClick(index) },
-                selected = selected,
-                music = music,
-            )
         }
     }
 }
@@ -100,12 +137,10 @@ private fun PlayListItem(modifier: Modifier = Modifier, music: Music, selected: 
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Surface(
-            color = tint,
+        Surface(color = tint,
             shape = CircleShape,
             modifier = Modifier.size(height = 32.dp, width = 4.dp),
-            content = {}
-        )
+            content = {})
 
         Spacer(modifier = Modifier.width(8.dp))
 
@@ -125,7 +160,7 @@ private fun PlayListItem(modifier: Modifier = Modifier, music: Music, selected: 
                 overflow = TextOverflow.Ellipsis
             )
         }
-        
+
         Spacer(modifier = Modifier.width(16.dp))
 
         Text(

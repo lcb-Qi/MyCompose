@@ -9,6 +9,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -67,6 +68,7 @@ object MusicPlayerScreen : Screen {
 
         LaunchedEffect(Unit) { musicPlayer.preparePlayer() }
 
+        val  listState = rememberLazyListState()
         AnimatedContent(
             targetState = musicPlayer.showPlayDetailPage,
             label = "showPlayDetailPage",
@@ -94,7 +96,8 @@ object MusicPlayerScreen : Screen {
                         player = musicPlayer,
                         playList = playList,
                         playingMusic = playingMusic,
-                        showPlay = showPlay
+                        showPlay = showPlay,
+                        listState = listState
                     )
                 }
             }

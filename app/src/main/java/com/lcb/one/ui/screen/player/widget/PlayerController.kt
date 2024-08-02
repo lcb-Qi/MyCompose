@@ -126,7 +126,7 @@ fun SimplePlayerController(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(8.dp)
+                .padding(horizontal = 16.dp)
                 .defaultMinSize(minHeight = 48.dp),
             verticalArrangement = Arrangement.Center
         ) {
@@ -145,22 +145,12 @@ fun SimplePlayerController(
         }
 
         AppIconButton(
-            icon = Icons.Rounded.SkipPrevious,
-            onClick = { onControllerEvent(ControllerEvent.Previous) }
-        )
-
-        AppIconButton(
             icon = if (showPlay) {
                 Icons.Rounded.PlayCircle
             } else {
                 Icons.Rounded.PauseCircle
             },
             onClick = { onControllerEvent(ControllerEvent.PlayOrPause) }
-        )
-
-        AppIconButton(
-            icon = Icons.Rounded.SkipNext,
-            onClick = { onControllerEvent(ControllerEvent.Next) }
         )
     }
 }

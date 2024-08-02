@@ -1,6 +1,5 @@
 package com.lcb.one.ui.screen.main.home
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -11,7 +10,8 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AddCircle
-import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.CheckBox
+import androidx.compose.material.icons.rounded.CheckBoxOutlineBlank
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedAssistChip
@@ -103,29 +103,11 @@ private fun AddShortcutsDialog(
         selectedScreen.addAll(userShortcuts)
     }
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(text = stringResource(R.string.add_shortcut)) },
-        dismissButton = {
-            AppTextButton(
-                text = stringResource(R.string.cancel),
-                onClick = onDismiss
-            )
-        },
-        confirmButton = {
-            AppTextButton(
-                text = stringResource(R.string.ok),
-                onClick = {
-                    onDismiss()
-                    onSelectFinish(selectedScreen)
-                }
-            )
-        },
-        text = {
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
+    val dialogContent: @Composable () -> Unit = {
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Fixed(2),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            content = {
                 items(count = supportShortcutScreens.size, key = { it }) { index ->
                     val screen = supportShortcutScreens[index]
                     val selected = screen in selectedScreen
@@ -140,11 +122,32 @@ private fun AddShortcutsDialog(
                         },
                         label = { Text(text = screen.label) },
                         trailingIcon = {
-                            AnimatedVisibility(selected) { Icon(Icons.Rounded.Check, null) }
+                            Icon(
+                                if (selected) Icons.Rounded.CheckBox else Icons.Rounded.CheckBoxOutlineBlank,
+                                null
+                            )
                         }
                     )
                 }
             }
-        }
+        )
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = stringResource(R.string.add_shortcut)) },
+        dismissButton = {
+            AppTextButton(text = stringResource(R.string.cancel), onClick = onDismiss)
+        },
+        confirmButton = {
+            AppTextButton(
+                text = stringResource(R.string.ok),
+                onClick = {
+                    onDismiss()
+                    onSelectFinish(selectedScreen)
+                }
+            )
+        },
+        text = dialogContent
     )
 }
