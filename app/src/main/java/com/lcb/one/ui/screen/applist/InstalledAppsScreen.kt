@@ -20,9 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.lcb.one.R
-import com.lcb.one.ui.ANIMATE_DURATION
 import com.lcb.one.ui.Screen
+import com.lcb.one.ui.screen.ANIMATE_DURATION
 import com.lcb.one.ui.screen.applist.repo.AppInfo
 import com.lcb.one.ui.screen.applist.repo.loadInstalledApps
 import com.lcb.one.ui.screen.applist.widget.AppType
@@ -44,7 +45,7 @@ object InstalledAppsScreen : Screen {
         get() = Res.string(R.string.app_list)
 
     @Composable
-    override fun Content(args: Bundle?) {
+    override fun Content(navController: NavHostController, args: Bundle?) {
         var appType by remember { mutableStateOf(AppType.USER) }
         var loadSuccess by remember { mutableStateOf(false) }
         var allApps by remember { mutableStateOf(emptyList<AppInfo>()) }

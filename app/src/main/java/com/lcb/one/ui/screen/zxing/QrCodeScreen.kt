@@ -2,6 +2,7 @@ package com.lcb.one.ui.screen.zxing
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import com.lcb.one.ui.Screen
 
 object QrCodeScreen : Screen {
@@ -9,6 +10,6 @@ object QrCodeScreen : Screen {
         get() = "QrCode"
 
     @Composable
-    override fun Content(args: Bundle?) {
+    override fun Content(navController: NavHostController, args: Bundle?) {
     }
 }

@@ -21,10 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.navigation.NavHostController
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
-import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.about.repo.model.AppVersion
@@ -50,8 +50,7 @@ object AboutScreen : Screen {
         get() = Res.string(R.string.about)
 
     @Composable
-    override fun Content(args: Bundle?) {
-        val navController = LocalNav.current!!
+    override fun Content(navController: NavHostController, args: Bundle?) {
         Scaffold(topBar = { ToolBar(title = label) }) { innerPadding ->
             Card(
                 modifier = Modifier

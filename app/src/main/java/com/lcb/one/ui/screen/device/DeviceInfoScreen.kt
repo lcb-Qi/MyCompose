@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.screen.device.repo.model.BasicInfo
@@ -38,7 +39,7 @@ object DeviceInfoScreen : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    override fun Content(args: Bundle?) {
+    override fun Content(navController: NavHostController, args: Bundle?) {
         Scaffold(topBar = { ToolBar(title = label) }) { innerPadding ->
             val tabTitles = listOf(stringResource(R.string.device), stringResource(R.string.display))
             val pagerState = rememberPagerState { tabTitles.size }

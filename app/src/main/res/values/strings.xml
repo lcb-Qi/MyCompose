@@ -49,7 +49,7 @@
     <string name="menstruation_tips">It has been more than %d days, please pay attention to your health</string>
     <string name="no_menstruation">No menstruation</string>
     <string name="menstruation_prediction">Menstruation prediction</string>
-    <string name="next_menstruation_info">The next menstruation is expected on %s, come in %d days from today</string>
+    <string name="next_menstruation_info">The next menstruation is expected on %s</string>
     <string name="next_menstruation_days">Next menstruation day %d</string>
     <string name="menstruation_history">Menstruation history</string>
     <string name="conflict_tips">Conflicts with existing records</string>

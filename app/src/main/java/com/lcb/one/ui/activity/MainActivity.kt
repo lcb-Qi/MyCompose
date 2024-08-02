@@ -4,28 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
-import com.lcb.one.ui.AppGlobalConfigs
-import com.lcb.one.ui.AppNavHost
 import com.lcb.one.ui.appwidget.PoemAppWidgetProvider
-import com.lcb.one.ui.screen.main.MainScreen
-import com.lcb.one.ui.theme.AppTheme
-import com.lcb.one.ui.widget.dialog.AssertInternetDialog
+import com.lcb.one.ui.screen.ComposeApp
 
 class MainActivity : ComponentActivity() {
+    companion object {
+        const val EXT_START_ROUTE = "start_route"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        setContent { AppScreen(intent.getStringExtra("route")) }
+        val startRoute = intent.getStringExtra(EXT_START_ROUTE)
+        setContent { ComposeApp(startRoute) }
         PoemAppWidgetProvider.tryUpdate(this)
-    }
-
-    @Composable
-    private fun AppScreen(startRoute: String? = null) {
-        AppTheme {
-            AppNavHost(start = startRoute ?: MainScreen.route) {
-                AssertInternetDialog(AppGlobalConfigs.assertNetwork)
-            }
-        }
     }
 }

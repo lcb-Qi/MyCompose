@@ -23,7 +23,7 @@ import com.lcb.one.ui.widget.settings.storage.disk.BooleanPrefState
 import com.lcb.one.ui.widget.settings.storage.disk.IntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
-import com.lcb.one.util.android.LLog
+import com.lcb.one.util.android.LLogger
 import com.lcb.one.util.android.StorageUtils
 import com.lcb.one.util.android.UserPref
 import kotlinx.coroutines.CoroutineScope
@@ -77,7 +77,7 @@ class MusicPlayer {
             playingMusic.update {
                 val current = mediaItem?.getExtraAudioItem()
 
-                LLog.d(TAG, "onMediaItemTransition: $current")
+                LLogger.debug(TAG) { "onMediaItemTransition: $current" }
                 current?.let {
                     UserPref.putString(UserPref.Key.PLAYER_LAST_MUSIC, it.uri.toString())
                 }
@@ -107,7 +107,7 @@ class MusicPlayer {
                 player.apply {
                     addListener(playerListener)
 
-                    LLog.d(TAG, "preparePlayer: mediaItemCount = $mediaItemCount")
+                    LLogger.debug(TAG) { "preparePlayer: mediaItemCount = $mediaItemCount" }
                     if (mediaItemCount == 0) {
                         loadMusics()
                     }
@@ -140,12 +140,12 @@ class MusicPlayer {
         }
         player.setMediaItems(mediaItems)
         player.seekTo(lastIndex, 0)
-        LLog.d(TAG, "loadMusics: total = ${mediaItems.size}, lastIndex = $lastIndex")
+        LLogger.debug(TAG) { "loadMusics: total = ${mediaItems.size}, lastIndex = $lastIndex" }
     }
 
 
     fun handleCommand(event: ControllerEvent) {
-        LLog.d(TAG, "handleCommand: $event")
+        LLogger.debug(TAG) { "handleCommand: $event" }
         when (event) {
             ControllerEvent.ChangeRepeatMode -> changedRepeatMode()
             ControllerEvent.PlayOrPause -> playOrPause()
@@ -207,7 +207,7 @@ class MusicPlayer {
 
     private fun getLastPlayMusicUri(): String {
         val uri = UserPref.getString(UserPref.Key.PLAYER_LAST_MUSIC, "")
-        LLog.d(TAG, "getLastPlayMusic: uri = $uri")
+        LLogger.debug(TAG) { "getLastPlayMusic: uri = $uri" }
         return uri
     }
 }

@@ -20,9 +20,9 @@ import androidx.compose.ui.res.integerArrayResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
-import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
@@ -43,8 +43,7 @@ object SettingsScreen : Screen {
         get() = Res.string(R.string.settings)
 
     @Composable
-    override fun Content(args: Bundle?) {
-        val navController = LocalNav.current!!
+    override fun Content(navController: NavHostController, args: Bundle?) {
         Scaffold(topBar = { ToolBar(title = label) }) { innerPadding ->
             Column(
                 modifier = Modifier

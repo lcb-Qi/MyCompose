@@ -21,6 +21,7 @@ kotlinxSerializationJson = "1.7.0"
 markdown = "4.6.2"
 androidxRoom = "2.6.1"
 # others
+lottieCompose = "6.4.1"
 composeWebview = "0.33.6"
 retrofit = "2.11.0"
 okhttpLogger = "4.12.0"
@@ -63,6 +64,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 # others
 compose-webview = { module = "io.github.kevinnzou:compose-webview", version.ref = "composeWebview" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 retrofit-converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }

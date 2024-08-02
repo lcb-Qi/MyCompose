@@ -23,8 +23,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import androidx.navigation.NavHostController
 import com.lcb.one.R
-import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.activity.ClockActivity
 import com.lcb.one.ui.launchSingleTop
@@ -44,8 +44,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ToolScreen() {
-    val navController = LocalNav.current!!
+fun ToolScreen(navController: NavHostController) {
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)

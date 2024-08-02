@@ -1,7 +1,7 @@
 package com.lcb.one.ui.screen.qmc
 
 import android.net.Uri
-import com.lcb.one.util.android.LLog
+import com.lcb.one.util.android.LLogger
 import com.lcb.one.util.android.StorageUtils
 import com.lcb.one.util.android.getDisplayName
 import com.lcb.one.util.android.getRelativePath
@@ -110,7 +110,7 @@ object QmcConverter {
 
     suspend fun convert(inputUri: Uri) = withContext(Dispatchers.IO) {
         return@withContext runCatching {
-            LLog.d(TAG, "convert: inputUri = $inputUri")
+            LLogger.debug(TAG) { "convert: inputUri = $inputUri" }
 
             val outputUri = createOutputUri(inputUri.getDisplayName())
             checkNotNull(outputUri) { "Create output file failed." }
@@ -130,7 +130,7 @@ object QmcConverter {
     }
 
     private fun createOutputUri(inputFullName: String): Uri? {
-        LLog.d(TAG, "createOutputUri: inputFullName = $inputFullName")
+        LLogger.debug(TAG) { "createOutputUri: inputFullName = $inputFullName" }
 
         val split = inputFullName.split(".")
         val inName = split.getOrElse(0) { DateTimeUtils.nowStringShort() }

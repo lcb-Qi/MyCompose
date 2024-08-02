@@ -7,17 +7,10 @@
         <item>12 hours</item>
         <item>1 day</item>
     </string-array>
-    <integer-array name="settings_duration_values" translatable="false">
-        <item>900000</item>
-        <item>1800000</item>
-        <item>3600000</item>
-        <item>43200000</item>
-        <item>86400000</item>
-    </integer-array>
 
     <string-array name="settings_dark_mode_options">
-        <item>更随系统</item>
-        <item>浅色</item>
-        <item>深色</item>
+        <item>More with system</item>
+        <item>Light</item>
+        <item>Dark</item>
     </string-array>
 </resources>

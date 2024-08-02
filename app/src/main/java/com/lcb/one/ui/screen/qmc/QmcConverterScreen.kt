@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -46,7 +47,7 @@ object QmcConverterScreen : Screen {
         get() = Res.string(R.string.qmc_converter)
 
     @Composable
-    override fun Content(args: Bundle?) {
+    override fun Content(navController: NavHostController, args: Bundle?) {
         Scaffold(topBar = { ToolBar(title = label) }) { innerPadding ->
 
             var loading by remember { mutableStateOf(false) }

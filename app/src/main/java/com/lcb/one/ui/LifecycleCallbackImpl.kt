@@ -3,7 +3,7 @@ package com.lcb.one.ui
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import com.lcb.one.util.android.LLog
+import com.lcb.one.util.android.LLogger
 
 
 class LifecycleCallbackImpl : Application.ActivityLifecycleCallbacks {
@@ -11,10 +11,10 @@ class LifecycleCallbackImpl : Application.ActivityLifecycleCallbacks {
         private const val TAG = "LifecycleCallback"
     }
 
-    private fun logLifecycle(activity: Activity, lifecycleName: String) {
+    private fun logLifecycle(activity: Activity, lifecycleName: String) = LLogger.info(TAG) {
         val name = activity.javaClass.name
         val hashCode = activity.hashCode()
-        LLog.i(TAG, "$lifecycleName: $name@$hashCode")
+        "$lifecycleName: $name@$hashCode"
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {

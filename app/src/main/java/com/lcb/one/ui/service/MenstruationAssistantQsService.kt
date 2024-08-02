@@ -9,17 +9,19 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.quicksettings.TileService
 import androidx.core.app.PendingIntentCompat
+import androidx.core.service.quicksettings.TileServiceCompat.startActivityAndCollapse
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.activity.MainActivity
 import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
-import com.lcb.one.util.android.LLog
+import com.lcb.one.util.android.LLogger
 import java.util.concurrent.Executors
 
 class MenstruationAssistantQsService : TileService() {
     companion object {
+        private const val TAG = "MenstruationAssistantQsService"
         fun tryAddQs(context: Context = MyApp.get()) {
-            LLog.d(TAG, "tryAddQs: ")
+            LLogger.debug(TAG) { "tryAddQs: " }
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
                 return
             val statusBarManager = context.getSystemService(StatusBarManager::class.java)
@@ -29,28 +31,27 @@ class MenstruationAssistantQsService : TileService() {
                 Icon.createWithResource(context.packageName, R.drawable.ic_ice_cream),
                 Executors.newSingleThreadExecutor()
             ) {
-                LLog.d(TAG, "tryAddQs: result = $it")
+                LLogger.debug(TAG) { "tryAddQs: result = $it" }
             }
         }
 
-        private const val TAG = "MenstruationAssistantQsService"
     }
 
     override fun onTileAdded() {
         super.onTileAdded()
-        LLog.d(TAG, "onTileAdded: ")
+        LLogger.debug(TAG) { "onTileAdded: " }
     }
 
     override fun onTileRemoved() {
         super.onTileRemoved()
-        LLog.d(TAG, "onTileRemoved: ")
+        LLogger.debug(TAG) { "onTileRemoved: " }
     }
 
     override fun onClick() {
-        LLog.d(TAG, "onClick: ")
+        LLogger.debug(TAG) { "onClick: " }
         val intent = Intent(this, MainActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            .putExtra("route", MenstruationAssistantScreen.route)
+            .putExtra(MainActivity.EXT_START_ROUTE, MenstruationAssistantScreen.route)
 
         val pendingIntent = PendingIntentCompat.getActivity(
             this,

@@ -1,6 +1,6 @@
 package com.lcb.one.util.common
 
-import com.lcb.one.util.android.LLog
+import com.lcb.one.util.android.LLogger
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.SerializationStrategy
@@ -28,7 +28,7 @@ object JsonUtils {
         return try {
             json.encodeToString(serializer, src)
         } catch (e: Exception) {
-            LLog.d(TAG, "toJsonOrDefault failed: src = ${src.toString()}")
+            LLogger.debug(TAG) { "toJsonOrDefault failed: src = ${src.toString()}" }
             e.printStackTrace()
             default
         }
@@ -45,7 +45,7 @@ object JsonUtils {
         return try {
             json.decodeFromString(deserializer, src)
         } catch (e: Exception) {
-            LLog.d(TAG, "fromJsonOrDefault failed: src = $src")
+            LLogger.debug(TAG) { "fromJsonOrDefault failed: src = $src" }
             e.printStackTrace()
             default
         }

@@ -19,13 +19,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
 import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.kevinnzou.web.LoadingState
 import com.kevinnzou.web.WebView
 import com.kevinnzou.web.rememberWebViewNavigator
 import com.kevinnzou.web.rememberWebViewState
-import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.screen.webview.widget.WebAction
 import com.lcb.one.ui.screen.webview.widget.WebMenu
@@ -46,9 +46,8 @@ object WebScreen : Screen {
 
     @SuppressLint("SetJavaScriptEnabled")
     @Composable
-    override fun Content(args: Bundle?) {
+    override fun Content(navController: NavHostController, args: Bundle?) {
         val url = args?.getString("url") ?: ""
-        val navController = LocalNav.current!!
         val webViewState = rememberWebViewState(url)
         val webNav = rememberWebViewNavigator()
         Scaffold(

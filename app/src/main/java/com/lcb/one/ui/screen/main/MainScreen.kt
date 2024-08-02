@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.Screen
@@ -48,7 +49,7 @@ object MainScreen : Screen {
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    override fun Content(args: Bundle?) {
+    override fun Content(navController: NavHostController, args: Bundle?) {
         FriendlyExitHandler()
 
         val mainViewModel = viewModel<MainViewModel>()
@@ -106,9 +107,9 @@ object MainScreen : Screen {
                 verticalAlignment = Alignment.Top
             ) {
                 when (it) {
-                    0 -> HomeScreen()
-                    1 -> ToolScreen()
-                    2 -> MoreScreen()
+                    0 -> HomeScreen(navController)
+                    1 -> ToolScreen(navController)
+                    2 -> MoreScreen(navController)
                 }
             }
 

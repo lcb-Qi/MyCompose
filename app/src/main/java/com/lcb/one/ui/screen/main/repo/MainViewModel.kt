@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.appwidget.PoemAppWidgetProvider
 import com.lcb.one.ui.screen.main.repo.model.PoemInfo
-import com.lcb.one.util.android.LLog
+import com.lcb.one.util.android.LLogger
 import com.lcb.one.util.android.UserPref
 import com.lcb.one.util.common.ExceptionHandler
 import com.lcb.one.util.common.JsonUtils
@@ -50,7 +50,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun updatePoem(force: Boolean = false) {
-        LLog.d(TAG, "updatePoem: force = $force")
+        LLogger.debug(TAG) { "updatePoem: force = $force" }
         if (loading) return
 
         if (!needRefresh(force)) return

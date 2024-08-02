@@ -12,7 +12,7 @@ import com.lcb.one.R
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.activity.MainActivity
 import com.lcb.one.ui.screen.main.repo.model.PoemInfo
-import com.lcb.one.util.android.LLog
+import com.lcb.one.util.android.LLogger
 import com.lcb.one.util.android.PACKAGE_ME
 import com.lcb.one.util.android.UserPref
 import com.lcb.one.util.common.JsonUtils
@@ -33,7 +33,7 @@ class PoemAppWidgetProvider : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
-        LLog.d(TAG, "onReceive: action = $action")
+        LLogger.debug(TAG) { "onReceive: action = $action" }
 
         when (action) {
             ACTION_DATA_CHANGED -> refreshUi(context)
@@ -56,7 +56,7 @@ class PoemAppWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        LLog.d(TAG, "onUpdate: ids = ${appWidgetIds.contentToString()}")
+        LLogger.debug(TAG) { "onUpdate: ids = ${appWidgetIds.contentToString()}" }
 
         appWidgetManager.updateAppWidget(appWidgetIds, createRemoteViews(context))
     }

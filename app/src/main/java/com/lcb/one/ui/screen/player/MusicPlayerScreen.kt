@@ -18,8 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.NavHostController
 import com.lcb.one.R
-import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.player.repo.MusicPlayer
@@ -42,8 +42,7 @@ object MusicPlayerScreen : Screen {
     private val musicPlayer = MusicPlayer.instance
 
     @Composable
-    override fun Content(args: Bundle?) {
-        val navController = LocalNav.current!!
+    override fun Content(navController: NavHostController, args: Bundle?) {
         if (!PermissionUtils.hasPermission(permission = Manifest.permission.READ_MEDIA_AUDIO)) {
             var show by remember { mutableStateOf(true) }
             SimpleMessageDialog(

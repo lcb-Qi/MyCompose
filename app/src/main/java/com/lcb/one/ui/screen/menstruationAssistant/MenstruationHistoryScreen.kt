@@ -35,8 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.lcb.one.R
-import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
@@ -51,6 +51,7 @@ import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationMenuAction
 import com.lcb.one.ui.screen.menstruationAssistant.widget.PastMcDayPicker
 import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.util.android.Res
+import com.lcb.one.util.android.inputStream
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -64,7 +65,7 @@ object MenstruationHistoryScreen : Screen {
         get() = Res.string(R.string.menstruation_history)
 
     @Composable
-    override fun Content(args: Bundle?) {
+    override fun Content(navController: NavHostController, args: Bundle?) {
         val mcViewmodel = viewModel<MenstruationViewModel>()
         val allMcDay by mcViewmodel.all.collectAsState(emptyList())
         var showImportButton by remember { mutableStateOf(false) }
@@ -76,10 +77,8 @@ object MenstruationHistoryScreen : Screen {
                         var showMenu by remember { mutableStateOf(false) }
                         val launcher =
                             rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
-                                if (it != null) {
-                                    MyApp.getContentResolver().openInputStream(it)?.use { input ->
-                                        mcViewmodel.importFromFile(input)
-                                    }
+                                it?.inputStream()?.use { input ->
+                                    mcViewmodel.import(input)
                                 }
                             }
 

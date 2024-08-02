@@ -13,7 +13,7 @@ object UserPref {
         const val APP_ALOMED_MODE = "app_amoled_mode"// boolean
         const val USE_BUILTIN_BROWSER = "use_builtin_browser"// boolean
         const val DARK_MODE = "dark_mode"// int
-        const val QUICK_NAV = "quick_nav"// list
+        const val USER_SHORTCUTS = "user_shortcuts"// string set
 
         // poem
         const val POEM_TOKEN = "poem_token"// string
@@ -26,7 +26,6 @@ object UserPref {
         const val CLOCK_DARK_THEME = "clock_dark_theme"// boolean
 
         // 首页
-        const val PAYDAY = "salary_day"
         const val PLAYER_REPEAT_MODE = "player_repeat_mode"
         const val PLAYER_IS_SHUFFLE = "player_is_SHUFFLE"
         const val PLAYER_LAST_MUSIC = "player_last_music"
@@ -38,6 +37,19 @@ object UserPref {
     fun getString(key: String, default: String = ""): String {
         if (key.isBlank()) return default
         return defaultPref.getString(key, default) ?: default
+    }
+
+    fun getStringSet(key: String, default: Set<String> = emptySet()): Set<String> {
+        if (key.isBlank()) return default
+
+        return defaultPref.getStringSet(key, default) ?: default
+    }
+
+    fun putStringSet(key: String, value: Set<String>) {
+        if (key.isBlank()) return
+        defaultPref.edit {
+            putStringSet(key, value)
+        }
     }
 
     fun putInt(key: String, value: Int) {

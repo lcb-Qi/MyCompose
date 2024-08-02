@@ -31,41 +31,36 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.lcb.one.R
-import com.lcb.one.ui.LocalNav
+import com.lcb.one.ui.Route
 import com.lcb.one.ui.Screen
-import com.lcb.one.ui.defaultScreens
 import com.lcb.one.ui.launchSingleTop
-import com.lcb.one.ui.supportQuickNavScreens
 import com.lcb.one.ui.widget.common.AppTextButton
 import com.lcb.one.util.android.UserPref
-import com.lcb.one.util.common.JsonUtils
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.serializer
 
-private val userQuickNav by lazy {
-    val quickNav = UserPref.getString(UserPref.Key.QUICK_NAV, "")
-    val serializer = ListSerializer(String.serializer())
-    val quickNavs = JsonUtils.fromJsonOrDefault(quickNav, serializer)?.let { list ->
-        defaultScreens.filter { list.contains(it.route) }
-    }
+private val userShortcuts by lazy {
+    val set = UserPref.getStringSet(UserPref.Key.USER_SHORTCUTS)
+    val shortcuts = Route.defaultScreens.filter { set.contains(it.route) }
 
-    quickNavs?.toMutableStateList() ?: mutableStateListOf()
+    shortcuts.toMutableStateList()
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun QuickNavCard(modifier: Modifier = Modifier) {
-    val navController = LocalNav.current!!
-    Card(modifier = modifier.fillMaxWidth()) {
+fun ShortcutsCard(navController: NavHostController) {
+    Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = stringResource(R.string.shortcut), style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = stringResource(R.string.shortcut),
+                style = MaterialTheme.typography.titleMedium
+            )
 
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                userQuickNav.forEach {
+                userShortcuts.forEach {
                     ElevatedAssistChip(
                         onClick = { navController.launchSingleTop(it.route) },
                         label = { Text(text = it.label) }
@@ -79,16 +74,14 @@ fun QuickNavCard(modifier: Modifier = Modifier) {
                     icon = { Icon(Icons.Rounded.AddCircle, null) }
                 )
 
-                AddQuickNavDialog(
+                AddShortcutsDialog(
                     show = showAdd,
                     onDismiss = { showAdd = false },
                     onSelectFinish = {
-                        userQuickNav.clear()
-                        userQuickNav.addAll(it)
-                        UserPref.putString(
-                            UserPref.Key.QUICK_NAV,
-                            JsonUtils.toJson(it.map { it.route })
-                        )
+                        userShortcuts.clear()
+                        userShortcuts.addAll(it)
+                        val routes = it.map { it.route }.toSet()
+                        UserPref.putStringSet(UserPref.Key.USER_SHORTCUTS, routes)
                     }
                 )
             }
@@ -97,16 +90,17 @@ fun QuickNavCard(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun AddQuickNavDialog(
+private fun AddShortcutsDialog(
     show: Boolean,
     onDismiss: () -> Unit,
     onSelectFinish: (List<Screen>) -> Unit = {}
 ) {
     if (!show) return
 
+    val supportShortcutScreens = Route.supportShortcutScreens
     val selectedScreen = remember { mutableStateListOf<Screen>() }
     LaunchedEffect(Unit) {
-        selectedScreen.addAll(userQuickNav)
+        selectedScreen.addAll(userShortcuts)
     }
 
     AlertDialog(
@@ -132,8 +126,8 @@ private fun AddQuickNavDialog(
                 columns = StaggeredGridCells.Fixed(2),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                items(count = supportQuickNavScreens.size, key = { it }) { index ->
-                    val screen = supportQuickNavScreens[index]
+                items(count = supportShortcutScreens.size, key = { it }) { index ->
+                    val screen = supportShortcutScreens[index]
                     val selected = screen in selectedScreen
                     FilterChip(
                         selected = selected,
@@ -146,9 +140,7 @@ private fun AddQuickNavDialog(
                         },
                         label = { Text(text = screen.label) },
                         trailingIcon = {
-                            AnimatedVisibility(selected) {
-                                Icon(Icons.Rounded.Check, null)
-                            }
+                            AnimatedVisibility(selected) { Icon(Icons.Rounded.Check, null) }
                         }
                     )
                 }

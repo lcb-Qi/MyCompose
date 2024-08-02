@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
@@ -57,7 +58,7 @@ object BiliBiliScreen : Screen {
 
     @OptIn(ExperimentalSharedTransitionApi::class)
     @Composable
-    override fun Content(args: Bundle?) {
+    override fun Content(navController: NavHostController, args: Bundle?) {
         SharedTransitionLayout(modifier = Modifier.fillMaxSize()) {
             var showBig by remember { mutableStateOf(false) }
             var url by remember { mutableStateOf("") }

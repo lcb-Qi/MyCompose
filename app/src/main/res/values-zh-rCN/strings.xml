@@ -50,7 +50,7 @@
     <string name="menstruation_tips">已超过 %d 天，请注意健康哦</string>
     <string name="no_menstruation">不在月经期</string>
     <string name="menstruation_prediction">月经预测</string>
-    <string name="next_menstruation_info">预计下一次月经在 %s，距今天还有 %d 天</string>
+    <string name="next_menstruation_info">预计下一次月经在 %s</string>
     <string name="next_menstruation_days">下一次月经第 %d 天</string>
     <string name="menstruation_history">月经记录</string>
     <string name="conflict_tips">和已有记录冲突</string>

@@ -14,7 +14,6 @@ import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Today
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,8 +29,8 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.lcb.one.R
-import com.lcb.one.ui.LocalNav
 import com.lcb.one.ui.service.MenstruationAssistantQsService
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.launchSingleTop
@@ -40,8 +39,8 @@ import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.ui.screen.menstruationAssistant.repo.MenstruationViewModel
 import com.lcb.one.ui.screen.menstruationAssistant.widget.Calendar
 import com.lcb.one.ui.screen.menstruationAssistant.widget.CalendarColor
-import com.lcb.one.ui.screen.menstruationAssistant.widget.PredictMessages
-import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationInfo
+import com.lcb.one.ui.screen.menstruationAssistant.widget.PredictInfoCard
+import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationInfoCard
 import com.lcb.one.ui.screen.menstruationAssistant.widget.rememberCalendarState
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.ui.widget.common.AppIconButton
@@ -61,9 +60,7 @@ object MenstruationAssistantScreen : Screen {
         get() = Res.string(R.string.menstruation_assistant)
 
     @Composable
-    override fun Content(args: Bundle?) {
-        val navController = LocalNav.current!!
-
+    override fun Content(navController: NavHostController, args: Bundle?) {
         val mcViewmodel = viewModel<MenstruationViewModel>()
         val mcDays by mcViewmodel.all.collectAsState(emptyList())
         val runningMcDay by remember { derivedStateOf { mcDays.firstOrNull { !it.finish } } }
@@ -118,23 +115,15 @@ object MenstruationAssistantScreen : Screen {
             ) {
                 Calendar(state = calendarState)
 
-                LegendTips(
-                    modifier = Modifier.padding(horizontal = 32.dp),
-                    color = calendarState.colors
-                )
+                LegendTips(Modifier.padding(horizontal = 32.dp), calendarState.colors)
 
-                MenstruationInfo(
+                MenstruationInfoCard(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     selectedDate = calendarState.selectedMillis,
                     mcDays = mcDays
                 )
 
-                PredictMessages(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    selectedDate = calendarState.selectedMillis,
-                    predictMcDay = predictMcDay
-                )
-
+                PredictInfoCard(Modifier.padding(horizontal = 16.dp), predictMcDay)
 
                 val showStart by remember {
                     derivedStateOf {

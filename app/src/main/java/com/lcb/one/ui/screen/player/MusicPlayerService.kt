@@ -7,7 +7,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import com.lcb.one.ui.screen.player.repo.MusicPlayer
-import com.lcb.one.util.android.LLog
+import com.lcb.one.util.android.LLogger
 
 @UnstableApi
 class MusicPlayerService : MediaSessionService() {
@@ -35,24 +35,24 @@ class MusicPlayerService : MediaSessionService() {
 
     override fun onCreate() {
         super.onCreate()
-        LLog.d(TAG, "onCreate: ")
+        LLogger.debug(TAG) { "onCreate: " }
         exoPlayer.prepare()
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession {
-        LLog.d(TAG, "onGetSession: ")
+        LLogger.debug(TAG) { "onGetSession: " }
         return mediaSession
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
-        LLog.d(TAG, "onTaskRemoved: stopSelf now")
+        LLogger.debug(TAG) { "onTaskRemoved: stopSelf now" }
         stopSelf()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        LLog.d(TAG, "onDestroy: ")
+        LLogger.debug(TAG) { "onDestroy: " }
         exoPlayer.release()
         mediaSession.release()
     }

@@ -79,10 +79,6 @@ android {
 ksp {
     arg("room.incremental", "true")
     arg("room.generateKotlin", "true")
-    arg(
-        "compose-destinations.codeGenPackageName",
-        "${project.android.defaultConfig.applicationId}.route"
-    )
 }
 
 tasks.register("copyTask") {
@@ -151,7 +147,7 @@ dependencies {
     implementation(libs.androidx.media3.session)
     implementation(files("libs/androidx-media3-decoder-ffmpeg.aar"))
 
-    implementation("com.airbnb.android:lottie-compose:6.4.1")
+    implementation(libs.lottie.compose)
     // for test
     addTestDependencies()
 }

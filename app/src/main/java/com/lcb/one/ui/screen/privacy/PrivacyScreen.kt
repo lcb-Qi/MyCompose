@@ -26,6 +26,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -43,7 +44,7 @@ object PrivacyScreen : Screen {
         get() = Res.string(R.string.permissions_management)
 
     @Composable
-    override fun Content(args: Bundle?) {
+    override fun Content(navController: NavHostController, args: Bundle?) {
         val privacyViewModel = viewModel<PrivacyViewModel>()
         val privacy by privacyViewModel.privacyState.collectAsState()
 

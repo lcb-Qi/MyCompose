@@ -1,7 +1,7 @@
 package com.lcb.one.network.core
 
 import android.annotation.SuppressLint
-import com.lcb.one.util.android.LLog
+import com.lcb.one.util.android.LLogger
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -37,13 +37,13 @@ object OkhttpFactory {
 
     private fun createHostnameVerifier(): HostnameVerifier {
         return HostnameVerifier { hostname, _ ->
-            LLog.v(TAG, "hostnameVerifier: hostname = $hostname")
+            LLogger.verbose(TAG) { "hostnameVerifier: hostname = $hostname" }
             true
         }
     }
 
     private fun createLogger(): HttpLoggingInterceptor {
-        val loggingInterceptor = HttpLoggingInterceptor { LLog.v(TAG, it) }
+        val loggingInterceptor = HttpLoggingInterceptor { LLogger.verbose(TAG) { it } }
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
         return loggingInterceptor
@@ -59,15 +59,15 @@ object OkhttpFactory {
     @SuppressLint("CustomX509TrustManager")
     private class DefaultTrustManager : X509TrustManager {
         override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-            LLog.v(TAG, "checkClientTrusted: authType = $authType")
+            LLogger.verbose(TAG) { "checkClientTrusted: authType = $authType" }
         }
 
         override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-            LLog.v(TAG, "checkServerTrusted: authType = $authType")
+            LLogger.verbose(TAG) { "checkServerTrusted: authType = $authType" }
         }
 
         override fun getAcceptedIssuers(): Array<X509Certificate?> {
-            LLog.v(TAG, "getAcceptedIssuers: ")
+            LLogger.verbose(TAG) { "getAcceptedIssuers: " }
 
             return arrayOfNulls(0)
         }

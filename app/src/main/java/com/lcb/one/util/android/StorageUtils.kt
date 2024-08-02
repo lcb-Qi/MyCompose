@@ -36,10 +36,7 @@ object StorageUtils {
         filename: String,
         relativePath: String = getRelativePathFromMimeType(mimeType)
     ): Uri? {
-        LLog.d(
-            TAG,
-            "insertToStorage: mimeType = $mimeType, filename = $filename, relativePath = $relativePath"
-        )
+        LLogger.debug(TAG) { "insertToStorage: mimeType = $mimeType, filename = $filename, relativePath = $relativePath" }
 
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
@@ -61,7 +58,7 @@ object StorageUtils {
     // public api start
 
     suspend fun createImageFromUrl(url: String, filename: String) = withContext(Dispatchers.IO) {
-        LLog.d(TAG, "createImageFromUrl: $url")
+        LLogger.debug(TAG) { "createImageFromUrl: $url" }
 
         require(url.isNotBlank() && filename.isNotBlank()) {
             "url and filename must not empty."
@@ -80,7 +77,7 @@ object StorageUtils {
         fileName: String,
         contentType: String = "image/jpeg"
     ) = withContext(Dispatchers.IO) {
-        LLog.d(TAG, "createImageFile: ")
+        LLogger.debug(TAG) { "createImageFile: " }
 
         val uri = insertToStorage(contentType, fileName)
         val result = uri?.outputStream()?.use {
@@ -93,7 +90,7 @@ object StorageUtils {
     }
 
     suspend fun createImageFile(bitmap: Bitmap, fileName: String) = withContext(Dispatchers.IO) {
-        LLog.d(TAG, "createImageFile: ")
+        LLogger.debug(TAG) { "createImageFile: " }
 
         val uri = insertToStorage("image/jpeg", fileName)
         val result = uri?.outputStream()?.use {
@@ -107,7 +104,7 @@ object StorageUtils {
     }
 
     suspend fun saveApk(srcPath: String, targetFileName: String) = withContext(Dispatchers.IO) {
-        LLog.d(TAG, "saveApk: $srcPath")
+        LLogger.debug(TAG) { "saveApk: $srcPath" }
 
         val mimeType = "application/vnd.android.package-archive"
         val uri = insertToStorage(mimeType, targetFileName)
@@ -123,7 +120,7 @@ object StorageUtils {
     }
 
     suspend fun createDocument(text: String, filename: String) = withContext(Dispatchers.IO) {
-        LLog.d(TAG, "saveToFile: ")
+        LLogger.debug(TAG) { "saveToFile: " }
 
         val uri = insertToStorage("text/plain", filename)
         val result = uri?.bufferedSink()?.use { sink ->

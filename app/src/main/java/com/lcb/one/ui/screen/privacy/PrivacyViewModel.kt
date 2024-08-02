@@ -1,7 +1,6 @@
 package com.lcb.one.ui.screen.privacy
 
 import androidx.lifecycle.ViewModel
-import com.lcb.one.util.android.LLog
 import com.lcb.one.util.android.PermissionUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -20,7 +19,6 @@ class PrivacyViewModel : ViewModel() {
     val privacyState: MutableStateFlow<Privacy> = MutableStateFlow(Privacy())
 
     fun checkPermission() {
-        LLog.d(TAG, "checkPermission: ")
         privacyState.update { last ->
             last.copy(
                 canReadImage = PermissionUtils.canReadImage(),

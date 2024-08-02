@@ -4,32 +4,33 @@ import android.util.Log
 import com.lcb.one.ui.MyApp
 import com.lcb.one.R
 
-object LLog {
+object LLogger {
     private val COMMON_TAG = "SaltFish#" + MyApp.get().getString(R.string.BUILD_ID)
 
-    fun e(tag: String, vararg message: String) {
-        println(Log.ERROR, buildLogMessage(tag, *message))
+    fun error(tag: String = "", lazyMsg: () -> Any) {
+        println(Log.ERROR, buildLogMessage(tag, lazyMsg().toString()))
     }
 
-    fun w(tag: String, vararg message: String) {
-        println(Log.WARN, buildLogMessage(tag, *message))
+    fun info(tag: String = "", lazyMsg: () -> Any) {
+        println(Log.INFO, buildLogMessage(tag, lazyMsg().toString()))
     }
 
-    fun i(tag: String, vararg message: String) {
-        println(Log.INFO, buildLogMessage(tag, *message))
+    fun warn(tag: String = "", lazyMsg: () -> Any) {
+        println(Log.WARN, buildLogMessage(tag, lazyMsg().toString()))
     }
 
-    fun d(tag: String, vararg message: String) {
-        println(Log.DEBUG, buildLogMessage(tag, *message))
+    fun debug(tag: String = "", lazyMsg: () -> Any) {
+        println(Log.DEBUG, buildLogMessage(tag, lazyMsg().toString()))
     }
 
-    fun v(tag: String, vararg message: String) {
-        println(Log.VERBOSE, buildLogMessage(tag, *message))
+    fun verbose(tag: String = "", lazyMsg: () -> Any) {
+        println(Log.VERBOSE, buildLogMessage(tag, lazyMsg().toString()))
     }
 
-    private fun buildLogMessage(tag: String, vararg message: String): String {
+    private fun buildLogMessage(tag: String = "", vararg message: String): String {
         return if (message.isNotEmpty()) {
-            message.joinToString(separator = ", ", prefix = "[$tag] ")
+            val prefix = if (tag.isNotEmpty()) "[$tag] " else ""
+            message.joinToString(separator = ", ", prefix = prefix)
         } else {
             ""
         }

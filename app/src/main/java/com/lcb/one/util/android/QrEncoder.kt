@@ -32,7 +32,7 @@ object QrEncoder {
         logo: Bitmap? = null
     ): Bitmap =
         withContext(Dispatchers.Default) {
-            LLog.d(TAG, "createQrCode: content = $content, size = $size")
+            LLogger.debug(TAG) { "createQrCode: content = $content, size = $size" }
 
             val matrix = MultiFormatWriter().encode(
                 content,
@@ -75,7 +75,7 @@ object QrEncoder {
                 restore()
             }
         }.onFailure {
-            LLog.d(TAG, "addLogo failed: $it")
+            LLogger.debug(TAG) { "addLogo failed: $it" }
         }
 
         return if (result.isFailure) {

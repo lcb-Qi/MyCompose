@@ -2,7 +2,7 @@ package com.lcb.one.ui
 
 import android.app.Application
 import android.content.ContentResolver
-import com.lcb.one.util.android.LLog
+import com.lcb.one.util.android.LLogger
 
 class MyApp : Application() {
     companion object {
@@ -18,7 +18,7 @@ class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
         app = this
-        LLog.d(TAG, "Application onCreate...")
+        LLogger.debug(TAG) { "Application onCreate" }
         registerActivityLifecycleCallbacks(LifecycleCallbackImpl())
     }
 }
