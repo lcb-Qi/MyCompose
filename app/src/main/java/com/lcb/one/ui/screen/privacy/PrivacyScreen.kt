@@ -1,8 +1,6 @@
 package com.lcb.one.ui.screen.privacy
 
 import android.os.Bundle
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +33,7 @@ import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.Res
+import com.lcb.one.util.android.rememberLauncherForStartActivity
 
 object PrivacyScreen : Screen {
     override val route: String
@@ -55,10 +54,9 @@ object PrivacyScreen : Screen {
             }
         }
 
-        val activityLauncher =
-            rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                privacyViewModel.checkPermission()
-            }
+        val activityLauncher = rememberLauncherForStartActivity {
+            privacyViewModel.checkPermission()
+        }
 
         Scaffold(topBar = { ToolBar(title = label) }) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {

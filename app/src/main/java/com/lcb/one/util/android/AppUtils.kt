@@ -17,6 +17,7 @@ import android.net.Uri
 import android.provider.Settings
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.annotation.Px
 import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.core.view.WindowInsetsControllerCompat
 import com.lcb.one.BuildConfig
@@ -39,24 +40,18 @@ object AppUtils {
         }
     }
 
+    @Px
     fun getNavigationBarsHeight(context: Context = MyApp.get()): Int {
         val metrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
         val insets = metrics.windowInsets.getInsets(WindowInsets.Type.systemBars())
         return insets.bottom
     }
 
+    @Px
     fun getStatusBarsHeight(context: Context = MyApp.get()): Int {
         val metrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
         val insets = metrics.windowInsets.getInsets(WindowInsets.Type.systemBars())
         return insets.top
-    }
-
-    fun getScreenWidth(context: Context = MyApp.get()): Int {
-        return PhoneUtil.getResolution(context).width
-    }
-
-    fun getScreenHeight(context: Context = MyApp.get()): Int {
-        return PhoneUtil.getResolution(context).height
     }
 
     fun getAppIcon(context: Context = MyApp.get(), packageName: String): Bitmap? {

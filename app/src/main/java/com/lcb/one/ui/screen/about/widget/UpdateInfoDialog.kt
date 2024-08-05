@@ -2,8 +2,6 @@ package com.lcb.one.ui.screen.about.widget
 
 import android.content.Intent
 import android.widget.TextView
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -15,14 +13,14 @@ import androidx.core.net.toUri
 import com.lcb.one.R
 import com.lcb.one.ui.screen.about.repo.model.UpdateInfo
 import com.lcb.one.ui.widget.common.AppTextButton
+import com.lcb.one.util.android.rememberLauncherForStartActivity
 import io.noties.markwon.Markwon
 
 @Composable
 fun UpdateInfoDialog(show: Boolean, updateInfo: UpdateInfo?, onCancel: () -> Unit) {
     if (!show || updateInfo == null) return
 
-    val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+    val launcher = rememberLauncherForStartActivity {}
     AlertDialog(
         title = {
             Text(

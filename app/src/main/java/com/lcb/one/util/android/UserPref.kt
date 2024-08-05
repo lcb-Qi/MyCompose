@@ -14,6 +14,7 @@ object UserPref {
         const val USE_BUILTIN_BROWSER = "use_builtin_browser"// boolean
         const val DARK_MODE = "dark_mode"// int
         const val USER_SHORTCUTS = "user_shortcuts"// string set
+        const val HOME_HEADER_BG = "home_header_bg"// uri
 
         // poem
         const val POEM_TOKEN = "poem_token"// string

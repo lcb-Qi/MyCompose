@@ -39,20 +39,25 @@ fun SingleChoiceDialog(
                 onClick = { onItemSelected(selectedIndex) }
             )
         },
-        dismissButton = { AppTextButton(text = stringResource(R.string.cancel), onClick = onDismiss) },
+        dismissButton = {
+            AppTextButton(
+                text = stringResource(R.string.cancel),
+                onClick = onDismiss
+            )
+        },
         title = { Text(text = title) },
         text = {
             LazyColumn(modifier = Modifier.requiredHeightIn(max = 240.dp)) {
-                items(options.size, key = { it }) {
+                items(options.size, key = { it }) { index ->
                     DropdownMenuItem(
                         trailingIcon = {
                             RadioButton(
-                                selected = selectedIndex == it,
-                                onClick = { update(it) }
+                                selected = selectedIndex == index,
+                                onClick = { update(index) }
                             )
                         },
-                        text = { Text(text = options[it]) },
-                        onClick = { update(it) }
+                        text = { Text(text = options[index]) },
+                        onClick = { update(index) }
                     )
                 }
             }

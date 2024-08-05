@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -37,6 +38,7 @@ import com.lcb.one.ui.widget.dialog.LoadingDialog
 import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.android.getRelativePath
+import com.lcb.one.util.android.rememberLauncherForGetContents
 import kotlinx.coroutines.launch
 
 object QmcConverterScreen : Screen {
@@ -53,10 +55,7 @@ object QmcConverterScreen : Screen {
             var loading by remember { mutableStateOf(false) }
             val scope = rememberCoroutineScope()
             var selectedFile by remember { mutableStateOf(emptyList<Uri>()) }
-            val launcher =
-                rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { files ->
-                    selectedFile = files
-                }
+            val launcher = rememberLauncherForGetContents { selectedFile = it }
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
@@ -80,9 +79,9 @@ object QmcConverterScreen : Screen {
                             modifier = Modifier.height(240.dp),
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            items(selectedFile.size, key = { it }) { index ->
+                            items(items = selectedFile, key = { it }) { fileUri ->
                                 Text(
-                                    text = selectedFile[index].getRelativePath(),
+                                    text = fileUri.getRelativePath(),
                                     style = MaterialTheme.typography.bodyMedium,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis

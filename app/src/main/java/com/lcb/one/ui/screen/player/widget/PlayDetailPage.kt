@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -51,21 +52,22 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.lcb.one.R
-import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.ui.screen.player.repo.MusicPlayer
 import com.lcb.one.ui.screen.player.repo.ControllerEvent
 import com.lcb.one.ui.widget.common.AppIconButton
-import com.lcb.one.util.android.DimenUtils
 import com.lcb.one.util.android.PhoneUtil
 import kotlinx.coroutines.delay
 
 private val horizontalPadding = 32.dp
 
-private fun calculateImageSize(): Dp {
-    val screenWidth = DimenUtils.px2dp(PhoneUtil.getResolution(MyApp.get()).width)
+@Composable
+private fun calculateImageSize(): DpSize = with(LocalDensity.current) {
+    val screenWidthInDp = PhoneUtil.getScreenWidth().toDp()
 
-    return screenWidth.dp - horizontalPadding * 2
+    val size = screenWidthInDp - horizontalPadding * 2
+
+    DpSize(size, size)
 }
 
 @OptIn(UnstableApi::class)

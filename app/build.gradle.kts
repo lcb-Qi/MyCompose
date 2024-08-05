@@ -141,7 +141,6 @@ dependencies {
 
     implementation(libs.bundles.settings.ui)
     implementation(libs.compose.webview)
-    implementation("com.google.zxing:core:3.5.3")
 
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.session)

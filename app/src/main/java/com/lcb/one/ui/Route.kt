@@ -20,7 +20,6 @@ import com.lcb.one.ui.screen.qmc.QmcConverterScreen
 import com.lcb.one.ui.screen.settings.SettingsScreen
 import com.lcb.one.ui.screen.settings.ThemeSettingsScreen
 import com.lcb.one.ui.screen.webview.WebScreen
-import com.lcb.one.ui.screen.zxing.QrCodeScreen
 
 object Route {
     val defaultScreens by lazy {
@@ -35,7 +34,6 @@ object Route {
             MenstruationHistoryScreen,
             ThemeSettingsScreen,
             PrivacyScreen,
-            QrCodeScreen,
             WebScreen,
             QmcConverterScreen,
             MusicPlayerScreen,

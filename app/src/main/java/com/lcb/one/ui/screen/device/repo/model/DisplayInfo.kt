@@ -6,7 +6,6 @@ import android.util.Size
 import android.view.WindowManager
 import com.lcb.one.ui.MyApp
 import com.lcb.one.util.android.AppUtils
-import com.lcb.one.util.android.DimenUtils
 import com.lcb.one.util.android.PhoneUtil
 
 data class DisplayInfo(
@@ -18,18 +17,6 @@ data class DisplayInfo(
     var statusBarsHeight: Int = -1,
     var navigationBarsHeight: Int = -1
 ) {
-    fun displaySize2dp(): String {
-        val widthInDip = DimenUtils.px2dp(displaySize.width)
-        val heightInDip = DimenUtils.px2dp(displaySize.height)
-        return "${widthInDip}x${heightInDip}"
-    }
-
-    fun resolution2dp(): String {
-        val widthInDip = DimenUtils.px2dp(resolution.width)
-        val heightInDip = DimenUtils.px2dp(resolution.height)
-        return "${widthInDip}x${heightInDip}"
-    }
-
     companion object {
         fun obtain(context: Context = MyApp.get()): DisplayInfo {
             val displayInfo = DisplayInfo()

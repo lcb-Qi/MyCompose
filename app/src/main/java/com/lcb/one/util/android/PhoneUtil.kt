@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Build
 import android.util.Size
 import android.view.WindowManager
+import androidx.annotation.Px
+import com.lcb.one.ui.MyApp
 
 object PhoneUtil {
     private const val BRAND_XIAOMI = "Xiaomi"
@@ -27,8 +29,14 @@ object PhoneUtil {
 
     fun getSdkInt(): Int = Build.VERSION.SDK_INT
 
-    fun getResolution(context: Context): Size {
+    fun getResolution(context: Context = MyApp.get()): Size {
         val metrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
         return Size(metrics.bounds.width(), metrics.bounds.height())
     }
+
+    @Px
+    fun getScreenWidth(context: Context = MyApp.get()): Int = getResolution(context).width
+
+    @Px
+    fun getScreenHeight(context: Context = MyApp.get()): Int = getResolution(context).height
 }

@@ -8,7 +8,6 @@ import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.menstruationAssistant.repo.MenstruationDayDao
 
 val appDatabase by lazy {
-    KotlinVersion.CURRENT
     Room.databaseBuilder(MyApp.get(), AppDatabase::class.java, "db_salt_fish")
         .build()
 }

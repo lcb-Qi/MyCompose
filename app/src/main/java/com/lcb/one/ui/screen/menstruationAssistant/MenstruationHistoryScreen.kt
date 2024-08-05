@@ -1,8 +1,6 @@
 package com.lcb.one.ui.screen.menstruationAssistant
 
 import android.os.Bundle
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animate
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -12,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.MoreVert
@@ -52,6 +51,7 @@ import com.lcb.one.ui.screen.menstruationAssistant.widget.PastMcDayPicker
 import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.inputStream
+import com.lcb.one.util.android.rememberLauncherForGetContent
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -75,12 +75,11 @@ object MenstruationHistoryScreen : Screen {
                     title = label,
                     actions = {
                         var showMenu by remember { mutableStateOf(false) }
-                        val launcher =
-                            rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
-                                it?.inputStream()?.use { input ->
-                                    mcViewmodel.import(input)
-                                }
+                        val launcher = rememberLauncherForGetContent {
+                            it?.inputStream()?.use { input ->
+                                mcViewmodel.import(input)
                             }
+                        }
 
                         AppIconButton(icon = Icons.Rounded.MoreVert, onClick = { showMenu = true })
 
@@ -106,8 +105,7 @@ object MenstruationHistoryScreen : Screen {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 reverseLayout = true
             ) {
-                items(count = allMcDay.size, key = { allMcDay[it].startTime }) { index ->
-                    val mcDay = allMcDay[index]
+                items(items = allMcDay, key = { it.startTime }) { mcDay ->
                     HistoryItem(data = mcDay) { mcViewmodel.deleteMenstruationDay(mcDay) }
                 }
 
