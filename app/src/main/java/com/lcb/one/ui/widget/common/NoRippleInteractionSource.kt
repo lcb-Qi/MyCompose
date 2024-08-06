@@ -25,7 +25,7 @@ fun Modifier.noRippleClickable(
     onLongClickLabel: String? = null,
     onLongClick: (() -> Unit)? = null,
     onDoubleClick: (() -> Unit)? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit = {}
 ) = then(
     Modifier.combinedClickable(
         enabled = enabled,

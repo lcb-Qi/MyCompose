@@ -48,7 +48,7 @@ private val userShortcuts by lazy {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ShortcutsCard(navController: NavHostController) {
+fun ShortcutsCard(onShortcutClick: (String) -> Unit) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -62,7 +62,7 @@ fun ShortcutsCard(navController: NavHostController) {
             ) {
                 userShortcuts.forEach {
                     ElevatedAssistChip(
-                        onClick = { navController.launchSingleTop(it.route) },
+                        onClick = { onShortcutClick(it.route) },
                         label = { Text(text = it.label) }
                     )
                 }

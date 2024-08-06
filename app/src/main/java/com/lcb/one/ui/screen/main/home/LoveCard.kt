@@ -34,7 +34,7 @@ fun LoveCard(modifier: Modifier = Modifier) {
             Image(
                 modifier = Modifier
                     .size(48.dp)
-                    .padding(8.dp),
+                    .padding(12.dp),
                 painter = painterResource(R.drawable.icon_love),
                 contentDescription = null
             )
