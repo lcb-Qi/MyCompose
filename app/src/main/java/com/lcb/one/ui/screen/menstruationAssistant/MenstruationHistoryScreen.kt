@@ -172,9 +172,7 @@ object MenstruationHistoryScreen : Screen {
                 onDelete(data)
                 showDeleteDialog = false
             },
-            icon = {
-                Icon(imageVector = Icons.Rounded.WarningAmber, contentDescription = "")
-            }
+            icon = { Icon(Icons.Rounded.WarningAmber, null) }
         )
     }
 

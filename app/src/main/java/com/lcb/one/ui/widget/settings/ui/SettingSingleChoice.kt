@@ -39,10 +39,7 @@ fun SettingSingleChoice(
         title = title,
         selected = selectIndex,
         options = options,
-        onItemSelected = {
-            showDialog = false
-            onItemSelected?.invoke(it)
-        },
+        onItemSelected = { onItemSelected?.invoke(it) },
         onDismiss = { showDialog = false }
     )
 }

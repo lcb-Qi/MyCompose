@@ -40,9 +40,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -52,8 +49,9 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.lcb.one.R
+import com.lcb.one.ui.screen.player.PlayerHelper
 import com.lcb.one.ui.screen.player.repo.Music
-import com.lcb.one.ui.screen.player.repo.MusicPlayer
+import com.lcb.one.ui.screen.player.PlayerManager
 import com.lcb.one.ui.screen.player.repo.ControllerEvent
 import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.util.android.PhoneUtil
@@ -73,7 +71,7 @@ private fun calculateImageSize(): DpSize = with(LocalDensity.current) {
 @OptIn(UnstableApi::class)
 @Composable
 fun PlayDetailPage(
-    player: MusicPlayer,
+    player: PlayerManager,
     playList: List<Music>,
     playingMusic: Music?,
     showPlay: Boolean,
@@ -139,10 +137,9 @@ fun PlayDetailPage(
             var currentPosition by remember { mutableLongStateOf(0L) }
             val activity = LocalContext.current as Activity
             LaunchedEffect(Unit) {
+                // FIXME: 拖动 slider 时不松开，这里也会更新进度，导致slider跳动，sliderState 里有 drag 状态但是无法访问
                 while (true) {
-                    activity.runOnUiThread {
-                        currentPosition = player.getCurrentPosition()
-                    }
+                    activity.runOnUiThread { currentPosition = player.getCurrentPosition() }
                     delay(1000)
                 }
             }
@@ -153,7 +150,7 @@ fun PlayDetailPage(
                 onValueChange = { currentPosition = it.toLong() },
                 onValueChangeFinished = {
                     val event = ControllerEvent.SeekToPosition(currentPosition)
-                    player.handleCommand(event)
+                    player.handleEvent(event)
                 },
                 nowPosition = currentPosition,
             )
@@ -165,7 +162,7 @@ fun PlayDetailPage(
                 isShuffle = player.isShuffle,
                 playing = playingMusic,
                 showPlay = showPlay,
-                onEvent = { player.handleCommand(it) }
+                onEvent = { player.handleEvent(it) }
             )
         }
     }
@@ -228,7 +225,7 @@ private fun PlayerProgressIndicator(
                     top.linkTo(sliderRef.bottom)
                 }
                 .padding(start = 8.dp),
-            text = MusicPlayer.formatDuration(nowPosition),
+            text = PlayerHelper.formatDuration(nowPosition),
             style = MaterialTheme.typography.labelLarge
         )
 
@@ -239,7 +236,7 @@ private fun PlayerProgressIndicator(
                     top.linkTo(sliderRef.bottom)
                 }
                 .padding(end = 8.dp),
-            text = MusicPlayer.formatDuration(maxValue.toLong()),
+            text = PlayerHelper.formatDuration(maxValue.toLong()),
             style = MaterialTheme.typography.labelLarge
         )
     }
@@ -259,10 +256,7 @@ private fun LegacySlider(
     val thumbSize = DpSize(16.dp, 16.dp)
     Slider(
         interactionSource = interactionSource,
-        modifier =
-        modifier
-            .semantics { contentDescription = "Localized Description" }
-            .requiredSizeIn(minWidth = thumbSize.width, minHeight = trackHeight),
+        modifier = modifier.requiredSizeIn(minWidth = thumbSize.width, minHeight = trackHeight),
         value = value,
         valueRange = 0f..maxValue,
         onValueChange = onValueChange,

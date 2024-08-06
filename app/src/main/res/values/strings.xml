@@ -39,14 +39,10 @@
     <string name="common">Common</string>
     <string name="theme">Theme</string>
     <string name="about">About</string>
-    <string name="check_updates">Check updates</string>
-    <string name="no_new_version">No new version</string>
-    <string name="already_last_version">Already the latest version</string>
     <string name="load_success_msg">Loading complete, a total of %d applications loaded, time taken %d ms</string>
     <string name="menstruation_start">Menstruation has started</string>
     <string name="menstruation_ended">Menstruation has ended</string>
     <string name="menstruation_days">Menstruation day %d</string>
-    <string name="menstruation_tips">It has been more than %d days, please pay attention to your health</string>
     <string name="no_menstruation">No menstruation</string>
     <string name="menstruation_prediction">Menstruation prediction</string>
     <string name="next_menstruation_info">The next menstruation is expected on %s</string>
@@ -72,7 +68,6 @@
     <string name="extract_icon">Extract desktop icon</string>
     <string name="extract_installation_package">Extract installation package</string>
     <string name="friendly_exit_tips">Press the back button again to exit</string>
-    <string name="to_download">Go to download</string>
     <string name="go_settings">Go settings</string>
     <string name="daily_poetry">Daily poetry</string>
     <string name="main_screen">Main screen</string>
@@ -107,4 +102,6 @@
     <string name="refresh">Refresh</string>
     <string name="msg_no_internet">Can\'t connect to the network, please check the network and try again</string>
     <string name="qmc_converter">Qmc converter(QQ Music Decryption)</string>
+    <string name="qmc_convertor_msg">Convert finish, total %d but %d failures</string>
+    <string name="app_details">Application details</string>
 </resources>

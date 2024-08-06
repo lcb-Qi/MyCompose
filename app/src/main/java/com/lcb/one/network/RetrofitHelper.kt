@@ -21,9 +21,7 @@ object RetrofitHelper {
             client(client)
             addConverterFactory(ScalarsConverterFactory.create())
             addConverterFactory(JsonUtils.json.asConverterFactory("application/json; charset=UTF8".toMediaType()))
-            converterFactory.forEach {
-                addConverterFactory(it)
-            }
+            converterFactory.forEach(::addConverterFactory)
         }
 
         return builder.build().create(clazz)

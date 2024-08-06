@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Autorenew
 import androidx.compose.material.icons.rounded.DisplaySettings
 import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material.icons.rounded.TravelExplore
+import androidx.compose.material.icons.rounded.Update
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -87,7 +87,7 @@ object SettingsScreen : Screen {
                             SettingSingleChoice(
                                 modifier = Modifier.padding(top = 8.dp),
                                 title = stringResource(R.string.poem_update_duration),
-                                icon = { Icon(Icons.Rounded.Autorenew, null) },
+                                icon = { Icon(Icons.Rounded.Update, null) },
                                 selectIndex = values.indexOf(AppGlobalConfigs.poemUpdateInterval)
                                     .coerceAtLeast(0),
                                 options = options,

@@ -30,7 +30,7 @@ import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.lcb.one.R
-import com.lcb.one.ui.theme.AppTheme
+import com.lcb.one.ui.theme.AppThemeSurface
 import com.lcb.one.ui.theme.ThemeManager
 import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPrefState
 import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPrefState
@@ -92,7 +92,7 @@ class ClockActivity : ComponentActivity() {
             DATE_POSITION_LEFT_BOTTOM
         )
 
-        AppTheme(darkTheme = darkTheme) {
+        AppThemeSurface(darkTheme = darkTheme) {
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             ModalNavigationDrawer(
                 drawerState = drawerState,

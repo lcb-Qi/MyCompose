@@ -28,7 +28,7 @@ import com.lcb.one.ui.screen.applist.repo.AppInfo
 import com.lcb.one.ui.screen.applist.repo.loadInstalledApps
 import com.lcb.one.ui.screen.applist.widget.AppType
 import com.lcb.one.ui.screen.applist.widget.AppTypeSelector
-import com.lcb.one.ui.screen.applist.widget.ApplicationInfoDialog
+import com.lcb.one.ui.screen.applist.widget.AppInfoDialog
 import com.lcb.one.ui.screen.applist.widget.InstalledAppList
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppIconButton
@@ -107,7 +107,7 @@ object InstalledAppsScreen : Screen {
                     )
                 }
 
-                ApplicationInfoDialog(showDetail, packageName) { showDetail = false }
+                AppInfoDialog(showDetail, packageName) { showDetail = false }
             }
         }
     }

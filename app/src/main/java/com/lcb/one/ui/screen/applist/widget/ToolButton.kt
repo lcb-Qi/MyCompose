@@ -3,7 +3,6 @@ package com.lcb.one.ui.screen.applist.widget
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -26,14 +25,13 @@ fun ToolButton(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 48.dp)
             .clip(MaterialTheme.shapes.small)
             .clickable { onclick() }
-            .padding(8.dp),
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Icon(imageVector = leadingIcon, contentDescription = "")
+        Icon(leadingIcon, null)
         Text(
             text = text,
             modifier = Modifier.weight(1f),

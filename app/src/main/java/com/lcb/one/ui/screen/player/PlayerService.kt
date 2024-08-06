@@ -6,13 +6,12 @@ import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
-import com.lcb.one.ui.screen.player.repo.MusicPlayer
 import com.lcb.one.util.android.LLogger
 
 @UnstableApi
-class MusicPlayerService : MediaSessionService() {
+class PlayerService : MediaSessionService() {
     companion object {
-        private const val TAG = "MusicPlayerService"
+        private const val TAG = "PlayerService"
     }
 
     private val exoPlayer by lazy {
@@ -23,8 +22,8 @@ class MusicPlayerService : MediaSessionService() {
         }.build()
 
         player.apply {
-            repeatMode = MusicPlayer.instance.repeatMode
-            shuffleModeEnabled = MusicPlayer.instance.isShuffle
+            repeatMode = PlayerManager.instance.repeatMode
+            shuffleModeEnabled = PlayerManager.instance.isShuffle
         }
     }
 
@@ -37,6 +36,7 @@ class MusicPlayerService : MediaSessionService() {
         super.onCreate()
         LLogger.debug(TAG) { "onCreate: " }
         exoPlayer.prepare()
+        LLogger.debug(TAG) { "onCreate: end" }
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession {

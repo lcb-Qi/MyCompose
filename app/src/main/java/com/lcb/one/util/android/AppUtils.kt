@@ -2,8 +2,10 @@ package com.lcb.one.util.android
 
 import android.app.Activity
 import android.app.UiModeManager
+import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -14,6 +16,7 @@ import android.graphics.drawable.LayerDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -26,6 +29,15 @@ import com.lcb.one.ui.MyApp
 const val PACKAGE_ME = BuildConfig.APPLICATION_ID
 
 object AppUtils {
+    private const val TAG = "AppUtils"
+
+    fun hasPermission(context: Context = MyApp.get(), permission: String): Boolean {
+        val hasSelfPermission =
+            context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+
+        return hasSelfPermission
+    }
+
     fun isNetworkAvailable(context: Context = MyApp.get()): Boolean {
         val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
@@ -80,6 +92,21 @@ object AppUtils {
         }
 
         return icon
+    }
+
+    fun getWallpaper(
+        context: Context = MyApp.get(),
+        type: Int = WallpaperManager.FLAG_SYSTEM
+    ): Drawable? {
+        return runCatching {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                WallpaperManager.getInstance(context).getDrawable(type)
+            } else {
+                WallpaperManager.getInstance(context).drawable
+            }
+        }.onFailure {
+            LLogger.debug(TAG) { "getWallpaper failed: $it" }
+        }.getOrNull()
     }
 
     fun getApkPath(packageName: String): String {

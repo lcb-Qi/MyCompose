@@ -1,6 +1,6 @@
 package com.lcb.one.ui.screen.player.widget
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,8 +15,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MyLocation
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Card
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -39,48 +39,54 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
+import com.lcb.one.ui.screen.player.PlayerHelper
 import com.lcb.one.ui.screen.player.repo.ControllerEvent
 import com.lcb.one.ui.screen.player.repo.Music
-import com.lcb.one.ui.screen.player.repo.MusicPlayer
+import com.lcb.one.ui.screen.player.PlayerManager
 import com.lcb.one.ui.widget.appbar.ToolBar
+import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.ui.widget.common.noRippleClickable
 import kotlinx.coroutines.launch
 
 @Composable
 fun PlayListPage(
-    player: MusicPlayer,
+    playerManager: PlayerManager,
     playList: List<Music>,
     playingMusic: Music?,
     showPlay: Boolean,
     listState: LazyListState = rememberLazyListState()
 ) {
+    val scope = rememberCoroutineScope()
+
     val selectedIndex = remember(playList, playingMusic) {
         playList.indexOf(playingMusic).coerceAtLeast(0)
     }
 
-    Scaffold(topBar = { ToolBar(title = stringResource(R.string.music_player)) },
+    Scaffold(
+        topBar = {
+            ToolBar(title = stringResource(R.string.music_player), actions = {
+                AppIconButton(icon = Icons.Rounded.Search, onClick = {
+                    scope.launch { playerManager.updatePlaylist() }
+                })
+            })
+        },
         floatingActionButton = {
-            val scope = rememberCoroutineScope()
-
             var showBack2Current by remember { mutableStateOf(false) }
             LaunchedEffect(listState, selectedIndex) {
-                snapshotFlow { listState.layoutInfo.visibleItemsInfo }.collect {
-                    showBack2Current = selectedIndex !in it.map { it.index }
+                snapshotFlow { listState.layoutInfo.visibleItemsInfo }.collect { visibleItem ->
+                    showBack2Current = selectedIndex !in visibleItem.map { it.index }
                 }
             }
 
             if (showBack2Current) {
                 SmallFloatingActionButton(
                     modifier = Modifier.padding(bottom = 80.dp),
-                    onClick = {
-                        scope.launch { listState.animateScrollToItem(selectedIndex) }
-                    },
-                    content = {
-                        Icon(imageVector = Icons.Rounded.MyLocation, contentDescription = null)
-                    }
+                    onClick = { scope.launch { listState.animateScrollToItem(selectedIndex) } },
+                    content = { Icon(Icons.Rounded.MyLocation, null) }
                 )
             }
-        }) { innerPadding ->
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -89,14 +95,15 @@ fun PlayListPage(
         ) {
 
             LazyColumn(
-                state = listState, modifier = Modifier
+                state = listState,
+                modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
             ) {
                 items(playList.size, key = { it }) { index ->
                     PlayListItem(
                         modifier = Modifier.noRippleClickable {
-                            player.handleCommand(ControllerEvent.SeekTo(index))
+                            playerManager.handleEvent(ControllerEvent.SeekTo(index))
                         },
                         selected = selectedIndex == index,
                         music = playList[index],
@@ -109,14 +116,14 @@ fun PlayListPage(
             }
 
             Card(
-                onClick = { player.showPlayDetailPage() },
+                onClick = { playerManager.showPlayDetailPage() },
                 modifier = Modifier.padding(bottom = 16.dp)
             ) {
                 SimplePlayerController(
                     modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
                     showPlay = showPlay,
                     playingAudio = playingMusic,
-                    onControllerEvent = { player.handleCommand(it) },
+                    onControllerEvent = { playerManager.handleEvent(it) },
                 )
             }
         }
@@ -165,7 +172,7 @@ private fun PlayListItem(modifier: Modifier = Modifier, music: Music, selected: 
 
         Text(
             modifier = Modifier.padding(horizontal = 4.dp),
-            text = MusicPlayer.formatDuration(music.duration),
+            text = PlayerHelper.formatDuration(music.duration),
             color = tint,
             style = MaterialTheme.typography.labelMedium
         )

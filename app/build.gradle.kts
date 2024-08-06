@@ -144,7 +144,7 @@ dependencies {
 
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.session)
-    implementation(files("libs/androidx-media3-decoder-ffmpeg.aar"))
+    implementation(files("libs/lib-androidx-media3-decoder-flac.aar"))
 
     implementation(libs.lottie.compose)
     // for test

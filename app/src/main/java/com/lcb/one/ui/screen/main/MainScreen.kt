@@ -28,6 +28,7 @@ import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.screen.main.home.HomeScreen
+import com.lcb.one.ui.screen.main.more.MoreScreen
 import com.lcb.one.ui.widget.appbar.BottomBar
 import com.lcb.one.ui.widget.appbar.BottomBarItem
 import com.lcb.one.ui.widget.appbar.ToolBar
@@ -35,6 +36,7 @@ import com.lcb.one.ui.widget.common.FriendlyExitHandler
 import com.lcb.one.ui.screen.main.widget.PoemInfoDialog
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.ui.screen.main.repo.MainViewModel
+import com.lcb.one.ui.screen.main.tool.ToolScreen
 import com.lcb.one.ui.widget.common.noRippleClickable
 import com.lcb.one.util.android.Res
 import kotlinx.coroutines.launch
@@ -50,7 +52,7 @@ object MainScreen : Screen {
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Content(navController: NavHostController, args: Bundle?) {
-        FriendlyExitHandler()
+        // FriendlyExitHandler()
 
         val mainViewModel = viewModel<MainViewModel>()
         val poemState by mainViewModel.poemInfo.collectAsState()

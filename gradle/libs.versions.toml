@@ -14,7 +14,7 @@ androidxCore = "1.13.1"
 androidxLifecycle = "2.8.1"
 coroutinesAndroid = "1.8.0"
 androidxPreference = "1.2.1"
-# 更新此库时，建议同步更新 libs/androidx-media3-decoder-ffmpeg.aar
+# 更新此库时，建议同步更新 libs/lib-androidx-media3-decoder-flac.aar
 # https://github.com/androidx/media/blob/release/libraries/decoder_ffmpeg/README.md
 androidxMedia3 = "1.3.1"
 kotlinxSerializationJson = "1.7.0"

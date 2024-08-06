@@ -70,7 +70,7 @@ object ThemeManager {
 }
 
 @Composable
-fun AppTheme(
+fun AppThemeSurface(
     darkTheme: Boolean = ThemeManager.calculateDarkTheme(),
     dynamicColor: Boolean = ThemeManager.dynamicColor,
     seedColor: Color = ThemeManager.themeColor,

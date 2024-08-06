@@ -1,16 +1,13 @@
-package com.lcb.one.ui.screen.player.repo
+package com.lcb.one.ui.screen.player
 
 import android.content.ComponentName
 import android.content.Context
-import android.os.Build
 import androidx.annotation.OptIn
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.common.util.Util
@@ -18,41 +15,38 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.lcb.one.ui.MyApp
-import com.lcb.one.ui.screen.player.MusicPlayerService
+import com.lcb.one.ui.screen.player.PlayerHelper.getExtraMusic
+import com.lcb.one.ui.screen.player.PlayerHelper.toMediaItem
+import com.lcb.one.ui.screen.player.repo.ControllerEvent
+import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.ui.widget.settings.storage.disk.BooleanPrefState
 import com.lcb.one.ui.widget.settings.storage.disk.IntPrefState
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
 import com.lcb.one.util.android.LLogger
-import com.lcb.one.util.android.StorageUtils
 import com.lcb.one.util.android.UserPref
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 @OptIn(UnstableApi::class)
-class MusicPlayer {
+class PlayerManager {
     companion object {
-        private const val TAG = "MusicPlayer"
-        private const val EXT_MUSIC = "ext_music"
-        val instance by lazy { MusicPlayer() }
-
-        fun formatDuration(duration: Long): String {
-            val minutes = duration / 1000 / 60
-            val seconds = duration / 1000 % 60
-            return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
-        }
+        private const val TAG = "PlayerManager"
+        val instance by lazy { PlayerManager() }
     }
 
+    private lateinit var player: MediaController
+
+    val playList: MutableStateFlow<List<Music>> = MutableStateFlow(emptyList())
+    val isPlaying: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val playingMusic: MutableStateFlow<Music?> = MutableStateFlow(null)
+    val showPlay: MutableStateFlow<Boolean> = MutableStateFlow(true)
 
     var showPlayDetailPage by mutableStateOf(false)
         private set
-    val playList: MutableStateFlow<List<Music>> = MutableStateFlow(emptyList())
-
-    val isPlaying: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     fun showPlayListPage() {
         showPlayDetailPage = false
@@ -62,57 +56,42 @@ class MusicPlayer {
         showPlayDetailPage = true
     }
 
-    private lateinit var player: MediaController
-
-    val playingMusic: MutableStateFlow<Music?> = MutableStateFlow(null)
-    val showPlay: MutableStateFlow<Boolean> = MutableStateFlow(true)
-
     private val playerListener = object : Player.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             showPlay.update { Util.shouldShowPlayButton(player) }
-            this@MusicPlayer.isPlaying.update { isPlaying }
+            this@PlayerManager.isPlaying.update { isPlaying }
         }
 
         override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-            playingMusic.update {
-                val current = mediaItem?.getExtraAudioItem()
-
-                LLogger.debug(TAG) { "onMediaItemTransition: $current" }
-                current?.let {
-                    UserPref.putString(UserPref.Key.PLAYER_LAST_MUSIC, it.uri.toString())
-                }
-
-                current
-            }
-        }
-    }
-
-    private fun MediaItem.getExtraAudioItem(): Music? {
-        val extras = mediaMetadata.extras ?: return null
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            extras.getParcelable(EXT_MUSIC, Music::class.java)
-        } else {
-            extras.getParcelable(EXT_MUSIC) as? Music
+            LLogger.debug(TAG) { "onMediaItemTransition: " }
+            val current = mediaItem?.getExtraMusic() ?: return
+            UserPref.putString(UserPref.Key.PLAYER_LAST_MUSIC, current.uri.toString())
+            playingMusic.update { current }
         }
     }
 
     suspend fun preparePlayer(context: Context = MyApp.get()) {
-        val sessionToken =
-            SessionToken(context, ComponentName(context, MusicPlayerService::class.java))
-        val controllerFuture = MediaController.Builder(context, sessionToken).buildAsync()
+        if (::player.isInitialized) {
+            LLogger.debug(TAG) { "preparePlayer: has initialized, break" }
+            return
+        }
+        LLogger.debug(TAG) { "preparePlayer: " }
+
+        val token = SessionToken(context, ComponentName(context, PlayerService::class.java))
+        val controllerFuture = MediaController.Builder(context, token).buildAsync()
 
         val runnable = Runnable {
             CoroutineScope(Dispatchers.Main.immediate).launch {
                 player = controllerFuture.get()
                 player.apply {
                     addListener(playerListener)
-
-                    LLogger.debug(TAG) { "preparePlayer: mediaItemCount = $mediaItemCount" }
-                    if (mediaItemCount == 0) {
-                        loadMusics()
+                    // 先获取上一次播放的歌曲，再初始化播放列表，然后长时定位到上一次播放位置
+                    val lastUri = PlayerHelper.getLastPlayMusicUri()
+                    updatePlaylist()
+                    val lastIndex = playList.value.indexOfFirst { it.uri.toString() == lastUri }
+                    if (lastIndex in playList.value.indices) {
+                        seekTo(lastIndex, 0)
                     }
-
-                    playingMusic.update { currentMediaItem?.getExtraAudioItem() }
                 }
             }
         }
@@ -120,32 +99,15 @@ class MusicPlayer {
         controllerFuture.addListener(runnable, ContextCompat.getMainExecutor(context))
     }
 
-    private suspend fun loadMusics() {
-        playList.update { StorageUtils.findMusics() }
-        val lastPlayMusicUri = getLastPlayMusicUri()
-        var lastIndex = 0
-        val mediaItems = playList.value.map { music ->
-            if (music.uri.toString() == lastPlayMusicUri) {
-                lastIndex = playList.value.indexOf(music)
-            }
-            MediaItem.Builder().apply {
-                setUri(music.uri)
-                setMediaId(music.uri.toString())
-
-                val metadata = MediaMetadata.Builder()
-                    .setExtras(bundleOf(EXT_MUSIC to music))
-                    .build()
-                setMediaMetadata(metadata)
-            }.build()
-        }
-        player.setMediaItems(mediaItems)
-        player.seekTo(lastIndex, 0)
-        LLogger.debug(TAG) { "loadMusics: total = ${mediaItems.size}, lastIndex = $lastIndex" }
+    suspend fun updatePlaylist() {
+        LLogger.debug(TAG) { "updatePlaylist: " }
+        playList.update { PlayerHelper.findMusics() }
+        val mediaItems = playList.value.toMediaItem()
+        player.addMediaItems(mediaItems)
     }
 
-
-    fun handleCommand(event: ControllerEvent) {
-        LLogger.debug(TAG) { "handleCommand: $event" }
+    fun handleEvent(event: ControllerEvent) {
+        LLogger.debug(TAG) { "handleEvent: $event" }
         when (event) {
             ControllerEvent.ChangeRepeatMode -> changedRepeatMode()
             ControllerEvent.PlayOrPause -> playOrPause()
@@ -157,23 +119,10 @@ class MusicPlayer {
     }
 
     fun getCurrentPosition() = player.currentPosition
-
     private fun playOrPause() = Util.handlePlayPauseButtonAction(player)
-
     private fun seekTo(index: Int, position: Long = 0) = player.seekTo(index, position)
-
-    private fun seekToNext() {
-        if (player.hasNextMediaItem()) {
-            player.seekToNextMediaItem()
-        }
-    }
-
-    private fun seekToPrevious() {
-        if (player.hasPreviousMediaItem()) {
-            player.seekToPreviousMediaItem()
-        }
-    }
-
+    private fun seekToNext() = player.seekToNextMediaItem()
+    private fun seekToPrevious() = player.seekToPreviousMediaItem()
     private fun seekToPosition(position: Long) = player.seekTo(position)
 
     var repeatMode by IntPrefState(UserPref.Key.PLAYER_REPEAT_MODE, ExoPlayer.REPEAT_MODE_ALL)
@@ -203,11 +152,5 @@ class MusicPlayer {
 
         repeatMode = player.repeatMode
         isShuffle = player.shuffleModeEnabled
-    }
-
-    private fun getLastPlayMusicUri(): String {
-        val uri = UserPref.getString(UserPref.Key.PLAYER_LAST_MUSIC, "")
-        LLogger.debug(TAG) { "getLastPlayMusic: uri = $uri" }
-        return uri
     }
 }

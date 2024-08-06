@@ -25,7 +25,7 @@
         android:theme="@style/Theme.MyCompose"
         android:usesCleartextTraffic="true">
         <service
-            android:name=".ui.service.MenstruationAssistantQsService"
+            android:name=".ui.screen.menstruationAssistant.MenstruationAssistantQsService"
             android:enabled="true"
             android:exported="true"
             android:icon="@drawable/ic_ice_cream"
@@ -68,7 +68,7 @@
         </receiver>
 
         <service
-            android:name=".ui.screen.player.MusicPlayerService"
+            android:name=".ui.screen.player.PlayerService"
             android:exported="true"
             android:foregroundServiceType="mediaPlayback">
             <intent-filter>

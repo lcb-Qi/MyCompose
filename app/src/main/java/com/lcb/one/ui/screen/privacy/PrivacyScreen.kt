@@ -54,9 +54,7 @@ object PrivacyScreen : Screen {
             }
         }
 
-        val activityLauncher = rememberLauncherForStartActivity {
-            privacyViewModel.checkPermission()
-        }
+        val launcher = rememberLauncherForStartActivity { privacyViewModel.checkPermission() }
 
         Scaffold(topBar = { ToolBar(title = label) }) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
@@ -70,7 +68,7 @@ object PrivacyScreen : Screen {
                                 title = stringResource(R.string.permission_access_image_and_video),
                                 summary = stringResource(R.string.permission_access_image_and_video_desc),
                                 action = { PrivacyAction(hasPermission = privacy.canReadImage) },
-                                onClick = { activityLauncher.launch(AppUtils.getAppDetailSettingsIntent()) }
+                                onClick = { launcher.launch(AppUtils.getAppDetailSettingsIntent()) }
                             )
                         }
 
@@ -79,7 +77,7 @@ object PrivacyScreen : Screen {
                                 title = stringResource(R.string.permission_access_all_files),
                                 summary = stringResource(R.string.permission_access_all_files_desc),
                                 action = { PrivacyAction(hasPermission = privacy.canAccessAllFile) },
-                                onClick = { activityLauncher.launch(AppUtils.getAllFileAccessIntent()) }
+                                onClick = { launcher.launch(AppUtils.getAllFileAccessIntent()) }
                             )
                         }
 
@@ -88,7 +86,7 @@ object PrivacyScreen : Screen {
                                 title = stringResource(R.string.permission_access_music_and_audio),
                                 summary = stringResource(R.string.permission_access_music_and_audio_desc),
                                 action = { PrivacyAction(hasPermission = privacy.canReadAudio) },
-                                onClick = { activityLauncher.launch(AppUtils.getAppDetailSettingsIntent()) }
+                                onClick = { launcher.launch(AppUtils.getAppDetailSettingsIntent()) }
                             )
                         }
                     }

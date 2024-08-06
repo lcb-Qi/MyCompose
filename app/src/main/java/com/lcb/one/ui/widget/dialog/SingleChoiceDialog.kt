@@ -10,12 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
 import com.lcb.one.ui.widget.common.AppTextButton
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun SingleChoiceDialog(
@@ -28,17 +31,21 @@ fun SingleChoiceDialog(
 ) {
     if (!show) return
 
+    val scope = rememberCoroutineScope()
+
     var selectedIndex by remember { mutableIntStateOf(selected) }
-    val update: (Int) -> Unit = { selectedIndex = it }
+    val handleSelected: (Int) -> Unit = {
+        selectedIndex = it
+        onItemSelected(it)
+        scope.launch {
+            delay(100)
+            onDismiss()
+        }
+    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        confirmButton = {
-            AppTextButton(
-                text = stringResource(R.string.ok),
-                onClick = { onItemSelected(selectedIndex) }
-            )
-        },
+        confirmButton = {},
         dismissButton = {
             AppTextButton(
                 text = stringResource(R.string.cancel),
@@ -53,11 +60,11 @@ fun SingleChoiceDialog(
                         trailingIcon = {
                             RadioButton(
                                 selected = selectedIndex == index,
-                                onClick = { update(index) }
+                                onClick = { handleSelected(index) }
                             )
                         },
                         text = { Text(text = options[index]) },
-                        onClick = { update(index) }
+                        onClick = { handleSelected(index) }
                     )
                 }
             }

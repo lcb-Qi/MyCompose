@@ -10,6 +10,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -23,13 +24,14 @@ import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.launchSingleTop
-import com.lcb.one.ui.screen.player.repo.MusicPlayer
+import com.lcb.one.ui.screen.ANIMATE_DURATION
 import com.lcb.one.ui.screen.player.widget.PlayListPage
 import com.lcb.one.ui.screen.player.widget.PlayDetailPage
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
-import com.lcb.one.util.android.PermissionUtils
+import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.Res
+import kotlinx.coroutines.delay
 
 
 @OptIn(UnstableApi::class)
@@ -40,11 +42,11 @@ object MusicPlayerScreen : Screen {
     override val label: String
         get() = Res.string(R.string.music_player)
 
-    private val musicPlayer = MusicPlayer.instance
+    private val playerManager = PlayerManager.instance
 
     @Composable
     override fun Content(navController: NavHostController, args: Bundle?) {
-        if (!PermissionUtils.hasPermission(permission = Manifest.permission.READ_MEDIA_AUDIO)) {
+        if (!AppUtils.hasPermission(permission = Manifest.permission.READ_MEDIA_AUDIO)) {
             var show by remember { mutableStateOf(true) }
             SimpleMessageDialog(
                 show = show,
@@ -62,18 +64,20 @@ object MusicPlayerScreen : Screen {
             return
         }
 
-        val playList by musicPlayer.playList.collectAsState()
-        val playingMusic by musicPlayer.playingMusic.collectAsState()
-        val showPlay by musicPlayer.showPlay.collectAsState()
+        val playList by playerManager.playList.collectAsState()
+        val playingMusic by playerManager.playingMusic.collectAsState()
+        val showPlay by playerManager.showPlay.collectAsState()
 
-        LaunchedEffect(Unit) { musicPlayer.preparePlayer() }
+        var loading by remember { mutableStateOf(false) }
+        val listState = rememberLazyListState()
 
-        val  listState = rememberLazyListState()
+
+
         AnimatedContent(
-            targetState = musicPlayer.showPlayDetailPage,
+            targetState = playerManager.showPlayDetailPage,
             label = "showPlayDetailPage",
             transitionSpec = {
-                if (musicPlayer.showPlayDetailPage) {
+                if (playerManager.showPlayDetailPage) {
                     val enter = slideInVertically { it } + fadeIn()
                     val exit = slideOutVertically { -it } + fadeOut()
                     enter.togetherWith(exit)
@@ -86,14 +90,14 @@ object MusicPlayerScreen : Screen {
             content = { showPlayDetailPage ->
                 if (showPlayDetailPage) {
                     PlayDetailPage(
-                        player = musicPlayer,
+                        player = playerManager,
                         playList = playList,
                         playingMusic = playingMusic,
                         showPlay = showPlay
                     )
                 } else {
                     PlayListPage(
-                        player = musicPlayer,
+                        playerManager = playerManager,
                         playList = playList,
                         playingMusic = playingMusic,
                         showPlay = showPlay,
@@ -102,5 +106,11 @@ object MusicPlayerScreen : Screen {
                 }
             }
         )
+
+        LaunchedEffect(Unit) {
+            // FIXME: 页面跳转动画还没结束，列表就开始渲染的话，会卡一下
+            delay(ANIMATE_DURATION.toLong())
+            playerManager.preparePlayer()
+        }
     }
 }

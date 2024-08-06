@@ -1,6 +1,8 @@
 package com.lcb.one.ui.screen.webview
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,13 +28,13 @@ import com.kevinnzou.web.LoadingState
 import com.kevinnzou.web.WebView
 import com.kevinnzou.web.rememberWebViewNavigator
 import com.kevinnzou.web.rememberWebViewState
+import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.screen.webview.widget.WebAction
 import com.lcb.one.ui.screen.webview.widget.WebMenu
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.util.android.AppUtils
-import com.lcb.one.util.android.ClipboardUtils
 
 object WebScreen : Screen {
     override val route: String
@@ -67,7 +69,11 @@ object WebScreen : Screen {
                         val handleMenuAction: (WebAction) -> Unit = { action ->
                             val lastUrl = webViewState.lastLoadedUrl ?: ""
                             when (action) {
-                                WebAction.CopyUrl -> ClipboardUtils.copyText(text = lastUrl)
+                                WebAction.CopyUrl -> {
+                                    val clipboard = MyApp.get().getSystemService(ClipboardManager::class.java)
+                                    val plainText = ClipData.newPlainText(null, lastUrl)
+                                    clipboard.setPrimaryClip(plainText)
+                                }
                                 WebAction.OpenInBrowser -> AppUtils.launchSystemBrowser(uri = lastUrl.toUri())
                                 // reload会丢失标题
                                 WebAction.Refresh -> webNav.loadUrl(lastUrl)
@@ -89,6 +95,10 @@ object WebScreen : Screen {
                     navigator = webNav,
                     onCreated = {
                         it.settings.javaScriptEnabled = true
+                    },
+                    onDispose = {
+                        it.clearHistory()
+                        it.clearCache(true)
                     }
                 )
             }

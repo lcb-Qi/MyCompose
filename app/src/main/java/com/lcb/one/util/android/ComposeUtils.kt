@@ -19,7 +19,7 @@ fun rememberLauncherForGetContents(onResult: (List<Uri>) -> Unit) =
     }
 
 @Composable
-fun rememberLauncherForStartActivity(onResult: (ActivityResult) -> Unit) =
+fun rememberLauncherForStartActivity(onResult: (ActivityResult) -> Unit = {}) =
     rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
         onResult.invoke(it)
     }

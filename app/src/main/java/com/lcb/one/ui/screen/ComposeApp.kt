@@ -12,7 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.Route
 import com.lcb.one.ui.screen.main.MainScreen
-import com.lcb.one.ui.theme.AppTheme
+import com.lcb.one.ui.theme.AppThemeSurface
 import com.lcb.one.ui.widget.dialog.AssertInternetDialog
 
 const val ANIMATE_DURATION = 500
@@ -20,7 +20,7 @@ const val ANIMATE_DURATION = 500
 @Composable
 fun ComposeApp(startRoute: String? = null) {
 
-    AppTheme {
+    AppThemeSurface {
         val navHostController = rememberNavController()
         NavHost(
             navController = navHostController,

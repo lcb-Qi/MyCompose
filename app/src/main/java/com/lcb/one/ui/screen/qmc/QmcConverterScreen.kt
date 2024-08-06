@@ -2,8 +2,6 @@ package com.lcb.one.ui.screen.qmc
 
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,10 +18,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -54,8 +54,11 @@ object QmcConverterScreen : Screen {
 
             var loading by remember { mutableStateOf(false) }
             val scope = rememberCoroutineScope()
-            var selectedFile by remember { mutableStateOf(emptyList<Uri>()) }
-            val launcher = rememberLauncherForGetContents { selectedFile = it }
+            val selectedFile = remember { mutableStateListOf<Uri>() }
+            val launcher = rememberLauncherForGetContents {
+                selectedFile.clear()
+                selectedFile.addAll(it)
+            }
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
@@ -63,47 +66,8 @@ object QmcConverterScreen : Screen {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                OutlinedCard {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.selected_files),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-
-                        LazyColumn(
-                            modifier = Modifier.height(240.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            items(items = selectedFile, key = { it }) { fileUri ->
-                                Text(
-                                    text = fileUri.getRelativePath(),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Card {
-                    Box(modifier = Modifier.padding(16.dp)) {
-                        val guideMessage = remember {
-                            buildString {
-                                appendLine(Res.string(R.string.supported_formats))
-                                val supportFormat = QmcConverter.qmcFormatMap.keys.joinToString()
-                                append(supportFormat)
-                            }
-                        }
-                        Text(text = guideMessage)
-                    }
-                }
-
+                SelectedFiles(selectedFile)
+                SupportFormatTips()
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     AppButton(
                         text = stringResource(R.string.select_file),
@@ -118,13 +82,16 @@ object QmcConverterScreen : Screen {
                             scope.launch {
                                 loading = true
 
+                                val total = selectedFile.size
+                                var failedCount = 0
                                 selectedFile.forEach { uri ->
                                     val result = QmcConverter.convert(uri)
-                                    result.onFailure { ToastUtils.showToast("${Res.string(R.string.convert_failed)} ${it.message}") }
-                                        .onSuccess { ToastUtils.showToast("${Res.string(R.string.convert_success)} $it") }
+                                    result.onFailure { failedCount++ }
                                 }
 
                                 loading = false
+                                val msg = Res.string(R.string.qmc_convertor_msg, total, failedCount)
+                                ToastUtils.showToast(msg)
                             }
                         }
                     )
@@ -132,6 +99,53 @@ object QmcConverterScreen : Screen {
             }
 
             LoadingDialog(loading)
+        }
+    }
+
+    @Composable
+    private fun SelectedFiles(selectedFile: SnapshotStateList<Uri>) {
+        OutlinedCard {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.selected_files),
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                LazyColumn(
+                    modifier = Modifier.height(240.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(items = selectedFile, key = { it }) { fileUri ->
+                        Text(
+                            text = fileUri.getRelativePath(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun SupportFormatTips() {
+        Card {
+            Box(modifier = Modifier.padding(16.dp)) {
+                val guideMessage = remember {
+                    buildString {
+                        appendLine(Res.string(R.string.supported_formats))
+                        val supportFormat = QmcConverter.qmcFormatMap.keys.joinToString()
+                        append(supportFormat)
+                    }
+                }
+                Text(text = guideMessage)
+            }
         }
     }
 }

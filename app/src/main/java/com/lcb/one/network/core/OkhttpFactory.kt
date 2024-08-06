@@ -7,24 +7,25 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
-import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 object OkhttpFactory {
-    private const val TIME_OUT = 10L/* seconds */
+    private val TIME_OUT = 10.seconds.toJavaDuration()
     private const val TAG = "OkhttpRequest"
 
     val okHttpClient by lazy {
         OkHttpClient.Builder()
             .apply {
                 connectionPool(ConnectionPool())
-                connectTimeout(TIME_OUT, TimeUnit.SECONDS)
-                readTimeout(TIME_OUT, TimeUnit.SECONDS)
-                writeTimeout(TIME_OUT, TimeUnit.SECONDS)
+                connectTimeout(TIME_OUT)
+                readTimeout(TIME_OUT)
+                writeTimeout(TIME_OUT)
 
                 val trustManager = DefaultTrustManager()
                 sslSocketFactory(createSSLFactory(trustManager), trustManager)

@@ -132,33 +132,4 @@ object StorageUtils {
 
         return@withContext result
     }
-
-    private val audioContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-    suspend fun findMusics(context: Context = MyApp.get()) = withContext(Dispatchers.IO) {
-        val audios = mutableListOf<Music>()
-        val proj = arrayOf(
-            MediaStore.Audio.AudioColumns._ID,
-            MediaStore.Audio.AudioColumns.TITLE,
-            MediaStore.Audio.AudioColumns.ARTIST,
-            MediaStore.Audio.AudioColumns.DURATION,
-            MediaStore.Audio.AudioColumns.ALBUM,
-        )
-        context.contentResolver.query(audioContentUri, proj, null, null, null)?.use { cursor ->
-            cursor.moveToFirst()
-            do {
-                val id = cursor.getInt(0)
-                val uri = ContentUris.withAppendedId(audioContentUri, id.toLong())
-
-                val title = cursor.getStringOrNull(1) ?: ""
-                val artist = cursor.getStringOrNull(2) ?: ""
-                val duration = cursor.getLongOrNull(3) ?: 0
-                val album = cursor.getStringOrNull(4) ?: ""
-
-
-                audios.add(Music(uri, title, artist, duration, album))
-            } while (cursor.moveToNext())
-        }
-
-        return@withContext audios
-    }
 }

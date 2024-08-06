@@ -40,14 +40,10 @@
     <string name="common">通用</string>
     <string name="theme">主题</string>
     <string name="about">关于</string>
-    <string name="check_updates">检查更新</string>
-    <string name="no_new_version">未检测到新版本</string>
-    <string name="already_last_version">已是最新版</string>
     <string name="load_success_msg">加载完成，总计 %d 个应用，耗时 %d ms</string>
     <string name="menstruation_start">月经已开始</string>
     <string name="menstruation_ended">月经已结束</string>
     <string name="menstruation_days">月经第 %d 天</string>
-    <string name="menstruation_tips">已超过 %d 天，请注意健康哦</string>
     <string name="no_menstruation">不在月经期</string>
     <string name="menstruation_prediction">月经预测</string>
     <string name="next_menstruation_info">预计下一次月经在 %s</string>
@@ -73,7 +69,6 @@
     <string name="extract_icon">提取桌面图标</string>
     <string name="extract_installation_package">提取安装包</string>
     <string name="friendly_exit_tips">再按一次返回键退出</string>
-    <string name="to_download">去下载</string>
     <string name="go_settings">去设置</string>
     <string name="daily_poetry">每日诗词</string>
     <string name="main_screen">主页</string>
@@ -108,4 +103,6 @@
     <string name="refresh">刷新</string>
     <string name="msg_no_internet">无法连接网络，请检查网络后重试</string>
     <string name="qmc_converter">Qmc 转换器（QQ音乐解密）</string>
+    <string name="qmc_convertor_msg">转换结束，共 %d 个，失败 %d 个</string>
+    <string name="app_details">应用详情</string>
 </resources>
