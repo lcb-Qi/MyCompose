@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.lcb.one.R
-import com.lcb.one.ui.AppGlobalConfigs
+import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
@@ -58,10 +58,10 @@ object SettingsScreen : Screen {
                             // 内置浏览器
                             SimpleSettingsSwitch(
                                 modifier = Modifier.padding(top = 8.dp),
-                                checked = AppGlobalConfigs.useBuiltinBrowser,
+                                checked = UserPrefs.useBuiltInBrowser,
                                 icon = { Icon(Icons.Rounded.TravelExplore, null) },
                                 title = stringResource(R.string.use_built_in_browser),
-                                onCheckedChange = { AppGlobalConfigs.useBuiltinBrowser = it }
+                                onCheckedChange = { UserPrefs.useBuiltInBrowser = it }
                             )
 
                             // 界面显示
@@ -88,11 +88,11 @@ object SettingsScreen : Screen {
                                 modifier = Modifier.padding(top = 8.dp),
                                 title = stringResource(R.string.poem_update_duration),
                                 icon = { Icon(Icons.Rounded.Update, null) },
-                                selectIndex = values.indexOf(AppGlobalConfigs.poemUpdateInterval)
+                                selectIndex = values.indexOf(UserPrefs.poemUpdateInterval)
                                     .coerceAtLeast(0),
                                 options = options,
                                 onItemSelected = {
-                                    AppGlobalConfigs.poemUpdateInterval = values[it]
+                                    UserPrefs.poemUpdateInterval = values[it]
                                 }
                             )
 

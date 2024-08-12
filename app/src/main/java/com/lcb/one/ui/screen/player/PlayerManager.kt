@@ -14,17 +14,16 @@ import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
+import com.lcb.one.ui.widget.settings.storage.DataStoreState
+import com.lcb.one.prefs.UserPrefs
+import com.lcb.one.ui.widget.settings.storage.getValue
+import com.lcb.one.ui.widget.settings.storage.setValue
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.player.PlayerHelper.getExtraMusic
 import com.lcb.one.ui.screen.player.PlayerHelper.toMediaItem
 import com.lcb.one.ui.screen.player.repo.ControllerEvent
 import com.lcb.one.ui.screen.player.repo.Music
-import com.lcb.one.ui.widget.settings.storage.disk.BooleanPrefState
-import com.lcb.one.ui.widget.settings.storage.disk.IntPrefState
-import com.lcb.one.ui.widget.settings.storage.getValue
-import com.lcb.one.ui.widget.settings.storage.setValue
 import com.lcb.one.util.android.LLogger
-import com.lcb.one.util.android.UserPref
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,7 +64,7 @@ class PlayerManager {
         override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
             LLogger.debug(TAG) { "onMediaItemTransition: " }
             val current = mediaItem?.getExtraMusic() ?: return
-            UserPref.putString(UserPref.Key.PLAYER_LAST_MUSIC, current.uri.toString())
+            UserPrefs.putBlocking(UserPrefs.Key.lastMusic, current.uri.toString())
             playingMusic.update { current }
         }
     }
@@ -125,8 +124,8 @@ class PlayerManager {
     private fun seekToPrevious() = player.seekToPreviousMediaItem()
     private fun seekToPosition(position: Long) = player.seekTo(position)
 
-    var repeatMode by IntPrefState(UserPref.Key.PLAYER_REPEAT_MODE, ExoPlayer.REPEAT_MODE_ALL)
-    var isShuffle by BooleanPrefState(UserPref.Key.PLAYER_IS_SHUFFLE, false)
+    var repeatMode by DataStoreState(UserPrefs.Key.repeatMode, ExoPlayer.REPEAT_MODE_ALL)
+    var isShuffle by DataStoreState(UserPrefs.Key.isShuffle, false)
     private fun changedRepeatMode() {
         if (player.shuffleModeEnabled) {
             player.repeatMode = ExoPlayer.REPEAT_MODE_ALL

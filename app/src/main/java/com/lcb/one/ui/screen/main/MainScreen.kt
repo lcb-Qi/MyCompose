@@ -32,7 +32,6 @@ import com.lcb.one.ui.screen.main.more.MoreScreen
 import com.lcb.one.ui.widget.appbar.BottomBar
 import com.lcb.one.ui.widget.appbar.BottomBarItem
 import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.common.FriendlyExitHandler
 import com.lcb.one.ui.screen.main.widget.PoemInfoDialog
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.ui.screen.main.repo.MainViewModel
@@ -117,13 +116,9 @@ object MainScreen : Screen {
 
             PoemInfoDialog(
                 show = showDetail,
-                origin = { poemState.origin },
+                origin = { poemState },
                 onDismiss = { showDetail = false }
             )
-        }
-        // TODO: 仅在app启动时执行一次
-        if (AppUtils.isNetworkAvailable()) {
-            mainViewModel.updatePoem(false)
         }
     }
 }

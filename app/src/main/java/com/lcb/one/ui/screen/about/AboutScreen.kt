@@ -21,7 +21,7 @@ import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
-import com.lcb.one.ui.AppGlobalConfigs
+import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.about.widget.AboutSaltFishDialog
@@ -65,7 +65,7 @@ object AboutScreen : Screen {
                     // 项目地址
                     val url = stringResource(R.string.project_location_url)
                     val launchBrowser: () -> Unit = {
-                        if (AppGlobalConfigs.useBuiltinBrowser) {
+                        if (UserPrefs.useBuiltInBrowser) {
                             navController.launchSingleTop(WebScreen.createRoute(url))
                         } else {
                             AppUtils.launchSystemBrowser(uri = url.toUri())

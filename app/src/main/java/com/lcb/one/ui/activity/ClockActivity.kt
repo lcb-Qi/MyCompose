@@ -19,6 +19,7 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
@@ -30,12 +31,12 @@ import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.lcb.one.R
-import com.lcb.one.ui.theme.AppThemeSurface
-import com.lcb.one.ui.theme.ThemeManager
-import com.lcb.one.ui.widget.settings.storage.disk.rememberBooleanPrefState
-import com.lcb.one.ui.widget.settings.storage.disk.rememberIntPrefState
+import com.lcb.one.ui.widget.settings.storage.DataStoreState
+import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
+import com.lcb.one.ui.theme.AppThemeSurface
+import com.lcb.one.ui.theme.ThemeManager
 import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
 import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
 import com.lcb.one.ui.widget.settings.ui.SettingsCategory
@@ -43,7 +44,6 @@ import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSlider
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
 import com.lcb.one.util.android.Res
-import com.lcb.one.util.android.UserPref
 import java.util.Locale
 
 class ClockActivity : ComponentActivity() {
@@ -78,19 +78,16 @@ class ClockActivity : ComponentActivity() {
 
     @Composable
     fun ClockScreen() {
-        var darkTheme by rememberBooleanPrefState(
-            UserPref.Key.CLOCK_DARK_THEME,
-            ThemeManager.dynamicColor
-        )
+        var darkTheme by remember {
+            DataStoreState(UserPrefs.Key.dynamicColor, ThemeManager.dynamicColor)
+        }
 
-        var clockSize by rememberIntPrefState(
-            UserPref.Key.CLOCK_TEXT_SIZE,
-            DEFAULT_CLOCK_SIZE
-        )
-        var datePosition by rememberIntPrefState(
-            UserPref.Key.CLOCK_DATE_POSITION,
-            DATE_POSITION_LEFT_BOTTOM
-        )
+        var clockSize by remember {
+            DataStoreState(UserPrefs.Key.clockSize, DEFAULT_CLOCK_SIZE)
+        }
+        var datePosition by remember {
+            DataStoreState(UserPrefs.Key.datePosition, DATE_POSITION_LEFT_BOTTOM)
+        }
 
         AppThemeSurface(darkTheme = darkTheme) {
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)

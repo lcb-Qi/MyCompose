@@ -26,21 +26,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.lcb.one.R
+import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.Route
 import com.lcb.one.ui.Screen
-import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.widget.common.AppTextButton
-import com.lcb.one.util.android.UserPref
+import kotlinx.coroutines.launch
 
 private val userShortcuts by lazy {
-    val set = UserPref.getStringSet(UserPref.Key.USER_SHORTCUTS)
+    val set = UserPrefs.getBlocking(UserPrefs.Key.shortcuts, emptySet())
     val shortcuts = Route.defaultScreens.filter { set.contains(it.route) }
 
     shortcuts.toMutableStateList()
@@ -49,6 +49,7 @@ private val userShortcuts by lazy {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ShortcutsCard(onShortcutClick: (String) -> Unit) {
+    val scope = rememberCoroutineScope()
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -81,7 +82,9 @@ fun ShortcutsCard(onShortcutClick: (String) -> Unit) {
                         userShortcuts.clear()
                         userShortcuts.addAll(it)
                         val routes = it.map { it.route }.toSet()
-                        UserPref.putStringSet(UserPref.Key.USER_SHORTCUTS, routes)
+                        scope.launch {
+                            UserPrefs.put(UserPrefs.Key.shortcuts, routes)
+                        }
                     }
                 )
             }

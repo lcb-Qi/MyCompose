@@ -2,11 +2,10 @@ package com.lcb.one.ui.screen.main.repo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lcb.one.ui.AppGlobalConfigs
+import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.appwidget.PoemAppWidgetProvider
 import com.lcb.one.ui.screen.main.repo.model.PoemInfo
 import com.lcb.one.util.android.LLogger
-import com.lcb.one.util.android.UserPref
 import com.lcb.one.util.common.ExceptionHandler
 import com.lcb.one.util.common.JsonUtils
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +16,7 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel : ViewModel() {
     companion object {
-        private const val TAG = "PoemViewModel"
+        private const val TAG = "MainViewModel"
     }
 
     val poemInfo: MutableStateFlow<PoemInfo> = MutableStateFlow(PoemInfo())
@@ -26,20 +25,25 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             val last =
                 JsonUtils.fromJsonOrDefault(
-                    UserPref.getString(UserPref.Key.POEM_LAST),
+                    UserPrefs.get(UserPrefs.Key.lastPoem, ""),
                     PoemInfo.serializer()
                 )
-            poemInfo.update { last ?: it }
+            LLogger.debug(TAG) { "init: last = $last" }
+            if (last == null) {
+                updatePoem(true)
+            } else {
+                poemInfo.update { last }
+            }
         }
     }
 
     private val poemService = PoemApiService.instance
 
     private suspend fun getToken(): String {
-        var token = UserPref.getString(UserPref.Key.POEM_TOKEN)
+        var token = UserPrefs.get(UserPrefs.Key.token, "")
         if (token.isNotEmpty()) return token
         token = poemService.getToken().token
-        UserPref.putString(UserPref.Key.POEM_TOKEN, token)
+        UserPrefs.put(UserPrefs.Key.token, token)
 
         return token
     }
@@ -66,10 +70,14 @@ class MainViewModel : ViewModel() {
                 PoemInfo(
                     recommend = poemResponse.data.recommend,
                     updateTime = System.currentTimeMillis(),
-                    origin = poemResponse.data.origin
+                    author = poemResponse.data.origin.author,
+                    dynasty = poemResponse.data.origin.dynasty,
+                    title = poemResponse.data.origin.title,
+                    content = poemResponse.data.origin.content
                 )
             }
-            UserPref.putString(UserPref.Key.POEM_LAST, JsonUtils.toJson(poemInfo.value))
+            UserPrefs
+                .put(UserPrefs.Key.lastPoem, JsonUtils.toJson(poemInfo.value))
             PoemAppWidgetProvider.tryUpdate()
         }
     }
@@ -78,7 +86,8 @@ class MainViewModel : ViewModel() {
         if (force) return true
 
         val info = poemInfo.value
+        LLogger.debug(TAG) { "needRefresh: info = $info" }
         return info.recommend.isBlank() ||
-                (System.currentTimeMillis() - info.updateTime > AppGlobalConfigs.poemUpdateInterval)
+                (System.currentTimeMillis() - info.updateTime > UserPrefs.poemUpdateInterval)
     }
 }

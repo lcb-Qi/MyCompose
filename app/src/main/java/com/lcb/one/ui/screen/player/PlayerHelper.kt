@@ -9,10 +9,10 @@ import androidx.core.database.getStringOrNull
 import androidx.core.os.bundleOf
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.util.android.LLogger
-import com.lcb.one.util.android.UserPref
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Locale
@@ -22,33 +22,34 @@ object PlayerHelper {
     private const val EXT_MUSIC = "ext_music"
 
     private val audioContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-     fun findMusics(context: Context = MyApp.get()):List<Music> /* = withContext(Dispatchers.IO) */ {
-        val audios = mutableListOf<Music>()
-        val proj = arrayOf(
-            MediaStore.Audio.AudioColumns._ID,
-            MediaStore.Audio.AudioColumns.TITLE,
-            MediaStore.Audio.AudioColumns.ARTIST,
-            MediaStore.Audio.AudioColumns.DURATION,
-            MediaStore.Audio.AudioColumns.ALBUM,
-        )
-        context.contentResolver.query(audioContentUri, proj, null, null, null)?.use { cursor ->
-            cursor.moveToFirst()
-            do {
-                val id = cursor.getInt(0)
-                val uri = ContentUris.withAppendedId(audioContentUri, id.toLong())
+    suspend fun findMusics(context: Context = MyApp.get()): List<Music> =
+        withContext(Dispatchers.IO) {
+            val audios = mutableListOf<Music>()
+            val proj = arrayOf(
+                MediaStore.Audio.AudioColumns._ID,
+                MediaStore.Audio.AudioColumns.TITLE,
+                MediaStore.Audio.AudioColumns.ARTIST,
+                MediaStore.Audio.AudioColumns.DURATION,
+                MediaStore.Audio.AudioColumns.ALBUM,
+            )
+            context.contentResolver.query(audioContentUri, proj, null, null, null)?.use { cursor ->
+                cursor.moveToFirst()
+                do {
+                    val id = cursor.getInt(0)
+                    val uri = ContentUris.withAppendedId(audioContentUri, id.toLong())
 
-                val title = cursor.getStringOrNull(1) ?: ""
-                val artist = cursor.getStringOrNull(2) ?: ""
-                val duration = cursor.getLongOrNull(3) ?: 0
-                val album = cursor.getStringOrNull(4) ?: ""
+                    val title = cursor.getStringOrNull(1) ?: ""
+                    val artist = cursor.getStringOrNull(2) ?: ""
+                    val duration = cursor.getLongOrNull(3) ?: 0
+                    val album = cursor.getStringOrNull(4) ?: ""
 
 
-                audios.add(Music(uri, title, artist, duration, album))
-            } while (cursor.moveToNext())
+                    audios.add(Music(uri, title, artist, duration, album))
+                } while (cursor.moveToNext())
+            }
+
+            return@withContext audios
         }
-
-        return audios
-    }
 
     fun List<Music>.toMediaItem() = map { music ->
         MediaItem.Builder().apply {
@@ -69,7 +70,7 @@ object PlayerHelper {
     }
 
     fun getLastPlayMusicUri(): String {
-        val uri = UserPref.getString(UserPref.Key.PLAYER_LAST_MUSIC, "")
+        val uri = UserPrefs.getBlocking(UserPrefs.Key.lastMusic, "")
         LLogger.debug(TAG) { "getLastPlayMusic: uri = $uri" }
         return uri
     }

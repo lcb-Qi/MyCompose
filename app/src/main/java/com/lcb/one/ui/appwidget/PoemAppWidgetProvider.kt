@@ -9,12 +9,12 @@ import android.content.Intent
 import android.widget.RemoteViews
 import androidx.core.app.PendingIntentCompat
 import com.lcb.one.R
+import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.activity.MainActivity
 import com.lcb.one.ui.screen.main.repo.model.PoemInfo
 import com.lcb.one.util.android.LLogger
 import com.lcb.one.util.android.PACKAGE_ME
-import com.lcb.one.util.android.UserPref
 import com.lcb.one.util.common.JsonUtils
 
 class PoemAppWidgetProvider : AppWidgetProvider() {
@@ -67,15 +67,12 @@ class PoemAppWidgetProvider : AppWidgetProvider() {
 
         remoteViews.setOnClickPendingIntent(R.id.container, createPendingIntent(context))
 
-        val lastPoem = UserPref.getString(UserPref.Key.POEM_LAST)
+        val lastPoem = UserPrefs.getBlocking(UserPrefs.Key.lastPoem, "")
         val poemInfo = JsonUtils.fromJsonOrDefault(lastPoem, PoemInfo.serializer())
 
         poemInfo?.let {
             remoteViews.setTextViewText(R.id.tv_content, it.recommend)
-            remoteViews.setTextViewText(
-                R.id.tv_author,
-                "—— ${it.origin.author}《${it.origin.title}》"
-            )
+            remoteViews.setTextViewText(R.id.tv_author, "—— ${it.author}《${it.title}》")
         }
 
         return remoteViews

@@ -147,6 +147,7 @@ dependencies {
     implementation(files("libs/lib-androidx-media3-decoder-flac.aar"))
 
     implementation(libs.lottie.compose)
+    implementation(libs.androidx.datastore.preferences)
     // for test
     addTestDependencies()
 }
