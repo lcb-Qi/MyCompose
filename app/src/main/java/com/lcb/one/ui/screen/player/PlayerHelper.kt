@@ -21,6 +21,8 @@ object PlayerHelper {
     private const val TAG = "PlayerHelper"
     private const val EXT_MUSIC = "ext_music"
 
+    private const val MINI_DURATION = 30 * 1000
+
     private val audioContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     suspend fun findMusics(context: Context = MyApp.get()): List<Music> =
         withContext(Dispatchers.IO) {
@@ -43,15 +45,16 @@ object PlayerHelper {
                     val duration = cursor.getLongOrNull(3) ?: 0
                     val album = cursor.getStringOrNull(4) ?: ""
 
-
-                    audios.add(Music(uri, title, artist, duration, album))
+                    if (duration > MINI_DURATION) {
+                        audios.add(Music(uri, title, artist, duration, album))
+                    }
                 } while (cursor.moveToNext())
             }
 
             return@withContext audios
         }
 
-    fun List<Music>.toMediaItem() = map { music ->
+    fun Iterable<Music>.toMediaItem() = map { music ->
         MediaItem.Builder().apply {
             setUri(music.uri)
             setMediaId(music.uri.toString())

@@ -100,9 +100,11 @@ class PlayerManager {
 
     suspend fun updatePlaylist() {
         LLogger.debug(TAG) { "updatePlaylist: " }
-        playList.update { PlayerHelper.findMusics() }
-        val mediaItems = playList.value.toMediaItem()
-        player.addMediaItems(mediaItems)
+        playList.update { old ->
+            val musics = PlayerHelper.findMusics()
+            player.addMediaItems((musics - old).toMediaItem())
+            musics
+        }
     }
 
     fun handleEvent(event: ControllerEvent) {

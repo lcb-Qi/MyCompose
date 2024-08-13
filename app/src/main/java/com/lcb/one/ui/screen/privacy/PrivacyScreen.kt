@@ -33,7 +33,7 @@ import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.Res
-import com.lcb.one.util.android.rememberLauncherForStartActivity
+import com.lcb.one.util.android.rememberStartActivityForResult
 
 object PrivacyScreen : Screen {
     override val route: String
@@ -54,7 +54,7 @@ object PrivacyScreen : Screen {
             }
         }
 
-        val launcher = rememberLauncherForStartActivity { privacyViewModel.checkPermission() }
+        val launcher = rememberStartActivityForResult { privacyViewModel.checkPermission() }
 
         Scaffold(topBar = { ToolBar(title = label) }) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {

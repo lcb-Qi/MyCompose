@@ -38,7 +38,7 @@ import com.lcb.one.ui.widget.dialog.LoadingDialog
 import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.android.getRelativePath
-import com.lcb.one.util.android.rememberLauncherForGetContents
+import com.lcb.one.util.android.rememberGetContents
 import kotlinx.coroutines.launch
 
 object QmcConverterScreen : Screen {
@@ -55,7 +55,7 @@ object QmcConverterScreen : Screen {
             var loading by remember { mutableStateOf(false) }
             val scope = rememberCoroutineScope()
             val selectedFile = remember { mutableStateListOf<Uri>() }
-            val launcher = rememberLauncherForGetContents {
+            val launcher = rememberGetContents {
                 selectedFile.clear()
                 selectedFile.addAll(it)
             }

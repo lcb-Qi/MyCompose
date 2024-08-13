@@ -119,21 +119,19 @@ dependencies {
     implementation(libs.bundles.androidx.compose.support)
 
     implementation(libs.kolor)
+
     implementation(libs.coil.compose)
+
     implementation(libs.zoomimage.compose.coil)
-    // 协程
+
     implementation(libs.coroutines.android)
-    // lifecycle
+
     implementation(libs.bundles.androidx.lifecycle)
-    // preference
-    implementation(libs.androidx.preference)
-    // retrofit2
+
     implementation(libs.bundles.retrofit2)
-    // json
+
     implementation(libs.kotlinx.serialization.json)
-    // markdown
-    implementation(libs.markdown)
-    // room
+
     implementation(libs.androidx.room)
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
@@ -147,6 +145,7 @@ dependencies {
     implementation(files("libs/lib-androidx-media3-decoder-flac.aar"))
 
     implementation(libs.lottie.compose)
+
     implementation(libs.androidx.datastore.preferences)
     // for test
     addTestDependencies()

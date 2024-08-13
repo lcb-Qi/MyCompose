@@ -51,7 +51,7 @@ import com.lcb.one.ui.screen.menstruationAssistant.widget.PastMcDayPicker
 import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.inputStream
-import com.lcb.one.util.android.rememberLauncherForGetContent
+import com.lcb.one.util.android.rememberGetContent
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -75,7 +75,7 @@ object MenstruationHistoryScreen : Screen {
                     title = label,
                     actions = {
                         var showMenu by remember { mutableStateOf(false) }
-                        val launcher = rememberLauncherForGetContent {
+                        val launcher = rememberGetContent {
                             it?.inputStream()?.use { input ->
                                 mcViewmodel.import(input)
                             }

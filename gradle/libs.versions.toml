@@ -1,27 +1,23 @@
 [versions]
-# dependencies
 kotlin = "2.0.0"
 ksp = "2.0.0-1.0.22"
 agp = "8.1.4"
+# Android
 androidxComposeBom = "2024.05.00"
-# https://central.sonatype.com/artifact/dev.chrisbanes.compose/compose-bom/versions
 androidxDatastore = "1.1.1"
 androidxComposeBomSnapshots = "2024.07.00-alpha01"
 androidxConstraintlayoutCompose = "1.0.1"
 androidxActivityCompose = "1.9.0"
 androidxNavigationCompose = "2.7.7"
-coilCompose = "2.6.0"
 androidxCore = "1.13.1"
 androidxLifecycle = "2.8.1"
-coroutinesAndroid = "1.8.0"
-androidxPreference = "1.2.1"
-# 更新此库时，建议同步更新 libs/lib-androidx-media3-decoder-flac.aar
-# https://github.com/androidx/media/blob/release/libraries/decoder_ffmpeg/README.md
 androidxMedia3 = "1.3.1"
-kotlinxSerializationJson = "1.7.0"
-markdown = "4.6.2"
 androidxRoom = "2.6.1"
-# others
+# Kotlin
+kotlinxCoroutines = "1.8.0"
+kotlinxSerialization = "1.7.0"
+# 三方库
+coilCompose = "2.6.0"
 lottieCompose = "6.4.1"
 composeWebview = "0.33.6"
 retrofit = "2.11.0"
@@ -35,8 +31,11 @@ junit = "4.13.2"
 extJunit = "1.1.5"
 
 [libraries]
-# bom对照表：https://developer.android.google.cn/develop/ui/compose/bom/bom-mapping
+#---------------------- Android ----------------------#
+# compose
+# bom stable 对照表： https://developer.android.google.cn/develop/ui/compose/bom/bom-mapping
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
+# bom snapshots 对照表： https://central.sonatype.com/artifact/dev.chrisbanes.compose/compose-bom/versions
 androidx-compose-bom-snapshosts = { module = "dev.chrisbanes.compose:compose-bom", version.ref = "androidxComposeBomSnapshots" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-graphics = { module = "androidx.compose.ui:ui-graphics" }
@@ -46,40 +45,54 @@ androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
 
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivityCompose" }
-androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidxDatastore" }
-androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidxMedia3" }
-androidx-media3-session = { module = "androidx.media3:media3-session", version.ref = "androidxMedia3" }
+# navigation
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigationCompose" }
+# constraintlayout
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidxConstraintlayoutCompose" }
 
+# datastore
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidxDatastore" }
+# media3
+# 更新此库时，同步更新 libs/lib-androidx-media3-decoder-flac.aar
+# https://github.com/androidx/media/blob/release/libraries/decoder_flac/README.md
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidxMedia3" }
+androidx-media3-session = { module = "androidx.media3:media3-session", version.ref = "androidxMedia3" }
+# core
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
+# lifecycle
 androidx-lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
-androidx-preference = { module = "androidx.preference:preference-ktx", version.ref = "androidxPreference" }
-
+# room
 androidx-room = { module = "androidx.room:room-ktx", version.ref = "androidxRoom" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidxRoom" }
 
-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutinesAndroid" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+#---------------------- Kotlin ----------------------#
+# 协程
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+# serialization json
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
-# others
-compose-webview = { module = "io.github.kevinnzou:compose-webview", version.ref = "composeWebview" }
-lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
+#---------------------- 三方库 ----------------------#
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 retrofit-converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 okhttp-logger = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttpLogger" }
 
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+
+compose-webview = { module = "io.github.kevinnzou:compose-webview", version.ref = "composeWebview" }
+
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
+
 kolor = { module = "com.materialkolor:material-kolor", version.ref = "kolor" }
+
 zoomimage-compose-coil = { module = "io.github.panpf.zoomimage:zoomimage-compose-coil", version.ref = "zoomimage" }
-markdown = { module = "io.noties.markwon:core", version.ref = "markdown" }
+
 settings-ui = { module = "com.github.alorma.compose-settings:ui-tiles", version.ref = "settingsUi" }
 settings-ui-extended = { module = "com.github.alorma.compose-settings:ui-tiles-extended", version.ref = "settingsUi" }
 
-# for test
+#---------------------- Test ----------------------#
 test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 test-junit = { module = "junit:junit", version.ref = "junit" }
 test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "extJunit" }

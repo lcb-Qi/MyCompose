@@ -17,13 +17,13 @@ import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
 import com.lcb.one.ui.widget.common.noRippleClickable
-import com.lcb.one.util.android.rememberLauncherForGetContent
+import com.lcb.one.util.android.rememberGetContent
 
 @Composable
 fun HeaderImage(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     var headUri by DataStoreState(UserPrefs.Key.homeHeader, "")
-    val launcher = rememberLauncherForGetContent {
+    val launcher = rememberGetContent {
         it?.run {
             context.contentResolver
                 .takePersistableUriPermission(this, Intent.FLAG_GRANT_READ_URI_PERMISSION)

@@ -27,7 +27,7 @@ import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.StorageUtils
 import com.lcb.one.util.android.ToastUtils
-import com.lcb.one.util.android.rememberLauncherForStartActivity
+import com.lcb.one.util.android.rememberStartActivityForResult
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,7 +97,7 @@ fun AppInfoDialog(show: Boolean, packageName: String, onDisMiss: () -> Unit) {
                 }
 
                 item {
-                    val launcher = rememberLauncherForStartActivity()
+                    val launcher = rememberStartActivityForResult()
                     ToolButton(
                         text = stringResource(R.string.app_details),
                         leadingIcon = Icons.Rounded.ArrowOutward,

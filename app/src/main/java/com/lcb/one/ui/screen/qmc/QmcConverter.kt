@@ -26,9 +26,11 @@ object QmcConverter {
             "mflac" to "flac",
             "mflac0" to "flac",
             "bkcflac" to "flac",
+
             "qmc0" to "mp3",
             "qmc3" to "mp3",
             "bkcmp3" to "mp3",
+
             "qmc2" to "ogg",
             "mgg" to "ogg",
             "mgg1" to "ogg",
