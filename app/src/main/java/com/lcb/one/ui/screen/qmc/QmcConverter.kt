@@ -143,6 +143,6 @@ object QmcConverter {
 
         val mimeType = mimeTypeMap[targetFormat] ?: "audio/mpeg"
 
-        return StorageUtils.insertToStorage(mimeType, "$inName.$targetFormat")
+        return StorageUtils.createUri(mimeType, "$inName.$targetFormat")
     }
 }

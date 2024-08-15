@@ -7,12 +7,14 @@ import androidx.core.database.getStringOrNull
 import com.lcb.one.ui.MyApp
 import okio.buffer
 import okio.sink
+import okio.source
 
 // Uri
 fun Uri.outputStream() = MyApp.getContentResolver().openOutputStream(this)
 fun Uri.inputStream() = MyApp.getContentResolver().openInputStream(this)
 
 fun Uri.bufferedSink() = outputStream()?.sink()?.buffer()
+fun Uri.bufferedSource() = inputStream()?.source()?.buffer()
 
 fun Uri.getRelativePath(context: Context = MyApp.get()): String {
     var path = ""

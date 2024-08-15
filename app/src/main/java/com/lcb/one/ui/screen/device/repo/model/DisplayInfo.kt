@@ -11,6 +11,7 @@ import com.lcb.one.util.android.PhoneUtil
 data class DisplayInfo(
     var displaySize: Size = Size(-1, -1),
     var resolution: Size = Size(-1, -1),
+    var refreshFPS: Float = 0f,
     var smallWidth: Int = -1,
     var density: Float = -1f,
     var dpi: Int = -1,
@@ -27,6 +28,7 @@ data class DisplayInfo(
 
             displayInfo.apply {
                 resolution = PhoneUtil.getResolution(context)
+                refreshFPS = windowManager.defaultDisplay.refreshRate
                 density = outMetrics.density
                 dpi = outMetrics.densityDpi
                 statusBarsHeight = AppUtils.getStatusBarsHeight()
@@ -46,6 +48,7 @@ data class DisplayInfo(
 fun DisplayInfo.toMap(): Map<String, String> {
     return mapOf(
         "Resolution" to "$resolution px",
+        "refreshFPS" to "$refreshFPS",
         "Display Size" to "$displaySize px",
         "Small Width" to "$smallWidth dp",
         "DPI" to dpi.toString(),

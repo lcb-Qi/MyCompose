@@ -15,7 +15,6 @@ import com.lcb.one.R
 import com.lcb.one.ui.activity.ClockActivity
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
-import com.lcb.one.ui.screen.main.widget.ToolCard
 import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
 import com.lcb.one.ui.screen.player.MusicPlayerScreen
 import com.lcb.one.ui.screen.qmc.QmcConverterScreen

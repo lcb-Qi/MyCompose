@@ -6,6 +6,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,20 +34,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import coil.size.Size
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.Screen
-import com.lcb.one.ui.screen.bilibili.repo.BiliServerAccessor
+import com.lcb.one.ui.screen.bilibili.repo.BiliServerHelper
 import com.lcb.one.ui.screen.bilibili.widget.BigImageViewer
+import com.lcb.one.ui.screen.bilibili.widget.DownloadDialog
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.Res
-import com.lcb.one.util.android.StorageUtils
 import com.lcb.one.util.android.ToastUtils
-import com.lcb.one.util.common.DateTimeUtils
 import kotlinx.coroutines.launch
 
 object BiliBiliScreen : Screen {
@@ -110,29 +109,25 @@ object BiliBiliScreen : Screen {
             if (AppUtils.isNetworkAvailable()) {
                 if (BuildConfig.DEBUG) textInput = "BV1Jp421y768"
                 scope.launch {
-                    coverUrl = BiliServerAccessor.getVideoCoverUrl(textInput)
+                    coverUrl = BiliServerHelper.getVideoCoverUrl(textInput)
                 }
             } else {
                 AppGlobalConfigs.assertNetwork = true
             }
         }
 
-        val download: () -> Unit = {
-            scope.launch {
-                StorageUtils.createImageFromUrl(coverUrl, DateTimeUtils.nowStringShort())
-                    .onSuccess { ToastUtils.showToast("${Res.string(R.string.save_success)} $it") }
-                    .onFailure { ToastUtils.showToast(Res.string(R.string.save_failed)) }
-            }
-        }
         Scaffold(
             modifier = modifier.fillMaxSize(),
             topBar = { ToolBar(title = label) },
             floatingActionButton = {
+                var downloading by remember { mutableStateOf(false) }
                 if (coverUrl.isNotBlank()) {
-                    FloatingActionButton(onClick = download) {
-                        Icon(imageVector = Icons.Rounded.Download, contentDescription = "")
-                    }
+                    FloatingActionButton(
+                        onClick = { downloading = true },
+                        content = { Icon(Icons.Rounded.Download, null) }
+                    )
                 }
+                DownloadDialog(downloading, coverUrl) { downloading = false }
             }
         ) { innerPadding ->
             Column(
@@ -160,12 +155,15 @@ object BiliBiliScreen : Screen {
                         .clickable { onShowBigImage(coverUrl) },
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(coverUrl)
-                        .size(Size.ORIGINAL)
                         .placeholder(R.drawable.icon_bilibili)
                         .error(R.drawable.icon_bilibili)
                         .build(),
                     contentDescription = null,
-                    loading = { CircularProgressIndicator() }
+                    loading = {
+                        Box(contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
+                        }
+                    }
                 )
             }
         }

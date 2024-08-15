@@ -5,8 +5,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
-object BiliServerAccessor {
-    private const val TAG = "BiliServerAccessor"
+object BiliServerHelper {
+    private const val TAG = "BiliServerHelper"
     private const val BASE_URL = "https://api.bilibili.com/"
     private const val VIDEO_INO_URL = BASE_URL + "x/web-interface/view"
 

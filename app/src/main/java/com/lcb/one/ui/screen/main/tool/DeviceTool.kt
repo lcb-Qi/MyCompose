@@ -19,7 +19,6 @@ import com.lcb.one.R
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.applist.InstalledAppsScreen
 import com.lcb.one.ui.screen.device.DeviceInfoScreen
-import com.lcb.one.ui.screen.main.widget.ToolCard
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
 import com.lcb.one.util.android.AppUtils

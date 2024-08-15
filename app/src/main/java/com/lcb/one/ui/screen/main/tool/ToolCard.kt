@@ -1,4 +1,4 @@
-package com.lcb.one.ui.screen.main.widget
+package com.lcb.one.ui.screen.main.tool
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +32,7 @@ fun ToolCard(
     icon: @Composable () -> Unit,
     content: @Composable FlowRowScope.() -> Unit
 ) {
-    var expand by rememberSaveable { mutableStateOf(false) }
+    var expand by rememberSaveable { mutableStateOf(true) }
     Card(onClick = { expand = !expand }) {
         Column(
             modifier = Modifier

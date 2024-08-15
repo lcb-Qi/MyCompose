@@ -1,5 +1,6 @@
 package com.lcb.one.util.android
 
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.util.Size
@@ -39,4 +40,8 @@ object PhoneUtil {
 
     @Px
     fun getScreenHeight(context: Context = MyApp.get()): Int = getResolution(context).height
+
+    fun getScreenFPS(context: Activity): Float {
+        return context.display?.refreshRate ?: 0f
+    }
 }
