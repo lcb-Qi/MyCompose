@@ -26,9 +26,13 @@ import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.util.android.LLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.text.Collator
+import java.util.Locale
+import java.util.Stack
 
 @OptIn(UnstableApi::class)
 class PlayerManager {
@@ -62,8 +66,15 @@ class PlayerManager {
         }
 
         override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-            LLogger.debug(TAG) { "onMediaItemTransition: " }
+            if (nextPlayIndex != null) {
+                LLogger.debug(TAG) { "onMediaItemTransition: seek to nextPlayIndex = $nextPlayIndex" }
+                seekTo(nextPlayIndex!!)
+                nextPlayIndex = null
+                return
+            }
+
             val current = mediaItem?.getExtraMusic() ?: return
+            LLogger.debug(TAG) { "onMediaItemTransition: $current" }
             UserPrefs.putBlocking(UserPrefs.Key.lastMusic, current.uri.toString())
             playingMusic.update { current }
         }
@@ -98,13 +109,32 @@ class PlayerManager {
         controllerFuture.addListener(runnable, ContextCompat.getMainExecutor(context))
     }
 
-    suspend fun updatePlaylist() {
+    private val collator = Collator.getInstance(Locale.getDefault()).apply {
+        strength = Collator.PRIMARY
+        decomposition = Collator.CANONICAL_DECOMPOSITION
+    }
+
+    private var nextPlayIndex: Int? = null
+
+    suspend fun updatePlaylist(): Int {
         LLogger.debug(TAG) { "updatePlaylist: " }
+        var newCount = 0
         playList.update { old ->
-            val musics = PlayerHelper.findMusics()
-            player.addMediaItems((musics - old).toMediaItem())
+            val musics = PlayerHelper.findMusics().sortedWith { o1, o2 ->
+                collator.compare(o1.title, o2.title)
+            }
+
+            val newMusic = musics - old
+            newCount = newMusic.size
+
+            newMusic.forEach {
+                player.addMediaItem(musics.indexOf(it), it.toMediaItem())
+            }
+
             musics
         }
+
+        return newCount
     }
 
     fun handleEvent(event: ControllerEvent) {
@@ -116,6 +146,10 @@ class PlayerManager {
             ControllerEvent.Previous -> seekToPrevious()
             is ControllerEvent.SeekTo -> seekTo(event.index, event.position)
             is ControllerEvent.SeekToPosition -> seekToPosition(event.position)
+            is ControllerEvent.SetNext -> nextPlayIndex = event.index
+        }
+        if (event !is ControllerEvent.PlayOrPause && !player.isPlaying) {
+            player.play()
         }
     }
 

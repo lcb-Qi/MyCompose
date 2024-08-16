@@ -35,36 +35,35 @@ object PlayerHelper {
                 MediaStore.Audio.AudioColumns.ALBUM,
             )
             context.contentResolver.query(audioContentUri, proj, null, null, null)?.use { cursor ->
-                cursor.moveToFirst()
-                do {
-                    val id = cursor.getInt(0)
-                    val uri = ContentUris.withAppendedId(audioContentUri, id.toLong())
+                if (cursor.moveToFirst()) {
+                    do {
+                        val id = cursor.getInt(0)
+                        val uri = ContentUris.withAppendedId(audioContentUri, id.toLong())
 
-                    val title = cursor.getStringOrNull(1) ?: ""
-                    val artist = cursor.getStringOrNull(2) ?: ""
-                    val duration = cursor.getLongOrNull(3) ?: 0
-                    val album = cursor.getStringOrNull(4) ?: ""
+                        val title = cursor.getStringOrNull(1) ?: ""
+                        val artist = cursor.getStringOrNull(2) ?: ""
+                        val duration = cursor.getLongOrNull(3) ?: 0
+                        val album = cursor.getStringOrNull(4) ?: ""
 
-                    if (duration > MINI_DURATION) {
-                        audios.add(Music(uri, title, artist, duration, album))
-                    }
-                } while (cursor.moveToNext())
+                        if (duration > MINI_DURATION) {
+                            audios.add(Music(uri, title, artist, duration, album))
+                        }
+                    } while (cursor.moveToNext())
+                }
             }
 
             return@withContext audios
         }
 
-    fun Iterable<Music>.toMediaItem() = map { music ->
-        MediaItem.Builder().apply {
-            setUri(music.uri)
-            setMediaId(music.uri.toString())
+    fun Music.toMediaItem() = MediaItem.Builder().apply {
+        setUri(uri)
+        setMediaId(uri.toString())
 
-            val metadata = MediaMetadata.Builder()
-                .setExtras(bundleOf(EXT_MUSIC to music))
-                .build()
-            setMediaMetadata(metadata)
-        }.build()
-    }
+        val metadata = MediaMetadata.Builder()
+            .setExtras(bundleOf(EXT_MUSIC to this@toMediaItem))
+            .build()
+        setMediaMetadata(metadata)
+    }.build()
 
     fun formatDuration(duration: Long): String {
         val minutes = duration / 1000 / 60

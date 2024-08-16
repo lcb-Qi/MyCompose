@@ -22,8 +22,8 @@ android {
         applicationId = "com.lcb.one"
         minSdk = 31
         targetSdk = 34
-        versionCode = 10701
-        versionName = "1.7.1-beta"
+        versionCode = 10702
+        versionName = "1.7.2-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

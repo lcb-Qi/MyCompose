@@ -1,6 +1,5 @@
 package com.lcb.one.ui.screen.player.widget
 
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,22 +7,34 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Album
+import androidx.compose.material.icons.rounded.Folder
+import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.MyLocation
-import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.PersonOutline
+import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.WatchLater
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,15 +50,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
-import com.lcb.one.ui.screen.player.PlayerHelper
+import com.lcb.one.ui.screen.applist.widget.ToolButton
 import com.lcb.one.ui.screen.player.repo.ControllerEvent
 import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.ui.screen.player.PlayerManager
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.ui.widget.common.noRippleClickable
+import com.lcb.one.util.android.ToastUtils
+import com.lcb.one.util.android.getAbsolutePath
+import com.lcb.one.util.android.getRelativePath
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayListPage(
     playerManager: PlayerManager,
@@ -62,12 +78,21 @@ fun PlayListPage(
         playList.indexOf(playingMusic).coerceAtLeast(0)
     }
 
+    var refreshing by remember { mutableStateOf(false) }
+    val updatePlayList: () -> Unit = {
+        scope.launch {
+            refreshing = true
+            delay(1000)
+            val newCount = playerManager.updatePlaylist()
+            ToastUtils.showToast("新增 $newCount 首音乐")
+            refreshing = false
+        }
+    }
+
     Scaffold(
         topBar = {
             ToolBar(title = stringResource(R.string.music_player), actions = {
-                AppIconButton(icon = Icons.Rounded.Search, onClick = {
-                    scope.launch { playerManager.updatePlaylist() }
-                })
+                AppIconButton(icon = Icons.Rounded.Refresh, onClick = updatePlayList)
             })
         },
         floatingActionButton = {
@@ -87,51 +112,84 @@ fun PlayListPage(
             }
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+        PullToRefreshBox(
+            modifier = Modifier.padding(innerPadding),
+            isRefreshing = refreshing,
+            onRefresh = updatePlayList
         ) {
-
-            LazyColumn(
-                state = listState,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-            ) {
-                items(playList.size, key = { it }) { index ->
-                    PlayListItem(
-                        modifier = Modifier.noRippleClickable {
-                            playerManager.handleEvent(ControllerEvent.SeekTo(index))
-                        },
-                        selected = selectedIndex == index,
-                        music = playList[index],
-                    )
-
-                    if (index != playList.size - 1) {
-                        HorizontalDivider()
-                    }
-                }
-            }
-
-            Card(
-                onClick = { playerManager.showPlayDetailPage() },
-                modifier = Modifier.padding(bottom = 16.dp)
-            ) {
-                SimplePlayerController(
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-                    showPlay = showPlay,
-                    playingAudio = playingMusic,
-                    onControllerEvent = { playerManager.handleEvent(it) },
-                )
-            }
+            PlayListContent(
+                listState, playList, playerManager,
+                selectedIndex, showPlay, playingMusic
+            )
         }
     }
 }
 
 @Composable
-private fun PlayListItem(modifier: Modifier = Modifier, music: Music, selected: Boolean) {
+private fun PlayListContent(
+    listState: LazyListState,
+    playList: List<Music>,
+    playerManager: PlayerManager,
+    selectedIndex: Int,
+    showPlay: Boolean,
+    playingMusic: Music?
+) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        LazyColumn(
+            state = listState,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
+            items(playList.size, key = { it }) { index ->
+                var more by remember { mutableStateOf(false) }
+                PlayListItem(
+                    modifier = Modifier.noRippleClickable {
+                        playerManager.handleEvent(ControllerEvent.SeekTo(index))
+                    },
+                    selected = selectedIndex == index,
+                    music = playList[index],
+                    onClickMore = { more = true }
+                )
+
+                if (index != playList.size - 1) {
+                    HorizontalDivider()
+                }
+
+                MusicInfoDialog(
+                    more,
+                    playList[index],
+                    onSetNext = { playerManager.handleEvent(ControllerEvent.SetNext(index)) },
+                    onDismiss = { more = false }
+                )
+            }
+        }
+
+        Card(
+            onClick = { playerManager.showPlayDetailPage() },
+            modifier = Modifier.padding(bottom = 16.dp)
+        ) {
+            SimplePlayerController(
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                showPlay = showPlay,
+                playingAudio = playingMusic,
+                onControllerEvent = { playerManager.handleEvent(it) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun PlayListItem(
+    modifier: Modifier = Modifier,
+    music: Music,
+    selected: Boolean,
+    onClickMore: () -> Unit = {}
+) {
     val tint = if (selected) {
         MaterialTheme.colorScheme.primary
     } else {
@@ -170,11 +228,42 @@ private fun PlayListItem(modifier: Modifier = Modifier, music: Music, selected: 
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        Text(
-            modifier = Modifier.padding(horizontal = 4.dp),
-            text = PlayerHelper.formatDuration(music.duration),
-            color = tint,
-            style = MaterialTheme.typography.labelMedium
+        AppIconButton(icon = Icons.Rounded.MoreHoriz, onClick = onClickMore)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MusicInfoDialog(show: Boolean, music: Music, onSetNext: () -> Unit, onDismiss: () -> Unit) {
+    if (!show) return
+
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        modifier = Modifier.statusBarsPadding()
+    ) {
+        Column(
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            content = {
+                ToolButton(text = music.title, style = MaterialTheme.typography.titleLarge)
+
+                ToolButton(
+                    leadingIcon = Icons.Rounded.Person,
+                    text = "歌手    ${music.artist}"
+                )
+                ToolButton(leadingIcon = Icons.Rounded.Album, text = "专辑    ${music.album}")
+
+                ToolButton(leadingIcon = Icons.Rounded.WatchLater, text = "下一首播放") {
+                    onDismiss()
+                    onSetNext()
+                }
+
+                ToolButton(
+                    leadingIcon = Icons.Rounded.Folder,
+                    text = "文件    ${music.uri.getRelativePath()}",
+                )
+            }
         )
     }
 }

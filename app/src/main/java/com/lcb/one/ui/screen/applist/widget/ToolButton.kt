@@ -13,14 +13,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun ToolButton(
     modifier: Modifier = Modifier,
-    leadingIcon: ImageVector,
     text: String,
-    onclick: () -> Unit,
+    leadingIcon: ImageVector? = null,
+    style: TextStyle = MaterialTheme.typography.titleSmall,
+    onclick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -31,11 +33,13 @@ fun ToolButton(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Icon(leadingIcon, null)
+        if (leadingIcon != null) {
+            Icon(leadingIcon, null)
+        }
         Text(
             text = text,
             modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.titleMedium
+            style = style
         )
     }
 }

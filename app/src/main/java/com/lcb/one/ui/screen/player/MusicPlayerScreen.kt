@@ -68,10 +68,7 @@ object MusicPlayerScreen : Screen {
         val playingMusic by playerManager.playingMusic.collectAsState()
         val showPlay by playerManager.showPlay.collectAsState()
 
-        var loading by remember { mutableStateOf(false) }
         val listState = rememberLazyListState()
-
-
 
         AnimatedContent(
             targetState = playerManager.showPlayDetailPage,

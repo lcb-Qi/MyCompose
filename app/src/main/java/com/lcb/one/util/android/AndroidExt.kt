@@ -16,6 +16,18 @@ fun Uri.inputStream() = MyApp.getContentResolver().openInputStream(this)
 fun Uri.bufferedSink() = outputStream()?.sink()?.buffer()
 fun Uri.bufferedSource() = inputStream()?.source()?.buffer()
 
+fun Uri.getAbsolutePath(context: Context = MyApp.get()): String {
+    var path = ""
+    val proj = arrayOf(MediaStore.Images.Media.DATA)
+    context.contentResolver.query(this, proj, null, null)?.use {
+        if (it.moveToFirst()) {
+            path = it.getStringOrNull(it.getColumnIndexOrThrow(proj[0])) ?: ""
+        }
+    }
+
+    return path
+}
+
 fun Uri.getRelativePath(context: Context = MyApp.get()): String {
     var path = ""
     val proj = arrayOf(MediaStore.Images.Media.RELATIVE_PATH, MediaStore.Images.Media.DISPLAY_NAME)
