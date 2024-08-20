@@ -82,17 +82,15 @@ object ThemeSettingsScreen : Screen {
 
                 SettingsCategory(title = stringResource(R.string.dark_mode)) {
                     Card(modifier = Modifier.fillMaxWidth()) {
-                        val options = stringArrayResource(R.array.settings_dark_mode_options)
-                        val values = ThemeManager.darkModeValues
+                        val options = stringArrayResource(R.array.settings_ui_mode_options)
+                        val values = ThemeManager.uiModes
                         SettingSingleChoice(
                             modifier = Modifier.padding(vertical = 8.dp),
                             colors = SettingsDefaults.colorOnCard(),
                             title = stringResource(R.string.dark_mode),
                             options = options,
-                            selectIndex = values.indexOf(ThemeManager.darkMode),
-                            onItemSelected = {
-                                ThemeManager.darkMode = values[it]
-                            }
+                            selectIndex = values.indexOf(ThemeManager.uiMode),
+                            onItemSelected = { ThemeManager.uiMode = values[it] }
                         )
                     }
                 }

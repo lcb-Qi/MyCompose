@@ -1,7 +1,9 @@
 package com.lcb.one.ui.widget.settings.storage
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -13,7 +15,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty
 
-class DataStoreState<T>(
+@Composable
+fun <T> rememberPrefState(key: Preferences.Key<T>, def: T) = remember(key) { PrefState(key, def) }
+
+class PrefState<T>(
     private val key: Preferences.Key<T>,
     default: T,
     private val dataStore: DataStore<Preferences> = DateStores.getDefault(),
@@ -30,11 +35,11 @@ class DataStoreState<T>(
 }
 
 @Suppress("NOTHING_TO_INLINE")
-inline operator fun <T> DataStoreState<T>.getValue(thisObj: Any?, prop: KProperty<*>): T {
+inline operator fun <T> PrefState<T>.getValue(thisObj: Any?, prop: KProperty<*>): T {
     return value
 }
 
 @Suppress("NOTHING_TO_INLINE")
-inline operator fun <T> DataStoreState<T>.setValue(thisObj: Any?, prop: KProperty<*>, value: T) {
+inline operator fun <T> PrefState<T>.setValue(thisObj: Any?, prop: KProperty<*>, value: T) {
     this.value = value
 }

@@ -1,4 +1,4 @@
-package com.lcb.one.ui.activity
+package com.lcb.one.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

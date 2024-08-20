@@ -1,6 +1,5 @@
 package com.lcb.one.ui.screen.main.tool
 
-import android.content.Intent
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MiscellaneousServices
@@ -8,11 +7,10 @@ import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.lcb.one.R
-import com.lcb.one.ui.activity.ClockActivity
+import com.lcb.one.ui.screen.clock.ClockScreen
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
 import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
@@ -30,21 +28,18 @@ fun OtherTool(navController: NavHostController) {
             onClick = { navController.launchSingleTop(BiliBiliScreen) },
             label = { Text(text = BiliBiliScreen.label) }
         )
-        val context = LocalContext.current
         ElevatedAssistChip(
-            onClick = { context.startActivity(Intent(context, ClockActivity::class.java)) },
-            label = { Text(text = stringResource(R.string.clock_screen)) }
+            onClick = { navController.launchSingleTop(ClockScreen) },
+            label = { Text(text = ClockScreen.label) }
         )
         ElevatedAssistChip(
             onClick = { navController.launchSingleTop(MenstruationAssistantScreen) },
             label = { Text(text = MenstruationAssistantScreen.label) }
         )
-
         ElevatedAssistChip(
             onClick = { navController.launchSingleTop(QmcConverterScreen) },
             label = { Text(text = QmcConverterScreen.label) }
         )
-
         ElevatedAssistChip(
             onClick = { navController.launchSingleTop(MusicPlayerScreen) },
             label = { Text(text = MusicPlayerScreen.label) }

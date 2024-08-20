@@ -1,9 +1,13 @@
 package com.lcb.one.ui.widget.settings.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ListItemColors
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.alorma.compose.settings.ui.SettingsSlider
+import com.alorma.compose.settings.ui.base.internal.SettingsTileScaffold
+import com.lcb.one.ui.widget.common.LegacySlider
 
 @Composable
 fun SimpleSettingsSlider(
@@ -18,17 +22,27 @@ fun SimpleSettingsSlider(
     steps: Int = 0,
     onValueChangeFinished: (() -> Unit)? = null,
 ) {
-    SettingsSlider(
-        colors = colors,
+    SettingsTileScaffold(
         modifier = Modifier.minSettingsHeight(),
         enabled = enabled,
         title = { SettingsDefaults.Title(title = title) },
-        subtitle = summary?.let { { SettingsDefaults.Summary(summary = summary) } },
+        subtitle = {
+            Column {
+                summary?.let { SettingsDefaults.Summary(summary = summary) }
+                LegacySlider(
+                    value = value,
+                    onValueChange = { value -> onValueChange(value) },
+                    enabled = enabled,
+                    valueRange = valueRange,
+                    steps = steps,
+                    onValueChangeFinished = onValueChangeFinished,
+                    colors = SliderDefaults.colors(),
+                )
+            }
+        },
         icon = icon,
-        valueRange = valueRange,
-        steps = steps,
-        value = value,
-        onValueChange = onValueChange,
-        onValueChangeFinished = onValueChangeFinished
+        colors = colors,
+        tonalElevation = ListItemDefaults.Elevation,
+        shadowElevation = ListItemDefaults.Elevation,
     )
 }

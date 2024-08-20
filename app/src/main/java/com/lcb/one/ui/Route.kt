@@ -7,6 +7,7 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
 import androidx.navigation.Navigator
 import androidx.navigation.navOptions
+import com.lcb.one.ui.screen.clock.ClockScreen
 import com.lcb.one.ui.screen.about.AboutScreen
 import com.lcb.one.ui.screen.applist.InstalledAppsScreen
 import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
@@ -23,7 +24,7 @@ import com.lcb.one.ui.screen.webview.WebScreen
 
 object Route {
     val defaultScreens by lazy {
-        listOf(
+        setOf(
             MainScreen,
             BiliBiliScreen,
             DeviceInfoScreen,
@@ -37,12 +38,13 @@ object Route {
             WebScreen,
             QmcConverterScreen,
             MusicPlayerScreen,
+            ClockScreen
         )
     }
 
     val supportShortcutScreens by lazy {
-        val notSupport = setOf(WebScreen, MainScreen)
-        defaultScreens.subtract(notSupport).toList()
+        val notSupport = setOf(WebScreen, MainScreen, MenstruationHistoryScreen)
+        defaultScreens - notSupport
     }
 }
 
@@ -69,12 +71,5 @@ fun NavHostController.launchSingleTop(route: String, extras: Navigator.Extras? =
     )
 }
 
-fun NavHostController.launchSingleTop(screen: Screen, extras: Navigator.Extras? = null) {
-    navigate(
-        route = screen.route,
-        navOptions = navOptions {
-            launchSingleTop = true
-        },
-        navigatorExtras = extras
-    )
-}
+fun NavHostController.launchSingleTop(screen: Screen, extras: Navigator.Extras? = null) =
+    launchSingleTop(screen.route, extras)

@@ -20,11 +20,7 @@
     <string name="other">Other</string>
     <string name="obtain_bilibili_cover">Obtain bilibili cover</string>
     <string name="clock_screen">Clock screen</string>
-    <string name="left_bottom">Left-bottom</string>
-    <string name="right_bottom">Right-bottom</string>
-    <string name="center_above">Center-above</string>
-    <string name="center_below">Center-below</string>
-    <string name="date_position">Position of date</string>
+    <string name="layout">Layout</string>
     <string name="bibibili">Bilibili</string>
     <string name="display">Display</string>
     <string name="fall_in_love">Fall in love</string>
@@ -63,7 +59,7 @@
     <string name="all_apps">All applications</string>
     <string name="dark_mode">Dark mode</string>
     <string name="effective_this_page">Effective only on this page</string>
-    <string name="clock_font_size">Font size of clock</string>
+    <string name="font_zoom">Zoom of font</string>
     <string name="sum_of_apps">%d applications</string>
     <string name="extract_icon">Extract desktop icon</string>
     <string name="extract_installation_package">Extract installation package</string>

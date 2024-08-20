@@ -37,7 +37,7 @@
         </service>
 
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MyCompose">
@@ -47,11 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activity.ClockActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="landscape" />
 
         <receiver
             android:name=".ui.appwidget.PoemAppWidgetProvider"

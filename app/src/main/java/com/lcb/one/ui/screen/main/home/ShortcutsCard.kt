@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 
 private val userShortcuts by lazy {
     val set = UserPrefs.getBlocking(UserPrefs.Key.shortcuts, emptySet())
-    val shortcuts = Route.defaultScreens.filter { set.contains(it.route) }
+    val shortcuts = Route.supportShortcutScreens.filter { set.contains(it.route) }
 
     shortcuts.toMutableStateList()
 }
@@ -82,9 +82,7 @@ fun ShortcutsCard(onShortcutClick: (String) -> Unit) {
                         userShortcuts.clear()
                         userShortcuts.addAll(it)
                         val routes = it.map { it.route }.toSet()
-                        scope.launch {
-                            UserPrefs.put(UserPrefs.Key.shortcuts, routes)
-                        }
+                        scope.launch { UserPrefs.put(UserPrefs.Key.shortcuts, routes) }
                     }
                 )
             }
@@ -100,7 +98,7 @@ private fun AddShortcutsDialog(
 ) {
     if (!show) return
 
-    val supportShortcutScreens = Route.supportShortcutScreens
+    val supportShortcutScreens = Route.supportShortcutScreens.toList()
     val selectedScreen = remember { mutableStateListOf<Screen>() }
     LaunchedEffect(Unit) {
         selectedScreen.addAll(userShortcuts)

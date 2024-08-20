@@ -21,11 +21,7 @@
     <string name="other">其他</string>
     <string name="obtain_bilibili_cover">獲取B站封面</string>
     <string name="clock_screen">時鐘螢幕</string>
-    <string name="left_bottom">左下</string>
-    <string name="right_bottom">右下</string>
-    <string name="center_above">居中-上</string>
-    <string name="center_below">居中-下</string>
-    <string name="date_position">日期位置</string>
+    <string name="layout">布局</string>
     <string name="bibibili">哔哩哔哩</string>
     <string name="display">顯示</string>
     <string name="fall_in_love">相戀</string>
@@ -64,7 +60,7 @@
     <string name="all_apps">全部應用程式</string>
     <string name="dark_mode">深色模式</string>
     <string name="effective_this_page">僅本頁生效</string>
-    <string name="clock_font_size">時鐘字型大小</string>
+    <string name="font_zoom">字体縮放</string>
     <string name="sum_of_apps">共 %d 個應用程式</string>
     <string name="extract_icon">提取桌面圖示</string>
     <string name="extract_installation_package">提取安裝包</string>

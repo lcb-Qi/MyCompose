@@ -14,7 +14,7 @@ import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
-import com.lcb.one.ui.widget.settings.storage.DataStoreState
+import com.lcb.one.ui.widget.settings.storage.PrefState
 import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
@@ -26,13 +26,11 @@ import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.util.android.LLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.Collator
 import java.util.Locale
-import java.util.Stack
 
 @OptIn(UnstableApi::class)
 class PlayerManager {
@@ -160,8 +158,8 @@ class PlayerManager {
     private fun seekToPrevious() = player.seekToPreviousMediaItem()
     private fun seekToPosition(position: Long) = player.seekTo(position)
 
-    var repeatMode by DataStoreState(UserPrefs.Key.repeatMode, ExoPlayer.REPEAT_MODE_ALL)
-    var isShuffle by DataStoreState(UserPrefs.Key.isShuffle, false)
+    var repeatMode by PrefState(UserPrefs.Key.repeatMode, ExoPlayer.REPEAT_MODE_ALL)
+    var isShuffle by PrefState(UserPrefs.Key.isShuffle, false)
     private fun changedRepeatMode() {
         if (player.shuffleModeEnabled) {
             player.repeatMode = ExoPlayer.REPEAT_MODE_ALL

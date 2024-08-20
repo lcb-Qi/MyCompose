@@ -11,7 +11,7 @@ import android.service.quicksettings.TileService
 import androidx.core.app.PendingIntentCompat
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
-import com.lcb.one.ui.activity.MainActivity
+import com.lcb.one.ui.MainActivity
 import com.lcb.one.util.android.LLogger
 import java.util.concurrent.Executors
 
