@@ -47,12 +47,8 @@ import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
 import com.lcb.one.util.android.Res
 import java.util.Locale
 
-object ClockScreen : Screen {
-    override val route: String
-        get() = "Clock"
-
-    override val label: String
-        get() = Res.string(R.string.clock_screen)
+object ClockScreen : Screen() {
+    override val label: String = Res.string(R.string.clock_screen)
 
     private fun Activity.hideSystemBars() {
         window.insetsController?.run {

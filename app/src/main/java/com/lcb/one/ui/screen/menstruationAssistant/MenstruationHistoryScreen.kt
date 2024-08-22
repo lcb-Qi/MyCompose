@@ -57,12 +57,8 @@ import kotlin.math.roundToInt
 
 private const val DRAG_OFFSET_MAX = 400
 
-object MenstruationHistoryScreen : Screen {
-    override val route: String
-        get() = "MenstruationHistory"
-
-    override val label: String
-        get() = Res.string(R.string.menstruation_history)
+object MenstruationHistoryScreen : Screen() {
+    override val label: String = Res.string(R.string.menstruation_history)
 
     @Composable
     override fun Content(navController: NavHostController, args: Bundle?) {

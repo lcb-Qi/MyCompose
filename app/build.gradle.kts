@@ -118,8 +118,6 @@ dependencies {
     implementation(libs.bundles.androidx.compose)
     implementation(libs.bundles.androidx.compose.support)
 
-    implementation(libs.kolor)
-
     implementation(libs.coil.compose)
 
     implementation(libs.zoomimage.compose.coil)

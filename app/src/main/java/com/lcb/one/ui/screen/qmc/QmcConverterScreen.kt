@@ -41,12 +41,8 @@ import com.lcb.one.util.android.getRelativePath
 import com.lcb.one.util.android.rememberGetContents
 import kotlinx.coroutines.launch
 
-object QmcConverterScreen : Screen {
-    override val route: String
-        get() = "QmcConverter"
-
-    override val label: String
-        get() = Res.string(R.string.qmc_converter)
+object QmcConverterScreen : Screen() {
+    override val label: String = Res.string(R.string.qmc_converter)
 
     @Composable
     override fun Content(navController: NavHostController, args: Bundle?) {

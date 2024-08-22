@@ -33,12 +33,8 @@ import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.Res
 
-object AboutScreen : Screen {
-    override val route: String
-        get() = "About"
-
-    override val label: String
-        get() = Res.string(R.string.about)
+object AboutScreen : Screen() {
+    override val label: String = Res.string(R.string.about)
 
     @Composable
     override fun Content(navController: NavHostController, args: Bundle?) {

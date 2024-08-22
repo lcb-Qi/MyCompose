@@ -35,12 +35,8 @@ import kotlinx.coroutines.delay
 
 
 @OptIn(UnstableApi::class)
-object MusicPlayerScreen : Screen {
-    override val route: String
-        get() = "MusicPlayer"
-
-    override val label: String
-        get() = Res.string(R.string.music_player)
+object MusicPlayerScreen : Screen() {
+    override val label: String = Res.string(R.string.music_player)
 
     private val playerManager = PlayerManager.instance
 

@@ -49,16 +49,14 @@ object Route {
 }
 
 @Stable
-interface Screen {
-    val route: String
-    val args: List<NamedNavArgument>
-        get() = emptyList()
+abstract class Screen {
+    open val route: String = this.javaClass.name
+    open val args: List<NamedNavArgument> = emptyList()
 
-    val label: String
-        get() = route
+    open val label: String = this.javaClass.simpleName
 
     @Composable
-    fun Content(navController: NavHostController, args: Bundle?)
+    abstract fun Content(navController: NavHostController, args: Bundle?)
 }
 
 fun NavHostController.launchSingleTop(route: String, extras: Navigator.Extras? = null) {

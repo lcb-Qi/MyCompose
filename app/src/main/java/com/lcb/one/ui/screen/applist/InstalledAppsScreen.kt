@@ -37,12 +37,8 @@ import com.lcb.one.util.android.ToastUtils
 import kotlinx.coroutines.delay
 import kotlin.system.measureTimeMillis
 
-object InstalledAppsScreen : Screen {
-    override val route: String
-        get() = "AppList"
-
-    override val label: String
-        get() = Res.string(R.string.app_list)
+object InstalledAppsScreen : Screen() {
+    override val label: String = Res.string(R.string.app_list)
 
     @Composable
     override fun Content(navController: NavHostController, args: Bundle?) {

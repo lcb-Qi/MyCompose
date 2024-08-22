@@ -47,16 +47,12 @@ import com.lcb.one.util.android.Res
 import java.time.LocalDate
 
 
-object MenstruationAssistantScreen : Screen {
+object MenstruationAssistantScreen : Screen() {
     private const val ONE_DAY_MILLIS = 24 * 60 * 60 * 1000L// 一天的毫秒数
     private const val MENSTRUATION_INTERVAL = 28L// 两次月经间隔
     private const val MENSTRUATION_DURATION = 7L// 月经持续时间
 
-    override val route: String
-        get() = "MenstruationAssistant"
-
-    override val label: String
-        get() = Res.string(R.string.menstruation_assistant)
+    override val label: String = Res.string(R.string.menstruation_assistant)
 
     @Composable
     override fun Content(navController: NavHostController, args: Bundle?) {

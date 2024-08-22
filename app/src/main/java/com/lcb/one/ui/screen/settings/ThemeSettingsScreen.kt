@@ -1,8 +1,6 @@
 package com.lcb.one.ui.screen.settings
 
 import android.os.Bundle
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.Screen
-import com.lcb.one.ui.screen.settings.widget.ThemSelector
 import com.lcb.one.ui.theme.ThemeManager
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
@@ -29,12 +26,8 @@ import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
 import com.lcb.one.util.android.Res
 
-object ThemeSettingsScreen : Screen {
-    override val route: String
-        get() = "ThemeSettings"
-
-    override val label: String
-        get() = Res.string(R.string.theme)
+object ThemeSettingsScreen : Screen() {
+    override val label: String = Res.string(R.string.theme)
 
     @Composable
     override fun Content(navController: NavHostController, args: Bundle?) {
@@ -51,29 +44,17 @@ object ThemeSettingsScreen : Screen {
                                 modifier = Modifier.padding(top = 8.dp),
                                 title = "AMOLED",
                                 summary = stringResource(R.string.amoled_mode_summary),
-                                checked = ThemeManager.amoledMode,
-                                onCheckedChange = { ThemeManager.amoledMode = it }
+                                checked = ThemeManager.amoled,
+                                onCheckedChange = { ThemeManager.amoled = it }
                             )
 
-                            val bottomPadding by animateDpAsState(
-                                targetValue = if (ThemeManager.dynamicColor) 8.dp else 0.dp,
-                                label = "dynamicColor"
-                            )
                             SimpleSettingsSwitch(
-                                modifier = Modifier.padding(bottom = bottomPadding),
+                                modifier = Modifier.padding(bottom = 8.dp),
                                 title = stringResource(R.string.dynamic_color),
                                 summary = stringResource(R.string.dynamic_color_summary),
                                 checked = ThemeManager.dynamicColor,
                                 onCheckedChange = { ThemeManager.dynamicColor = it }
                             )
-
-                            AnimatedVisibility(visible = !ThemeManager.dynamicColor) {
-                                ThemSelector(
-                                    modifier = Modifier.padding(bottom = 8.dp),
-                                    selected = ThemeManager.themeColor,
-                                    onColorSelected = { ThemeManager.themeColor = it }
-                                )
-                            }
                         }
                     }
                 }

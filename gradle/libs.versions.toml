@@ -24,7 +24,6 @@ retrofit = "2.11.0"
 okhttpLogger = "4.12.0"
 settingsUi = "2.4.0"
 zoomimage = "1.0.2"
-kolor = "1.4.4"
 # for test
 espresso = "3.5.1"
 junit = "4.13.2"
@@ -84,8 +83,6 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose"
 compose-webview = { module = "io.github.kevinnzou:compose-webview", version.ref = "composeWebview" }
 
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
-
-kolor = { module = "com.materialkolor:material-kolor", version.ref = "kolor" }
 
 zoomimage-compose-coil = { module = "io.github.panpf.zoomimage:zoomimage-compose-coil", version.ref = "zoomimage" }
 

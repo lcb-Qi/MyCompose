@@ -35,12 +35,8 @@ import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.rememberStartActivityForResult
 
-object PrivacyScreen : Screen {
-    override val route: String
-        get() = "Privacy"
-
-    override val label: String
-        get() = Res.string(R.string.permissions_management)
+object PrivacyScreen : Screen() {
+    override val label: String = Res.string(R.string.permissions_management)
 
     @Composable
     override fun Content(navController: NavHostController, args: Bundle?) {

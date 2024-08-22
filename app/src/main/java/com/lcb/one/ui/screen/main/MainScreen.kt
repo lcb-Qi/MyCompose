@@ -41,12 +41,8 @@ import com.lcb.one.util.android.Res
 import kotlinx.coroutines.launch
 
 
-object MainScreen : Screen {
-    override val route: String
-        get() = "Main"
-
-    override val label: String
-        get() = Res.string(R.string.main_screen)
+object MainScreen : Screen() {
+    override val label: String = Res.string(R.string.main_screen)
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable

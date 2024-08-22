@@ -25,14 +25,11 @@ object UserPrefs {
         val dynamicColor: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("dynamic_color")
 
-        val amoledMode: Preferences.Key<Boolean>
+        val amoled: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("amoled_mode")
 
         val uiMode: Preferences.Key<Int>
             get() = intPreferencesKey("ui_mode")
-
-        val seedColor: Preferences.Key<Int>
-            get() = intPreferencesKey("seed_color")
 
         val clockSize: Preferences.Key<Float>
             get() = floatPreferencesKey("clock_size")

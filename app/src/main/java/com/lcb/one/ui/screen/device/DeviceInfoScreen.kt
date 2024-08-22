@@ -30,12 +30,8 @@ import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.util.android.Res
 import kotlinx.coroutines.launch
 
-object DeviceInfoScreen : Screen {
-    override val route: String
-        get() = "Device"
-
-    override val label: String
-        get() = Res.string(R.string.device_info)
+object DeviceInfoScreen : Screen() {
+    override val label: String = Res.string(R.string.device_info)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable

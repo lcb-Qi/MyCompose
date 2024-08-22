@@ -3,8 +3,6 @@ package com.lcb.one.ui.theme
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import com.lcb.one.ui.widget.settings.storage.PrefState
 import com.lcb.one.prefs.UserPrefs.Key
@@ -13,24 +11,11 @@ import com.lcb.one.ui.widget.settings.storage.setValue
 import com.lcb.one.util.android.AppUtils
 
 object ThemeManager {
-    val seeds = defaultSeeds
-
-    // 主题种子
-    private var seed by PrefState(Key.seedColor, seeds.first().toArgb())
-
-    // 主题色
-    var themeColor = Color(seed)
-        get() = Color(seed)
-        set(value) {
-            field = value
-            seed = value.toArgb()
-        }
-
     // 是否动态取色
     var dynamicColor by PrefState(Key.dynamicColor, true)
 
     // 是否启用纯白/纯黑背景
-    var amoledMode by PrefState(Key.amoledMode, false)
+    var amoled by PrefState(Key.amoled, false)
 
     private const val UI_MODE_AUTO = -1
     private const val UI_MODE_LIGHT = 0

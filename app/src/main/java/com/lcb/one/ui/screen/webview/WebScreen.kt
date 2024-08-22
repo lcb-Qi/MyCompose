@@ -36,7 +36,7 @@ import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.util.android.AppUtils
 
-object WebScreen : Screen {
+object WebScreen : Screen() {
     override val route: String
         get() = "Web?url={url}"
 

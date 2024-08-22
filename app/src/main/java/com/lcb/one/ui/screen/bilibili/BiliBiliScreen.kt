@@ -45,15 +45,10 @@ import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.util.android.AppUtils
 import com.lcb.one.util.android.Res
-import com.lcb.one.util.android.ToastUtils
 import kotlinx.coroutines.launch
 
-object BiliBiliScreen : Screen {
-    override val route: String
-        get() = "Bilibili"
-
-    override val label: String
-        get() = Res.string(R.string.bibibili)
+object BiliBiliScreen : Screen() {
+    override val label: String = Res.string(R.string.bibibili)
 
     @OptIn(ExperimentalSharedTransitionApi::class)
     @Composable
