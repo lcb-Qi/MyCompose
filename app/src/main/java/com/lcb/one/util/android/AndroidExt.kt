@@ -1,7 +1,7 @@
 package com.lcb.one.util.android
 
+import android.content.ContentResolver
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.database.getStringOrNull
@@ -18,15 +18,25 @@ fun Uri.bufferedSink() = outputStream()?.sink()?.buffer()
 fun Uri.bufferedSource() = inputStream()?.source()?.buffer()
 
 fun Uri.getAbsolutePath(context: Context = MyApp.get()): String {
-    var path = ""
-    val proj = arrayOf(MediaStore.Images.Media.DATA)
-    context.contentResolver.query(this, proj, null, null)?.use {
-        if (it.moveToFirst()) {
-            path = it.getStringOrNull(it.getColumnIndexOrThrow(proj[0])) ?: ""
+    val filePath = when (scheme) {
+        null -> path
+        ContentResolver.SCHEME_FILE -> path
+        ContentResolver.SCHEME_CONTENT -> {
+            val proj = arrayOf("_data")
+            context.contentResolver.query(this, proj, null, null)?.use {
+                if (it.moveToFirst()) {
+                    it.getStringOrNull(it.getColumnIndexOrThrow(proj[0])) ?: ""
+                } else {
+                    path
+                }
+            }
         }
+
+        else -> path
     }
 
-    return path
+    LLogger.debug { "getAbsolutePath: path = $filePath" }
+    return filePath ?: ""
 }
 
 fun Uri.getRelativePath(context: Context = MyApp.get()): String {

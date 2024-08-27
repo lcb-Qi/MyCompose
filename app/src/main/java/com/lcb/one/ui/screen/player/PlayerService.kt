@@ -36,7 +36,6 @@ class PlayerService : MediaSessionService() {
         super.onCreate()
         LLogger.debug(TAG) { "onCreate: " }
         exoPlayer.prepare()
-        LLogger.debug(TAG) { "onCreate: end" }
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession {

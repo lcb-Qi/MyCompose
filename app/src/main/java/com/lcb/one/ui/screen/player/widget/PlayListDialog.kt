@@ -30,7 +30,7 @@ import com.lcb.one.ui.widget.common.noRippleClickable
 fun PlayListDialog(
     show: Boolean,
     playList: List<Music>,
-    playingAudio: Music?,
+    playingMusic: Music?,
     onDismiss: () -> Unit,
     onItemSelected: (index: Int) -> Unit
 ) {
@@ -40,7 +40,9 @@ fun PlayListDialog(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        modifier = Modifier.statusBarsPadding()
+        modifier = Modifier
+            .statusBarsPadding()
+            .padding(top = 360.dp)
     ) {
         Column(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
@@ -52,12 +54,12 @@ fun PlayListDialog(
                 )
 
                 val listState =
-                    rememberLazyListState(playList.indexOf(playingAudio), 0)
+                    rememberLazyListState(playList.indexOf(playingMusic), 0)
                 LazyColumn(state = listState) {
 
                     items(count = playList.size, key = { it }) { index ->
                         val audio = playList[index]
-                        val textColor = if (playingAudio?.uri == audio.uri) {
+                        val textColor = if (playingMusic?.uri == audio.uri) {
                             MaterialTheme.colorScheme.primary
                         } else {
                             Color.Unspecified

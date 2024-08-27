@@ -19,7 +19,6 @@ import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.MyLocation
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.PersonOutline
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.WatchLater
 import androidx.compose.material3.Card
@@ -32,7 +31,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -58,7 +56,6 @@ import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.ui.widget.common.noRippleClickable
 import com.lcb.one.util.android.ToastUtils
-import com.lcb.one.util.android.getAbsolutePath
 import com.lcb.one.util.android.getRelativePath
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -170,13 +167,13 @@ private fun PlayListContent(
         }
 
         Card(
-            onClick = { playerManager.showPlayDetailPage() },
+            onClick = { if (playingMusic != null) (playerManager.showPlayDetailPage()) },
             modifier = Modifier.padding(bottom = 16.dp)
         ) {
             SimplePlayerController(
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp),
                 showPlay = showPlay,
-                playingAudio = playingMusic,
+                playingMusic = playingMusic,
                 onControllerEvent = { playerManager.handleEvent(it) },
             )
         }
@@ -247,22 +244,13 @@ fun MusicInfoDialog(show: Boolean, music: Music, onSetNext: () -> Unit, onDismis
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             content = {
                 ToolButton(text = music.title, style = MaterialTheme.typography.titleLarge)
-
-                ToolButton(
-                    leadingIcon = Icons.Rounded.Person,
-                    text = "歌手    ${music.artist}"
-                )
-                ToolButton(leadingIcon = Icons.Rounded.Album, text = "专辑    ${music.album}")
-
+                ToolButton(leadingIcon = Icons.Rounded.Person, text = music.artist)
+                ToolButton(leadingIcon = Icons.Rounded.Album, text = music.album)
                 ToolButton(leadingIcon = Icons.Rounded.WatchLater, text = "下一首播放") {
                     onDismiss()
                     onSetNext()
                 }
-
-                ToolButton(
-                    leadingIcon = Icons.Rounded.Folder,
-                    text = "文件    ${music.uri.getRelativePath()}",
-                )
+                ToolButton(leadingIcon = Icons.Rounded.Folder, text = music.uri.getRelativePath())
             }
         )
     }

@@ -135,6 +135,13 @@ class PlayerManager {
         return newCount
     }
 
+    private fun ControllerEvent.supportAutoPlay(): Boolean {
+        return this is ControllerEvent.Next ||
+                this is ControllerEvent.Previous ||
+                this is ControllerEvent.SeekTo ||
+                this is ControllerEvent.SeekToPosition
+    }
+
     fun handleEvent(event: ControllerEvent) {
         LLogger.debug(TAG) { "handleEvent: $event" }
         when (event) {
@@ -146,7 +153,7 @@ class PlayerManager {
             is ControllerEvent.SeekToPosition -> seekToPosition(event.position)
             is ControllerEvent.SetNext -> nextPlayIndex = event.index
         }
-        if (event !is ControllerEvent.PlayOrPause && !player.isPlaying) {
+        if (event.supportAutoPlay() && !player.isPlaying) {
             player.play()
         }
     }

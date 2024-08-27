@@ -35,6 +35,7 @@ import com.lcb.one.ui.Screen
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.ui.widget.dialog.LoadingDialog
+import com.lcb.one.util.android.LLogger
 import com.lcb.one.util.android.Res
 import com.lcb.one.util.android.ToastUtils
 import com.lcb.one.util.android.getRelativePath
@@ -82,7 +83,10 @@ object QmcConverterScreen : Screen() {
                                 var failedCount = 0
                                 selectedFile.forEach { uri ->
                                     val result = QmcConverter.convert(uri)
-                                    result.onFailure { failedCount++ }
+                                    result.onFailure {
+                                        LLogger.debug { "onFailure: $it" }
+                                        failedCount++
+                                    }
                                 }
 
                                 loading = false

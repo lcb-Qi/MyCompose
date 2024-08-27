@@ -2,6 +2,10 @@ package com.lcb.one.ui.screen.player
 
 import android.content.ContentUris
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
+import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.core.database.getLongOrNull
@@ -13,6 +17,7 @@ import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.util.android.LLogger
+import com.lcb.one.util.android.getAbsolutePath
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Locale
@@ -24,9 +29,10 @@ object PlayerHelper {
     private const val MINI_DURATION = 30 * 1000
 
     private val audioContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+
     suspend fun findMusics(context: Context = MyApp.get()): List<Music> =
         withContext(Dispatchers.IO) {
-            val audios = mutableListOf<Music>()
+            val musics = mutableListOf<Music>()
             val proj = arrayOf(
                 MediaStore.Audio.AudioColumns._ID,
                 MediaStore.Audio.AudioColumns.TITLE,
@@ -46,14 +52,26 @@ object PlayerHelper {
                         val album = cursor.getStringOrNull(4) ?: ""
 
                         if (duration > MINI_DURATION) {
-                            audios.add(Music(uri, title, artist, duration, album))
+                            musics.add(Music(uri, title, artist, duration, album))
                         }
                     } while (cursor.moveToNext())
                 }
             }
 
-            return@withContext audios
+            return@withContext musics
         }
+
+    suspend fun getAlbumPicture(uri: Uri?): Bitmap? = withContext(Dispatchers.IO) {
+        if (uri == null) return@withContext null
+
+        val retriever = MediaMetadataRetriever()
+        retriever.setDataSource(uri.getAbsolutePath())
+        val pic = retriever.embeddedPicture?.let {
+            BitmapFactory.decodeByteArray(it, 0, it.size)
+        }
+        retriever.release()
+        return@withContext pic
+    }
 
     fun Music.toMediaItem() = MediaItem.Builder().apply {
         setUri(uri)

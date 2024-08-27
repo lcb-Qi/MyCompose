@@ -7,7 +7,6 @@ import com.lcb.one.util.android.getDisplayName
 import com.lcb.one.util.android.getRelativePath
 import com.lcb.one.util.android.inputStream
 import com.lcb.one.util.android.outputStream
-import com.lcb.one.util.common.DateTimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.InputStream
@@ -134,9 +133,8 @@ object QmcConverter {
     private fun createOutputUri(inputFullName: String): Uri? {
         LLogger.debug(TAG) { "createOutputUri: inputFullName = $inputFullName" }
 
-        val split = inputFullName.split(".")
-        val inName = split.getOrElse(0) { DateTimeUtils.nowStringShort() }
-        val inExtension = split.getOrElse(1) { "" }
+        val inExtension = inputFullName.substringAfterLast(".")
+        val inName = inputFullName.substringBeforeLast(".")
 
         val targetFormat = qmcFormatMap[inExtension.lowercase(Locale.getDefault())]
         checkNotNull(targetFormat) { "No matchable format for [$inExtension]" }

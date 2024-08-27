@@ -47,6 +47,7 @@ fun LegacySlider(
         thumb = {
             SliderDefaults.Thumb(
                 interactionSource = interactionSource,
+                colors = colors,
                 modifier = Modifier
                     .size(thumbSize)
                     .shadow(1.dp, CircleShape, clip = false)
@@ -58,6 +59,7 @@ fun LegacySlider(
         },
         track = {
             SliderDefaults.Track(
+                colors = colors,
                 sliderState = it,
                 modifier = Modifier.height(trackHeight),
                 thumbTrackGapSize = 0.dp,

@@ -1,7 +1,7 @@
 package com.lcb.one.ui.screen.player.widget
 
+import android.graphics.Bitmap
 import androidx.annotation.OptIn
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,18 +18,24 @@ import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.lcb.one.R
+import com.lcb.one.ui.screen.player.PlayerHelper
 import com.lcb.one.ui.screen.player.repo.ControllerEvent
 import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.ui.widget.common.AppIconButton
@@ -77,7 +83,7 @@ fun PlayerController(
         )
 
         AppIconButton(
-            modifier = Modifier.scale(2f),
+            modifier = Modifier.scale(1.5f),
             icon = if (showPlay) {
                 Icons.Rounded.PlayCircle
             } else {
@@ -100,7 +106,7 @@ fun PlayerController(
     PlayListDialog(
         show = showPlayList,
         playList = playList,
-        playingAudio = playing,
+        playingMusic = playing,
         onDismiss = { showPlayList = false },
         onItemSelected = { onEvent(ControllerEvent.SeekTo(index = it)) }
     )
@@ -110,17 +116,28 @@ fun PlayerController(
 fun SimplePlayerController(
     modifier: Modifier = Modifier,
     showPlay: Boolean,
-    playingAudio: Music?,
+    playingMusic: Music?,
     onControllerEvent: (event: ControllerEvent) -> Unit,
 ) {
+    val context = LocalContext.current
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Image(
-            modifier = Modifier.size(48.dp),
-            painter = painterResource(R.mipmap.ic_launcher),
-            contentDescription = null
+        var albumPic: Bitmap? by remember { mutableStateOf(null) }
+        LaunchedEffect(playingMusic) {
+            albumPic = PlayerHelper.getAlbumPicture(playingMusic?.uri)
+        }
+
+        AsyncImage(
+            model = ImageRequest.Builder(context)
+                .data(albumPic)
+                .error(R.mipmap.ic_launcher)
+                .build(),
+            contentDescription = null,
+            modifier = Modifier
+                .size(48.dp)
+                .clip(MaterialTheme.shapes.small),
         )
 
         Column(
@@ -132,13 +149,13 @@ fun SimplePlayerController(
         ) {
             Text(
                 modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE),
-                text = playingAudio?.title ?: "",
+                text = playingMusic?.title ?: "",
                 style = MaterialTheme.typography.labelLarge,
                 maxLines = 1
             )
             Text(
                 modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE),
-                text = playingAudio?.artistAndAlbum ?: "",
+                text = playingMusic?.artistAndAlbum ?: "",
                 style = MaterialTheme.typography.labelSmall,
                 maxLines = 1
             )

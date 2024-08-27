@@ -4,18 +4,17 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.lcb.one.ui.MyApp
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
-import java.io.File
 
 object DateStores {
+    private const val DEFAULT_DATASTORE_NAME = "default"
     private val defaultDataStore by lazy {
         PreferenceDataStoreFactory.create {
-            val rootDir = File(MyApp.get().dataDir, "prefs")
-
-            File(rootDir, "default_prefs.preferences_pb")
+            MyApp.get().preferencesDataStoreFile(DEFAULT_DATASTORE_NAME)
         }
     }
 
