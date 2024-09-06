@@ -1,6 +1,7 @@
 package com.lcb.one.ui.widget.settings.ui
 
 import androidx.annotation.IntRange
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItemColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -8,6 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import com.lcb.one.R
 import com.lcb.one.ui.widget.dialog.SingleChoiceDialog
 
 @Composable
@@ -31,7 +34,8 @@ fun SettingSingleChoice(
         icon = icon,
         title = title,
         summary = options[selectIndex],
-        onClick = { showDialog = true }
+        onClick = { showDialog = true },
+        action = { Icon(painterResource(R.drawable.ic_unfold_more), null) }
     )
 
     SingleChoiceDialog(

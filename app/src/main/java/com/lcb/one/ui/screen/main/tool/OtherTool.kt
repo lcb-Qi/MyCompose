@@ -12,7 +12,6 @@ import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.screen.clock.ClockScreen
 import com.lcb.one.ui.launchSingleTop
-import com.lcb.one.ui.screen.bilibili.BiliBiliScreen
 import com.lcb.one.ui.screen.menstruationAssistant.MenstruationAssistantScreen
 import com.lcb.one.ui.screen.player.MusicPlayerScreen
 import com.lcb.one.ui.screen.qmc.QmcConverterScreen
@@ -24,10 +23,6 @@ fun OtherTool(navController: NavHostController) {
         title = stringResource(R.string.other),
         icon = { Icon(Icons.Rounded.MiscellaneousServices, null) }
     ) {
-        ElevatedAssistChip(
-            onClick = { navController.launchSingleTop(BiliBiliScreen) },
-            label = { Text(text = BiliBiliScreen.label) }
-        )
         ElevatedAssistChip(
             onClick = { navController.launchSingleTop(ClockScreen) },
             label = { Text(text = ClockScreen.label) }

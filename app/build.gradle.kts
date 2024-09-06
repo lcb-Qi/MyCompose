@@ -22,8 +22,8 @@ android {
         applicationId = "com.lcb.one"
         minSdk = 31
         targetSdk = 34
-        versionCode = 10702
-        versionName = "1.7.2-beta"
+        versionCode = 10800
+        versionName = "1.8.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -81,16 +81,13 @@ ksp {
     arg("room.generateKotlin", "true")
 }
 
-tasks.register("copyTask") {
+tasks.register("copyReleaseTask") {
     doLast {
-        val appName = "Salted_fish"
-        val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+        val appName = "saltedFish"
+        val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMdd"))
         val fileName = "$appName-${android.defaultConfig.versionName}-release-$date.apk"
         val sourceFile = "./build/outputs/apk/release/app-release.apk"
         val destinationFile = File(project.projectDir.path + "/apk/")
-        if (!destinationFile.exists()) {
-            destinationFile.mkdir()
-        }
         copy {
             from(sourceFile)
             into(destinationFile)
@@ -101,10 +98,10 @@ tasks.register("copyTask") {
 
 project.afterEvaluate {
     val assembleRelease = tasks.getByName("assembleRelease")
-    assembleRelease.finalizedBy("copyTask")
+    assembleRelease.finalizedBy("copyReleaseTask")
 }
 
-val stableCompose = false
+val stableCompose = true
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
@@ -120,8 +117,6 @@ dependencies {
 
     implementation(libs.coil.compose)
 
-    implementation(libs.zoomimage.compose.coil)
-
     implementation(libs.coroutines.android)
 
     implementation(libs.bundles.androidx.lifecycle)
@@ -136,7 +131,6 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.bundles.settings.ui)
-    implementation(libs.compose.webview)
 
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.session)

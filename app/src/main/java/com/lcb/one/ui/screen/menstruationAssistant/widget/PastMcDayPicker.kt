@@ -23,7 +23,7 @@ import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.toMillis
 import java.time.ZoneId
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PastMcDayPicker(
     show: Boolean,

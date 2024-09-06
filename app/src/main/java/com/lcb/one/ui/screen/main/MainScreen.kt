@@ -44,11 +44,8 @@ import kotlinx.coroutines.launch
 object MainScreen : Screen() {
     override val label: String = Res.string(R.string.main_screen)
 
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Content(navController: NavHostController, args: Bundle?) {
-        // FriendlyExitHandler()
-
         val mainViewModel = viewModel<MainViewModel>()
         val poemState by mainViewModel.poemInfo.collectAsState()
         var showDetail by remember { mutableStateOf(false) }

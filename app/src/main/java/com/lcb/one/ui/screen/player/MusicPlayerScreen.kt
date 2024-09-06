@@ -10,7 +10,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,8 +24,8 @@ import com.lcb.one.R
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.ANIMATE_DURATION
-import com.lcb.one.ui.screen.player.widget.PlayListPage
 import com.lcb.one.ui.screen.player.widget.PlayDetailPage
+import com.lcb.one.ui.screen.player.widget.PlayListPage
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
 import com.lcb.one.util.android.AppUtils

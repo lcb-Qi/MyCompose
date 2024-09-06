@@ -4,12 +4,14 @@ import android.os.Bundle
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.DisplaySettings
+import androidx.compose.material.icons.rounded.DarkMode
+import androidx.compose.material.icons.rounded.Palette
+import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material.icons.rounded.PrivacyTip
-import androidx.compose.material.icons.rounded.TravelExplore
 import androidx.compose.material.icons.rounded.Update
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -26,6 +28,7 @@ import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
+import com.lcb.one.ui.theme.ThemeManager
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
 import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
@@ -47,27 +50,47 @@ object SettingsScreen : Screen() {
                     .padding(innerPadding)
                     .padding(horizontal = 16.dp)
             ) {
-                // 1.通用设置
-                SettingsCategory(title = stringResource(R.string.common)) {
-                    Card {
+                // 界面显示
+                SettingsCategory(title = stringResource(R.string.interface_and_display)) {
+                    Card(modifier = Modifier.fillMaxWidth()) {
                         ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
-                            // 内置浏览器
                             SimpleSettingsSwitch(
+                                icon = { Icon(Icons.Rounded.PhoneAndroid, null) },
                                 modifier = Modifier.padding(top = 8.dp),
-                                checked = UserPrefs.useBuiltInBrowser,
-                                icon = { Icon(Icons.Rounded.TravelExplore, null) },
-                                title = stringResource(R.string.use_built_in_browser),
-                                onCheckedChange = { UserPrefs.useBuiltInBrowser = it }
+                                title = "AMOLED",
+                                summary = stringResource(R.string.amoled_mode_summary),
+                                checked = ThemeManager.amoled,
+                                onCheckedChange = { ThemeManager.amoled = it }
                             )
 
-                            // 界面显示
-                            SimpleSettingsMenuLink(
+                            SimpleSettingsSwitch(
+                                icon = { Icon(Icons.Rounded.Palette, null) },
                                 modifier = Modifier.padding(bottom = 8.dp),
-                                title = stringResource(R.string.interface_and_display),
-                                icon = { Icon(Icons.Rounded.DisplaySettings, null) },
-                                onClick = { navController.launchSingleTop(ThemeSettingsScreen) }
+                                title = stringResource(R.string.dynamic_color),
+                                summary = stringResource(R.string.dynamic_color_summary),
+                                checked = ThemeManager.dynamicColor,
+                                onCheckedChange = { ThemeManager.dynamicColor = it }
                             )
                         }
+                    }
+                }
+
+                Spacer(Modifier.height(16.dp))
+
+                // 深色模式
+                SettingsCategory(title = stringResource(R.string.dark_mode)) {
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        val options = stringArrayResource(R.array.settings_ui_mode_options)
+                        val values = ThemeManager.uiModes
+                        SettingSingleChoice(
+                            icon = { Icon(Icons.Rounded.DarkMode, null) },
+                            modifier = Modifier.padding(vertical = 8.dp),
+                            colors = SettingsDefaults.colorOnCard(),
+                            title = stringResource(R.string.dark_mode),
+                            options = options,
+                            selectIndex = values.indexOf(ThemeManager.uiMode),
+                            onItemSelected = { ThemeManager.uiMode = values[it] }
+                        )
                     }
                 }
 

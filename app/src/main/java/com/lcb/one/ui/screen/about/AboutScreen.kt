@@ -21,11 +21,8 @@ import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
-import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.Screen
-import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.about.widget.AboutSaltFishDialog
-import com.lcb.one.ui.screen.webview.WebScreen
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
@@ -60,19 +57,12 @@ object AboutScreen : Screen() {
 
                     // 项目地址
                     val url = stringResource(R.string.project_location_url)
-                    val launchBrowser: () -> Unit = {
-                        if (UserPrefs.useBuiltInBrowser) {
-                            navController.launchSingleTop(WebScreen.createRoute(url))
-                        } else {
-                            AppUtils.launchSystemBrowser(uri = url.toUri())
-                        }
-                    }
                     SimpleSettingsMenuLink(
                         modifier = Modifier.padding(bottom = 8.dp),
                         title = stringResource(R.string.project_url),
                         summary = url,
                         icon = { Icon(Icons.Rounded.Link, null) },
-                        onClick = launchBrowser
+                        onClick = { AppUtils.launchSystemBrowser(uri = url.toUri()) }
                     )
                 }
             }

@@ -25,7 +25,7 @@ import com.lcb.one.R
 import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.ui.widget.common.noRippleClickable
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayListDialog(
     show: Boolean,

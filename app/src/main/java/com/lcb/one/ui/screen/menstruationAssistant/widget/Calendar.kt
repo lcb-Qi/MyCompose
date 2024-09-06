@@ -37,7 +37,6 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Calendar(modifier: Modifier = Modifier, state: CalendarState = rememberCalendarState()) {
     val firstDay = remember { LocalDate.of(state.yearRange.first, 1, 1) }

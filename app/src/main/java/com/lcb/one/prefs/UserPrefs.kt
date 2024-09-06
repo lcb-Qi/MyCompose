@@ -16,9 +16,6 @@ import com.lcb.one.ui.widget.settings.storage.setValue
 
 object UserPrefs {
     object Key {
-        val useBuiltInBrowser: Preferences.Key<Boolean>
-            get() = booleanPreferencesKey("use_built_in_browser")
-
         val poemUpdateInterval: Preferences.Key<Int>
             get() = intPreferencesKey("poem_update_interval")
 
@@ -64,7 +61,6 @@ object UserPrefs {
     fun <T> getBlocking(key: Preferences.Key<T>, def: T): T = DateStores.getDefault().getBlocking(key, def)
     fun <T> putBlocking(key: Preferences.Key<T>, value: T) = DateStores.getDefault().putBlocking(key, value)
 
-    var useBuiltInBrowser by PrefState(Key.useBuiltInBrowser, false)
     var poemUpdateInterval by PrefState(Key.poemUpdateInterval, 24 * 60 * 60 * 1000)
 }
 

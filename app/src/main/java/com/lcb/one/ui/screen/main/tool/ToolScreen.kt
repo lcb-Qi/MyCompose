@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ToolScreen(navController: NavHostController) {
     Column(

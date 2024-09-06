@@ -61,24 +61,6 @@ object PrivacyScreen : Screen() {
                     ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
                         Card {
                             SimpleSettingsMenuLink(
-                                title = stringResource(R.string.permission_access_image_and_video),
-                                summary = stringResource(R.string.permission_access_image_and_video_desc),
-                                action = { PrivacyAction(hasPermission = privacy.canReadImage) },
-                                onClick = { launcher.launch(AppUtils.getAppDetailSettingsIntent()) }
-                            )
-                        }
-
-                        Card {
-                            SimpleSettingsMenuLink(
-                                title = stringResource(R.string.permission_access_all_files),
-                                summary = stringResource(R.string.permission_access_all_files_desc),
-                                action = { PrivacyAction(hasPermission = privacy.canAccessAllFile) },
-                                onClick = { launcher.launch(AppUtils.getAllFileAccessIntent()) }
-                            )
-                        }
-
-                        Card {
-                            SimpleSettingsMenuLink(
                                 title = stringResource(R.string.permission_access_music_and_audio),
                                 summary = stringResource(R.string.permission_access_music_and_audio_desc),
                                 action = { PrivacyAction(hasPermission = privacy.canReadAudio) },
