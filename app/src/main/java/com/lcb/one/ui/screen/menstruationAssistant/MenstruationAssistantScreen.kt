@@ -43,7 +43,7 @@ import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationInfoCard
 import com.lcb.one.ui.screen.menstruationAssistant.widget.rememberCalendarState
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.ui.widget.common.AppIconButton
-import com.lcb.one.util.android.Res
+import com.lcb.one.util.platform.Res
 import java.time.LocalDate
 
 

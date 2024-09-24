@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!--  player  -->
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
@@ -46,23 +45,9 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".ui.appwidget.PoemAppWidgetProvider"
-            android:exported="true"
-            android:label="@string/daily_poetry">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="${applicationId}.appwidget.poem.ACTION_DATA_CHANGED" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/app_widget_info" />
-        </receiver>
-
         <service
             android:name=".ui.screen.player.PlayerService"
-            android:exported="true"
+            android:exported="false"
             android:foregroundServiceType="mediaPlayback">
             <intent-filter>
                 <action android:name="androidx.media3.session.MediaSessionService" />

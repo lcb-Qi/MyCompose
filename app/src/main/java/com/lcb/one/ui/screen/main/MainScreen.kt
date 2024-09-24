@@ -1,7 +1,6 @@
 package com.lcb.one.ui.screen.main
 
 import android.os.Bundle
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -10,34 +9,23 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Android
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.MoreHoriz
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.lcb.one.R
-import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.screen.main.home.HomeScreen
 import com.lcb.one.ui.screen.main.more.MoreScreen
 import com.lcb.one.ui.widget.appbar.BottomBar
 import com.lcb.one.ui.widget.appbar.BottomBarItem
 import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.screen.main.widget.PoemInfoDialog
-import com.lcb.one.util.android.AppUtils
-import com.lcb.one.ui.screen.main.repo.MainViewModel
 import com.lcb.one.ui.screen.main.tool.ToolScreen
-import com.lcb.one.ui.widget.common.noRippleClickable
-import com.lcb.one.util.android.Res
+import com.lcb.one.util.platform.Res
 import kotlinx.coroutines.launch
 
 
@@ -46,10 +34,6 @@ object MainScreen : Screen() {
 
     @Composable
     override fun Content(navController: NavHostController, args: Bundle?) {
-        val mainViewModel = viewModel<MainViewModel>()
-        val poemState by mainViewModel.poemInfo.collectAsState()
-        var showDetail by remember { mutableStateOf(false) }
-
         val bottomItem = remember(Unit) {
             listOf(
                 BottomBarItem(Res.string(R.string.home), Icons.Rounded.Home),
@@ -61,30 +45,7 @@ object MainScreen : Screen() {
         val pagerState = rememberPagerState { bottomItem.size }
         val scope = rememberCoroutineScope()
         Scaffold(
-            topBar = {
-                val updatePoem: () -> Unit = {
-                    if (AppUtils.isNetworkAvailable()) {
-                        mainViewModel.updatePoem(true)
-                    } else {
-                        AppGlobalConfigs.assertNetwork = true
-                    }
-                }
-
-                ToolBar(
-                    title = {
-                        Text(
-                            text = poemState.recommend,
-                            modifier = Modifier
-                                .noRippleClickable(
-                                    onLongClick = { showDetail = true },
-                                    onClick = updatePoem
-                                ),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    },
-                    navIcon = null,
-                )
-            },
+            topBar = { ToolBar(title = stringResource(R.string.app_name), navIcon = null) },
             bottomBar = {
                 BottomBar(
                     selectedIndex = pagerState.currentPage,
@@ -106,12 +67,6 @@ object MainScreen : Screen() {
                     2 -> MoreScreen(navController)
                 }
             }
-
-            PoemInfoDialog(
-                show = showDetail,
-                origin = { poemState },
-                onDismiss = { showDetail = false }
-            )
         }
     }
 }

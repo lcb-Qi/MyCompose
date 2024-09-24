@@ -40,7 +40,7 @@ fun ToolCard(
                 .padding(vertical = 8.dp)
         ) {
             ListItem(
-                colors = SettingsDefaults.colorOnCard(),
+                colors = SettingsDefaults.colorsOnCard(),
                 headlineContent = { Text(text = title, fontWeight = FontWeight.Medium) },
                 leadingContent = { icon() },
                 trailingContent = {

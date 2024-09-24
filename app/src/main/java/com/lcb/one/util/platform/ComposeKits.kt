@@ -1,4 +1,4 @@
-package com.lcb.one.util.android
+package com.lcb.one.util.platform
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

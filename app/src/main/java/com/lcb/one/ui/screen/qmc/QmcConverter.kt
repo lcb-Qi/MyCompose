@@ -1,12 +1,12 @@
 package com.lcb.one.ui.screen.qmc
 
 import android.net.Uri
-import com.lcb.one.util.android.LLogger
-import com.lcb.one.util.android.StorageUtils
-import com.lcb.one.util.android.getDisplayName
-import com.lcb.one.util.android.getRelativePath
-import com.lcb.one.util.android.inputStream
-import com.lcb.one.util.android.outputStream
+import com.lcb.one.util.platform.LLogger
+import com.lcb.one.util.platform.StorageUtils
+import com.lcb.one.util.platform.getDisplayName
+import com.lcb.one.util.platform.getRelativePath
+import com.lcb.one.util.platform.inputStream
+import com.lcb.one.util.platform.outputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.InputStream

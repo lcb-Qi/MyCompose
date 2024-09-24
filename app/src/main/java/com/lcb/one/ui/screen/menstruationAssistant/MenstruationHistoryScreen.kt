@@ -39,7 +39,7 @@ import com.lcb.one.R
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
-import com.lcb.one.util.android.ToastUtils
+import com.lcb.one.util.platform.ToastUtils
 import com.lcb.one.ui.screen.menstruationAssistant.repo.MenstruationViewModel
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.averageDurationDay
@@ -49,9 +49,9 @@ import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationMenu
 import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationMenuAction
 import com.lcb.one.ui.screen.menstruationAssistant.widget.PastMcDayPicker
 import com.lcb.one.ui.widget.common.AppIconButton
-import com.lcb.one.util.android.Res
-import com.lcb.one.util.android.inputStream
-import com.lcb.one.util.android.rememberGetContent
+import com.lcb.one.util.platform.Res
+import com.lcb.one.util.platform.inputStream
+import com.lcb.one.util.platform.rememberGetContent
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -114,7 +114,7 @@ object MenstruationHistoryScreen : Screen() {
                 !(selectRange.last < it.startTime || selectRange.first > it.endTime)
             }
             if (hasIntersect) {
-                ToastUtils.showToast(Res.string(R.string.conflict_tips))
+                ToastUtils.send(Res.string(R.string.conflict_tips))
             } else {
                 mcViewmodel.addPastMenstruationDay(selectRange.first, selectRange.last)
             }

@@ -13,7 +13,7 @@ fun SettingsSimpleText(
     icon: (@Composable () -> Unit)? = null,
     title: String,
     summary: String? = null,
-    colors: ListItemColors = SettingsDefaults.colors(),
+    colors: ListItemColors = SettingsDefaults.colorsDefault(),
     onClick: () -> Unit,
 ) {
 

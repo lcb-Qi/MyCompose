@@ -1,4 +1,4 @@
-package com.lcb.one.util.android
+package com.lcb.one.util.platform
 
 import android.app.Activity
 import android.content.Context
@@ -18,8 +18,8 @@ object PhoneUtil {
 
     fun getOS(): String {
         val os = when (getBrand()) {
-            BRAND_XIAOMI -> SystemPropertyUtils.getString(OS_KEY_XIAOMI)
-            BRAND_MEIZU -> SystemPropertyUtils.getString(OS_KEY_MEIZU)
+            BRAND_XIAOMI -> SystemPropUtils.getString(OS_KEY_XIAOMI)
+            BRAND_MEIZU -> SystemPropUtils.getString(OS_KEY_MEIZU)
             else -> ""
         }
 

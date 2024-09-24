@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lcb.one.database.appDatabase
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
-import com.lcb.one.util.android.StorageUtils
-import com.lcb.one.util.android.LLogger
+import com.lcb.one.util.platform.StorageUtils
+import com.lcb.one.util.platform.LLogger
 import com.lcb.one.util.common.DateTimeUtils
 import com.lcb.one.util.common.JsonUtils
 import kotlinx.coroutines.flow.collectLatest

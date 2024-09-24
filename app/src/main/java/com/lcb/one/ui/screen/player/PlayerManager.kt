@@ -23,7 +23,7 @@ import com.lcb.one.ui.screen.player.PlayerHelper.getExtraMusic
 import com.lcb.one.ui.screen.player.PlayerHelper.toMediaItem
 import com.lcb.one.ui.screen.player.repo.ControllerEvent
 import com.lcb.one.ui.screen.player.repo.Music
-import com.lcb.one.util.android.LLogger
+import com.lcb.one.util.platform.LLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

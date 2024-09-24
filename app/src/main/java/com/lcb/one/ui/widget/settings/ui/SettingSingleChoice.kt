@@ -22,7 +22,7 @@ fun SettingSingleChoice(
     title: String,
     options: Array<String>,
     icon: (@Composable () -> Unit)? = null,
-    colors: ListItemColors = SettingsDefaults.colors(),
+    colors: ListItemColors = SettingsDefaults.colorsDefault(),
     onItemSelected: ((Int) -> Unit)? = null,
 ) {
     var showDialog by remember { mutableStateOf(false) }

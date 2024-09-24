@@ -13,7 +13,7 @@ fun SimpleSettingsSwitch(
     enabled: Boolean = true,
     icon: @Composable (() -> Unit)? = null,
     summary: String? = null,
-    colors: ListItemColors = SettingsDefaults.colors(),
+    colors: ListItemColors = SettingsDefaults.colorsDefault(),
     onCheckedChange: (Boolean) -> Unit = {},
 ) {
     SettingsSwitch(

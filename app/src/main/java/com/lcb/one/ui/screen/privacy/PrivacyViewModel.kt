@@ -4,7 +4,7 @@ import android.Manifest
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.lcb.one.ui.MyApp
-import com.lcb.one.util.android.AppUtils
+import com.lcb.one.util.platform.AppUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 

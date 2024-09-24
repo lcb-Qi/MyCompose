@@ -3,7 +3,7 @@ package com.lcb.one.ui
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import com.lcb.one.util.android.LLogger
+import com.lcb.one.util.platform.LLogger
 
 
 class LifecycleCallbackImpl : Application.ActivityLifecycleCallbacks {

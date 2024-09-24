@@ -16,7 +16,7 @@ fun SimpleInfoCard(modifier: Modifier = Modifier, data: Map<String, String>) {
             data.forEach { (key, value) ->
                 item {
                     ListItem(
-                        colors = SettingsDefaults.colorOnCard(),
+                        colors = SettingsDefaults.colorsOnCard(),
                         headlineContent = { Text(text = key, fontWeight = FontWeight.Medium) },
                         supportingContent = { Text(text = value) }
                     )

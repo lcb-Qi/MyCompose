@@ -1,6 +1,6 @@
 package com.lcb.one.util.common
 
-import com.lcb.one.util.android.LLogger
+import com.lcb.one.util.platform.LLogger
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.SerializationStrategy

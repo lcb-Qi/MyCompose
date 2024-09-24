@@ -2,7 +2,7 @@ package com.lcb.one.ui
 
 import android.app.Application
 import android.content.ContentResolver
-import com.lcb.one.util.android.LLogger
+import com.lcb.one.util.platform.LLogger
 
 class MyApp : Application() {
     companion object {

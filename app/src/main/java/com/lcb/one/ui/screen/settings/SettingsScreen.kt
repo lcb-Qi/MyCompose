@@ -12,31 +12,27 @@ import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material.icons.rounded.PrivacyTip
-import androidx.compose.material.icons.rounded.Update
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.integerArrayResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.lcb.one.R
-import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.launchSingleTop
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
 import com.lcb.one.ui.theme.ThemeManager
 import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
 import com.lcb.one.ui.widget.settings.ui.SettingSingleChoice
 import com.lcb.one.ui.widget.settings.ui.SettingsCategory
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
-import com.lcb.one.util.android.Res
+import com.lcb.one.util.platform.Res
 
 object SettingsScreen : Screen() {
     override val label: String = Res.string(R.string.settings)
@@ -53,25 +49,26 @@ object SettingsScreen : Screen() {
                 // 界面显示
                 SettingsCategory(title = stringResource(R.string.interface_and_display)) {
                     Card(modifier = Modifier.fillMaxWidth()) {
-                        ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
-                            SimpleSettingsSwitch(
-                                icon = { Icon(Icons.Rounded.PhoneAndroid, null) },
-                                modifier = Modifier.padding(top = 8.dp),
-                                title = "AMOLED",
-                                summary = stringResource(R.string.amoled_mode_summary),
-                                checked = ThemeManager.amoled,
-                                onCheckedChange = { ThemeManager.amoled = it }
-                            )
+                        val colors = SettingsDefaults.colorsOnCard()
+                        SimpleSettingsSwitch(
+                            colors = colors,
+                            icon = { Icon(Icons.Rounded.PhoneAndroid, null) },
+                            modifier = Modifier.padding(top = 8.dp),
+                            title = "AMOLED",
+                            summary = stringResource(R.string.amoled_mode_summary),
+                            checked = ThemeManager.amoled,
+                            onCheckedChange = { ThemeManager.amoled = it }
+                        )
 
-                            SimpleSettingsSwitch(
-                                icon = { Icon(Icons.Rounded.Palette, null) },
-                                modifier = Modifier.padding(bottom = 8.dp),
-                                title = stringResource(R.string.dynamic_color),
-                                summary = stringResource(R.string.dynamic_color_summary),
-                                checked = ThemeManager.dynamicColor,
-                                onCheckedChange = { ThemeManager.dynamicColor = it }
-                            )
-                        }
+                        SimpleSettingsSwitch(
+                            colors = colors,
+                            icon = { Icon(Icons.Rounded.Palette, null) },
+                            modifier = Modifier.padding(bottom = 8.dp),
+                            title = stringResource(R.string.dynamic_color),
+                            summary = stringResource(R.string.dynamic_color_summary),
+                            checked = ThemeManager.dynamicColor,
+                            onCheckedChange = { ThemeManager.dynamicColor = it }
+                        )
                     }
                 }
 
@@ -85,7 +82,7 @@ object SettingsScreen : Screen() {
                         SettingSingleChoice(
                             icon = { Icon(Icons.Rounded.DarkMode, null) },
                             modifier = Modifier.padding(vertical = 8.dp),
-                            colors = SettingsDefaults.colorOnCard(),
+                            colors = SettingsDefaults.colorsOnCard(),
                             title = stringResource(R.string.dark_mode),
                             options = options,
                             selectIndex = values.indexOf(ThemeManager.uiMode),
@@ -99,30 +96,15 @@ object SettingsScreen : Screen() {
                 // 2.其他设置
                 SettingsCategory(title = stringResource(R.string.other)) {
                     Card {
-                        ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
-                            // 标题诗词更新间隔
-                            val options = stringArrayResource(R.array.settings_duration_options)
-                            val values = integerArrayResource(R.array.settings_duration_values)
-                            SettingSingleChoice(
-                                modifier = Modifier.padding(top = 8.dp),
-                                title = stringResource(R.string.poem_update_duration),
-                                icon = { Icon(Icons.Rounded.Update, null) },
-                                selectIndex = values.indexOf(UserPrefs.poemUpdateInterval)
-                                    .coerceAtLeast(0),
-                                options = options,
-                                onItemSelected = {
-                                    UserPrefs.poemUpdateInterval = values[it]
-                                }
-                            )
-
-                            // 权限
-                            SimpleSettingsMenuLink(
-                                modifier = Modifier.padding(bottom = 8.dp),
-                                title = stringResource(R.string.permissions_management),
-                                icon = { Icon(Icons.Rounded.PrivacyTip, null) },
-                                onClick = { navController.launchSingleTop(PrivacyScreen) }
-                            )
-                        }
+                        val colors = SettingsDefaults.colorsOnCard()
+                        // 权限
+                        SimpleSettingsMenuLink(
+                            colors = colors,
+                            modifier = Modifier.padding(vertical = 8.dp),
+                            title = stringResource(R.string.permissions_management),
+                            icon = { Icon(Icons.Rounded.PrivacyTip, null) },
+                            onClick = { navController.launchSingleTop(PrivacyScreen) }
+                        )
                     }
                 }
             }

@@ -1,6 +1,6 @@
 package com.lcb.one.ui.screen.device.repo.model
 
-import com.lcb.one.util.android.PhoneUtil
+import com.lcb.one.util.platform.PhoneUtil
 
 data class BasicInfo(
     var brand: String = "",

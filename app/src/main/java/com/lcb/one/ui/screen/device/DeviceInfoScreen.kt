@@ -27,7 +27,7 @@ import com.lcb.one.ui.screen.device.repo.model.DisplayInfo
 import com.lcb.one.ui.screen.device.repo.model.toMap
 import com.lcb.one.ui.screen.device.widget.SimpleInfoCard
 import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.util.android.Res
+import com.lcb.one.util.platform.Res
 import kotlinx.coroutines.launch
 
 object DeviceInfoScreen : Screen() {

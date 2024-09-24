@@ -38,13 +38,12 @@ import com.lcb.one.ui.theme.ThemeManager
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.rememberPrefState
 import com.lcb.one.ui.widget.settings.storage.setValue
-import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
 import com.lcb.one.ui.widget.settings.ui.SettingsCategory
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SettingsDropdownMenu
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSlider
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
-import com.lcb.one.util.android.Res
+import com.lcb.one.util.platform.Res
 import java.util.Locale
 
 object ClockScreen : Screen() {
@@ -80,36 +79,39 @@ object ClockScreen : Screen() {
                 drawerState = drawerState,
                 drawerContent = {
                     ModalDrawerSheet {
-                        ProvideSettingsItemColor(SettingsDefaults.colorOnContainer(DrawerDefaults.modalContainerColor)) {
-                            Column(modifier = Modifier.padding(24.dp)) {
-                                SettingsCategory(
-                                    title = stringResource(R.string.settings),
-                                    color = DrawerDefaults.modalContainerColor
-                                ) {
-                                    SimpleSettingsSwitch(
-                                        checked = darkTheme,
-                                        title = stringResource(R.string.dark_mode),
-                                        summary = stringResource(R.string.effective_this_page),
-                                        onCheckedChange = { darkTheme = it }
-                                    )
+                        Column(modifier = Modifier.padding(24.dp)) {
+                            SettingsCategory(
+                                title = stringResource(R.string.settings),
+                                color = DrawerDefaults.modalContainerColor
+                            ) {
+                                val colors =
+                                    SettingsDefaults.colorsOnContainer(DrawerDefaults.modalContainerColor)
+                                SimpleSettingsSwitch(
+                                    colors = colors,
+                                    checked = darkTheme,
+                                    title = stringResource(R.string.dark_mode),
+                                    summary = stringResource(R.string.effective_this_page),
+                                    onCheckedChange = { darkTheme = it }
+                                )
 
-                                    SimpleSettingsSlider(
-                                        title = stringResource(R.string.font_zoom),
-                                        summary = "%.2f".format(clockSizeScale),
-                                        value = clockSizeScale,
-                                        valueRange = MIN_SCALED..MAX_SCALED,
-                                        onValueChange = { clockSizeScale = it }
-                                    )
+                                SimpleSettingsSlider(
+                                    colors = colors,
+                                    title = stringResource(R.string.font_zoom),
+                                    summary = "%.2f".format(clockSizeScale),
+                                    value = clockSizeScale,
+                                    valueRange = MIN_SCALED..MAX_SCALED,
+                                    onValueChange = { clockSizeScale = it }
+                                )
 
-                                    val options =
-                                        layouts.map { "${Res.string(R.string.layout)} $it" }
-                                    SettingsDropdownMenu(
-                                        title = stringResource(R.string.layout),
-                                        selectIndex = layouts.indexOf(layout).coerceAtLeast(0),
-                                        options = options.toTypedArray(),
-                                        onItemSelected = { layout = layouts[it] }
-                                    )
-                                }
+                                val options =
+                                    layouts.map { "${Res.string(R.string.layout)} $it" }
+                                SettingsDropdownMenu(
+                                    colors = colors,
+                                    title = stringResource(R.string.layout),
+                                    selectIndex = layouts.indexOf(layout).coerceAtLeast(0),
+                                    options = options.toTypedArray(),
+                                    onItemSelected = { layout = layouts[it] }
+                                )
                             }
                         }
                     }

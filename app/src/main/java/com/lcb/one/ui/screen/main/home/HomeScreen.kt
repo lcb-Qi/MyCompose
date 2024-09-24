@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.lcb.one.ui.launchSingleTop
-import com.lcb.one.util.android.PhoneUtil
+import com.lcb.one.util.platform.PhoneUtil
 
 @Composable
 fun HomeScreen(navController: NavHostController) {

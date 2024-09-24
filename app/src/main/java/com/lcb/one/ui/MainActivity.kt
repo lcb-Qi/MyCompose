@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.lcb.one.ui.appwidget.PoemAppWidgetProvider
 import com.lcb.one.ui.screen.ComposeApp
 
 class MainActivity : ComponentActivity() {
@@ -17,6 +16,5 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val startRoute = intent.getStringExtra(EXT_START_ROUTE)
         setContent { ComposeApp(startRoute) }
-        PoemAppWidgetProvider.tryUpdate(this)
     }
 }

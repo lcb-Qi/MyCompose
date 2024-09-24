@@ -28,8 +28,8 @@ import com.lcb.one.ui.screen.player.widget.PlayDetailPage
 import com.lcb.one.ui.screen.player.widget.PlayListPage
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
 import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
-import com.lcb.one.util.android.AppUtils
-import com.lcb.one.util.android.Res
+import com.lcb.one.util.platform.AppUtils
+import com.lcb.one.util.platform.Res
 import kotlinx.coroutines.delay
 
 

@@ -15,7 +15,7 @@ fun SimpleSettingsSlider(
     value: Float,
     onValueChange: (Float) -> Unit,
     summary: String? = null,
-    colors: ListItemColors = SettingsDefaults.colors(),
+    colors: ListItemColors = SettingsDefaults.colorsDefault(),
     icon: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,

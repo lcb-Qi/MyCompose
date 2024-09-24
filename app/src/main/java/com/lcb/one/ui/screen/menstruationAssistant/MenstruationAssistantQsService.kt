@@ -12,7 +12,7 @@ import androidx.core.app.PendingIntentCompat
 import com.lcb.one.R
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.MainActivity
-import com.lcb.one.util.android.LLogger
+import com.lcb.one.util.platform.LLogger
 import java.util.concurrent.Executors
 
 class MenstruationAssistantQsService : TileService() {

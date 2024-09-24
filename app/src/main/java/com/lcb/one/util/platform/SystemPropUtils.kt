@@ -1,9 +1,9 @@
-package com.lcb.one.util.android
+package com.lcb.one.util.platform
 
 import android.annotation.SuppressLint
 
-object SystemPropertyUtils {
-    private const val TAG = "SystemPropertyUtils"
+object SystemPropUtils {
+    private const val TAG = "SystemPropUtils"
     private const val CLASS_NAME = "android.os.SystemProperties"
 
     @SuppressLint("PrivateApi")

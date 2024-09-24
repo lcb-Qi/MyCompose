@@ -28,12 +28,11 @@ import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
-import com.lcb.one.util.android.AppUtils
-import com.lcb.one.util.android.Res
-import com.lcb.one.util.android.rememberStartActivityForResult
+import com.lcb.one.util.platform.AppUtils
+import com.lcb.one.util.platform.Res
+import com.lcb.one.util.platform.rememberStartActivityForResult
 
 object PrivacyScreen : Screen() {
     override val label: String = Res.string(R.string.permissions_management)
@@ -45,7 +44,7 @@ object PrivacyScreen : Screen() {
 
         val lifecycleOwner = LocalLifecycleOwner.current
         LaunchedEffect(Unit) {
-            lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 privacyViewModel.checkPermission()
             }
         }
@@ -58,15 +57,14 @@ object PrivacyScreen : Screen() {
                     modifier = Modifier.padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
-                        Card {
-                            SimpleSettingsMenuLink(
-                                title = stringResource(R.string.permission_access_music_and_audio),
-                                summary = stringResource(R.string.permission_access_music_and_audio_desc),
-                                action = { PrivacyAction(hasPermission = privacy.canReadAudio) },
-                                onClick = { launcher.launch(AppUtils.getAppDetailSettingsIntent()) }
-                            )
-                        }
+                    Card {
+                        SimpleSettingsMenuLink(
+                            colors = SettingsDefaults.colorsOnCard(),
+                            title = stringResource(R.string.permission_access_music_and_audio),
+                            summary = stringResource(R.string.permission_access_music_and_audio_desc),
+                            action = { PrivacyAction(hasPermission = privacy.canReadAudio) },
+                            onClick = { launcher.launch(AppUtils.getAppDetailSettingsIntent()) }
+                        )
                     }
                 }
             }

@@ -49,7 +49,7 @@ fun AppInfoCard(
 
     Card(modifier = modifier, onClick = { onClick(appInfo.packageName) }) {
         ListItem(
-            colors = SettingsDefaults.colorOnCard(),
+            colors = SettingsDefaults.colorsOnCard(),
             leadingContent = iconContent,
             headlineContent = labelContent,
             supportingContent = appIdContent,

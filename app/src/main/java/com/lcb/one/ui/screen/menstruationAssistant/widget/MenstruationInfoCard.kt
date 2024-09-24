@@ -22,7 +22,7 @@ fun MenstruationInfoCard(
 ) {
     Card(modifier = modifier.fillMaxWidth()) {
         ListItem(
-            colors = SettingsDefaults.colorOnCard(),
+            colors = SettingsDefaults.colorsOnCard(),
             headlineContent = {
                 val date = DateTimeUtils.format(selectedDate, DateTimeUtils.FORMAT_ONLY_DATE)
                 Text(text = date, fontWeight = FontWeight.Medium)

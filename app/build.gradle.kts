@@ -58,17 +58,7 @@ android {
         buildConfig = true
     }
     packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-
-    defaultConfig {
-        val now = LocalDateTime.now()
-        val buildTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
-        val buildId = now.format(DateTimeFormatter.ofPattern("MMddHHmm"))
-        resValue("string", "BUILD_TIME", buildTime)
-        resValue("string", "BUILD_ID", buildId)
+        resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" }
     }
 
     room {
@@ -83,7 +73,7 @@ ksp {
 
 tasks.register("copyReleaseTask") {
     doLast {
-        val appName = "saltedFish"
+        val appName = "SaltedFish"
         val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMdd"))
         val fileName = "$appName-${android.defaultConfig.versionName}-release-$date.apk"
         val sourceFile = "./build/outputs/apk/release/app-release.apk"
@@ -120,8 +110,6 @@ dependencies {
     implementation(libs.coroutines.android)
 
     implementation(libs.bundles.androidx.lifecycle)
-
-    implementation(libs.bundles.retrofit2)
 
     implementation(libs.kotlinx.serialization.json)
 

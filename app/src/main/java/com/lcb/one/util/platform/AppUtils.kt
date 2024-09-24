@@ -1,22 +1,16 @@
-package com.lcb.one.util.android
+package com.lcb.one.util.platform
 
 import android.app.Activity
-import android.app.UiModeManager
-import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -36,20 +30,6 @@ object AppUtils {
             context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
 
         return hasSelfPermission
-    }
-
-    fun isNetworkAvailable(context: Context = MyApp.get()): Boolean {
-        val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
-
-        val networkCapabilities =
-            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-
-        return if (networkCapabilities == null) {
-            false
-        } else {
-            networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                    || networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-        }
     }
 
     @Px
@@ -94,21 +74,6 @@ object AppUtils {
         return icon
     }
 
-    fun getWallpaper(
-        context: Context = MyApp.get(),
-        type: Int = WallpaperManager.FLAG_SYSTEM
-    ): Drawable? {
-        return runCatching {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                WallpaperManager.getInstance(context).getDrawable(type)
-            } else {
-                WallpaperManager.getInstance(context).drawable
-            }
-        }.onFailure {
-            LLogger.debug(TAG) { "getWallpaper failed: $it" }
-        }.getOrNull()
-    }
-
     fun getApkPath(packageName: String): String {
         val pm = MyApp.get().packageManager
         val info = pm.getApplicationInfo(packageName, 0)
@@ -128,17 +93,6 @@ object AppUtils {
         return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             .setData(Uri.fromParts("package", appId, null))
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
-
-    fun getAllFileAccessIntent(appId: String = PACKAGE_ME): Intent {
-        return Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .setData(Uri.fromParts("package", appId, null))
-    }
-
-    fun isSystemInDarkTheme(context: Context = MyApp.get()): Boolean {
-        val uiMode = context.getSystemService(UiModeManager::class.java).nightMode
-        return (uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     }
 
     fun lightStatusBars(activity: Activity, light: Boolean) {

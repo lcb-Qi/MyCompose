@@ -9,11 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.lcb.one.ui.AppGlobalConfigs
 import com.lcb.one.ui.Route
 import com.lcb.one.ui.screen.main.MainScreen
 import com.lcb.one.ui.theme.AppThemeSurface
-import com.lcb.one.ui.widget.dialog.AssertInternetDialog
 
 const val ANIMATE_DURATION = 500
 
@@ -40,7 +38,5 @@ fun ComposeApp(startRoute: String? = null) {
                 }
             }
         )
-
-        AssertInternetDialog(AppGlobalConfigs.assertNetwork)
     }
 }

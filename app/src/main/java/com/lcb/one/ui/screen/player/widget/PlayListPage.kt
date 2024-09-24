@@ -55,8 +55,8 @@ import com.lcb.one.ui.screen.player.PlayerManager
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.ui.widget.common.noRippleClickable
-import com.lcb.one.util.android.ToastUtils
-import com.lcb.one.util.android.getRelativePath
+import com.lcb.one.util.platform.ToastUtils
+import com.lcb.one.util.platform.getRelativePath
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -81,7 +81,7 @@ fun PlayListPage(
             refreshing = true
             delay(1000)
             val newCount = playerManager.updatePlaylist()
-            ToastUtils.showToast("新增 $newCount 首音乐")
+            ToastUtils.send("新增 $newCount 首音乐")
             refreshing = false
         }
     }

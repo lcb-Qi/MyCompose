@@ -1,4 +1,4 @@
-package com.lcb.one.util.android
+package com.lcb.one.util.platform
 
 import android.content.ContentValues
 import android.graphics.Bitmap

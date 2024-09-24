@@ -17,7 +17,7 @@ import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
 import com.lcb.one.ui.widget.common.noRippleClickable
 import com.lcb.one.ui.widget.settings.storage.rememberPrefState
-import com.lcb.one.util.android.rememberGetContent
+import com.lcb.one.util.platform.rememberGetContent
 
 @Composable
 fun HeaderImage(modifier: Modifier = Modifier) {

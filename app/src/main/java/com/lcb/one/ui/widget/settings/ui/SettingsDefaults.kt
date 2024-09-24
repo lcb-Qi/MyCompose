@@ -7,26 +7,11 @@ import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.ProvidableCompositionLocal
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 fun Modifier.minSettingsHeight() = this.defaultMinSize(minHeight = 64.dp)
-
-val localSettingsItemColor: ProvidableCompositionLocal<ListItemColors?> = compositionLocalOf {
-    null
-}
-
-@Composable
-fun ProvideSettingsItemColor(
-    containerColor: ListItemColors,
-    content: @Composable () -> Unit
-) {
-    CompositionLocalProvider(localSettingsItemColor provides containerColor, content = content)
-}
 
 object SettingsDefaults {
     @Composable
@@ -40,15 +25,12 @@ object SettingsDefaults {
     }
 
     @Composable
-    fun colors(): ListItemColors = localSettingsItemColor.current ?: ListItemDefaults.colors()
+    fun colorsDefault(): ListItemColors = ListItemDefaults.colors()
 
     @Composable
-    fun colorOnCard(): ListItemColors {
-        return colorOnContainer(CardDefaults.cardColors().containerColor)
-    }
+    fun colorsOnCard(): ListItemColors = colorsOnContainer(CardDefaults.cardColors().containerColor)
 
     @Composable
-    fun colorOnContainer(containerColor: Color): ListItemColors {
-        return ListItemDefaults.colors(containerColor = containerColor)
-    }
+    fun colorsOnContainer(containerColor: Color): ListItemColors =
+        ListItemDefaults.colors(containerColor = containerColor)
 }

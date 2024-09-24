@@ -56,7 +56,7 @@ import com.lcb.one.ui.screen.player.repo.ControllerEvent
 import com.lcb.one.ui.theme.AppThemeSurface
 import com.lcb.one.ui.widget.common.AppIconButton
 import com.lcb.one.ui.widget.common.LegacySlider
-import com.lcb.one.util.android.PhoneUtil
+import com.lcb.one.util.platform.PhoneUtil
 import kotlinx.coroutines.delay
 
 private val horizontalPadding = 32.dp

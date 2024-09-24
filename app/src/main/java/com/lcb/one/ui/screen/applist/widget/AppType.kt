@@ -1,7 +1,7 @@
 package com.lcb.one.ui.screen.applist.widget
 
 import com.lcb.one.R
-import com.lcb.one.util.android.Res
+import com.lcb.one.util.platform.Res
 
 enum class AppType {
     USER, SYSTEM, ALL;

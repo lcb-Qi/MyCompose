@@ -1,11 +1,12 @@
-package com.lcb.one.util.android
+package com.lcb.one.util.platform
 
 import android.util.Log
+import com.lcb.one.BuildConfig
 import com.lcb.one.ui.MyApp
 import com.lcb.one.R
 
 object LLogger {
-    private val COMMON_TAG = "SaltFish#" + MyApp.get().getString(R.string.BUILD_ID)
+    private const val COMMON_TAG = "SaltFish#${BuildConfig.VERSION_NAME}"
 
     fun error(tag: String = "", lazyMsg: () -> Any) {
         println(Log.ERROR, buildLogMessage(tag, lazyMsg().toString()))

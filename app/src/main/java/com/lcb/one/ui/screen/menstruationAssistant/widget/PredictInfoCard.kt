@@ -17,7 +17,7 @@ import com.lcb.one.util.common.DateTimeUtils
 fun PredictInfoCard(modifier: Modifier = Modifier, predictMcDay: MenstruationDay?) {
     Card(modifier = modifier.fillMaxWidth()) {
         ListItem(
-            colors = SettingsDefaults.colorOnCard(),
+            colors = SettingsDefaults.colorsOnCard(),
             headlineContent = {
                 Text(
                     text = stringResource(R.string.menstruation_prediction),

@@ -6,7 +6,7 @@ import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
-import com.lcb.one.util.android.LLogger
+import com.lcb.one.util.platform.LLogger
 
 @UnstableApi
 class PlayerService : MediaSessionService() {

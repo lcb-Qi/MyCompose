@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
-import com.lcb.one.util.android.Res
+import com.lcb.one.util.platform.Res
 import java.time.Duration
 import java.time.LocalDateTime
 

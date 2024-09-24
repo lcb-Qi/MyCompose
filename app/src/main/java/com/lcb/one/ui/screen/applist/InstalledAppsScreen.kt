@@ -32,8 +32,8 @@ import com.lcb.one.ui.screen.applist.widget.AppInfoDialog
 import com.lcb.one.ui.screen.applist.widget.InstalledAppList
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppIconButton
-import com.lcb.one.util.android.Res
-import com.lcb.one.util.android.ToastUtils
+import com.lcb.one.util.platform.Res
+import com.lcb.one.util.platform.ToastUtils
 import kotlinx.coroutines.delay
 import kotlin.system.measureTimeMillis
 
@@ -52,7 +52,7 @@ object InstalledAppsScreen : Screen() {
             val costTime = measureTimeMillis { allApps = loadInstalledApps() }
             loadSuccess = true
             val msg = Res.string(R.string.load_success_msg, allApps.size, costTime)
-            ToastUtils.showToast(msg)
+            ToastUtils.send(msg)
         }
 
         Scaffold(

@@ -8,7 +8,7 @@ import com.lcb.one.ui.widget.settings.storage.PrefState
 import com.lcb.one.prefs.UserPrefs.Key
 import com.lcb.one.ui.widget.settings.storage.getValue
 import com.lcb.one.ui.widget.settings.storage.setValue
-import com.lcb.one.util.android.AppUtils
+import com.lcb.one.util.platform.AppUtils
 
 object ThemeManager {
     // 是否动态取色

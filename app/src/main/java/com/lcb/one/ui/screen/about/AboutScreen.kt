@@ -10,10 +10,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,13 +18,11 @@ import androidx.navigation.NavHostController
 import com.lcb.one.BuildConfig
 import com.lcb.one.R
 import com.lcb.one.ui.Screen
-import com.lcb.one.ui.screen.about.widget.AboutSaltFishDialog
 import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.settings.ui.ProvideSettingsItemColor
 import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
 import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
-import com.lcb.one.util.android.AppUtils
-import com.lcb.one.util.android.Res
+import com.lcb.one.util.platform.AppUtils
+import com.lcb.one.util.platform.Res
 
 object AboutScreen : Screen() {
     override val label: String = Res.string(R.string.about)
@@ -43,28 +37,25 @@ object AboutScreen : Screen() {
                     .padding(horizontal = 16.dp)
             ) {
                 // 版本信息
-                var showDetail by remember { mutableStateOf(false) }
-                ProvideSettingsItemColor(SettingsDefaults.colorOnCard()) {
-                    SimpleSettingsMenuLink(
-                        modifier = Modifier.padding(top = 8.dp),
-                        title = stringResource(R.string.version_info),
-                        summary = BuildConfig.VERSION_NAME,
-                        icon = { Icon(Icons.Rounded.Info, null) },
-                        onClick = { showDetail = true }
-                    )
+                SimpleSettingsMenuLink(
+                    colors = SettingsDefaults.colorsOnCard(),
+                    modifier = Modifier.padding(top = 8.dp),
+                    title = stringResource(R.string.version_info),
+                    summary = BuildConfig.VERSION_NAME,
+                    icon = { Icon(Icons.Rounded.Info, null) },
+                    onClick = { }
+                )
 
-                    AboutSaltFishDialog(showDetail) { showDetail = false }
-
-                    // 项目地址
-                    val url = stringResource(R.string.project_location_url)
-                    SimpleSettingsMenuLink(
-                        modifier = Modifier.padding(bottom = 8.dp),
-                        title = stringResource(R.string.project_url),
-                        summary = url,
-                        icon = { Icon(Icons.Rounded.Link, null) },
-                        onClick = { AppUtils.launchSystemBrowser(uri = url.toUri()) }
-                    )
-                }
+                // 项目地址
+                val url = "https://github.com/lcb-Qi/MyCompose"
+                SimpleSettingsMenuLink(
+                    colors = SettingsDefaults.colorsOnCard(),
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    title = stringResource(R.string.project_url),
+                    summary = url,
+                    icon = { Icon(Icons.Rounded.Link, null) },
+                    onClick = { AppUtils.launchSystemBrowser(uri = url.toUri()) }
+                )
             }
         }
     }

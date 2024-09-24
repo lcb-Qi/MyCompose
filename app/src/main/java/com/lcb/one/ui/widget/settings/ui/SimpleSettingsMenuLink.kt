@@ -16,7 +16,7 @@ fun SimpleSettingsMenuLink(
     title: String,
     summary: String? = null,
     action: (@Composable () -> Unit)? = { Icon(Icons.AutoMirrored.Rounded.NavigateNext, null) },
-    colors: ListItemColors = SettingsDefaults.colors(),
+    colors: ListItemColors = SettingsDefaults.colorsDefault(),
     onClick: () -> Unit,
 ) {
     SettingsMenuLink(

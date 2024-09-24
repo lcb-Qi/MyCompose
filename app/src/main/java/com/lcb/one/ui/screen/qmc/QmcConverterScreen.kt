@@ -35,11 +35,11 @@ import com.lcb.one.ui.Screen
 import com.lcb.one.ui.widget.appbar.ToolBar
 import com.lcb.one.ui.widget.common.AppButton
 import com.lcb.one.ui.widget.dialog.LoadingDialog
-import com.lcb.one.util.android.LLogger
-import com.lcb.one.util.android.Res
-import com.lcb.one.util.android.ToastUtils
-import com.lcb.one.util.android.getRelativePath
-import com.lcb.one.util.android.rememberGetContents
+import com.lcb.one.util.platform.LLogger
+import com.lcb.one.util.platform.Res
+import com.lcb.one.util.platform.ToastUtils
+import com.lcb.one.util.platform.getRelativePath
+import com.lcb.one.util.platform.rememberGetContents
 import kotlinx.coroutines.launch
 
 object QmcConverterScreen : Screen() {
@@ -91,7 +91,7 @@ object QmcConverterScreen : Screen() {
 
                                 loading = false
                                 val msg = Res.string(R.string.qmc_convertor_msg, total, failedCount)
-                                ToastUtils.showToast(msg)
+                                ToastUtils.send(msg)
                             }
                         }
                     )

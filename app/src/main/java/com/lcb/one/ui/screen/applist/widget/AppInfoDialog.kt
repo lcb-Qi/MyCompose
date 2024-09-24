@@ -23,11 +23,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.lcb.one.R
-import com.lcb.one.util.android.AppUtils
-import com.lcb.one.util.android.Res
-import com.lcb.one.util.android.StorageUtils
-import com.lcb.one.util.android.ToastUtils
-import com.lcb.one.util.android.rememberStartActivityForResult
+import com.lcb.one.util.platform.AppUtils
+import com.lcb.one.util.platform.Res
+import com.lcb.one.util.platform.StorageUtils
+import com.lcb.one.util.platform.ToastUtils
+import com.lcb.one.util.platform.rememberStartActivityForResult
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,10 +71,10 @@ fun AppInfoDialog(show: Boolean, packageName: String, onDisMiss: () -> Unit) {
                                 val icon = AppUtils.getAppIcon(packageName = packageName)
                                 if (icon != null) {
                                     StorageUtils.createImageFile(icon, "${label}_logo")
-                                        .onSuccess { ToastUtils.showToast("${Res.string(R.string.save_success)} $it") }
-                                        .onFailure { ToastUtils.showToast(Res.string(R.string.save_failed)) }
+                                        .onSuccess { ToastUtils.send("${Res.string(R.string.save_success)} $it") }
+                                        .onFailure { ToastUtils.send(Res.string(R.string.save_failed)) }
                                 } else {
-                                    ToastUtils.showToast(Res.string(R.string.save_failed))
+                                    ToastUtils.send(Res.string(R.string.save_failed))
                                 }
                             }
                         }
@@ -88,8 +88,8 @@ fun AppInfoDialog(show: Boolean, packageName: String, onDisMiss: () -> Unit) {
                         onclick = {
                             scope.launch {
                                 StorageUtils.saveApk(AppUtils.getApkPath(packageName), label)
-                                    .onSuccess { ToastUtils.showToast("${Res.string(R.string.save_success)} $it") }
-                                    .onFailure { ToastUtils.showToast(Res.string(R.string.save_failed)) }
+                                    .onSuccess { ToastUtils.send("${Res.string(R.string.save_success)} $it") }
+                                    .onFailure { ToastUtils.send(Res.string(R.string.save_failed)) }
                             }
                         }
                     )
