@@ -16,4 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "MyCompose"
 include(":app")
- 
+include(":lib-weight")

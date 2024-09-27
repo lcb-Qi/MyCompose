@@ -52,9 +52,9 @@ import com.lcb.one.ui.screen.applist.widget.ToolButton
 import com.lcb.one.ui.screen.player.repo.ControllerEvent
 import com.lcb.one.ui.screen.player.repo.Music
 import com.lcb.one.ui.screen.player.PlayerManager
-import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.common.AppIconButton
-import com.lcb.one.ui.widget.common.noRippleClickable
+import com.lcb.weight.appbar.ToolBar
+import com.lcb.weight.AppIconButton
+import com.lcb.weight.noRippleClickable
 import com.lcb.one.util.platform.ToastUtils
 import com.lcb.one.util.platform.getRelativePath
 import kotlinx.coroutines.delay

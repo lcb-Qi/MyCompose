@@ -32,9 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.Screen
-import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.common.AppButton
-import com.lcb.one.ui.widget.dialog.LoadingDialog
+import com.lcb.weight.appbar.ToolBar
+import com.lcb.weight.AppButton
+import com.lcb.weight.dialog.LoadingDialog
 import com.lcb.one.util.platform.LLogger
 import com.lcb.one.util.platform.Res
 import com.lcb.one.util.platform.ToastUtils
@@ -98,7 +98,7 @@ object QmcConverterScreen : Screen() {
                 }
             }
 
-            LoadingDialog(loading)
+            LoadingDialog(loading, stringResource(R.string.loading))
         }
     }
 

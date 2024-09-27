@@ -1,6 +1,5 @@
 package com.lcb.one.ui.screen.player.widget
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.lcb.one.R
 import com.lcb.one.ui.screen.player.repo.Music
-import com.lcb.one.ui.widget.common.noRippleClickable
+import com.lcb.weight.noRippleClickable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

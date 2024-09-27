@@ -14,7 +14,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.lcb.one.ui.screen.applist.repo.AppInfo
-import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
+import com.lcb.weight.settings.SettingsDefaults
 
 @Composable
 fun AppInfoCard(

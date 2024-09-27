@@ -13,10 +13,10 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.lcb.one.R
 import com.lcb.one.prefs.UserPrefs
-import com.lcb.one.ui.widget.settings.storage.getValue
-import com.lcb.one.ui.widget.settings.storage.setValue
-import com.lcb.one.ui.widget.common.noRippleClickable
-import com.lcb.one.ui.widget.settings.storage.rememberPrefState
+import com.lcb.one.prefs.getValue
+import com.lcb.one.prefs.setValue
+import com.lcb.weight.noRippleClickable
+import com.lcb.one.prefs.rememberPrefState
 import com.lcb.one.util.platform.rememberGetContent
 
 @Composable

@@ -95,6 +95,7 @@ val stableCompose = true
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
+    implementation(project(":lib-weight"))
     implementation(libs.androidx.core)
     // compose
     if (stableCompose) {
@@ -117,8 +118,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
-
-    implementation(libs.bundles.settings.ui)
 
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.session)

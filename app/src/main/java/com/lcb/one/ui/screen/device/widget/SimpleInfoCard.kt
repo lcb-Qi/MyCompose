@@ -7,7 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
+import com.lcb.weight.settings.SettingsDefaults
 
 @Composable
 fun SimpleInfoCard(modifier: Modifier = Modifier, data: Map<String, String>) {

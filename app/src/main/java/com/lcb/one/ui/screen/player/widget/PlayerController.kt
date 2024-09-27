@@ -38,7 +38,7 @@ import com.lcb.one.R
 import com.lcb.one.ui.screen.player.PlayerHelper
 import com.lcb.one.ui.screen.player.repo.ControllerEvent
 import com.lcb.one.ui.screen.player.repo.Music
-import com.lcb.one.ui.widget.common.AppIconButton
+import com.lcb.weight.AppIconButton
 
 private fun getRepeatModeIcon(repeatMode: Int, isShuffle: Boolean): Int {
     if (isShuffle) return R.drawable.ic_repeat_shuffle

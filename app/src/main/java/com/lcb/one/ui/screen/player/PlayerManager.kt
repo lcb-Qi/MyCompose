@@ -14,10 +14,10 @@ import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
-import com.lcb.one.ui.widget.settings.storage.PrefState
+import com.lcb.one.prefs.PrefState
 import com.lcb.one.prefs.UserPrefs
-import com.lcb.one.ui.widget.settings.storage.getValue
-import com.lcb.one.ui.widget.settings.storage.setValue
+import com.lcb.one.prefs.getValue
+import com.lcb.one.prefs.setValue
 import com.lcb.one.ui.MyApp
 import com.lcb.one.ui.screen.player.PlayerHelper.getExtraMusic
 import com.lcb.one.ui.screen.player.PlayerHelper.toMediaItem

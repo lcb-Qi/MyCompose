@@ -36,7 +36,7 @@ import com.lcb.one.R
 import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.Route
 import com.lcb.one.ui.Screen
-import com.lcb.one.ui.widget.common.AppTextButton
+import com.lcb.weight.AppTextButton
 import kotlinx.coroutines.launch
 
 private val userShortcuts by lazy {

@@ -37,8 +37,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.Screen
-import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
+import com.lcb.weight.appbar.ToolBar
+import com.lcb.weight.dialog.SimpleMessageDialog
 import com.lcb.one.util.platform.ToastUtils
 import com.lcb.one.ui.screen.menstruationAssistant.repo.MenstruationViewModel
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
@@ -48,7 +48,7 @@ import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstrualCycleHistoryC
 import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationMenu
 import com.lcb.one.ui.screen.menstruationAssistant.widget.MenstruationMenuAction
 import com.lcb.one.ui.screen.menstruationAssistant.widget.PastMcDayPicker
-import com.lcb.one.ui.widget.common.AppIconButton
+import com.lcb.weight.AppIconButton
 import com.lcb.one.util.platform.Res
 import com.lcb.one.util.platform.inputStream
 import com.lcb.one.util.platform.rememberGetContent

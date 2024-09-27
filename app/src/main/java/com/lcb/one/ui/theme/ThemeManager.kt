@@ -4,10 +4,10 @@ import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.lcb.one.ui.widget.settings.storage.PrefState
+import com.lcb.one.prefs.PrefState
 import com.lcb.one.prefs.UserPrefs.Key
-import com.lcb.one.ui.widget.settings.storage.getValue
-import com.lcb.one.ui.widget.settings.storage.setValue
+import com.lcb.one.prefs.getValue
+import com.lcb.one.prefs.setValue
 import com.lcb.one.util.platform.AppUtils
 
 object ThemeManager {

@@ -27,9 +27,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.lcb.one.R
 import com.lcb.one.ui.Screen
-import com.lcb.one.ui.widget.appbar.ToolBar
-import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
-import com.lcb.one.ui.widget.settings.ui.SimpleSettingsMenuLink
+import com.lcb.weight.appbar.ToolBar
+import com.lcb.weight.settings.SettingsDefaults
+import com.lcb.weight.settings.SettingsMenuLink
 import com.lcb.one.util.platform.AppUtils
 import com.lcb.one.util.platform.Res
 import com.lcb.one.util.platform.rememberStartActivityForResult
@@ -58,7 +58,7 @@ object PrivacyScreen : Screen() {
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Card {
-                        SimpleSettingsMenuLink(
+                        SettingsMenuLink(
                             colors = SettingsDefaults.colorsOnCard(),
                             title = stringResource(R.string.permission_access_music_and_audio),
                             summary = stringResource(R.string.permission_access_music_and_audio_desc),

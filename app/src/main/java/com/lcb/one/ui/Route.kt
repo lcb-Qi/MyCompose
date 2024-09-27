@@ -8,7 +8,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.Navigator
 import androidx.navigation.navOptions
 import com.lcb.one.ui.screen.clock.ClockScreen
-import com.lcb.one.ui.screen.about.AboutScreen
 import com.lcb.one.ui.screen.applist.InstalledAppsScreen
 import com.lcb.one.ui.screen.device.DeviceInfoScreen
 import com.lcb.one.ui.screen.main.MainScreen
@@ -17,15 +16,12 @@ import com.lcb.one.ui.screen.menstruationAssistant.MenstruationHistoryScreen
 import com.lcb.one.ui.screen.player.MusicPlayerScreen
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
 import com.lcb.one.ui.screen.qmc.QmcConverterScreen
-import com.lcb.one.ui.screen.settings.SettingsScreen
 
 object Route {
     val defaultScreens by lazy {
         setOf(
             MainScreen,
             DeviceInfoScreen,
-            SettingsScreen,
-            AboutScreen,
             InstalledAppsScreen,
             MenstruationAssistantScreen,
             MenstruationHistoryScreen,

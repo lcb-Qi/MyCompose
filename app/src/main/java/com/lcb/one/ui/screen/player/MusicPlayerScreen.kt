@@ -27,7 +27,7 @@ import com.lcb.one.ui.screen.ANIMATE_DURATION
 import com.lcb.one.ui.screen.player.widget.PlayDetailPage
 import com.lcb.one.ui.screen.player.widget.PlayListPage
 import com.lcb.one.ui.screen.privacy.PrivacyScreen
-import com.lcb.one.ui.widget.dialog.SimpleMessageDialog
+import com.lcb.weight.dialog.SimpleMessageDialog
 import com.lcb.one.util.platform.AppUtils
 import com.lcb.one.util.platform.Res
 import kotlinx.coroutines.delay

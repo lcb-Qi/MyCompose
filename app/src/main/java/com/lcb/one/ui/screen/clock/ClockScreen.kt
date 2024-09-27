@@ -35,15 +35,15 @@ import com.lcb.one.prefs.UserPrefs
 import com.lcb.one.ui.Screen
 import com.lcb.one.ui.theme.AppThemeSurface
 import com.lcb.one.ui.theme.ThemeManager
-import com.lcb.one.ui.widget.settings.storage.getValue
-import com.lcb.one.ui.widget.settings.storage.rememberPrefState
-import com.lcb.one.ui.widget.settings.storage.setValue
-import com.lcb.one.ui.widget.settings.ui.SettingsCategory
-import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
-import com.lcb.one.ui.widget.settings.ui.SettingsDropdownMenu
-import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSlider
-import com.lcb.one.ui.widget.settings.ui.SimpleSettingsSwitch
+import com.lcb.one.prefs.getValue
+import com.lcb.one.prefs.rememberPrefState
+import com.lcb.one.prefs.setValue
+import com.lcb.weight.settings.SettingsDefaults
+import com.lcb.weight.settings.SettingsDropdownMenu
+import com.lcb.weight.settings.SettingsSlider
+import com.lcb.weight.settings.SettingsSwitch
 import com.lcb.one.util.platform.Res
+import com.lcb.weight.settings.SettingsCategory
 import java.util.Locale
 
 object ClockScreen : Screen() {
@@ -86,7 +86,7 @@ object ClockScreen : Screen() {
                             ) {
                                 val colors =
                                     SettingsDefaults.colorsOnContainer(DrawerDefaults.modalContainerColor)
-                                SimpleSettingsSwitch(
+                                SettingsSwitch(
                                     colors = colors,
                                     checked = darkTheme,
                                     title = stringResource(R.string.dark_mode),
@@ -94,7 +94,7 @@ object ClockScreen : Screen() {
                                     onCheckedChange = { darkTheme = it }
                                 )
 
-                                SimpleSettingsSlider(
+                                SettingsSlider(
                                     colors = colors,
                                     title = stringResource(R.string.font_zoom),
                                     summary = "%.2f".format(clockSizeScale),

@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.lcb.one.R
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.MenstruationDay
 import com.lcb.one.ui.screen.menstruationAssistant.repo.model.getMcDay
-import com.lcb.one.ui.widget.settings.ui.SettingsDefaults
+import com.lcb.weight.settings.SettingsDefaults
 import com.lcb.one.util.common.DateTimeUtils
 
 @Composable
