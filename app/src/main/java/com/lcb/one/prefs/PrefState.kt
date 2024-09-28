@@ -8,21 +8,22 @@ import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import com.lcb.one.prefs.DateStores.getBlocking
+import com.lcb.one.prefs.DateStores.get
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KProperty
 
 @Composable
-fun <T> rememberPrefState(key: Preferences.Key<T>, def: T) = remember(key) { PrefState(key, def) }
+fun <T> rememberPrefState(key: Preferences.Key<T>, default: T) = remember(key) { PrefState(key, default) }
 
 class PrefState<T>(
     private val key: Preferences.Key<T>,
     default: T,
     private val dataStore: DataStore<Preferences> = DateStores.getDefault(),
 ) {
-    private var _value: T by mutableStateOf(dataStore.getBlocking(key, default))
+    private var _value: T by mutableStateOf(runBlocking { dataStore.get(key, default) })
 
     @OptIn(DelicateCoroutinesApi::class)
     var value: T

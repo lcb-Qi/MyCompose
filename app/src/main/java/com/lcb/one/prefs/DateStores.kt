@@ -20,19 +20,9 @@ object DateStores {
 
     fun getDefault() = defaultDataStore
 
-    fun <T> DataStore<Preferences>.getBlocking(key: Preferences.Key<T>, def: T): T = runBlocking {
-        data.map { it[key] }.first() ?: def
-    }
+    suspend inline fun <T> DataStore<Preferences>.get(key: Preferences.Key<T>, default: T): T =
+        data.map { it[key] }.first() ?: default
 
-    fun <T> DataStore<Preferences>.putBlocking(key: Preferences.Key<T>, value: T) = runBlocking {
+    suspend inline fun <T> DataStore<Preferences>.put(key: Preferences.Key<T>, value: T) =
         edit { it[key] = value }
-    }
-
-    suspend inline fun <T> DataStore<Preferences>.get(key: Preferences.Key<T>, def: T): T {
-        return data.map { it[key] }.first() ?: def
-    }
-
-    suspend inline fun <T> DataStore<Preferences>.put(key: Preferences.Key<T>, value: T) {
-        edit { it[key] = value }
-    }
 }

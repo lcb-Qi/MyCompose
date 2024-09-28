@@ -13,7 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -21,8 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.lcb.one.R
@@ -42,11 +40,8 @@ object PrivacyScreen : Screen() {
         val privacyViewModel = viewModel<PrivacyViewModel>()
         val privacy by privacyViewModel.privacyState.collectAsState()
 
-        val lifecycleOwner = LocalLifecycleOwner.current
-        LaunchedEffect(Unit) {
-            lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                privacyViewModel.checkPermission()
-            }
+        LifecycleEventEffect(event = Lifecycle.Event.ON_START) {
+            privacyViewModel.checkPermission()
         }
 
         val launcher = rememberStartActivityForResult { privacyViewModel.checkPermission() }

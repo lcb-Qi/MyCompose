@@ -7,9 +7,8 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import com.lcb.one.prefs.DateStores.get
-import com.lcb.one.prefs.DateStores.getBlocking
 import com.lcb.one.prefs.DateStores.put
-import com.lcb.one.prefs.DateStores.putBlocking
+import kotlinx.coroutines.runBlocking
 
 object UserPrefs {
     object Key {
@@ -50,10 +49,7 @@ object UserPrefs {
     suspend inline fun <T> put(key: Preferences.Key<T>, value: T) =
         DateStores.getDefault().put(key, value)
 
-    fun <T> getBlocking(key: Preferences.Key<T>, def: T): T =
-        DateStores.getDefault().getBlocking(key, def)
-
-    fun <T> putBlocking(key: Preferences.Key<T>, value: T) =
-        DateStores.getDefault().putBlocking(key, value)
+    fun <T> getBlocking(key: Preferences.Key<T>, def: T): T = runBlocking { get(key, def) }
+    fun <T> putBlocking(key: Preferences.Key<T>, value: T) = runBlocking { put(key, value) }
 }
 

@@ -1,25 +1,31 @@
 package com.lcb.one.ui.screen.player.widget
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Album
+import androidx.compose.material.icons.rounded.Cancel
 import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.MyLocation
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.WatchLater
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,6 +33,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Surface
@@ -43,6 +50,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -57,10 +66,11 @@ import com.lcb.weight.AppIconButton
 import com.lcb.weight.noRippleClickable
 import com.lcb.one.util.platform.ToastUtils
 import com.lcb.one.util.platform.getRelativePath
+import com.lcb.weight.AppTextButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun PlayListPage(
     playerManager: PlayerManager,
@@ -76,21 +86,71 @@ fun PlayListPage(
     }
 
     var refreshing by remember { mutableStateOf(false) }
+    var searchMode by remember { mutableStateOf(false) }
     val updatePlayList: () -> Unit = {
         scope.launch {
             refreshing = true
-            delay(1000)
+            delay(500)
             val newCount = playerManager.updatePlaylist()
             ToastUtils.send("新增 $newCount 首音乐")
             refreshing = false
         }
     }
 
+    var keyword by remember { mutableStateOf("") }
+    val focusRequester = remember { FocusRequester() }
+
+    val isImeVisible = WindowInsets.isImeVisible
+    BackHandler(searchMode && !isImeVisible) {
+        searchMode = false
+    }
+
+    LaunchedEffect(searchMode) {
+        if (searchMode) {
+            delay(100)
+            focusRequester.requestFocus()
+        } else {
+            keyword = ""
+        }
+    }
+
     Scaffold(
         topBar = {
-            ToolBar(title = stringResource(R.string.music_player), actions = {
-                AppIconButton(icon = Icons.Rounded.Refresh, onClick = updatePlayList)
-            })
+            ToolBar(
+                title = {
+                    AnimatedContent(targetState = searchMode, label = "search") { isInSearch ->
+                        if (isInSearch) {
+                            OutlinedTextField(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(end = 8.dp)
+                                    .focusRequester(focusRequester),
+                                shape = MaterialTheme.shapes.extraLarge,
+                                textStyle = MaterialTheme.typography.bodyLarge,
+                                value = keyword,
+                                placeholder = { Text(text = "搜索歌手或歌曲") },
+                                onValueChange = { keyword = it },
+                                maxLines = 1,
+                                trailingIcon = {
+                                    if (keyword.isNotEmpty()) {
+                                        Icon(
+                                            Icons.Rounded.Cancel,
+                                            contentDescription = null,
+                                            modifier = Modifier.noRippleClickable { keyword = "" }
+                                        )
+                                    }
+                                },
+                            )
+                        } else {
+                            Text(text = stringResource(R.string.music_player))
+                        }
+                    }
+                },
+                actions = {
+                    val text = if (searchMode) stringResource(R.string.cancel) else "搜索"
+                    AppTextButton(text = text, onClick = { searchMode = !searchMode })
+                }
+            )
         },
         floatingActionButton = {
             var showBack2Current by remember { mutableStateOf(false) }
@@ -116,7 +176,8 @@ fun PlayListPage(
         ) {
             PlayListContent(
                 listState, playList, playerManager,
-                selectedIndex, showPlay, playingMusic
+                selectedIndex, showPlay, playingMusic,
+                keyword
             )
         }
     }
@@ -129,7 +190,8 @@ private fun PlayListContent(
     playerManager: PlayerManager,
     selectedIndex: Int,
     showPlay: Boolean,
-    playingMusic: Music?
+    playingMusic: Music?,
+    filter: String = ""
 ) {
     Column(
         modifier = Modifier
@@ -142,27 +204,31 @@ private fun PlayListContent(
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            items(playList.size, key = { it }) { index ->
-                var more by remember { mutableStateOf(false) }
-                PlayListItem(
-                    modifier = Modifier.noRippleClickable {
-                        playerManager.handleEvent(ControllerEvent.SeekTo(index))
-                    },
-                    selected = selectedIndex == index,
-                    music = playList[index],
-                    onClickMore = { more = true }
-                )
+            itemsIndexed(playList, { _, item -> item.uri }) { index, item ->
+                val needShow = filter.isBlank()
+                        || (item.title.contains(filter) || item.artist.contains(filter))
+                if (needShow) {
+                    var showMore by remember { mutableStateOf(false) }
+                    PlayListItem(
+                        modifier = Modifier.noRippleClickable {
+                            playerManager.handleEvent(ControllerEvent.SeekTo(index))
+                        },
+                        selected = selectedIndex == index,
+                        music = item,
+                        onClickMore = { showMore = true }
+                    )
 
-                if (index != playList.size - 1) {
-                    HorizontalDivider()
+                    if (index != playList.size - 1) {
+                        HorizontalDivider()
+                    }
+
+                    MusicInfoDialog(
+                        showMore,
+                        item,
+                        onSetNext = { playerManager.handleEvent(ControllerEvent.SetNext(index)) },
+                        onDismiss = { showMore = false }
+                    )
                 }
-
-                MusicInfoDialog(
-                    more,
-                    playList[index],
-                    onSetNext = { playerManager.handleEvent(ControllerEvent.SetNext(index)) },
-                    onDismiss = { more = false }
-                )
             }
         }
 
